@@ -1,0 +1,15 @@
+<!-- User logged in -->
+<app-logo></app-logo>
+
+<div *ngIf="auth.currentUser">
+  <h3>Howdy, {{ auth.currentUser.displayName }}</h3>
+  <img [src]="auth.currentUser.photoURL" width=50px>
+  <button (click)="logout()">Logout</button>
+</div>
+
+<!-- User NOT logged in -->
+<div *ngIf="!auth.currentUser">
+  <h3>Howdy, {{ auth.currentUserDisplayName }}</h3>
+  <p>Login to get started...</p>
+  <button routerLink="/login">Login</button>
+</div>
