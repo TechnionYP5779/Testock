@@ -3,8 +3,7 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.2.
 
 ## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+See the wiki page for a [developer's quick start guide](https://github.com/TechnionYP5779/Testock/wiki/Developer's-Getting-Started). It will help you to set up a dev environment on your machine.
 
 ## Code scaffolding
 
