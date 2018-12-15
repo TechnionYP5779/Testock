@@ -1,9 +1,20 @@
 <header>
-  <mat-button-toggle class="main_menu_trigger" (click)="trigger_menu()">
-    <fa name="bars"></fa>
-  </mat-button-toggle>
+  <div class="container">
+    <div class="row">
+      <div class="col-1">
+        <mat-button-toggle class="main_menu_trigger" (click)="trigger_menu()">
+          <fa name="bars"></fa>
+        </mat-button-toggle>
+      </div>
 
-  <h1 style="text-align: center;">
-    <img src="/assets/images/testock-logo.png" alt="" />
-  </h1>
+      <div class="col-10">
+        <h1 style="text-align: center;">
+          <img src="/assets/images/testock-logo.png" alt="" />
+        </h1>
+      </div>
+
+      <div class="col-1"></div>
+    </div>
+  </div>
 </header>
+
