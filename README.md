@@ -6,7 +6,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 See the wiki page for a [developer's quick start guide](https://github.com/TechnionYP5779/Testock/wiki/Developer's-Getting-Started). It will help you to set up a dev environment on your machine.
 
 ## Code scaffolding
-
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
