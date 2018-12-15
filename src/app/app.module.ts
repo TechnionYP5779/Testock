@@ -13,7 +13,6 @@ import { UserProfileComponent } from './users/user-profile/user-profile.componen
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import { LogoComponent } from './logo/logo.component';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
-import { PdfjsTestComponent } from './pdfjs-test/pdfjs-test.component';
 import {PdfService} from './pdf.service';
 
 @NgModule({
@@ -21,8 +20,7 @@ import {PdfService} from './pdf.service';
     AppComponent,
     UserLoginComponent,
     UserProfileComponent,
-    LogoComponent,
-    PdfjsTestComponent
+    LogoComponent
   ],
   imports: [
     BrowserModule,
