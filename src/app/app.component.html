@@ -1,7 +1,7 @@
-<app-header (menu_triggered)="main_navigation.toggle()"></app-header>
+<app-header (main_menu_triggered)="main_navigation.toggle()"></app-header>
 
 <mat-sidenav-container>
-  <mat-sidenav #main_navigation mode="side" [(opened)]="opened">
+  <mat-sidenav #main_navigation mode="side">
     <app-main-navigation></app-main-navigation>
   </mat-sidenav>
 
