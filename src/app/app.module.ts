@@ -12,15 +12,19 @@ import { UserLoginComponent } from './users/user-login/user-login.component';
 import { UserProfileComponent } from './users/user-profile/user-profile.component';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
-import {PdfService} from './pdf.service';
+import {PdfService} from './core/pdf.service';
 import { MainNavigationComponent } from './ui/main-navigation/main-navigation.component';
 import { HeaderComponent } from './ui/header/header.component';
+
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatCheckboxModule, MatSidenavModule} from '@angular/material';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserLoginComponent,
     UserProfileComponent,
+    HeaderComponent,
     MainNavigationComponent
   ],
   imports: [
@@ -29,7 +33,10 @@ import { HeaderComponent } from './ui/header/header.component';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AppRoutingModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatCheckboxModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]

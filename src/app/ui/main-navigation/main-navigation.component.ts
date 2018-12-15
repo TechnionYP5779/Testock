@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-main-navigation',
@@ -6,8 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-navigation.component.css']
 })
 export class MainNavigationComponent implements OnInit {
+  opened: boolean;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
