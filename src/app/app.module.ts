@@ -13,6 +13,7 @@ import { UserProfileComponent } from './users/user-profile/user-profile.componen
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import { LogoComponent } from './logo/logo.component';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import {PdfService} from './pdf.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import {AngularFontAwesomeModule} from 'angular-font-awesome';
     AppRoutingModule,
     AngularFontAwesomeModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
