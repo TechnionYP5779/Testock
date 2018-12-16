@@ -4,3 +4,10 @@
     <a routerLink="/question/{{ q.id }}"> {{ q.year }} - {{ q.semester }} - {{ q.moed }}: Question {{ q.number }} </a>
   </li>
 </ul>
+<hr>
+<h2>Exams</h2>
+<ul>
+  <li *ngFor="let e of exams">
+    {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
+  </li>
+</ul>
