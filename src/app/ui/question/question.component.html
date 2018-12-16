@@ -1,11 +1,11 @@
-<h1>{{ question.semester }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h1>
+<h1>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h1>
 <br/>
 
 <img [src]="question.photo" />
 
-<h2>Solutions</h2>
-<ul>
-  <li *ngFor="let sol of solutions">
-    <img [src]="sol.photo" width="200px"/>
-  </li>
-</ul>
+<h2>Solutions:</h2>
+
+<div *ngFor="let sol of solutions">
+  <h2> Grade: {{sol.grade}}/{{question.total_grade}} </h2>
+  <img [src]="sol.photo" width="200px"/>
+</div>
