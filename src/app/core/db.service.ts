@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {Question, QuestionId} from './entities/question';
 import {Solution} from './entities/solution';
 import {map} from 'rxjs/operators';
+import {Exam} from './entities/exam';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class DbService {
     return this.coursesCollection.doc<Course>(id.toString()).valueChanges();
   }
 
+  // Should be deprecated?
   getQuestionsOfCourse(id: number): Observable<QuestionId[]> {
     return this.afs.collection('questions', ref => ref.where('course', '==', id)).snapshotChanges().pipe(
       map(actions => actions.map(a => {
@@ -30,6 +32,10 @@ export class DbService {
         return {id: qid, ...data};
       }))
     );
+  }
+
+  getExamsOfCourse(id: number): Observable<Exam[]> {
+    return this.coursesCollection.doc<Course>(id.toString()).collection<Exam>('exams').valueChanges();
   }
 
   getQuestion(id: string): Observable<Question> {
