@@ -17,7 +17,10 @@ import {MainNavigationComponent} from './ui/main-navigation/main-navigation.comp
 import {HeaderComponent} from './ui/header/header.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonToggleModule, MatCheckboxModule, MatSidenavModule} from '@angular/material';
+import {MatButtonToggleModule, MatCheckboxModule, MatSidenavModule, MatToolbarModule, MatButtonModule, MatIconModule, MatListModule} from '@angular/material';
+import { NavComponent } from './ui/nav/nav.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { UserProfilePicComponent } from './ui/user-profile-pic/user-profile-pic.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import {MatButtonToggleModule, MatCheckboxModule, MatSidenavModule} from '@angul
     UserLoginComponent,
     UserProfileComponent,
     HeaderComponent,
-    MainNavigationComponent
+    MainNavigationComponent,
+    NavComponent,
+    UserProfilePicComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +42,12 @@ import {MatButtonToggleModule, MatCheckboxModule, MatSidenavModule} from '@angul
     BrowserAnimationsModule,
     MatSidenavModule,
     MatCheckboxModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatListModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
