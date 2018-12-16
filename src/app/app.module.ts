@@ -14,13 +14,15 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
 import { LogoComponent } from './logo/logo.component';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {PdfService} from './pdf.service';
+import { CoursesComponent } from './ui/courses/courses.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserLoginComponent,
     UserProfileComponent,
-    LogoComponent
+    LogoComponent,
+    CoursesComponent
   ],
   imports: [
     BrowserModule,
