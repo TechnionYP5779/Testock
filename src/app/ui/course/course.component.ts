@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Course} from '../../core/entities/course';
+import {DbService} from '../../core/db.service';
+import {Question} from '../../core/entities/question';
 
 @Component({
   selector: 'app-course',
@@ -7,9 +11,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CourseComponent implements OnInit {
 
-  constructor() { }
+  public course: Course;
+  public id: number;
+  public questions: Question[];
+
+  constructor(private route: ActivatedRoute, private db: DbService) {
+    this.id = +this.route.snapshot.paramMap.get('id');
+  }
 
   ngOnInit() {
+    this.getCourse();
+    this.getQuestions();
+  }
+
+  getCourse(): void {
+    this.db.getCourse(this.id).subscribe(course => this.course = course);
+  }
+
+  getQuestions(): void {
+    this.db.getQuestionsOfCourse(this.id).subscribe(questions => this.questions = questions);
   }
 
 }

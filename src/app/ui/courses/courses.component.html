@@ -1,6 +1,6 @@
 <h1>Courses</h1>
 <ul>
   <li *ngFor="let course of courses">
-    <a routerLink="/courses/236363"> {{ course.name }} @ {{ course.faculty }}</a>
+    <a routerLink="/course/{{ course.id }}">{{ course.id }} - {{ course.name }} @ {{ course.faculty }}</a>
   </li>
 </ul>
