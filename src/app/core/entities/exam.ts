@@ -3,3 +3,7 @@ export class Exam {
   public semester: string;
   public year: number;
 }
+
+export class ExamId extends Exam {
+  public id: string;
+}

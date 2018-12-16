@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {Question, QuestionId} from './entities/question';
 import {Solution} from './entities/solution';
 import {map} from 'rxjs/operators';
-import {Exam} from './entities/exam';
+import {Exam, ExamId} from './entities/exam';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +34,14 @@ export class DbService {
     );
   }
 
-  getExamsOfCourse(id: number): Observable<Exam[]> {
-    return this.coursesCollection.doc<Course>(id.toString()).collection<Exam>('exams').valueChanges();
+  getExamsOfCourse(id: number): Observable<ExamId[]> {
+    return this.coursesCollection.doc<Course>(id.toString()).collection<Exam>('exams').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Exam;
+        const eid = a.payload.doc.id;
+        return {id: eid, ...data};
+      }))
+    );
   }
 
   getQuestion(id: string): Observable<Question> {
