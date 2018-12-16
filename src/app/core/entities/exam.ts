@@ -6,4 +6,5 @@ export class Exam {
 
 export class ExamId extends Exam {
   public id: string;
+  public course: number;
 }

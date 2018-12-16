@@ -39,7 +39,23 @@ export class DbService {
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Exam;
         const eid = a.payload.doc.id;
-        return {id: eid, ...data};
+        return {id: eid, course: id, ...data};
+      }))
+    );
+  }
+
+  getQuestionsOfExam(course: number, year: number, semester: string, moed: string): Observable<QuestionId[]> {
+    const ref = r => r
+      .where('course', '==', course)
+      .where('year', '==', year)
+      .where('semester', '==', semester)
+      .where('moed', '==', moed);
+
+    return this.afs.collection('questions', ref).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Question;
+        const qid = a.payload.doc.id;
+        return {id: qid, ...data};
       }))
     );
   }
