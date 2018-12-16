@@ -6,6 +6,7 @@ import {UserProfileComponent} from './users/user-profile/user-profile.component'
 import {CoursesComponent} from './ui/courses/courses.component';
 import {CourseComponent} from './ui/course/course.component';
 import {QuestionComponent} from './ui/question/question.component';
+import {ExamComponent} from './ui/exam/exam.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/profile', pathMatch: 'full'},
@@ -13,7 +14,8 @@ const routes: Routes = [
   {path: 'profile', component: UserProfileComponent},
   {path: 'courses', component: CoursesComponent},
   {path: 'course/:id', component: CourseComponent},
-  {path: 'question/:id', component: QuestionComponent}
+  {path: 'question/:id', component: QuestionComponent},
+  {path: 'exam/:id', component: ExamComponent}
 ];
 
 @NgModule({
