@@ -1,6 +1,6 @@
 <h1> {{ this.course.id }} - {{ this.course.name }}</h1>
 <ul>
   <li *ngFor="let q of questions">
-    {{ q.year }} - {{ q.semester }} - {{ q.moed }}: Question {{ q.number }}
+    <a routerLink="/question/{{this.course.id}}/{{q.year}}/{{q.semester}}/{{q.moed}}/{{q.number}}"> {{ q.year }} - {{ q.semester }} - {{ q.moed }}: Question {{ q.number }} </a>
   </li>
 </ul>
