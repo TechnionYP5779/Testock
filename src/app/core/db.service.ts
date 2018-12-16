@@ -32,6 +32,10 @@ export class DbService {
     );
   }
 
+  getQuestion(id: string): Observable<Question> {
+    return this.questionsCollection.doc<Question>(id).valueChanges();
+  }
+
   getSolutions(questionId: string): Observable<Solution[]> {
     return this.afs.collection<Solution>('questions/' + questionId + '/solutions').valueChanges();
   }
