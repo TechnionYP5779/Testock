@@ -44,6 +44,10 @@ export class DbService {
     );
   }
 
+  getExam(course: number, id: string): Observable<Exam> {
+    return this.coursesCollection.doc<Course>(course.toString()).collection<Exam>('exams').doc<Exam>(id).valueChanges();
+  }
+
   getQuestionsOfExam(course: number, year: number, semester: string, moed: string): Observable<QuestionId[]> {
     const ref = r => r
       .where('course', '==', course)
