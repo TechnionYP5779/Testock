@@ -15,6 +15,7 @@ import { LogoComponent } from './logo/logo.component';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {PdfService} from './pdf.service';
 import { CoursesComponent } from './ui/courses/courses.component';
+import { CourseComponent } from './ui/course/course.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CoursesComponent } from './ui/courses/courses.component';
     UserLoginComponent,
     UserProfileComponent,
     LogoComponent,
-    CoursesComponent
+    CoursesComponent,
+    CourseComponent
   ],
   imports: [
     BrowserModule,
