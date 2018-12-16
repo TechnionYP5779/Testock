@@ -8,6 +8,6 @@
 <h2>Exams</h2>
 <ul>
   <li *ngFor="let e of exams">
-    {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
+    <a routerLink="/exam/{{ e.id }}">{{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}</a>
   </li>
 </ul>
