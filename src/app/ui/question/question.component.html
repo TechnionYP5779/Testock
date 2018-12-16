@@ -1,3 +1,11 @@
-<p>
-  question works!
-</p>
+<h1>{{ question.semester }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h1>
+<br/>
+
+<img [src]="question.photo" />
+
+<h2>Solutions</h2>
+<ul>
+  <li *ngFor="let sol of solutions">
+    <img [src]="sol.photo" width="200px"/>
+  </li>
+</ul>
