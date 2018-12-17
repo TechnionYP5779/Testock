@@ -23,15 +23,14 @@ export class ExamComponent implements OnInit {
 
   ngOnInit() {
     this.getExam();
+    this.getQuestions();
   }
 
   private getQuestions() {
-    if (this.exam) {
-      this.db.getQuestionsOfExam(this.courseId, this.exam.year, this.exam.semester, this.exam.moed).subscribe(ques => this.questions = ques);
-    }
+    this.db.getQuestionsOfExam(this.courseId, this.examId).subscribe(ques => this.questions = ques);
   }
 
   private getExam() {
-    this.db.getExam(this.courseId, this.examId).subscribe(exam => { this.exam = exam; this.getQuestions(); } );
+    this.db.getExam(this.courseId, this.examId).subscribe(exam => this.exam = exam );
   }
 }

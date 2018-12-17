@@ -4,7 +4,7 @@ import {Course} from './entities/course';
 import {Observable} from 'rxjs';
 import {Question, QuestionId} from './entities/question';
 import {Solution} from './entities/solution';
-import {map} from 'rxjs/operators';
+import {flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
 
 @Injectable({
@@ -48,20 +48,28 @@ export class DbService {
     return this.coursesCollection.doc<Course>(course.toString()).collection<Exam>('exams').doc<Exam>(id).valueChanges();
   }
 
-  getQuestionsOfExam(course: number, year: number, semester: string, moed: string): Observable<QuestionId[]> {
-    const ref = r => r
-      .where('course', '==', course)
-      .where('year', '==', year)
-      .where('semester', '==', semester)
-      .where('moed', '==', moed)
-      .orderBy('number');
+  getQuestionsOfExam(course: number, examId: string): Observable<QuestionId[]> {
 
-    return this.afs.collection('questions', ref).snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as Question;
-        const qid = a.payload.doc.id;
-        return {id: qid, ...data};
-      }))
+    return this.getExam(course, examId).pipe(
+      flatMap(e => {
+          const year = e.year;
+          const semester = e.semester;
+          const moed = e.moed;
+          const ref = r => r
+          .where('course', '==', course)
+          .where('year', '==', year)
+          .where('semester', '==', semester)
+          .where('moed', '==', moed)
+          .orderBy('number');
+
+        return this.afs.collection('questions', ref).snapshotChanges().pipe(
+          map(actions => actions.map(a => {
+            const data = a.payload.doc.data() as Question;
+            const qid = a.payload.doc.id;
+            return {id: qid, ...data};
+          }))
+        );
+      })
     );
   }
 
