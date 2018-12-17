@@ -78,7 +78,9 @@ export class DbService {
   }
 
   getSolutions(questionId: string): Observable<Solution[]> {
-    return this.afs.collection<Solution>('questions/' + questionId + '/solutions').valueChanges();
+    return this.afs
+      .collection<Solution>('questions/' + questionId + '/solutions', r => r.orderBy('grade', 'desc'))
+      .valueChanges();
   }
 
   get courses(): Observable<Course[]> {
