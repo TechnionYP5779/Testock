@@ -7,3 +7,7 @@ export class Question {
   public number: number;
   public total_grade: number;
 }
+
+export class QuestionId extends Question {
+  public id: string;
+}
