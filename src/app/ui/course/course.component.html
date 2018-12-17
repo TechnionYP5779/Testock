@@ -1,7 +1,7 @@
 <h1 *ngIf="this.course"> {{ this.course.id }} - {{ this.course.name }}</h1>
 <ul>
   <li *ngFor="let q of questions">
-    <a routerLink="/question/{{ q.id }}"> {{ q.year }} - {{ q.semester }} - {{ q.moed }}: Question {{ q.number }} </a>
+    <a routerLink="/question/{{ q.id }}">{{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }} </a>
   </li>
 </ul>
 <hr>
