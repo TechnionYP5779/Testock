@@ -7,6 +7,7 @@ import {CoursesComponent} from './ui/courses/courses.component';
 import {CourseComponent} from './ui/course/course.component';
 import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
+import {UploadComponent} from './ui/upload/upload.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/profile', pathMatch: 'full'},
@@ -15,7 +16,8 @@ const routes: Routes = [
   {path: 'courses', component: CoursesComponent},
   {path: 'course/:id', component: CourseComponent},
   {path: 'question/:id', component: QuestionComponent},
-  {path: 'course/:cid/exam/:eid', component: ExamComponent}
+  {path: 'course/:cid/exam/:eid', component: ExamComponent},
+  {path: 'upload', component: UploadComponent}
 ];
 
 @NgModule({

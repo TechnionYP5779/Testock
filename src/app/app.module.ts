@@ -19,6 +19,7 @@ import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BreadcrumbsComponent} from './ui/breadcrumbs/breadcrumbs.component';
+import {UploadComponent} from './ui/upload/upload.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {BreadcrumbsComponent} from './ui/breadcrumbs/breadcrumbs.component';
     CoursesComponent,
     CourseComponent,
     QuestionComponent,
-    ExamComponent
+    ExamComponent,
+    UploadComponent
   ],
   imports: [
     BrowserModule,
