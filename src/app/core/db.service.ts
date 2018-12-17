@@ -42,7 +42,13 @@ export class DbService {
   }
 
   getExamsOfCourse(id: number): Observable<ExamId[]> {
-    return this.coursesCollection.doc<Course>(id.toString()).collection<Exam>('exams').snapshotChanges().pipe(
+
+    const order = r =>
+      r.orderBy('year', 'desc')
+        .orderBy('semester')
+        .orderBy('moed');
+
+    return this.coursesCollection.doc<Course>(id.toString()).collection<Exam>('exams', order).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Exam;
         const eid = a.payload.doc.id;
