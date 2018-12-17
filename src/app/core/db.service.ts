@@ -25,7 +25,14 @@ export class DbService {
 
   // Should be deprecated?
   getQuestionsOfCourse(id: number): Observable<QuestionId[]> {
-    return this.afs.collection('questions', ref => ref.where('course', '==', id)).snapshotChanges().pipe(
+    const order = r =>
+      r.where('course', '==', id)
+        .orderBy('year', 'desc')
+        .orderBy('semester')
+        .orderBy('moed')
+        .orderBy('number');
+
+    return this.afs.collection<Question>('questions', order).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Question;
         const qid = a.payload.doc.id;
