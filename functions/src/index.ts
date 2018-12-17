@@ -15,6 +15,6 @@ export const getPDFofExam = functions.https.onRequest((request, response) => {
     .fontSize(25)
     .text(examId, 100, 100);
 
-  doc.end()
+  doc.end();
 
 });
