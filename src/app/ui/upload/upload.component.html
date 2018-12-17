@@ -1,3 +1,8 @@
 <input type="file" id="scan" name="scan" accept="application/pdf" #file (change)="onFileSelected($event)">
 <br>
-<img *ngFor="let img of images" [src]="img" width="200"/>
+<div *ngFor="let img of images; let i = index">
+  <button (click)="removePage(img)">X</button>
+  <img [src]="img" width="100"/>
+</div>
+
+

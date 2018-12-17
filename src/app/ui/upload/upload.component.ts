@@ -26,4 +26,8 @@ export class UploadComponent implements OnInit {
       return this.sanitizer.bypassSecurityTrustUrl(url);
     }));
   }
+
+  removePage(img: SafeUrl) {
+    this.images.splice(this.images.indexOf(img), 1);
+  }
 }
