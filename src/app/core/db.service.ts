@@ -53,7 +53,8 @@ export class DbService {
       .where('course', '==', course)
       .where('year', '==', year)
       .where('semester', '==', semester)
-      .where('moed', '==', moed);
+      .where('moed', '==', moed)
+      .orderBy('number');
 
     return this.afs.collection('questions', ref).snapshotChanges().pipe(
       map(actions => actions.map(a => {
