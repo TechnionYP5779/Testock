@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {DbService} from '../../core/db.service';
+import {PdfService} from '../../pdf.service';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload',
@@ -7,9 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UploadComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild('file') file;
+
+  public images: SafeUrl[];
+
+  constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }
 
+  onFileSelected() {
+    const file = this.file.nativeElement.files[0];
+    this.pdf.getImagesOfFile(file).then(res => this.images = res.map(img => {
+      const url = URL.createObjectURL(img);
+      return this.sanitizer.bypassSecurityTrustUrl(url);
+    }));
+  }
 }
