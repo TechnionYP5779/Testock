@@ -1,8 +1,20 @@
-<input type="file" id="scan" name="scan" accept="application/pdf" #file (change)="onFileSelected($event)">
+
+
+Choose Your Scan: <input type="file" id="scan" name="scan" accept="application/pdf" #file (change)="onFileSelected($event)">
 <br>
-<div *ngFor="let img of images; let i = index">
-  <button (click)="removePage(img)">X</button>
-  <img [src]="img" width="100"/>
-</div>
+<h2 *ngIf="course">Auto Detected: {{ course.id }} {{ course.name }} @ {{ course.faculty }}</h2>
+<br>
+<table>
+  <tr *ngFor="let img of images; let i = index">
+
+    <td><button (click)="removePage(img)">X</button></td>
+    <td><img [src]="img" width="300"/></td>
+    <td>
+      Question Number: <input type="number" /><br>
+      Grade: <input type="number" />
+    </td>
+
+  </tr>
+</table>
 
 
