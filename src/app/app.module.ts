@@ -18,6 +18,7 @@ import { CoursesComponent } from './ui/courses/courses.component';
 import { CourseComponent } from './ui/course/course.component';
 import { QuestionComponent } from './ui/question/question.component';
 import { ExamComponent } from './ui/exam/exam.component';
+import { UploadComponent } from './ui/upload/upload.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ExamComponent } from './ui/exam/exam.component';
     CoursesComponent,
     CourseComponent,
     QuestionComponent,
-    ExamComponent
+    ExamComponent,
+    UploadComponent
   ],
   imports: [
     BrowserModule,
