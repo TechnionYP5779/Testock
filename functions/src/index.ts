@@ -13,7 +13,7 @@ export const getPDFofExam = functions.https.onRequest((request, response) => {
   doc.pipe(response);
   doc.addPage()
     .fontSize(25)
-    .text('Here is some vector graphics...', 100, 100);
+    .text(examId, 100, 100);
 
   doc.end()
 
