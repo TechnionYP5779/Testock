@@ -12,6 +12,7 @@ import {Course} from '../../core/entities/course';
 export class UploadComponent implements OnInit {
 
   @ViewChild('file') file;
+  @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
 
   public images: SafeUrl[];
 
@@ -33,6 +34,8 @@ export class UploadComponent implements OnInit {
       const url = URL.createObjectURL(img);
       return this.sanitizer.bypassSecurityTrustUrl(url);
     }));
+
+    this.imagesCollpaseTrigger.nativeElement.click();
   }
 
   removePage(img: SafeUrl) {
