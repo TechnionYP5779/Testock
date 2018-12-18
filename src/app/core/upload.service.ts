@@ -50,11 +50,11 @@ export class UploadService {
 
       question = await this.db.createQuestionForExam(course, q);
     }
-    await this.storage.ref(`${course}/${year}/${semester}/${moed}/${number}.jpg`).put(blob);
+    await this.storage.ref(`${course}\/${year}\/${semester}\/${moed}\/${number}.jpg`).put(blob);
     console.log('done');
     const sol = new Solution();
     sol.grade = grade;
-    sol.photo = await this.storage.ref(`${course}/${year}/${semester}/${moed}/${number}.png`).getDownloadURL().pipe(first()).toPromise();
+    sol.photo = await this.storage.ref(`${course}\/${year}\/${semester}\/${moed}\/${number}.jpg`).getDownloadURL().pipe(first()).toPromise();
 
     await this.db.addSolutionForQuestion(question, sol);
   }
