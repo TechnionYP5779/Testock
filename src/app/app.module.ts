@@ -13,14 +13,10 @@ import {UserProfileComponent} from './users/user-profile/user-profile.component'
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {PdfService} from './core/pdf.service';
-import {MainNavigationComponent} from './ui/main-navigation/main-navigation.component';
 import {HeaderComponent} from './ui/header/header.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonToggleModule, MatCheckboxModule, MatSidenavModule, MatToolbarModule, MatButtonModule, MatIconModule, MatListModule} from '@angular/material';
-import { NavComponent } from './ui/nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { UserProfilePicComponent } from './ui/user-profile-pic/user-profile-pic.component';
 import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
 
 @NgModule({
@@ -29,9 +25,6 @@ import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
     UserLoginComponent,
     UserProfileComponent,
     HeaderComponent,
-    MainNavigationComponent,
-    NavComponent,
-    UserProfilePicComponent,
     BreadcrumbsComponent
   ],
   imports: [
@@ -42,14 +35,7 @@ import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
     AppRoutingModule,
     AngularFontAwesomeModule,
     BrowserAnimationsModule,
-    MatSidenavModule,
-    MatCheckboxModule,
-    MatButtonToggleModule,
-    LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule
+    LayoutModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
