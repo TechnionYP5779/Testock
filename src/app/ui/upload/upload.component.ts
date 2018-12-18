@@ -58,6 +58,5 @@ export class UploadComponent implements OnInit {
 
   updateImageSelection(i: number) {
     this.chosenImages[i] = !this.chosenImages[i];
-    console.log(this.chosenImages);
   }
 }
