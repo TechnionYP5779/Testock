@@ -49,6 +49,5 @@ export class UploadComponent implements OnInit {
     this.year = parseInt(split[1].substr(0, 4), 10);
     this.semester = parseInt(split[1].substr(5, 2), 10);
     this.db.getCourse(courseId).subscribe(course => this.course = course);
-
   }
 }
