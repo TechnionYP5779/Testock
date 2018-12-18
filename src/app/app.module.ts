@@ -21,6 +21,9 @@ import {HeaderComponent} from './ui/header/header.component';
 import {BreadcrumbsComponent} from './ui/breadcrumbs/breadcrumbs.component';
 import {UploadComponent} from './ui/upload/upload.component';
 import {SemesterPipe} from './core/semester.pipe';
+import {FormControl, FormGroupDirective, NgForm} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatInputModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,9 @@ import {SemesterPipe} from './core/semester.pipe';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AppRoutingModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    BrowserAnimationsModule,
+    MatInputModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
