@@ -34,26 +34,18 @@
           <div class="row">
             <div class="col-3" *ngFor="let img of images; let i = index">
               <div class="card">
-                <mat-checkbox [checked]="true" (change)="updateImageSelection(i)"></mat-checkbox>
+                <mat-checkbox [checked]="false" (change)="updateImageSelection(i)"></mat-checkbox>
                 <img class="card-img-top" [src]="img" alt="exam scan image">
                 <div class="card-body">
                   <h5 class="card-title">Page #{{i+1}}</h5>
                   <mat-form-field class="full-width">
-                    <input class="input-for-page"  matInput type="number" placeholder="Question">
+                    <input class="input-for-page"  matInput type="number" placeholder="Question" (change)="addQuestionNumber(i, $event)">
                   </mat-form-field>
                   <mat-form-field class="full-width">
-                    <input class="input-for-page"  matInput type="number" placeholder="Grade">
+                    <input class="input-for-page"  matInput type="number" placeholder="Grade" (change)="addGrade(i, $event)">
                   </mat-form-field>
                 </div>
               </div>
-
-              <!--<td><button (click)="removePage(img)">X</button></td>-->
-              <!--<td><img [src]="img" width="300"/></td>-->
-              <!--<td>-->
-                <!--Question Number: <input type="number" /><br>-->
-                <!--Grade: <input type="number" />-->
-              <!--</td>-->
-
             </div>
           </div>
         </div>

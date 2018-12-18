@@ -15,9 +15,11 @@ export class UploadComponent implements OnInit {
   @ViewChild('file') file;
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
 
-  public blobs: Blob[];
   public images: SafeUrl[];
   public chosenImages: boolean[];
+  public questionNums: number[];
+  public grades: number[];
+  public blobs: Blob[];
 
   constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer, private uploadService: UploadService) { }
 
@@ -40,7 +42,9 @@ export class UploadComponent implements OnInit {
         return this.sanitizer.bypassSecurityTrustUrl(url);
       });
 
-      this.chosenImages = Array.apply(null, Array(this.images.length)).map(function() { return true; });
+      this.chosenImages = Array.apply(null, Array(this.images.length)).map(function() { return false; });
+      this.questionNums = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
+      this.grades = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
     });
 
     this.imagesCollpaseTrigger.nativeElement.click();
@@ -65,8 +69,19 @@ export class UploadComponent implements OnInit {
 
   uploadImages() {
     const sem = (this.semester === 1) ? 'winter' : 'spring';
-    this.uploadService.uploadScan(this.course.id, this.year, sem, 'A', [1, 2, 3], [33, 33, 34], this.blobs)
+    const nums = this.questionNums.filter((_, index) => this.chosenImages[index]);
+    const grades = this.grades.filter((_, index) => this.chosenImages[index]);
+    const blobs = this.blobs.filter((_, index) => this.chosenImages[index]);
+
+    this.uploadService.uploadScan(this.course.id, this.year, sem, 'A', nums, grades, blobs)
       .then(() => console.log('Piiiii'));
   }
 
+  addQuestionNumber(i: number, $event: any) {
+    this.questionNums[i] = $event.target.value;
+  }
+
+  addGrade(i, $event) {
+    this.grades[i] = $event.target.value;
+  }
 }
