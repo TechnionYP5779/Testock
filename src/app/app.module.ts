@@ -20,6 +20,7 @@ import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BreadcrumbsComponent} from './ui/breadcrumbs/breadcrumbs.component';
 import {UploadComponent} from './ui/upload/upload.component';
+import {SemesterPipe} from './core/semester.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {UploadComponent} from './ui/upload/upload.component';
     CourseComponent,
     QuestionComponent,
     ExamComponent,
-    UploadComponent
+    UploadComponent,
+    SemesterPipe
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 .upload-thumbnail-image-placeholder {
-  padding: 30px;
+  padding: 30px 20px;
   background: #f6f6f6;
 }
 
@@ -10,4 +10,15 @@
 .card-title span {
   font-size: 70%;
   opacity: 0.6;
+}
+
+.scan-properties {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+.scan-properties .scan-properties-icon {
+  font-size: 200%;
+  display: block;
 }
