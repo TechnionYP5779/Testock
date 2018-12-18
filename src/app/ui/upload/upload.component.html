@@ -1,21 +1,71 @@
+<div class="row">
+  <div class="accordion col-9" id="accordionExample">
 
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Upload a new scan
+          </button>
+        </h5>
+      </div>
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+          <div class="input-group mb-3">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="inputGroupFile01"  accept="application/pdf" #file (change)="onFileSelected($event)" aria-describedby="inputGroupFileAddon01">
+              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-Choose Your Scan: <input type="file" id="scan" name="scan" accept="application/pdf" #file (change)="onFileSelected($event)">
-<br>
-<h2 *ngIf="course">Auto Detected: {{ course.id }} {{ course.name }} @ {{ course.faculty }}</h2>
-<h2>Semester: {{ this.year }} {{ this.semester }}</h2>
-<br>
-<table>
-  <tr *ngFor="let img of images; let i = index">
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Choose pages for uploading
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        <div class="card-body">
+          <table>
+            <tr *ngFor="let img of images; let i = index">
 
-    <td><button (click)="removePage(img)">X</button></td>
-    <td><img [src]="img" width="300"/></td>
-    <td>
-      Question Number: <input type="number" /><br>
-      Grade: <input type="number" />
-    </td>
+              <td><button (click)="removePage(img)">X</button></td>
+              <td><img [src]="img" width="300"/></td>
+              <td>
+                Question Number: <input type="number" /><br>
+                Grade: <input type="number" />
+              </td>
 
-  </tr>
-</table>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
 
+    <div class="card">
+      <div class="card-header" id="headingThree">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Collapsible Group Item #3
+          </button>
+        </h5>
+      </div>
+      <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+        <div class="card-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+        </div>
+      </div>
+    </div>
 
+  </div>
+
+  <div class="col-3">
+    <h2 *ngIf="course">Auto Detected: {{ course.id }} {{ course.name }} @ {{ course.faculty }}</h2>
+    <h2>Semester: {{ this.year }} {{ this.semester }}</h2>
+  </div>
+</div>
