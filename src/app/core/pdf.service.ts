@@ -41,7 +41,6 @@ export class PdfService {
       fr.onload = () => resolve(fr.result);
       fr.readAsArrayBuffer(file);
     }).then(res => {
-      console.log(res);
       const data = new Uint8Array(res as ArrayBuffer);
       return this.getImagesOfPDF(data);
     });
