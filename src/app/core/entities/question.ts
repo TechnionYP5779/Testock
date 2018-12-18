@@ -1,7 +1,7 @@
 export class Question {
   public course: number;
   public year: number;
-  public moed: number;
+  public moed: string;
   public semester: string;
   public photo: string;
   public number: number;

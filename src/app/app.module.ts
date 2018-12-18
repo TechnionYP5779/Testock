@@ -24,6 +24,7 @@ import {SemesterPipe} from './core/semester.pipe';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {AngularFireStorageModule} from '@angular/fire/storage';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    AngularFireStorageModule,
     AppRoutingModule,
     AngularFontAwesomeModule,
     BrowserAnimationsModule,
