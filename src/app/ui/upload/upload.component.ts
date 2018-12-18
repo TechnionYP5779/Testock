@@ -15,6 +15,7 @@ export class UploadComponent implements OnInit {
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
 
   public images: SafeUrl[];
+  public chosenImages: boolean[];
 
   constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer) { }
 
@@ -30,10 +31,14 @@ export class UploadComponent implements OnInit {
 
     this.tryGetCourseDetails(file);
 
-    this.pdf.getImagesOfFile(file).then(res => this.images = res.map(img => {
-      const url = URL.createObjectURL(img);
-      return this.sanitizer.bypassSecurityTrustUrl(url);
-    }));
+    this.pdf.getImagesOfFile(file).then(res => {
+      this.images = res.map(img => {
+        const url = URL.createObjectURL(img);
+        return this.sanitizer.bypassSecurityTrustUrl(url);
+      });
+
+      this.chosenImages = Array.apply(null, Array(this.images.length)).map(function() { return true; });
+    });
 
     this.imagesCollpaseTrigger.nativeElement.click();
   }
@@ -49,5 +54,10 @@ export class UploadComponent implements OnInit {
     this.year = parseInt(split[1].substr(0, 4), 10);
     this.semester = parseInt(split[1].substr(5, 2), 10);
     this.db.getCourse(courseId).subscribe(course => this.course = course);
+  }
+
+  updateImageSelection(i: number) {
+    this.chosenImages[i] = !this.chosenImages[i];
+    console.log(this.chosenImages);
   }
 }
