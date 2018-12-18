@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DbService} from '../../core/db.service';
-import {PdfService} from '../../pdf.service';
+import {PdfService} from '../../core/pdf.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Course} from '../../core/entities/course';
 
