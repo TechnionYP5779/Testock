@@ -3,6 +3,7 @@
 Choose Your Scan: <input type="file" id="scan" name="scan" accept="application/pdf" #file (change)="onFileSelected($event)">
 <br>
 <h2 *ngIf="course">Auto Detected: {{ course.id }} {{ course.name }} @ {{ course.faculty }}</h2>
+<h2>Semester: {{ this.year }} {{ this.semester }}</h2>
 <br>
 <table>
   <tr *ngFor="let img of images; let i = index">

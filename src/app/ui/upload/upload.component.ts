@@ -18,6 +18,8 @@ export class UploadComponent implements OnInit {
   constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer) { }
 
   public course: Course;
+  public year: number;
+  public semester: number;
 
   ngOnInit() {
   }
@@ -41,6 +43,8 @@ export class UploadComponent implements OnInit {
     const fileName = file.name;
     const split = fileName.split('-');
     const courseId = parseInt(split[2], 10);
+    this.year = parseInt(split[1].substr(0, 4), 10);
+    this.semester = parseInt(split[1].substr(5, 2), 10);
     this.db.getCourse(courseId).subscribe(course => this.course = course);
 
   }
