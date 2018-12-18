@@ -21,6 +21,7 @@ import {MatButtonToggleModule, MatCheckboxModule, MatSidenavModule, MatToolbarMo
 import { NavComponent } from './ui/nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { UserProfilePicComponent } from './ui/user-profile-pic/user-profile-pic.component';
+import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { UserProfilePicComponent } from './ui/user-profile-pic/user-profile-pic.
     HeaderComponent,
     MainNavigationComponent,
     NavComponent,
-    UserProfilePicComponent
+    UserProfilePicComponent,
+    BreadcrumbsComponent
   ],
   imports: [
     BrowserModule,
