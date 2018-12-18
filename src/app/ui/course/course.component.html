@@ -1,0 +1,13 @@
+<h1 *ngIf="this.course"> {{ this.course.id }} - {{ this.course.name }}</h1>
+<ul>
+  <li *ngFor="let q of questions">
+    <a routerLink="/question/{{ q.id }}">{{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }} </a>
+  </li>
+</ul>
+<hr>
+<h2>Exams</h2>
+<ul>
+  <li *ngFor="let e of exams">
+    <a routerLink="exam/{{ e.id }}">{{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}</a>
+  </li>
+</ul>

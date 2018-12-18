@@ -1,0 +1,7 @@
+<h1 *ngIf="this.exam">{{exam.semester | titlecase}} {{ exam.year }} - Moed {{exam.moed}}</h1>
+
+<ul>
+  <li *ngFor="let q of questions">
+    <a routerLink="/question/{{ q.id }}">Question {{ q.number }} ({{q.total_grade}} Points)</a>
+  </li>
+</ul>

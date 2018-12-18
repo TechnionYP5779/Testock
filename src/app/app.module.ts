@@ -13,11 +13,12 @@ import {UserProfileComponent} from './users/user-profile/user-profile.component'
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {PdfService} from './core/pdf.service';
+import {CoursesComponent} from './ui/courses/courses.component';
+import {CourseComponent} from './ui/course/course.component';
+import {QuestionComponent} from './ui/question/question.component';
+import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
-
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { LayoutModule } from '@angular/cdk/layout';
-import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
+import {BreadcrumbsComponent} from './ui/breadcrumbs/breadcrumbs.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,11 @@ import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
     UserLoginComponent,
     UserProfileComponent,
     HeaderComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    CoursesComponent,
+    CourseComponent,
+    QuestionComponent,
+    ExamComponent
   ],
   imports: [
     BrowserModule,
@@ -33,9 +38,7 @@ import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AppRoutingModule,
-    AngularFontAwesomeModule,
-    BrowserAnimationsModule,
-    LayoutModule
+    AngularFontAwesomeModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
