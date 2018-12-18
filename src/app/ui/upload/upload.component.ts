@@ -3,6 +3,7 @@ import {DbService} from '../../core/db.service';
 import {PdfService} from '../../core/pdf.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Course} from '../../core/entities/course';
+import {UploadService} from '../../core/upload.service';
 
 @Component({
   selector: 'app-upload',
@@ -14,10 +15,11 @@ export class UploadComponent implements OnInit {
   @ViewChild('file') file;
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
 
+  public blobs: Blob[];
   public images: SafeUrl[];
   public chosenImages: boolean[];
 
-  constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer) { }
+  constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer, private uploadService: UploadService) { }
 
   public course: Course;
   public year: number;
@@ -32,6 +34,7 @@ export class UploadComponent implements OnInit {
     this.tryGetCourseDetails(file);
 
     this.pdf.getImagesOfFile(file).then(res => {
+      this.blobs = res;
       this.images = res.map(img => {
         const url = URL.createObjectURL(img);
         return this.sanitizer.bypassSecurityTrustUrl(url);
@@ -59,4 +62,11 @@ export class UploadComponent implements OnInit {
   updateImageSelection(i: number) {
     this.chosenImages[i] = !this.chosenImages[i];
   }
+
+  uploadImages() {
+    const sem = (this.semester === 1) ? 'winter' : 'spring';
+    this.uploadService.uploadScan(this.course.id, this.year, sem, 'A', [1, 2, 3], [33, 33, 34], this.blobs)
+      .then(() => console.log('Piiiii'));
+  }
+
 }
