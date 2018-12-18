@@ -19,6 +19,12 @@ import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BreadcrumbsComponent} from './ui/breadcrumbs/breadcrumbs.component';
+import {UploadComponent} from './ui/upload/upload.component';
+import {SemesterPipe} from './core/semester.pipe';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatInputModule} from '@angular/material';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {AngularFireStorageModule} from '@angular/fire/storage';
 
 @NgModule({
   declarations: [
@@ -30,15 +36,21 @@ import {BreadcrumbsComponent} from './ui/breadcrumbs/breadcrumbs.component';
     CoursesComponent,
     CourseComponent,
     QuestionComponent,
-    ExamComponent
+    ExamComponent,
+    UploadComponent,
+    SemesterPipe
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    AngularFireStorageModule,
     AppRoutingModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatCheckboxModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]

@@ -8,9 +8,9 @@ export class PdfService {
 
   constructor() { }
 
-  public async getImagesOfPDF(path: string): Promise<Blob[]> {
+  public async getImagesOfPDF(file: string|Uint8Array): Promise<Blob[]> {
 
-    const doc = await PDFJS.getDocument(path);
+    const doc = await PDFJS.getDocument(file);
     const images = [];
 
     for (let i = 1; i <= doc.numPages; ++i) {
@@ -32,5 +32,17 @@ export class PdfService {
 
     return Promise.all(res);
 
+  }
+
+  public async getImagesOfFile(file: File): Promise<Blob[]> {
+
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result);
+      fr.readAsArrayBuffer(file);
+    }).then(res => {
+      const data = new Uint8Array(res as ArrayBuffer);
+      return this.getImagesOfPDF(data);
+    });
   }
 }

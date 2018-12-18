@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection, DocumentReference} from '@angular/fire/firestore';
 import {Course} from './entities/course';
 import {Observable} from 'rxjs';
 import {Question, QuestionId} from './entities/question';
-import {Solution} from './entities/solution';
-import {flatMap, map} from 'rxjs/operators';
+import {Solution, SolutionId} from './entities/solution';
+import {first, flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
+import {assembleI18nBoundString} from '@angular/compiler/src/render3/view/i18n/util';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,31 @@ export class DbService {
     return this.coursesCollection.doc<Course>(course.toString()).collection<Exam>('exams').doc<Exam>(id).valueChanges();
   }
 
+  createExamForCourse(course: number, exam: Exam): Promise<ExamId> {
+    return this.coursesCollection.doc<Course>(course.toString()).collection('exams').add({...exam})
+      .then(docRef => {
+        return {id: docRef.id, course: course, ...exam};
+      });
+  }
+
+  getExamByDetails(course: number, year: number, semester: string, moed: string): Observable<ExamId> {
+
+    const ref = r =>
+      r.where('year', '==', year)
+        .where('semester', '==', semester)
+        .where('moed', '==', moed);
+
+    return this.coursesCollection.doc<Course>(course.toString()).collection<Exam>('exams', ref).snapshotChanges().pipe(
+      map(actions => {
+        if (actions.length !== 1) {
+          return null;
+        }
+        const e = actions[0].payload.doc.data() as Exam;
+        return {id: actions[0].payload.doc.id, course: course, ...e};
+      })
+    );
+  }
+
   getQuestionsOfExam(course: number, examId: string): Observable<QuestionId[]> {
 
     return this.getExam(course, examId).pipe(
@@ -100,4 +126,35 @@ export class DbService {
     return this.coursesCollection.valueChanges();
   }
 
+  getQuestionByDetails(course: number, year: number, semester: string, moed: string, number: number): Observable<QuestionId> {
+    const ref = r =>
+      r.where('year', '==', year)
+        .where('semester', '==', semester)
+        .where('moed', '==', moed)
+        .where('number', '==', number);
+
+    return this.afs.collection<Question>('questions', ref).snapshotChanges().pipe(
+      map(actions => {
+        if (actions.length !== 1) {
+          return null;
+        }
+        const e = actions[0].payload.doc.data() as Question;
+        return {id: actions[0].payload.doc.id, ...e};
+      })
+    );
+  }
+
+  createQuestionForExam(course: number, q: Question): Promise<QuestionId> {
+    return this.questionsCollection.add({...q})
+      .then(docRef => {
+        return {id: docRef.id, ...q};
+      });
+  }
+
+  addSolutionForQuestion(question: QuestionId, sol: Solution): Promise<SolutionId> {
+    return this.afs
+      .collection<Solution>('questions/' + question.id + '/solutions').add({...sol}).then(dr => {
+        return {id: dr.id, ...sol};
+      });
+  }
 }
