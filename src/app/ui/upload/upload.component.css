@@ -1,0 +1,13 @@
+.upload-thumbnail-image-placeholder {
+  padding: 50px;
+  background: #f6f6f6;
+}
+
+.upload-thumbnail-image-placeholder img {
+  width: 100%;
+}
+
+.card-title span {
+  font-size: 70%;
+  opacity: 0.6;
+}

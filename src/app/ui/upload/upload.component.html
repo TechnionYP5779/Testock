@@ -50,7 +50,44 @@
   </div>
 
   <div class="col-3">
-    <h2 *ngIf="course">Auto Detected: {{ course.id }} {{ course.name }} @ {{ course.faculty }}</h2>
-    <h2>Semester: {{ this.year }} {{ this.semester }}</h2>
+
+    <div class="card">
+      <div class="upload-thumbnail-image-placeholder">
+        <img class="align-middle" src="/assets/images/testock-logo.png" alt="Card image cap">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">
+          <!--{{ course.name }}-->
+          Introduction to Artificial Intelligence
+          <span>
+            <!--{{ this.semester }} {{ this.year }}-->
+            Winter 2017-2018
+          </span>
+        </h5>
+        <ul class="scan-properties">
+          <li>
+            <span class="scan-properties-icon">
+              <fa name="hashtag"></fa>
+            </span>
+            <span class="scan-properties-text">
+              <!--{{ course.id }}-->
+              236363
+            </span>
+          </li>
+          <li>
+            <span class="scan-properties-icon">
+              <fa name="home"></fa>
+            </span>
+            <span class="scan-properties-text">
+              <!--{{ course.faculty }}-->
+              Computer Science
+            </span>
+          </li>
+        </ul>
+        <p class="card-text">In here we will show the details about the selected images of the scan itself. <br /> To Be Done...</p>
+        <Button href="#" class="btn btn-primary">Upload Scan</Button>
+      </div>
+    </div>
   </div>
+
 </div>
