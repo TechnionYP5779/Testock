@@ -46,7 +46,7 @@ async function addSolImage(pdf: PDFDocument, url, x ,y){
         body += d;
       });
       res.on('end', () => {
-        pdf.image(body, x, y, { width: 500 });
+        pdf.image(body, { width: 500, align: 'center' });
         resolve(res);
       });
     });
