@@ -128,7 +128,8 @@ export class DbService {
 
   getQuestionByDetails(course: number, year: number, semester: string, moed: string, number: number): Observable<QuestionId> {
     const ref = r =>
-      r.where('year', '==', year)
+      r.where('course', '==', course)
+        .where('year', '==', year)
         .where('semester', '==', semester)
         .where('moed', '==', moed)
         .where('number', '==', number);
