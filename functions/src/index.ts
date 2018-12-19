@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as PDFDocument from 'pdfkit'
+import * as PDFDocument from 'pdfkit';
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
