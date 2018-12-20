@@ -4,9 +4,8 @@ import {Course} from './entities/course';
 import {Observable} from 'rxjs';
 import {Question, QuestionId} from './entities/question';
 import {Solution, SolutionId} from './entities/solution';
-import {first, flatMap, map} from 'rxjs/operators';
+import {flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
-import {assembleI18nBoundString} from '@angular/compiler/src/render3/view/i18n/util';
 
 @Injectable({
   providedIn: 'root'
@@ -63,7 +62,7 @@ export class DbService {
   }
 
   createExamForCourse(course: number, exam: Exam): Promise<ExamId> {
-    return this.coursesCollection.doc<Course>(course.toString()).collection('exams').add({...exam})
+    return this.coursesCollection.doc<Course>(course.toString()).collection('exams').add(exam)
       .then(docRef => {
         return {id: docRef.id, course: course, ...exam};
       });
@@ -146,7 +145,7 @@ export class DbService {
   }
 
   createQuestionForExam(course: number, q: Question): Promise<QuestionId> {
-    return this.questionsCollection.add({...q})
+    return this.questionsCollection.add(q)
       .then(docRef => {
         return {id: docRef.id, ...q};
       });
@@ -154,7 +153,7 @@ export class DbService {
 
   addSolutionForQuestion(question: QuestionId, sol: Solution): Promise<SolutionId> {
     return this.afs
-      .collection<Solution>('questions/' + question.id + '/solutions').add({...sol}).then(dr => {
+      .collection<Solution>('questions/' + question.id + '/solutions').add(sol).then(dr => {
         return {id: dr.id, ...sol};
       });
   }
