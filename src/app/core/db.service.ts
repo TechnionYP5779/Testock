@@ -158,4 +158,8 @@ export class DbService {
         return {id: dr.id, ...sol};
       });
   }
+
+  setSolutionForQuestion(question: QuestionId, sol: SolutionId): Promise<void> {
+    return this.afs.doc(`questions/${question.id}/solutions/${sol.id}`).set(sol);
+  }
 }
