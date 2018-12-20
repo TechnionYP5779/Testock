@@ -1,5 +1,5 @@
-export class Course {
-  public id: number;
-  public name: string;
-  public faculty: string;
+export interface Course {
+  id: number;
+  name: string;
+  faculty: string;
 }

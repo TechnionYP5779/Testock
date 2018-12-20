@@ -1,8 +1,8 @@
-export class Solution {
-  public photo: string;
-  public grade: number;
+export interface Solution {
+  photo: string;
+  grade: number;
 }
 
-export class SolutionId extends Solution {
-  public id: string;
+export interface SolutionId extends Solution {
+  id: string;
 }

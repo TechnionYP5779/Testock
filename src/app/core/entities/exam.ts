@@ -1,10 +1,10 @@
-export class Exam {
-  public moed: string;
-  public semester: string;
-  public year: number;
+export interface Exam {
+  moed: string;
+  semester: string;
+  year: number;
 }
 
-export class ExamId extends Exam {
-  public id: string;
-  public course: number;
+export interface ExamId extends Exam {
+  id: string;
+  course: number;
 }
