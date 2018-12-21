@@ -15,18 +15,22 @@
               <a class="nav-link" href="#">Home</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link disabled" routerLink="/faculties">Faculties</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" routerLink="/courses">Courses</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/upload">Upload</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">ScoreBoard</a>
-            </li>
+            <!--<li class="nav-item">-->
+              <!--<a class="nav-link" routerLink="/upload">Upload</a>-->
+            <!--</li>-->
+            <!--<li class="nav-item">-->
+              <!--<a class="nav-link disabled" href="#">ScoreBoard</a>-->
+            <!--</li>-->
           </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <form class="form-inline my-2 my-lrg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search course..." aria-label="Search">
+            <button class="btn btn-outline-success mr-2" type="submit" routerLink="/courses">Search</button>
+            <button class="btn btn-outline-primary" type="button" routerLink="/upload">Upload scan</button>
           </form>
         </div>
       </nav>
