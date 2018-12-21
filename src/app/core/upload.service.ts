@@ -19,7 +19,7 @@ export class UploadService {
     let exam = await this.db.getExamByDetails(course, year, semester, moed).pipe(first()).toPromise();
 
     if (!exam) {
-      const e = new Exam();
+      const e = {} as Exam;
       e.moed = moed;
       e.year = year;
       e.semester = semester;
@@ -40,7 +40,7 @@ export class UploadService {
     let question = await this.db.getQuestionByDetails(course, year, semester, moed, number).pipe(first()).toPromise();
 
     if (!question) {
-      const q = new Question();
+      const q = {} as Question;
       q.course = course;
       q.year = year;
       q.semester = semester;
@@ -50,7 +50,7 @@ export class UploadService {
 
       question = await this.db.createQuestionForExam(course, q);
     }
-    const sol = new Solution();
+    const sol = {} as Solution;
     sol.grade = grade;
 
     const createdSol = await this.db.addSolutionForQuestion(question, sol);

@@ -78,10 +78,10 @@ export class UploadComponent implements OnInit {
   }
 
   addQuestionNumber(i: number, $event: any) {
-    this.questionNums[i] = $event.target.value;
+    this.questionNums[i] = Number($event.target.value);
   }
 
   addGrade(i, $event) {
-    this.grades[i] = $event.target.value;
+    this.grades[i] = +Number($event.target.value);
   }
 }
