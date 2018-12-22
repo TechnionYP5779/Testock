@@ -1,4 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {AuthService} from '../../core/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,7 @@ export class HeaderComponent implements OnInit {
   main_menu_opened: boolean;
   @Output() main_menu_triggered: EventEmitter<boolean>;
 
-  constructor() {
+  constructor(public auth: AuthService) {
     this.main_menu_opened = false;
     this.main_menu_triggered = new EventEmitter();
   }
@@ -20,5 +21,9 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() { }
+
+  logout() {
+    this.auth.signOut();
+  }
 
 }
