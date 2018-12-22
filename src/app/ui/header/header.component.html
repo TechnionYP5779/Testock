@@ -2,7 +2,7 @@
   <div id="topbar">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="#">
           <img src="/assets/images/testock-logo.png" alt="" height="25">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,15 +24,17 @@
             <input class="form-control mr-sm-2" type="search" placeholder="Search course..." aria-label="Search">
             <button class="btn btn-outline-info mr-2" type="submit" routerLink="/courses">Search</button>
           </form>
-          <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">Upload scan</button>
-          <!-- User logged in -->
-          <div *ngIf="auth.currentUser">
-            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">Logout</button>
-            <img [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
-          </div>
-          <!-- User NOT logged in -->
-          <div *ngIf="!auth.currentUser">
-            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">Login</button>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">Upload scan</button>
+            <!-- User logged in -->
+            <div *ngIf="auth.currentUser">
+              <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">Logout</button>
+              <img [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+            </div>
+            <!-- User NOT logged in -->
+            <div *ngIf="!auth.currentUser">
+              <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">Login</button>
+            </div>
           </div>
         </div>
       </nav>
