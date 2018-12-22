@@ -24,17 +24,15 @@
             <input class="form-control mr-sm-2" type="search" placeholder="Search course..." aria-label="Search">
             <button class="btn btn-outline-info mr-2" type="submit" routerLink="/courses">Search</button>
           </form>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">Upload scan</button>
-            <!-- User logged in -->
-            <div *ngIf="auth.currentUser">
-              <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">Logout</button>
-              <img [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
-            </div>
-            <!-- User NOT logged in -->
-            <div *ngIf="!auth.currentUser">
-              <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">Login</button>
-            </div>
+          <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">Upload scan</button>
+          <!-- User logged in -->
+          <div *ngIf="auth.currentUser">
+            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">Logout</button>
+            <img [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+          </div>
+          <!-- User NOT logged in -->
+          <div *ngIf="!auth.currentUser">
+            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">Login</button>
           </div>
         </div>
       </nav>
