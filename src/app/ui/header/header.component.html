@@ -8,7 +8,6 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
@@ -20,25 +19,24 @@
             <li class="nav-item">
               <a class="nav-link" routerLink="/courses">Courses</a>
             </li>
-            <!--<li class="nav-item">-->
-              <!--<a class="nav-link" routerLink="/upload">Upload</a>-->
-            <!--</li>-->
-            <!--<li class="nav-item">-->
-              <!--<a class="nav-link disabled" href="#">ScoreBoard</a>-->
-            <!--</li>-->
           </ul>
           <form class="form-inline my-2 my-lrg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search course..." aria-label="Search">
-            <button class="btn btn-outline-success mr-2" type="submit" routerLink="/courses">Search</button>
-            <button class="btn btn-outline-primary" type="button" routerLink="/upload">Upload scan</button>
+            <button class="btn btn-outline-info mr-2" type="submit" routerLink="/courses">Search</button>
           </form>
+          <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">Upload scan</button>
+          <!-- User logged in -->
+          <div *ngIf="auth.currentUser">
+            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">Logout</button>
+            <img [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+          </div>
+          <!-- User NOT logged in -->
+          <div *ngIf="!auth.currentUser">
+            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">Login</button>
+          </div>
         </div>
       </nav>
     </div>
   </div>
-
   <app-breadcrumbs></app-breadcrumbs>
-
 </header>
-
-
