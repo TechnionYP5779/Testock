@@ -1,8 +1,24 @@
-<button class="facebook" (click)="signInWithFacebook()">
-  <fa name="facebook"></fa>
-  Continue with Facebook
-</button>
-<button class="guest" routerLink="/">
-  <fa name="user"></fa>
-  Continue as guest
-</button>
+<div class="col-sm-6 center" id="inner" style="width:35%">
+  <div class="card text-center" id="login">
+    <div class="card-header">
+      Login to Testock
+    </div>
+    <div class="card-body">
+      <!--<h5 class="card-title">Special title treatment</h5>-->
+      <!--<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
+
+      <button button type="button" class="btn btn-primary btn-block" (click)="signInWithFacebook()">
+        <fa name="facebook"></fa>
+        Continue with Facebook
+      </button>
+      <button button type="button" class="btn btn-secondary btn-block" routerLink="/courses">
+        <fa name="user"></fa>
+        Continue as guest
+      </button>
+
+    </div>
+    <!--<div class="card-footer text-muted">-->
+      <!--2 days ago-->
+    <!--</div>-->
+  </div>
+</div>
