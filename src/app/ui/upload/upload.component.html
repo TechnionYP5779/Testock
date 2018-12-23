@@ -13,7 +13,7 @@
           <div class="box has-advanced-upload" [ngClass]="{'is-dragover':isDragged == true}" (drop)="onDrop($event)" (dragover)="onDragOver($event)"
                (dragleave)="onDragLeave($event)" enctype="multipart/form-data">
             <div class="box-input">
-              <i class="fa fa-upload box-icon"></i>
+              <fa class="fa fa-upload box-icon"></fa>
               <input class="box-file" type="file" id="file" accept="application/pdf" #file (change)="onFileSelected()" aria-describedby="inputGroupFileAddon01">
               <div class="box-file-label-text" style="text-align: center;">
                 <label class="box-file-label" for="file">
