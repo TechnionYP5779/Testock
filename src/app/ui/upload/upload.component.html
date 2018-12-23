@@ -1,6 +1,5 @@
 <div class="row">
   <div class="accordion col-9" id="accordionExample">
-
     <div class="card">
       <div class="card-header" id="headingOne">
         <h5 class="mb-0">
@@ -11,16 +10,27 @@
       </div>
       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
         <div class="card-body">
-          <div class="input-group mb-3">
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="inputGroupFile01"  accept="application/pdf" #file (change)="onFileSelected($event)" aria-describedby="inputGroupFileAddon01">
-              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+
+          <!--<input type="file" class="custom-file-input" id="inputGroupFile01"  accept="application/pdf" #file (change)="onFileSelected($event)" aria-describedby="inputGroupFileAddon01">-->
+          <!--<label class="custom-file-label" for="inputGroupFile01">Choose file</label>-->
+
+          <div class="box has-advanced-upload" [ngClass]="{'is-dragover':isDragged == true}" (drop)="onDrop($event)" (dragover)="onDragOver($event)"
+               (dragleave)="onDragLeave($event)" enctype="multipart/form-data">
+            <div class="box-input">
+              <i class="fa fa-upload box-icon"></i>
+              <input class="box-file" type="file" id="file" accept="application/pdf" #file (change)="onFileSelected()" aria-describedby="inputGroupFileAddon01">
+              <div class="box-file-label-text" style="text-align: center;">
+                <label class="box-file-label" for="file">
+                  <strong> Browse files </strong> or drop them here
+                </label>
+              </div>
             </div>
           </div>
+
+
         </div>
       </div>
     </div>
-
     <div class="card">
       <div class="card-header" id="headingTwo">
         <h5 class="mb-0">
@@ -51,11 +61,8 @@
         </div>
       </div>
     </div>
-
   </div>
-
   <div class="col-3">
-
     <div class="card">
       <div class="upload-thumbnail-image-placeholder">
         <img class="align-middle" src="/assets/images/testock-logo.png" alt="Card image cap">
@@ -90,5 +97,6 @@
       </div>
     </div>
   </div>
-
 </div>
+
+
