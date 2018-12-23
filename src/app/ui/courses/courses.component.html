@@ -4,6 +4,9 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">{{ course.id }}: {{ course.name }} ({{ course.faculty }})</h5>
+          <button type="button" class="btn btn-success m-1" routerLink="/course/{{ course.id }}">Go to exams</button>
+          <button type="button" class="btn btn-primary m-1" href="#">Facebook group</button>
+          <button type="button" class="btn btn-secondary m-1" href="#">Webcourse</button>
         </div>
       </div>
     </div>
