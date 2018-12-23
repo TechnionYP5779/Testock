@@ -42,14 +42,18 @@ export class UploadComponent implements OnInit {
     this.images.splice(this.images.indexOf(img), 1);
   }
 
-  private tryGetCourseDetails(file: File) {
+  private getCourseDetails(file: File) {
     const fileName = file.name;
-    const split = fileName.split('-');
-    const courseId = parseInt(split[2], 10);
-    this.year = parseInt(split[1].substr(0, 4), 10);
-    this.semester = parseInt(split[1].substr(5, 2), 10);
-    this.moed = parseInt(split[3], 10);
-    this.db.getCourse(courseId).subscribe(course => this.course = course);
+    if (/^([0-9]{9}-20[0-9]{2}0(1|2|3)-[0-9]{6}-(1|2|3))/.test(fileName)) {
+      const split = fileName.split('-');
+      const courseId = parseInt(split[2], 10);
+      this.year = parseInt(split[1].substr(0, 4), 10);
+      this.semester = parseInt(split[1].substr(5, 2), 10);
+      this.moed = parseInt(split[3], 10);
+      this.db.getCourse(courseId).subscribe(course => this.course = course);
+    } else {
+      alert('undefined file name');
+    }
   }
 
   updateImageSelection(i: number) {
@@ -92,7 +96,11 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
-    this.tryGetCourseDetails(file);
+    try {
+      this.getCourseDetails(file);
+    } catch (e) {
+      // catch and just suppress error
+    }
     this.pdf.getImagesOfFile(file).then(res => {
       this.blobs = res;
       this.images = res.map(img => {
