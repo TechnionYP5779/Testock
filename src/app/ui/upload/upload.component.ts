@@ -74,7 +74,7 @@ export class UploadComponent implements OnInit {
     const moed = (this.moed === 1) ? 'A' : (this.moed === 2) ? 'B' : 'C';
     const nums = this.questionNums.filter((_, index) => this.chosenImages[index]);
     const grades = this.grades.filter((_, index) => this.chosenImages[index]);
-    const blobs = this.blobs.filter((_, index) => this.chosenImages[index]);
+    const blobs = this.blobs.filter((_, index) => this.chosenImages[index]).map(blob => [blob]);
 
     this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, blobs)
       .then(() => console.log('Piiiii'));
