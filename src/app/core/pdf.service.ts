@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as PDFJS from 'pdfjs-dist';
+declare let pdfjsLib: any;
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class PdfService {
 
   public async getImagesOfPDF(file: string|Uint8Array): Promise<Blob[]> {
 
-    const doc = await PDFJS.getDocument(file);
+    const doc = await pdfjsLib.getDocument(file);
     const images = [];
 
     for (let i = 1; i <= doc.numPages; ++i) {
@@ -18,7 +18,7 @@ export class PdfService {
       const ops = await page.getOperatorList();
 
       for (let j = 0; j < ops.fnArray.length; j++) {
-        if (ops.fnArray[j] === PDFJS.OPS.paintJpegXObject) {
+        if (ops.fnArray[j] === pdfjsLib.OPS.paintJpegXObject) {
           images.push(page.objs.get((ops.argsArray[j][0])));
         }
       }
