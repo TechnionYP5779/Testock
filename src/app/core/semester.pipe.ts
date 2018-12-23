@@ -4,7 +4,6 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'semester'
 })
 export class SemesterPipe implements PipeTransform {
-
   transform(value: number, args?: any): string {
     switch (value) {
       case 1: return 'Winter';
@@ -13,5 +12,18 @@ export class SemesterPipe implements PipeTransform {
       default: return 'Unknown semester';
     }
   }
+}
 
+@Pipe({
+  name: 'moed'
+})
+export class MoedPipe implements PipeTransform {
+  transform(value: number, args?: any): string {
+    switch (value) {
+      case 1: return 'A';
+      case 2: return 'B';
+      case 3: return 'C';
+      default: return 'Unknown moed';
+    }
+  }
 }
