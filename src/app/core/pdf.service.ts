@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as PDFJS from 'pdfjs-dist';
+declare let pdfjsLib: any;
+const PDFJS = pdfjsLib;
 
 @Injectable({
   providedIn: 'root'
