@@ -26,6 +26,7 @@ export class UploadComponent implements OnInit {
   public course: Course;
   public year: number;
   public semester: number;
+  public moed: number;
 
   ngOnInit() {
   }
@@ -60,6 +61,7 @@ export class UploadComponent implements OnInit {
     const courseId = parseInt(split[2], 10);
     this.year = parseInt(split[1].substr(0, 4), 10);
     this.semester = parseInt(split[1].substr(5, 2), 10);
+    this.moed = parseInt(split[3], 10);
     this.db.getCourse(courseId).subscribe(course => this.course = course);
   }
 
@@ -68,12 +70,13 @@ export class UploadComponent implements OnInit {
   }
 
   uploadImages() {
-    const sem = (this.semester === 1) ? 'winter' : 'spring';
+    const sem = (this.semester === 1) ? 'winter' : (this.semester === 2) ? 'spring' : 'summer';
+    const moed = (this.moed === 1) ? 'A' : (this.moed === 2) ? 'B' : 'C';
     const nums = this.questionNums.filter((_, index) => this.chosenImages[index]);
     const grades = this.grades.filter((_, index) => this.chosenImages[index]);
     const blobs = this.blobs.filter((_, index) => this.chosenImages[index]);
 
-    this.uploadService.uploadScan(this.course.id, this.year, sem, 'A', nums, grades, blobs)
+    this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, blobs)
       .then(() => console.log('Piiiii'));
   }
 
