@@ -64,14 +64,18 @@ export class UploadComponent implements OnInit {
     this.loadFile(file);
   }
 
-  private tryGetCourseDetails(file: File) {
+  private getCourseDetails(file: File) {
     const fileName = file.name;
-    const split = fileName.split('-');
-    const courseId = parseInt(split[2], 10);
-    this.year = parseInt(split[1].substr(0, 4), 10);
-    this.semester = parseInt(split[1].substr(5, 2), 10);
-    this.moed = parseInt(split[3], 10);
-    this.db.getCourse(courseId).subscribe(course => this.course = course);
+    if (/^([0-9]{9}-20[0-9]{2}0(1|2|3)-[0-9]{6}-(1|2|3))/.test(fileName)) {
+      const split = fileName.split('-');
+      const courseId = parseInt(split[2], 10);
+      this.year = parseInt(split[1].substr(0, 4), 10);
+      this.semester = parseInt(split[1].substr(5, 2), 10);
+      this.moed = parseInt(split[3], 10);
+      this.db.getCourse(courseId).subscribe(course => this.course = course);
+    } else {
+      alert('undefined file name');
+    }
   }
 
   uploadImages() {
@@ -108,8 +112,14 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
+    try {
+      this.getCourseDetails(file);
+    } catch (e) {
+      // add snackbar
+      return;
+    }
+
     this.questions = [];
-    this.tryGetCourseDetails(file);
     this.pdf.getImagesOfFile(file).then(res => this.blobs = res);
     this.imagesCollpaseTrigger.nativeElement.click();
   }
