@@ -20,6 +20,8 @@ export class UploadComponent implements OnInit {
   public questionNums: number[];
   public grades: number[];
   public blobs: Blob[];
+  private isDragged: boolean;
+  private files: any;
 
   constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer, private uploadService: UploadService) { }
 
@@ -33,22 +35,7 @@ export class UploadComponent implements OnInit {
 
   onFileSelected() {
     const file = this.file.nativeElement.files[0];
-
-    this.tryGetCourseDetails(file);
-
-    this.pdf.getImagesOfFile(file).then(res => {
-      this.blobs = res;
-      this.images = res.map(img => {
-        const url = URL.createObjectURL(img);
-        return this.sanitizer.bypassSecurityTrustUrl(url);
-      });
-
-      this.chosenImages = Array.apply(null, Array(this.images.length)).map(function() { return false; });
-      this.questionNums = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
-      this.grades = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
-    });
-
-    this.imagesCollpaseTrigger.nativeElement.click();
+    this.loadFile(file);
   }
 
   removePage(img: SafeUrl) {
@@ -87,4 +74,36 @@ export class UploadComponent implements OnInit {
   addGrade(i, $event) {
     this.grades[i] = +Number($event.target.value);
   }
+
+  onDragOver(event): void {
+    event.preventDefault();
+    this.isDragged = true;
+  }
+
+  onDragLeave(event): void {
+    this.isDragged = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragged = false;
+    const file = event.dataTransfer.items[0].getAsFile();
+    this.loadFile(file);
+  }
+
+  loadFile(file): void {
+    this.tryGetCourseDetails(file);
+    this.pdf.getImagesOfFile(file).then(res => {
+      this.blobs = res;
+      this.images = res.map(img => {
+        const url = URL.createObjectURL(img);
+        return this.sanitizer.bypassSecurityTrustUrl(url);
+      });
+      this.chosenImages = Array.apply(null, Array(this.images.length)).map(function() { return false; });
+      this.questionNums = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
+      this.grades = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
+    });
+    this.imagesCollpaseTrigger.nativeElement.click();
+  }
 }
+
