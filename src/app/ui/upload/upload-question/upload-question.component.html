@@ -4,22 +4,22 @@
       <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#question' + index" aria-expanded="true" [attr.aria-controls]="'question' + index">
         Question {{ index }}
       </button>
+      <button class="btn add-images-button float-right" data-toggle="collapse" [attr.data-target]="'#question' + index" aria-expanded="true" [attr.aria-controls]="'question' + index" (click)="requestImageAdd()">
+        <fa name="plus"></fa>
+      </button>
     </h5>
   </div>
 
   <div [attr.id]="'question' + index" class="collapse" [attr.aria-labelledby]="'question' + index + '-heading'" data-parent="#questions">
     <div class="card-body">
-      <div class="row question-images">
-        <div class="col-4" *ngFor="let image of images; let i = index">
-          <button class="image-remove" (click)="removeImage(i)">
-            <fa name="times"></fa>
-          </button>
+      <div class="question-images">
+        <div class="question-image" *ngFor="let image of images; let i = index">
           <img [src]="image" alt="scan page crop">
-        </div>
-        <div class="col-4">
-          <button class="btn btn-block add-images-button" (click)="requestImageAdd()">
-            <fa name="plus"></fa>
-          </button>
+          <div class="image-popup">
+            <button class="btn image-remove-button" (click)="removeImage(i)">
+              <fa name="trash"></fa>
+            </button>
+          </div>
         </div>
       </div>
     </div>

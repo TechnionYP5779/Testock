@@ -22,7 +22,6 @@ export class UploadQuestionComponent implements OnInit {
   }
 
   removeImage(imageIndex: number) {
-    this.images.splice(imageIndex, 1);
     this.imageRemoveRequested.emit([this.index, imageIndex]);
   }
 }
