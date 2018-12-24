@@ -1,1 +1,16 @@
-<img class="scan-page-image" [src]="image" alt="exam scan image">
+<img class="scan-page-image" [src]="image" alt="exam scan image" data-toggle="modal" [attr.data-target]="'#scan-page-modal-' + index" />
+
+<!-- Modal -->
+<div class="modal fade" [attr.id]="'scan-page-modal-' + index" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal">Done</button>
+      </div>
+      <div class="modal-body">
+        <img class="scan-page-image" [src]="image" alt="exam scan image">
+      </div>
+    </div>
+  </div>
+</div>
