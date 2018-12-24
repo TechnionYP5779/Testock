@@ -15,7 +15,7 @@ export class UploadService {
   }
 
   async uploadScan(course: number, year: number, semester: string, moed: string,
-                   nums: number[], grades: number[], images: string[][]): Promise<void> {
+                   nums: number[], grades: number[], points: number[], images: string[][]): Promise<void> {
     let exam = await this.db.getExamByDetails(course, year, semester, moed).pipe(first()).toPromise();
 
     if (!exam) {
@@ -28,14 +28,14 @@ export class UploadService {
 
     const promises = [];
     for (let i = 0; i < nums.length; ++i) {
-      promises.push(this.uploadQuestion(course, year, semester, moed, nums[i], grades[i], images[i]));
+      promises.push(this.uploadQuestion(course, year, semester, moed, nums[i], grades[i], points[i], images[i]));
     }
 
     await Promise.all(promises);
 
   }
 
-  private async uploadQuestion(course: number, year: number, semester: string, moed: string, number: number, grade: number, images: string[]) {
+  private async uploadQuestion(course: number, year: number, semester: string, moed: string, number: number, grade: number, points: number, images: string[]) {
 
     let question = await this.db.getQuestionByDetails(course, year, semester, moed, number).pipe(first()).toPromise();
 
@@ -46,7 +46,7 @@ export class UploadService {
       q.semester = semester;
       q.moed = moed;
       q.number = number;
-      q.total_grade = 10;
+      q.total_grade = points;
 
       question = await this.db.createQuestionForExam(course, q);
     }

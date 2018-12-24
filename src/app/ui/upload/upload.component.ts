@@ -8,7 +8,8 @@ import {MatSnackBar} from '@angular/material';
 class QuestionSolution {
   public index: number;
   public images: string[];
-  public grade = 10;
+  public grade: number;
+  public points: number;
 
   constructor(index: number) {
     this.index = index;
@@ -66,9 +67,10 @@ export class UploadComponent implements OnInit {
     const moed = (this.moed === 1) ? 'A' : (this.moed === 2) ? 'B' : 'C';
     const nums = this.questions.map(q => q.index);
     const grades = this.questions.map(q => q.grade);
+    const points = this.questions.map(q => q.points);
     const images = this.questions.map(q => q.images);
 
-    this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, images)
+    this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, points, images)
       .then(() => console.log('Piiiii'));
   }
 
