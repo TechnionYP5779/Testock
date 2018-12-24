@@ -9,12 +9,12 @@ import {SafeUrl} from '@angular/platform-browser';
 export class ScanPageComponent implements OnInit {
 
   @Input() private index: number;
-  @Input() private image: SafeUrl;
+  @Input() private blob: Blob;
   @Output() private selected = false;
 
   constructor() { }
 
   ngOnInit() {
   }
-
+  
 }
