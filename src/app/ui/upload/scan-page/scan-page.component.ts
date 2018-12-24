@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {SafeUrl} from '@angular/platform-browser';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
 
@@ -8,13 +8,12 @@ import {ImageCroppedEvent} from 'ngx-image-cropper';
   styleUrls: ['./scan-page.component.scss']
 })
 export class ScanPageComponent implements OnInit {
-
   @Input() private index: number;
   @Input() private blob: Blob;
   @Input() private croppable = false;
   private croppedImage = '';
   @Output() private selected = false;
-  @Output() onImageSelected = new EventEmitter<string>();
+  @Output() imageSelected = new EventEmitter<string>();
 
   constructor() { }
 
@@ -26,10 +25,10 @@ export class ScanPageComponent implements OnInit {
   }
 
   cancelImageSelection() {
-    this.onImageSelected.emit(null);
+    this.imageSelected.emit(null);
   }
 
   selectImage() {
-    this.onImageSelected.emit(this.croppedImage);
+    this.imageSelected.emit(this.croppedImage);
   }
 }
