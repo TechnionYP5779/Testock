@@ -7,9 +7,14 @@ import {UploadService} from '../../core/upload.service';
 
 class Question {
   public index: number;
+  public images: string[] = [];
 
   constructor(index: number) {
     this.index = index;
+  }
+
+  addImage(image: string) {
+    this.images.push(image);
   }
 }
 
