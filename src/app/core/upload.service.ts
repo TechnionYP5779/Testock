@@ -18,6 +18,9 @@ export class UploadService {
                    nums: number[], grades: number[], points: number[], images: string[][]): Promise<void> {
     let exam = await this.db.getExamByDetails(course, year, semester, moed).pipe(first()).toPromise();
 
+    console.log(grades);
+    console.log(points);
+
     if (!exam) {
       const e = {} as Exam;
       e.moed = moed;

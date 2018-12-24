@@ -8,7 +8,7 @@
         <fa name="plus"></fa>
       </button>
       <div class="grades-container float-right">
-        <input class="lhs" type="number" [(ngModel)]="grade"> / <input class="rhs" type="number" [(ngModel)]="points">
+        <input class="lhs" type="number" [value]="grade" (input)="updateGrade($event.target.value)"> / <input class="rhs" type="number" [value]="points" (input)="updatePoints($event.target.value)">
       </div>
     </h5>
   </div>
