@@ -25,6 +25,7 @@ export class QuestionId extends  Question {
 export class Solution {
   public photo: string;
   public grade: number;
+  public photos: string[];
 }
 
 export class Course {
@@ -37,7 +38,7 @@ function capStr(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-async function addSolImage(pdf: PDFDocument, url, x ,y){
+async function addSolImage(pdf: PDFDocument, url){
   return new Promise(async(resolve, reject) => {
     const req = await https.get(url, (res) => {
       res.setEncoding('base64');
@@ -69,7 +70,16 @@ async function addQuestion(pdf: PDFDocument, q: QuestionId) {
   const sol = await getBestSolutionFor(q);
   pdf.fontSize(25).text(`Question ${q.number} (${sol.grade}/${q.total_grade})`, 50, 50);
   pdf.moveDown();
-  await addSolImage(pdf, sol.photo, 0, 80);
+  let first = true;
+  for (const photo of sol.photos) {
+    if (first) {
+      first = false;
+    } else {
+      pdf.addPage();
+      pdf.fontSize(25).text(`Question ${q.number} (Cont.)`, 50, 50);
+    }
+    await addSolImage(pdf, photo);
+  }
 }
 
 async function getQuestionsOfExam(course: number, year: number, semester: string, moed: string): Promise<QuestionId[]> {
