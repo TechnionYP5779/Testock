@@ -74,7 +74,25 @@
             </span>
           </li>
         </ul>
-        <p class="card-text">Here we will show the details about the selected images of the scan itself. <br /> To Be Done...</p>
+
+        <div class="accordion" id="questions">
+          <div class="card" id="question-template">
+            <div class="card-header" id="question0-heading">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#question0" aria-expanded="true" aria-controls="question0">
+                  Question 0
+                </button>
+              </h5>
+            </div>
+
+            <div id="question0" class="collapse show" aria-labelledby="question0-heading" data-parent="#questions">
+              <div class="card-body">
+                Temp data...
+              </div>
+            </div>
+          </div>
+        </div>
+
         <Button href="#" class="btn btn-primary" (click)="uploadImages()">Upload Scan</Button>
       </div>
     </div>
