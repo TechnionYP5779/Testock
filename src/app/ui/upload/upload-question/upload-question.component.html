@@ -7,6 +7,9 @@
       <button class="btn add-images-button float-right" data-toggle="collapse" [attr.data-target]="'#question' + index" aria-expanded="true" [attr.aria-controls]="'question' + index" (click)="requestImageAdd()">
         <fa name="plus"></fa>
       </button>
+      <div class="grades-container float-right">
+        <input class="lhs" type="number" [(ngModel)]="grade"> / <input class="rhs" type="number" [(ngModel)]="points">
+      </div>
     </h5>
   </div>
 

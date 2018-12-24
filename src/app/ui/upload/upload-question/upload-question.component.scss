@@ -18,6 +18,30 @@
     background-color: transparent;
   }
 
+  .grades-container {
+    margin-top: 4px;
+
+    input {
+      width: 30px;
+      font-size: 70%;
+      text-align: right;
+      padding: 4px 0;
+      border: 0;
+      border-bottom: 2px solid #e1e1e1;
+      background-color: transparent;
+      outline: none;
+
+      &:focus {
+        border-bottom-color: #007bff;
+      }
+
+      &.lhs {
+        direction: rtl;
+        text-align: right;
+      }
+    }
+  }
+
   .question-images {
     img {
       width: 100%;

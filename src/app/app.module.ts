@@ -29,6 +29,7 @@ import {UploadQuestionComponent} from './ui/upload/upload-question/upload-questi
 import {ImageCropperModule} from 'ngx-image-cropper';
 import {CoreModule} from './core/core.module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatCheckboxModule,
     ImageCropperModule,
     CoreModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    FormsModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
