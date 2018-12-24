@@ -37,7 +37,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-3" *ngFor="let blob of blobs; let i = index">
-              <app-scan-page [blob]="blob" [index]="i" [croppable]="choosingMode" (onImageSelected)="addImage($event)"></app-scan-page>
+              <app-scan-page [blob]="blob" [index]="i" [croppable]="activeQuestion" (onImageSelected)="addImage($event)"></app-scan-page>
             </div>
           </div>
         </div>
