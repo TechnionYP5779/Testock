@@ -25,8 +25,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {AngularFireStorageModule} from '@angular/fire/storage';
-import { ScanPageComponent } from './ui/upload/scan-page/scan-page.component';
-import { UploadQuestionComponent } from './ui/upload/upload-question/upload-question.component';
+import {ScanPageComponent} from './ui/upload/scan-page/scan-page.component';
+import {UploadQuestionComponent} from './ui/upload/upload-question/upload-question.component';
+import {ImageCropperModule} from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { UploadQuestionComponent } from './ui/upload/upload-question/upload-ques
     AngularFontAwesomeModule,
     BrowserAnimationsModule,
     MatInputModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    ImageCropperModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
