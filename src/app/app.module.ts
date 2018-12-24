@@ -26,6 +26,7 @@ import {MatInputModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import { ScanPageComponent } from './ui/upload/scan-page/scan-page.component';
+import { UploadQuestionComponent } from './ui/upload/upload-question/upload-question.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ScanPageComponent } from './ui/upload/scan-page/scan-page.component';
     ExamComponent,
     UploadComponent,
     SemesterPipe,
-    ScanPageComponent
+    ScanPageComponent,
+    UploadQuestionComponent
   ],
   imports: [
     BrowserModule,
