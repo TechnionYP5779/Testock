@@ -1,6 +1,5 @@
 <img class="scan-page-image" [attr.src]="blob | safeUrl" alt="exam scan image" data-toggle="modal" [attr.data-target]="'#scan-page-modal-' + index" />
 
-<!-- Modal -->
 <div class="modal fade" [attr.id]="'scan-page-modal-' + index" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -9,8 +8,6 @@
         <button type="button" class="btn btn-success" data-dismiss="modal">Done</button>
       </div>
       <div class="modal-body">
-        <!--<img class="scan-page-image" [attr.src]="blob | safeUrl" alt="exam scan image">-->
-
         <image-cropper
           [imageFileChanged]="blob"
           format="jpg"
