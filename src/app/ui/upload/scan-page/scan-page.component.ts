@@ -10,6 +10,7 @@ export class ScanPageComponent implements OnInit {
 
   @Input() private index: number;
   @Input() private blob: Blob;
+  @Input() private croppable = false;
   @Output() private selected = false;
 
   constructor() { }
