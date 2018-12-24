@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
+import {SafeUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-scan-page',
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScanPageComponent implements OnInit {
 
-  constructor() { }
+  @Input() private image: SafeUrl;
+  @Output() private selected: boolean;
+
+  constructor() {
+    this.selected = false;
+  }
 
   ngOnInit() {
   }
