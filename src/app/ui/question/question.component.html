@@ -4,8 +4,15 @@
 <img [src]="question.photo" />
 
 <h2>Solutions:</h2>
-
-<div *ngFor="let sol of solutions">
-  <h2> Grade: {{sol.grade}}/{{question.total_grade}} </h2>
-  <img [src]="sol.photo" width="200px"/>
+<div class="row p-3">
+  <div class="col-4 p-3" *ngFor="let sol of solutions">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Grade: {{sol.grade}}/{{question.total_grade}}</h5>
+        <div *ngFor="let img of sol.photos">
+          <img [src]="img" width="100%"/>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
