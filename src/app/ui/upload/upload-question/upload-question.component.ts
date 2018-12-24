@@ -10,6 +10,7 @@ export class UploadQuestionComponent implements OnInit {
   @Input() index: number;
   @Input() images: string[] = [];
   @Output() imageAddRequested = new EventEmitter<number>();
+  @Output() imageRemoveRequested = new EventEmitter<any[]>();
 
   constructor() { }
 
@@ -20,4 +21,8 @@ export class UploadQuestionComponent implements OnInit {
     this.imageAddRequested.emit(this.index);
   }
 
+  removeImage(imageIndex: number) {
+    this.images.splice(imageIndex, 1);
+    this.imageRemoveRequested.emit([this.index, imageIndex]);
+  }
 }

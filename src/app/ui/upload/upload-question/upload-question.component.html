@@ -10,8 +10,11 @@
   <div [attr.id]="'question' + index" class="collapse" [attr.aria-labelledby]="'question' + index + '-heading'" data-parent="#questions">
     <div class="card-body">
       <div class="row question-images">
-        <div class="col-4" *ngFor="let image of images">
-          <img [attr.src]="image" alt="scan page crop">
+        <div class="col-4" *ngFor="let image of images; let i = index">
+          <button class="image-remove" (click)="removeImage(i)">
+            <fa name="times"></fa>
+          </button>
+          <img [src]="image" alt="scan page crop">
         </div>
         <div class="col-4">
           <button class="btn btn-block add-images-button" (click)="requestImageAdd()">

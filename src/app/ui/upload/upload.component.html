@@ -81,7 +81,8 @@
       <div class="questions-wrapper">
         <div class="accordion" id="questions">
           <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images"
-                               (imageAddRequested)="enableImageAdding($event)"></app-upload-question>
+                               (imageAddRequested)="enableImageAdding($event)"
+                               (imageRemoveRequested)="removeImage($event)"></app-upload-question>
         </div>
 
         <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">

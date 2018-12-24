@@ -112,5 +112,10 @@ export class UploadComponent implements OnInit {
     this.questions[this.activeQuestion - 1].addImage(image);
     this.activeQuestion = 0;
   }
+
+  removeImage(questionImage: any[]) {
+    this.questions[questionImage[0]].images.splice(questionImage[1], 1);
+    this.activeQuestion = 0;
+  }
 }
 
