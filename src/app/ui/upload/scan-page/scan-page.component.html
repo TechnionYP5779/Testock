@@ -5,7 +5,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
 
-      <div class="modal-body" *ngIf="croppable; else imageCropper">
+      <div class="modal-body" *ngIf="!croppable; else imageCropper">
         <img class="scan-page-image" [attr.src]="blob | safeUrl" alt="exam scan image">
       </div>
 
