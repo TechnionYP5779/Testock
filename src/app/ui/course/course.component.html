@@ -6,6 +6,10 @@
     <button type="button" class="btn btn-secondary m-1" href="#">Webcourse</button>
   </div>
 </div>
+<div class="list-group" *ngFor="let e of exams">
+  <a class="list-group-item list-group-item-action active"><span style="color:white">Available exams</span></a>
+  <a routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">{{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}</a>
+</div>
 
 <!--<ul>-->
   <!--<li *ngFor="let q of questions">-->
