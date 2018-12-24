@@ -9,8 +9,8 @@ export class UploadQuestionComponent implements OnInit {
 
   @Input() index: number;
   @Input() images: string[] = [];
-  public grade = 5;
-  public points = 7;
+  @Input() grade: number;
+  @Input() points: number;
   @Output() imageAddRequested = new EventEmitter<number>();
   @Output() imageRemoveRequested = new EventEmitter<any[]>();
 

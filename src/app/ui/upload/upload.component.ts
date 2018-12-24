@@ -14,6 +14,8 @@ class QuestionSolution {
   constructor(index: number) {
     this.index = index;
     this.images = [];
+    this.grade = 0;
+    this.points = 0;
   }
 
   addImage(image: string) {
