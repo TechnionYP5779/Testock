@@ -1,3 +1,15 @@
-<p>
-  upload-question works!
-</p>
+<div class="card">
+  <div class="card-header" [attr.id]="'question' + index + '-heading'">
+    <h5 class="mb-0">
+      <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#question' + index" aria-expanded="true" [attr.aria-controls]="'question' + index">
+        Question {{ index }}
+      </button>
+    </h5>
+  </div>
+
+  <div [attr.id]="'question' + index" class="collapse" [attr.aria-labelledby]="'question' + index + '-heading'" data-parent="#questions">
+    <div class="card-body">
+      Temp data...
+    </div>
+  </div>
+</div>

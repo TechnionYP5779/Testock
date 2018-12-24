@@ -5,6 +5,14 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Course} from '../../core/entities/course';
 import {UploadService} from '../../core/upload.service';
 
+class Question {
+  public index: number;
+
+  constructor(index: number) {
+    this.index = index;
+  }
+}
+
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -14,6 +22,8 @@ export class UploadComponent implements OnInit {
 
   @ViewChild('file') file;
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
+
+  public questions: Question[] = [];
 
   public images: SafeUrl[];
   public chosenImages: boolean[];
@@ -104,6 +114,10 @@ export class UploadComponent implements OnInit {
       this.grades = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
     });
     this.imagesCollpaseTrigger.nativeElement.click();
+  }
+
+  addQuestion() {
+    this.questions.push(new Question(this.questions.length + 1));
   }
 }
 
