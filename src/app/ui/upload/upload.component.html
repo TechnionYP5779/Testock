@@ -36,7 +36,7 @@
       <div id="imagesCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
         <div class="card-body">
           <div class="row">
-            <div class="col-3" *ngFor="let img of images; let i = index">
+            <div class="col-3" *ngFor="let img of images">
               <app-scan-page [image]="img"></app-scan-page>
             </div>
           </div>
