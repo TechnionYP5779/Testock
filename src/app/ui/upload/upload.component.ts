@@ -4,6 +4,7 @@ import {PdfService} from '../../core/pdf.service';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Course} from '../../core/entities/course';
 import {UploadService} from '../../core/upload.service';
+import {MatSnackBar} from '@angular/material';
 
 class Question {
   public index: number;
@@ -30,7 +31,7 @@ export class UploadComponent implements OnInit {
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
 
   public questions: Question[] = [];
-  private choosingMode = false;
+  private choosingMode = 0;
 
   public images: SafeUrl[];
   public chosenImages: boolean[];
@@ -40,7 +41,7 @@ export class UploadComponent implements OnInit {
   private isDragged: boolean;
   private files: any;
 
-  constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer, private uploadService: UploadService) { }
+  constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer, private uploadService: UploadService, public snackBar: MatSnackBar) { }
 
   public course: Course;
   public year: number;
@@ -125,6 +126,11 @@ export class UploadComponent implements OnInit {
 
   addQuestion() {
     this.questions.push(new Question(this.questions.length + 1));
+  }
+
+  enableImageAdding(questionIndex: number) {
+    this.choosingMode = questionIndex;
+    this.snackBar.open('Select a page to add', 'close', {duration: 3000});
   }
 }
 

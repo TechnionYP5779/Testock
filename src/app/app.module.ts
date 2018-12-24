@@ -28,6 +28,7 @@ import {ScanPageComponent} from './ui/upload/scan-page/scan-page.component';
 import {UploadQuestionComponent} from './ui/upload/upload-question/upload-question.component';
 import {ImageCropperModule} from 'ngx-image-cropper';
 import {CoreModule} from './core/core.module';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {CoreModule} from './core/core.module';
     MatInputModule,
     MatCheckboxModule,
     ImageCropperModule,
-    CoreModule
+    CoreModule,
+    MatSnackBarModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
