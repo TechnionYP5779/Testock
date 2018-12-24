@@ -5,6 +5,7 @@
 
   .scan-page-image {
     width: 100%;
+    cursor: pointer;
   }
 }
 
@@ -16,5 +17,9 @@
 
   .modal-header {
     border: 0;
+  }
+
+  .scan-page-image-modal {
+    width: 100%;
   }
 }
