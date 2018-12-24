@@ -45,36 +45,40 @@
     </div>
   </div>
   <div class="col-3">
-    <div class="card">
-      <div class="upload-thumbnail-image-placeholder">
-        <img class="align-middle" src="/assets/images/testock-logo.png" alt="Card image cap">
-      </div>
-      <div class="card-body" *ngIf="course">
-        <h5 class="card-title">
-          {{ course.name }}
-          <span style="display: block">
+    <div *ngIf="course">
+      <div class="card">
+        <div class="upload-thumbnail-image-placeholder">
+          <img class="align-middle" src="/assets/images/testock-logo.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ course.name }}
+            <span style="display: block">
             {{ this.semester | semester }} {{ this.year }}
           </span>
-        </h5>
-        <ul class="scan-properties row">
-          <li class="col-6">
+          </h5>
+          <ul class="scan-properties row">
+            <li class="col-6">
             <span class="scan-properties-icon">
               <fa name="hashtag"></fa>
             </span>
-            <span class="scan-properties-text">
+              <span class="scan-properties-text">
               {{ course.id }}
             </span>
-          </li>
-          <li class="col-6">
+            </li>
+            <li class="col-6">
             <span class="scan-properties-icon">
               <fa name="home"></fa>
             </span>
-            <span class="scan-properties-text">
+              <span class="scan-properties-text">
               {{ course.faculty }}
             </span>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
 
+      <div class="questions-wrapper">
         <div class="accordion" id="questions">
           <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images"
                                (imageAddRequested)="enableImageAdding($event)"></app-upload-question>
@@ -83,9 +87,9 @@
         <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">
           Add Question
         </button>
-
-        <Button id="upload-scan-button" class="btn btn-success btn-block" (click)="uploadImages()">Upload Scan</Button>
       </div>
+
+      <Button id="upload-scan-button" class="btn btn-success btn-block" (click)="uploadImages()">Upload Scan</Button>
     </div>
   </div>
 </div>
