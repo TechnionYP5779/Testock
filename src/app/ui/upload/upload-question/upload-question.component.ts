@@ -8,6 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
 export class UploadQuestionComponent implements OnInit {
 
   @Input() index: number;
+  @Input() images: string[] = [];
 
   constructor() { }
 

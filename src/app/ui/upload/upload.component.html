@@ -76,7 +76,7 @@
         </ul>
 
         <div class="accordion" id="questions">
-          <app-upload-question *ngFor="let q of questions" [index]="q.index"></app-upload-question>
+          <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images"></app-upload-question>
         </div>
 
         <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">

@@ -10,18 +10,7 @@
   <div [attr.id]="'question' + index" class="collapse" [attr.aria-labelledby]="'question' + index + '-heading'" data-parent="#questions">
     <div class="card-body">
       <div class="row question-images">
-        <div class="col-4">
-          <img src="/assets/images/testock-logo.png" alt="scan page crop">
-        </div>
-        <div class="col-4">
-          <img src="/assets/images/testock-logo.png" alt="scan page crop">
-        </div>
-        <div class="col-4">
-          <button class="btn btn-block add-images-button">
-            <fa name="plus"></fa>
-          </button>
-        </div>
-        <div class="col-4">
+        <div class="col-4" *ngFor="let image of images">
           <img src="/assets/images/testock-logo.png" alt="scan page crop">
         </div>
         <div class="col-4">
