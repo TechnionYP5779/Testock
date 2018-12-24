@@ -16,5 +16,5 @@ export class ScanPageComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
 }
