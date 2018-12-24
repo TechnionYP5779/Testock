@@ -1,7 +1,9 @@
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron jumbotron">
   <div class="container">
     <h1 *ngIf="this.course" class="display-4">{{ this.course.id }}</h1>
-    <p class="lead">Welcome to the "{{ this.course.name }}" ({{ this.course.id }}) course page. Good luck in your exams!</p>
+    <p class="lead">Welcome to the "{{ this.course.name }}" ({{ this.course.id }}) course page . Good luck in your exams!</p>
+    <button type="button" class="btn btn-primary m-1" href="#">Facebook group</button>
+    <button type="button" class="btn btn-secondary m-1" href="#">Webcourse</button>
   </div>
 </div>
 
