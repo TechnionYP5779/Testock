@@ -30,6 +30,7 @@ export class UploadComponent implements OnInit {
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
 
   public questions: Question[] = [];
+  private choosingMode = false;
 
   public images: SafeUrl[];
   public chosenImages: boolean[];
