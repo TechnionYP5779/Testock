@@ -25,6 +25,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {AngularFireStorageModule} from '@angular/fire/storage';
+import { ScanPageComponent } from './ui/upload/scan-page/scan-page.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
     QuestionComponent,
     ExamComponent,
     UploadComponent,
-    SemesterPipe
+    SemesterPipe,
+    ScanPageComponent
   ],
   imports: [
     BrowserModule,
