@@ -37,7 +37,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-3" *ngFor="let blob of blobs; let i = index">
-              <app-scan-page [blob]="blob" [index]="i" [croppable]="choosingMode"></app-scan-page>
+              <app-scan-page [blob]="blob" [index]="i" [croppable]="choosingMode" (onImageSelected)="addImage($event)"></app-scan-page>
             </div>
           </div>
         </div>
@@ -76,7 +76,8 @@
         </ul>
 
         <div class="accordion" id="questions">
-          <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images" (addingEvent)="enableImageAdding($event)"></app-upload-question>
+          <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images"
+                               (imageAddRequested)="enableImageAdding($event)"></app-upload-question>
         </div>
 
         <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">

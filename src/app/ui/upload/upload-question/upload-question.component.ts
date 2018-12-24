@@ -9,15 +9,15 @@ export class UploadQuestionComponent implements OnInit {
 
   @Input() index: number;
   @Input() images: string[] = [];
-  @Output() addingEvent = new EventEmitter<number>();
+  @Output() imageAddRequested = new EventEmitter<number>();
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  addImage() {
-    this.addingEvent.emit(this.index);
+  requestImageAdd() {
+    this.imageAddRequested.emit(this.index);
   }
 
 }

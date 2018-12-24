@@ -11,8 +11,8 @@
 
       <ng-template #imageCropper>
         <div class="modal-header">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-success" data-dismiss="modal">Done</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cancelImageSelection()">Cancel</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="selectImage()">Done</button>
         </div>
 
         <div class="modal-body">
@@ -21,6 +21,7 @@
             format="jpg"
             [maintainAspectRatio]="false"
             [resizeToWidth]="1920"
+            (imageCropped)="updateCroppedImage($event)"
           ></image-cropper>
         </div>
       </ng-template>

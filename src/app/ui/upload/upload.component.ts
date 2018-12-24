@@ -132,5 +132,13 @@ export class UploadComponent implements OnInit {
     this.choosingMode = questionIndex;
     this.snackBar.open('Select a page to add', 'close', {duration: 3000});
   }
+
+  addImage(image: string) {
+    if (image === null) {
+      return;
+    }
+
+    this.questions[this.choosingMode - 1].addImage(image);
+  }
 }
 

@@ -11,10 +11,10 @@
     <div class="card-body">
       <div class="row question-images">
         <div class="col-4" *ngFor="let image of images">
-          <img [attr.src]="'data:image/jpeg;charset=utf-8;base64,' + image" alt="scan page crop">
+          <img [attr.src]="image" alt="scan page crop">
         </div>
         <div class="col-4">
-          <button class="btn btn-block add-images-button" (click)="addImage()">
+          <button class="btn btn-block add-images-button" (click)="requestImageAdd()">
             <fa name="plus"></fa>
           </button>
         </div>
