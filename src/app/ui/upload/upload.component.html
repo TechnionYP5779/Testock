@@ -48,7 +48,6 @@
       </div>
     </div>
   </div>
-  <<<<<<< HEAD
   <div class="col-4">
     <div *ngIf="course">
       <div class="card">
@@ -59,25 +58,25 @@
           <h5 class="card-title">
             {{ course.name }}
             <span style="display: block">
-            {{ this.semester | semester }} {{ this.year }}, moed {{ this.moed | moed }}
+              {{ this.semester | semester }} {{ this.year }}, moed {{ this.moed }}
             </span>
           </h5>
           <ul class="scan-properties row">
             <li class="col-6">
-            <span class="scan-properties-icon">
-              <fa name="hashtag"></fa>
-            </span>
+              <span class="scan-properties-icon">
+                <fa name="hashtag"></fa>
+              </span>
               <span class="scan-properties-text">
-              {{ course.id }}
-            </span>
+                {{ course.id }}
+              </span>
             </li>
             <li class="col-6">
-            <span class="scan-properties-icon">
-              <fa name="home"></fa>
-            </span>
+              <span class="scan-properties-icon">
+                <fa name="home"></fa>
+              </span>
               <span class="scan-properties-text">
-              {{ course.faculty }}
-            </span>
+                {{ course.faculty }}
+              </span>
             </li>
           </ul>
         </div>
