@@ -7,13 +7,9 @@
     </a>
   </h5>
   <div class="card-body">
-    <h5>Question in this exam:</h5>
-    <ul>
-      <li *ngFor="let q of questions">
-        <a routerLink="/question/{{ q.id }}">Question {{ q.number }} ({{q.total_grade}} Points)</a>
-      </li>
-    </ul>
+    <div class="list-group my-3" *ngFor="let q of questions">
+      <li class="list-group-item list-group-item-primary">Solved questions</li>
+      <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action">Question {{ q.number }} ({{q.total_grade}} Points)</a>
+    </div>
   </div>
 </div>
-
-
