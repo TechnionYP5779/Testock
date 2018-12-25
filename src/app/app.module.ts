@@ -26,6 +26,7 @@ import {MatInputModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import { HomeComponent } from './ui/home/home.component';
+import { FacebookProfilePictureComponent } from './users/facebook-profile-picture/facebook-profile-picture.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { HomeComponent } from './ui/home/home.component';
     ExamComponent,
     UploadComponent,
     SemesterPipe,
-    HomeComponent
+    HomeComponent,
+    FacebookProfilePictureComponent
   ],
   imports: [
     BrowserModule,
