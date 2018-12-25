@@ -57,7 +57,7 @@ export class UploadService {
 
     createdSol.photos = [];
     for (let i = 0; i < images.length; ++i) {
-      const p = `${course}\/${year}\/${semester}\/${moed}\/${number}\/${createdSol.id}\/${i}.png`;
+      const p = `${course}\/${year}\/${semester}\/${moed}\/${number}\/${createdSol.id}\/${i}.jpg`;
       await this.storage.ref(p).putString(images[i], 'data_url');
 
       createdSol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
