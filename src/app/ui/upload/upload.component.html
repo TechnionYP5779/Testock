@@ -90,7 +90,12 @@
         </button>
       </div>
 
-      <Button id="upload-scan-button" class="btn btn-success btn-block" (click)="uploadImages()">Upload Scan</Button>
+      <Button id="upload-scan-button" class="btn btn-success btn-block" [disabled]="state !== uploadState.Ready" (click)="uploadImages()">
+        <span [hidden]="state !== uploadState.Uploading">
+          <fa name="spinner" animation="spin"></fa>
+        </span>
+        Upload Scan
+      </Button>
     </div>
   </div>
 </div>

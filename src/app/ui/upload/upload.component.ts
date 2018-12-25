@@ -23,6 +23,13 @@ class QuestionSolution {
   }
 }
 
+enum UploadState {
+  Ready,
+  Uploading,
+  UploadSuccess,
+  UploadFailure
+}
+
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -41,10 +48,13 @@ export class UploadComponent implements OnInit {
 
   constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar) { }
 
+  public uploadState = UploadState;
+
   public course: Course;
   public year: number;
   public semester: number;
   public moed: number;
+  public state = UploadState.Ready;
 
   ngOnInit() {
   }
@@ -65,6 +75,8 @@ export class UploadComponent implements OnInit {
   }
 
   uploadImages() {
+    this.state = UploadState.Uploading;
+
     const sem = (this.semester === 1) ? 'winter' : (this.semester === 2) ? 'spring' : 'summer';
     const moed = (this.moed === 1) ? 'A' : (this.moed === 2) ? 'B' : 'C';
     const nums = this.questions.map(q => q.index);
@@ -73,7 +85,10 @@ export class UploadComponent implements OnInit {
     const images = this.questions.map(q => q.images);
 
     this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, points, images)
-      .then(() => console.log('Piiiii'));
+      .then(() => {
+        this.state = UploadState.UploadSuccess;
+        this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
+      });
   }
 
   onDragOver(event): void {
