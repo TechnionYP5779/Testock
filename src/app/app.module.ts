@@ -46,7 +46,7 @@ import { FacebookProfilePictureComponent } from './users/facebook-profile-pictur
     ExamComponent,
     UploadComponent,
     HomeComponent,
-    FacebookProfilePictureComponent
+    FacebookProfilePictureComponent,
     ScanPageComponent,
     UploadQuestionComponent
   ],
