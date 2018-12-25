@@ -13,7 +13,7 @@
         <ng-template #imageCropper>
           <image-cropper
             [imageFileChanged]="blob"
-            format="jpg"
+            format="jpeg"
             [maintainAspectRatio]="false"
             [resizeToWidth]="1920"
             (imageCropped)="updateCroppedImage($event)"
