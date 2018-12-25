@@ -13,7 +13,7 @@ export class UserProfileComponent implements OnInit {
   currentUserFbId: string;
 
   ngOnInit() {
-    this.auth.fbId.subscribe(next => { this.currentUserFbId = next; console.log(next); } );
+    this.auth.fbId.subscribe(next => this.currentUserFbId = next);
   }
 
   logout() {
