@@ -45,8 +45,7 @@ import { HomeComponent } from './ui/home/home.component';
     ExamComponent,
     UploadComponent,
     ScanPageComponent,
-    UploadQuestionComponent
-    SemesterPipe,
+    UploadQuestionComponent,
     HomeComponent
   ],
   imports: [
