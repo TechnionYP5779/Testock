@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {AuthService} from '../../core/auth.service';
 
 @Component({
   selector: 'app-facebook-profile-picture',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FacebookProfilePictureComponent implements OnInit {
 
-  constructor() { }
+  @Input() width: number;
+  @Input() height: number;
+  url: string;
+
+  constructor() {}
 
   ngOnInit() {
+  }
+
+  @Input() set fbUid(uid: string) {
+      this.url = `https://graph.facebook.com/${uid}/picture?width=${this.width}&height=${this.height}`;
   }
 
 }
