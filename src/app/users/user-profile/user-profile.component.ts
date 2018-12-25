@@ -10,7 +10,10 @@ export class UserProfileComponent implements OnInit {
 
   constructor(public auth: AuthService) { }
 
+  currentUserFbId: string;
+
   ngOnInit() {
+    this.auth.fbId.subscribe(next => this.currentUserFbId = next);
   }
 
   logout() {

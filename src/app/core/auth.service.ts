@@ -8,6 +8,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import UserCredential = firebase.auth.UserCredential;
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,20 @@ export class AuthService {
     this.db.doc(path).set(data)
       .catch(error => console.log(error));
 
+  }
+
+  get fbId(): Observable<string> {
+    // In the current nature of our app, this should be the facebook id
+    return this.afAuth.user.pipe(map(u => u ? u.providerData[0].uid : ''));
+  }
+
+  fbPhotoUrl(width: number, height: number): Observable<string> {
+    return this.fbId.pipe(map(id => {
+      if (id === '') {
+        return '';
+      }
+      return `https://graph.facebook.com/${id}/picture?height=${height}&width=${width}`;
+    }));
   }
 
 }

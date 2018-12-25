@@ -31,6 +31,7 @@ import {CoreModule} from './core/core.module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FormsModule} from '@angular/forms';
 import { HomeComponent } from './ui/home/home.component';
+import { FacebookProfilePictureComponent } from './users/facebook-profile-picture/facebook-profile-picture.component';
 
 @NgModule({
   declarations: [
@@ -44,9 +45,10 @@ import { HomeComponent } from './ui/home/home.component';
     QuestionComponent,
     ExamComponent,
     UploadComponent,
+    HomeComponent,
+    FacebookProfilePictureComponent
     ScanPageComponent,
-    UploadQuestionComponent,
-    HomeComponent
+    UploadQuestionComponent
   ],
   imports: [
     BrowserModule,
