@@ -1,10 +1,10 @@
 .upload-thumbnail-image-placeholder {
   padding: 30px 20px;
   background: #f6f6f6;
-}
 
-.upload-thumbnail-image-placeholder img {
-  width: 100%;
+  img {
+    width: 100%;
+  }
 }
 
 .card-title span {
@@ -16,30 +16,22 @@
   list-style: none;
   padding: 0;
   text-align: center;
+
+  .scan-properties-icon {
+    font-size: 200%;
+    display: block;
+  }
 }
 
-.scan-properties .scan-properties-icon {
-  font-size: 200%;
-  display: block;
-}
-
-.full-width {
-  width: 100%;
-}
-
-#imagesCollapse .card {
+.questions-wrapper {
   margin-top: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-.mat-checkbox {
-  position: absolute;
-  right: 5px;
-  top: 5px;
+#upload-scan-button {
+  margin-top: 20px;
 }
 
 /* drag and drop */
-
 .hcentered {
   text-align: center;
 }

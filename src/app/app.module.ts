@@ -20,11 +20,16 @@ import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BreadcrumbsComponent} from './ui/breadcrumbs/breadcrumbs.component';
 import {UploadComponent} from './ui/upload/upload.component';
-import {SemesterPipe} from './core/semester.pipe';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {AngularFireStorageModule} from '@angular/fire/storage';
+import {ScanPageComponent} from './ui/upload/scan-page/scan-page.component';
+import {UploadQuestionComponent} from './ui/upload/upload-question/upload-question.component';
+import {ImageCropperModule} from 'ngx-image-cropper';
+import {CoreModule} from './core/core.module';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {FormsModule} from '@angular/forms';
 import { HomeComponent } from './ui/home/home.component';
 import { FacebookProfilePictureComponent } from './users/facebook-profile-picture/facebook-profile-picture.component';
 
@@ -40,9 +45,10 @@ import { FacebookProfilePictureComponent } from './users/facebook-profile-pictur
     QuestionComponent,
     ExamComponent,
     UploadComponent,
-    SemesterPipe,
     HomeComponent,
     FacebookProfilePictureComponent
+    ScanPageComponent,
+    UploadQuestionComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +60,11 @@ import { FacebookProfilePictureComponent } from './users/facebook-profile-pictur
     AngularFontAwesomeModule,
     BrowserAnimationsModule,
     MatInputModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    ImageCropperModule,
+    CoreModule,
+    MatSnackBarModule,
+    FormsModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]

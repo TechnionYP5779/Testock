@@ -1,29 +1,45 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../../core/pdf.service';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Course} from '../../core/entities/course';
 import {UploadService} from '../../core/upload.service';
+import {MatSnackBar} from '@angular/material';
+
+class QuestionSolution {
+  public index: number;
+  public images: string[];
+  public grade: number;
+  public points: number;
+
+  constructor(index: number) {
+    this.index = index;
+    this.images = [];
+    this.grade = 0;
+    this.points = 0;
+  }
+
+  addImage(image: string) {
+    this.images.push(image);
+  }
+}
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.css']
+  styleUrls: ['./upload.component.scss']
 })
 export class UploadComponent implements OnInit {
 
   @ViewChild('file') file;
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
 
-  public images: SafeUrl[];
-  public chosenImages: boolean[];
-  public questionNums: number[];
-  public grades: number[];
+  public questions: QuestionSolution[] = [];
+  private activeQuestion = 0;
+
   public blobs: Blob[];
   private isDragged: boolean;
-  private files: any;
 
-  constructor(private db: DbService, private pdf: PdfService, private sanitizer: DomSanitizer, private uploadService: UploadService) { }
+  constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar) { }
 
   public course: Course;
   public year: number;
@@ -38,10 +54,6 @@ export class UploadComponent implements OnInit {
     this.loadFile(file);
   }
 
-  removePage(img: SafeUrl) {
-    this.images.splice(this.images.indexOf(img), 1);
-  }
-
   private tryGetCourseDetails(file: File) {
     const fileName = file.name;
     const split = fileName.split('-');
@@ -52,27 +64,16 @@ export class UploadComponent implements OnInit {
     this.db.getCourse(courseId).subscribe(course => this.course = course);
   }
 
-  updateImageSelection(i: number) {
-    this.chosenImages[i] = !this.chosenImages[i];
-  }
-
   uploadImages() {
     const sem = (this.semester === 1) ? 'winter' : (this.semester === 2) ? 'spring' : 'summer';
     const moed = (this.moed === 1) ? 'A' : (this.moed === 2) ? 'B' : 'C';
-    const nums = this.questionNums.filter((_, index) => this.chosenImages[index]);
-    const grades = this.grades.filter((_, index) => this.chosenImages[index]);
-    const blobs = this.blobs.filter((_, index) => this.chosenImages[index]).map(blob => [blob]);
+    const nums = this.questions.map(q => q.index);
+    const grades = this.questions.map(q => q.grade);
+    const points = this.questions.map(q => q.points);
+    const images = this.questions.map(q => q.images);
 
-    this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, blobs)
+    this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, points, images)
       .then(() => console.log('Piiiii'));
-  }
-
-  addQuestionNumber(i: number, $event: any) {
-    this.questionNums[i] = Number($event.target.value);
-  }
-
-  addGrade(i, $event) {
-    this.grades[i] = +Number($event.target.value);
   }
 
   onDragOver(event): void {
@@ -92,18 +93,33 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
+    this.questions = [];
     this.tryGetCourseDetails(file);
-    this.pdf.getImagesOfFile(file).then(res => {
-      this.blobs = res;
-      this.images = res.map(img => {
-        const url = URL.createObjectURL(img);
-        return this.sanitizer.bypassSecurityTrustUrl(url);
-      });
-      this.chosenImages = Array.apply(null, Array(this.images.length)).map(function() { return false; });
-      this.questionNums = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
-      this.grades = Array.apply(null, Array(this.images.length)).map(function() { return 0; });
-    });
+    this.pdf.getImagesOfFile(file).then(res => this.blobs = res);
     this.imagesCollpaseTrigger.nativeElement.click();
+  }
+
+  addQuestion() {
+    this.questions.push(new QuestionSolution(this.questions.length + 1));
+  }
+
+  enableImageAdding(questionIndex: number) {
+    this.activeQuestion = questionIndex;
+    this.snackBar.open('Select a page to add', 'close', {duration: 3000});
+  }
+
+  addImage(image: string) {
+    if (image === null) {
+      return;
+    }
+
+    this.questions[this.activeQuestion - 1].addImage(image);
+    this.activeQuestion = 0;
+  }
+
+  removeImage(questionImage: any[]) {
+    this.questions[questionImage[0] - 1].images.splice(questionImage[1], 1);
+    this.activeQuestion = 0;
   }
 }
 

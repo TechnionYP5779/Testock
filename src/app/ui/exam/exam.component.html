@@ -1,14 +1,15 @@
-<h1 *ngIf="this.exam">{{exam.semester | titlecase}} {{ exam.year }} - Moed {{exam.moed}}</h1>
-<div>
-  <a *ngIf="exam"
-     href="https://us-central1-yp5779-testock.cloudfunctions.net/getPDFofExam?course={{ courseId }}&year={{exam.year}}&semester={{exam.semester}}&moed={{exam.moed}}"
-     target="_blank">
-    <h4>Download generated solution</h4>
-  </a>
+<div class="card">
+  <h5 class="card-header" *ngIf="this.exam">{{exam.semester | titlecase}} {{ exam.year }} - Moed {{exam.moed}}
+    <a *ngIf="exam"
+               href="https://us-central1-yp5779-testock.cloudfunctions.net/getPDFofExam?course={{ courseId }}&year={{exam.year}}&semester={{exam.semester}}&moed={{exam.moed}}"
+               target="_blank">
+      <button type="button" class="btn btn-danger float-right">Download full PDF solution!</button>
+    </a>
+  </h5>
+  <div class="card-body">
+    <div class="list-group my-3" *ngFor="let q of questions">
+      <li class="list-group-item list-group-item-primary">Solved questions</li>
+      <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action">Question {{ q.number }} ({{q.total_grade}} Points)</a>
+    </div>
+  </div>
 </div>
-<h2>Question in this exam:</h2>
-<ul>
-  <li *ngFor="let q of questions">
-    <a routerLink="/question/{{ q.id }}">Question {{ q.number }} ({{q.total_grade}} Points)</a>
-  </li>
-</ul>
