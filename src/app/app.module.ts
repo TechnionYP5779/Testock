@@ -30,6 +30,7 @@ import {ImageCropperModule} from 'ngx-image-cropper';
 import {CoreModule} from './core/core.module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FormsModule} from '@angular/forms';
+import { HomeComponent } from './ui/home/home.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,8 @@ import {FormsModule} from '@angular/forms';
     UploadComponent,
     ScanPageComponent,
     UploadQuestionComponent
+    SemesterPipe,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
