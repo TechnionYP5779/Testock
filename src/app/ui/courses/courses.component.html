@@ -1,26 +1,8 @@
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="dropdown">
-      <a class="btn btn-outline-secondary btn-lg dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Choose faculty
-      </a>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item">All faculties</a>
-        <a class="dropdown-item">Computer Science</a>
-        <a class="dropdown-item">Electrical Engineering</a>
-      </div>
-    </div>
-  </div>
-  <div class="row p-3">
-    <div class="col-6 p-3" *ngFor="let course of courses">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ course.id }}: {{ course.name }} ({{ course.faculty }})</h5>
-          <button type="button" class="btn btn-success m-1" routerLink="/course/{{ course.id }}">Go to exams</button>
-          <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/?q=' + course.id" target="_blank">Facebook group</a>
-          <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<ul class="list-group-flush">
+  <li class="list-group-item"  *ngFor="let course of courses">
+    <h6 class="course-title m-2">{{ course.id }}: {{ course.name }} ({{ course.faculty }})</h6>
+    <button type="button" class="btn btn-success mr-2 float-right" routerLink="/course/{{ course.id }}">Go to exams</button>
+    <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/?q=' + course.id" target="_blank">facebook group</a>
+    <a class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">webcourse</a>
+  </li>
+</ul>
