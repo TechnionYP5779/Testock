@@ -8,11 +8,11 @@ import {ImageCroppedEvent} from 'ngx-image-cropper';
   styleUrls: ['./scan-page.component.scss']
 })
 export class ScanPageComponent implements OnInit {
-  @Input() private index: number;
-  @Input() private blob: Blob;
-  @Input() private croppable = false;
+  @Input() index: number;
+  @Input() blob: Blob;
+  @Input() croppable = false;
   private croppedImage = '';
-  @Output() private selected = false;
+  @Output() selected = false;
   @Output() imageSelected = new EventEmitter<string>();
 
   constructor() { }

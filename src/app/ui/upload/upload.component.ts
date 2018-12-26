@@ -44,7 +44,7 @@ export class UploadComponent implements OnInit {
   private activeQuestion = 0;
 
   public blobs: Blob[];
-  private isDragged: boolean;
+  public isDragged: boolean;
 
   constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar) { }
 
