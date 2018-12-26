@@ -13,7 +13,7 @@ export class ExamComponent implements OnInit {
 
   private courseId: number;
   private examId: string;
-  public questions: QuestionId[];ß
+  public questions: QuestionId[];
   public exam: Exam;
 
   constructor(private route: ActivatedRoute, private db: DbService) {
