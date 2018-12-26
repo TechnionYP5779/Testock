@@ -53,7 +53,7 @@ export class UploadComponent implements OnInit {
   public course: Course;
   public year: number;
   public semester: number;
-  public moed: number;
+  public moed: string;
   public state = UploadState.Ready;
 
   ngOnInit() {
@@ -64,21 +64,26 @@ export class UploadComponent implements OnInit {
     this.loadFile(file);
   }
 
-  private tryGetCourseDetails(file: File) {
+  private getCourseDetails(file: File) {
     const fileName = file.name;
-    const split = fileName.split('-');
-    const courseId = parseInt(split[2], 10);
-    this.year = parseInt(split[1].substr(0, 4), 10);
-    this.semester = parseInt(split[1].substr(5, 2), 10);
-    this.moed = parseInt(split[3], 10);
-    this.db.getCourse(courseId).subscribe(course => this.course = course);
+    if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName)) {
+      const split = fileName.split('-');
+      const courseId = parseInt(split[2], 10);
+      this.year = parseInt(split[1].substr(0, 4), 10);
+      this.semester = parseInt(split[1].substr(5, 2), 10);
+      const moedId = parseInt(split[3], 10);
+      this.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
+      this.db.getCourse(courseId).subscribe(course => this.course = course);
+    } else {
+      throw new Error('undefined file name!');
+    }
   }
 
   uploadImages() {
     this.state = UploadState.Uploading;
 
     const sem = (this.semester === 1) ? 'winter' : (this.semester === 2) ? 'spring' : 'summer';
-    const moed = (this.moed === 1) ? 'A' : (this.moed === 2) ? 'B' : 'C';
+    const moed = this.moed;
     const nums = this.questions.map(q => q.index);
     const grades = this.questions.map(q => q.grade);
     const points = this.questions.map(q => q.points);
@@ -108,8 +113,13 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
+    try {
+      this.getCourseDetails(file);
+    } catch (e) {
+      this.snackBar.open('Invalid file name', 'close', {duration: 3000});
+      return;
+    }
     this.questions = [];
-    this.tryGetCourseDetails(file);
     this.pdf.getImagesOfFile(file).then(res => this.blobs = res);
     this.imagesCollpaseTrigger.nativeElement.click();
   }
