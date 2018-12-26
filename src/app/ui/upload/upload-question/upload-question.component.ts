@@ -33,12 +33,12 @@ export class UploadQuestionComponent implements OnInit {
   }
 
   updateGrade(grade: number) {
-    this.grade = grade;
-    this.gradeChange.emit(grade);
+    this.grade = +grade;
+    this.gradeChange.emit(+grade);
   }
 
   updatePoints(points: number) {
-    this.points = points;
-    this.pointsChange.emit(points);
+    this.points = +points;
+    this.pointsChange.emit(+points);
   }
 }
