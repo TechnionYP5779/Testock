@@ -1,16 +1,18 @@
-<h1>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h1>
-<br/>
+<div *ngIf="question">
+  <h1>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h1>
+  <br/>
 
-<img [src]="question.photo" />
+  <img [src]="question.photo" />
 
-<h2>Solutions:</h2>
-<div class="row p-3">
-  <div class="col-4 p-3" *ngFor="let sol of solutions">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Grade: {{sol.grade}}/{{question.total_grade}}</h5>
-        <div *ngFor="let img of sol.photos">
-          <img [src]="img" width="100%"/>
+  <h2>Solutions:</h2>
+  <div class="row p-3">
+    <div class="col-4 p-3" *ngFor="let sol of solutions">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Grade: {{sol.grade}}/{{question.total_grade}}</h5>
+          <div *ngFor="let img of sol.photos">
+            <img [src]="img" width="100%"/>
+          </div>
         </div>
       </div>
     </div>
