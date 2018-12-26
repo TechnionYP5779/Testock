@@ -10,7 +10,7 @@ import {ExamComponent} from './ui/exam/exam.component';
 import {UploadComponent} from './ui/upload/upload.component';
 
 const routes: Routes = [
-  {path: '', component: UserLoginComponent},
+  {path: '', component: CoursesComponent},
   {path: 'login', component: UserLoginComponent},
   {path: 'profile', component: UserProfileComponent},
   {path: 'courses', component: CoursesComponent},
