@@ -116,7 +116,7 @@ export class UploadComponent implements OnInit {
     try {
       this.getCourseDetails(file);
     } catch (e) {
-      // add snackbar
+      this.snackBar.open('Invalid file name', 'close', {duration: 3000});
       return;
     }
 
