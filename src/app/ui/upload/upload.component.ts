@@ -119,7 +119,6 @@ export class UploadComponent implements OnInit {
       this.snackBar.open('Invalid file name', 'close', {duration: 3000});
       return;
     }
-
     this.questions = [];
     this.pdf.getImagesOfFile(file).then(res => this.blobs = res);
     this.imagesCollpaseTrigger.nativeElement.click();
