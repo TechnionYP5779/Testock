@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {Course} from '../../core/entities/course';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {zip} from 'rxjs';
 
 @Component({
@@ -14,9 +14,11 @@ export class CoursesComponent implements OnInit {
   courses: Course[];
   term: any;
   route: ActivatedRoute;
+  router: Router;
 
-  constructor(private r: ActivatedRoute, private db: DbService) {
+  constructor(private rtr: Router, private r: ActivatedRoute, private db: DbService) {
     this.route = r;
+    this.router = rtr;
   }
 
   ngOnInit() {
@@ -26,10 +28,12 @@ export class CoursesComponent implements OnInit {
         if (this.term === undefined) {
           return true;
         } else {
-          console.log(this.term.toString());
           return course.id.toString().includes(this.term);
         }
       });
+      if (this.courses.length === 1) {
+        this.router.navigate(['../course/' + this.courses[0].id]);
+      }
     });
   }
 }
