@@ -8,10 +8,9 @@ import {CourseComponent} from './ui/course/course.component';
 import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {UploadComponent} from './ui/upload/upload.component';
-import {HomeComponent} from './ui/home/home.component';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
+  {path: '', component: CoursesComponent},
   {path: 'login', component: UserLoginComponent},
   {path: 'profile', component: UserProfileComponent},
   {path: 'courses', component: CoursesComponent},
