@@ -17,8 +17,8 @@
         <div class="card-body">
           <h5 class="card-title">{{ course.id }}: {{ course.name }} ({{ course.faculty }})</h5>
           <button type="button" class="btn btn-success m-1" routerLink="/course/{{ course.id }}">Go to exams</button>
-          <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/?q=' + course.id" target="_blank">Facebook group</a>
-          <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
+          <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/?q=' + course.id" target="_blank">facebook group</a>
+          <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">webcourse</a>
         </div>
       </div>
     </div>
