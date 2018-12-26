@@ -18,7 +18,8 @@ const routes: Routes = [
   {path: 'course/:id', component: CourseComponent},
   {path: 'question/:id', component: QuestionComponent},
   {path: 'course/:cid/exam/:eid', component: ExamComponent},
-  {path: 'upload', component: UploadComponent}
+  {path: 'upload', component: UploadComponent},
+  {path: 'courses/:term', component: CoursesComponent}
 ];
 
 @NgModule({
