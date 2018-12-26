@@ -28,7 +28,7 @@ export class CoursesComponent implements OnInit {
         if (this.term === undefined) {
           return true;
         } else {
-          return course.id.toString().includes(this.term);
+          return course.id.toString().includes(this.term) || course.name.toLowerCase().includes(this.term.toString().toLowerCase());
         }
       });
       if (this.courses.length === 1) {
