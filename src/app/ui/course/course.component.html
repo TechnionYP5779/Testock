@@ -7,13 +7,21 @@
   </div>
 </div>
 <div class="list-group my-3">
-  <li class="list-group-item list-group-item-primary"><fa name="book"></fa> Available exams</li>
+  <li class="list-group-item list-group-item-primary">
+    <fa name="book"></fa>
+    Available exams
+    <span class="badge badge-primary">{{this.exams.length}}</span>
+  </li>
   <div *ngFor="let e of exams">
     <a routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">{{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}</a>
   </div>
 </div>
 <div class="list-group my-3">
-  <li class="list-group-item list-group-item-danger"><fa name="fire"></fa> Hot questions</li>
+  <li class="list-group-item list-group-item-danger">
+    <fa name="fire"></fa>
+    Hot questions
+    <span class="badge badge-danger">{{this.questions.length}}</span>
+  </li>
   <div *ngFor="let q of questions">
     <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action">{{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}</a>
   </div>
