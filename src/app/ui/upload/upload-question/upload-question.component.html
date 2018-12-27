@@ -4,7 +4,7 @@
       <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#question' + index" aria-expanded="true" [attr.aria-controls]="'question' + index">
         Question {{ index }}
       </button>
-      <button class="btn add-images-button float-right" data-toggle="collapse" [attr.data-target]="'#question' + index" aria-expanded="true" [attr.aria-controls]="'question' + index" (click)="requestImageAdd()">
+      <button class="btn add-images-button float-right" aria-expanded="true" [attr.aria-controls]="'question' + index" (click)="requestImageAdd()">
         <fa name="plus"></fa>
       </button>
       <div class="grades-container float-right">
