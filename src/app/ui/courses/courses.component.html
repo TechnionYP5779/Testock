@@ -5,7 +5,6 @@
         {{ course.id }}: {{ course.name }} ({{ course.faculty }})
       </a>
     </h6>
-    <button type="button" class="btn btn-success mr-2 float-right" routerLink="/course/{{ course.id }}">Go to exams</button>
     <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/?q=' + course.id" target="_blank">facebook group</a>
     <a class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">webcourse</a>
   </li>
