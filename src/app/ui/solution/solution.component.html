@@ -1,0 +1,21 @@
+<div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal"
+     [attr.data-target]="'#solution-modal-' + solution.id">
+  <img class="card-img" [src]="solution.photos[0]" alt="scan preview" />
+  <div class="card-img-overlay align-items-center d-flex justify-content-center">
+    <h2 class="card-title text-center">
+      {{solution.grade}} / {{total_grade}}
+    </h2>
+  </div>
+</div>
+
+<div class="modal fade" [attr.id]="'solution-modal-' + solution.id" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div *ngFor="let photo of solution.photos">
+          <img [src]="photo" alt="solution photo" class="sol-image-modal"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
