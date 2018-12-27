@@ -15,7 +15,7 @@
             </li>
           </ul>
           <form class="form-inline my-2 my-lrg-0">
-            <input class="form-control mr-sm-2" type="text" (input)="onSearchChange($event.target.value)" placeholder="Search course..." aria-label="Search">
+            <input class="form-control mr-sm-2" type="text" (keyup)="onSearchChange($event.target.value)" placeholder="Search course..." aria-label="Search">
             <button class="btn btn-outline-info mr-2" type="submit" routerLink="/courses/{{ this.term }}">Search</button>
           </form>
           <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">Upload scan</button>
