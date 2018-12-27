@@ -10,11 +10,11 @@ import {combineLatest, zip} from 'rxjs';
   styleUrls: ['./courses.component.css'],
 })
 export class CoursesComponent implements OnInit {
+
   courses: Course[];
   term: any;
   route: ActivatedRoute;
   router: Router;
-
 
   constructor(private rtr: Router, private r: ActivatedRoute, private db: DbService) {
     this.route = r;
@@ -34,6 +34,6 @@ export class CoursesComponent implements OnInit {
       if (this.courses.length === 1) {
         this.router.navigate(['../course/' + this.courses[0].id]);
       }
-     });
+    });
   }
 }
