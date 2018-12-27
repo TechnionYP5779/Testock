@@ -2,8 +2,6 @@
   <h1>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h1>
   <br/>
 
-  <img [src]="question.photo" />
-
   <h2>Solutions:</h2>
   <div class="row p-3">
     <div class="col-4 p-3" *ngFor="let sol of solutions">
