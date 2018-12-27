@@ -16,7 +16,7 @@
                (dragleave)="onDragLeave($event)" enctype="multipart/form-data">
             <div class="box-input">
               <fa name="upload" class="box-icon"></fa>
-              <input class="box-file" type="file" id="file" accept="application/pdf" #file (change)="onFileSelected()">
+              <input class="box-file" type="file" id="file" accept="application/pdf" #file (change)="onFileSelected($event)">
               <div class="box-file-label-text" style="text-align: center;">
                 <label class="box-file-label" for="file">
                   <strong> Browse your scan </strong> or drop it here
