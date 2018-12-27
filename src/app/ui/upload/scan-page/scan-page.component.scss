@@ -1,0 +1,25 @@
+:host {
+  margin-top: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  display: block;
+
+  .scan-page-image {
+    width: 100%;
+    cursor: pointer;
+  }
+}
+
+.modal {
+  .modal-content {
+    background: transparent;
+    border: 0
+  }
+
+  .modal-header {
+    border: 0;
+  }
+
+  .scan-page-image-modal {
+    width: 100%;
+  }
+}

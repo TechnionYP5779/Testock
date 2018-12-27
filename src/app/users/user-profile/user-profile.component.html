@@ -1,15 +1,33 @@
-<!-- User logged in -->
-<app-logo></app-logo>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-4">
+      <div class="card text-center" id="login">
+        <div class="card-header">
+          Profile page
+        </div>
+        <div class="card-body">
+          <!-- User logged in -->
+          <div *ngIf="auth.currentUser">
+            <h3>Hi {{ auth.currentUser.displayName }}</h3>
+            <app-facebook-profile-picture [fbUid]="currentUserFbId" [width]="100" [height]="100"></app-facebook-profile-picture>
+          </div>
+          <!-- User NOT logged in -->
+          <div *ngIf="!auth.currentUser">
+            <h3>Hi guest</h3>
+          </div>
+        </div>
 
-<div *ngIf="auth.currentUser">
-  <h3>Howdy, {{ auth.currentUser.displayName }}</h3>
-  <img [src]="auth.currentUser.photoURL" width=50px>
-  <button (click)="logout()">Logout</button>
-</div>
-
-<!-- User NOT logged in -->
-<div *ngIf="!auth.currentUser">
-  <h3>Howdy, {{ auth.currentUserDisplayName }}</h3>
-  <p>Login to get started...</p>
-  <button routerLink="/login">Login</button>
+        <div class="card-footer text-muted">
+          <!-- User logged in -->
+          <div *ngIf="auth.currentUser">
+            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">Logout</button>
+          </div>
+          <!-- User NOT logged in -->
+          <div *ngIf="!auth.currentUser">
+            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">Login</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
