@@ -1,10 +1,10 @@
 <div class="jumbotron jumbotron" *ngIf="this.course">
-  <div class="container">
-    <h1 class="display-4">{{ this.course.id }}</h1>
-    <p class="lead">Welcome to the "{{ this.course.name }}" ({{ this.course.id }}) course page. Good luck in your exams!</p>
-    <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/?q=' + course.id" target="_blank">facebook group</a>
-    <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">webcourse</a>
-  </div>
+  <h1 class="display-4">{{ this.course.name }} ({{ this.course.id }})</h1>
+  <p class="lead">Welcome to the "{{ this.course.name }}" ({{ this.course.id }}) course page. Good luck in your exams!</p>
+  <p class="lead">
+    <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/?q=' + course.id" target="_blank">Facebook Group</a>
+    <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
+  </p>
 </div>
 <div class="list-group my-3">
   <li class="list-group-item list-group-item-primary">
