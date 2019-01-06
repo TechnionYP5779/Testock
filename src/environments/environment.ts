@@ -9,7 +9,7 @@ export const environment = {
     authDomain: 'testock-development.firebaseapp.com',
     databaseURL: 'https://testock-development.firebaseio.com',
     projectId: 'testock-development',
-    storageBucket: '',
+    storageBucket: 'testock-development.appspot.com',
     messagingSenderId: '398800867598'
   }
 };
