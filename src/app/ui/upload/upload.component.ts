@@ -39,6 +39,7 @@ export class UploadComponent implements OnInit {
 
   @ViewChild('file') file;
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
+  @ViewChild('collapseOne') collapseOneTrigger;
 
   public questions: QuestionSolution[] = [];
   private activeQuestion = 0;
@@ -93,6 +94,7 @@ export class UploadComponent implements OnInit {
       .then(() => {
         this.state = UploadState.UploadSuccess;
         this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
+        this.resetForm();
       });
   }
 
@@ -145,6 +147,17 @@ export class UploadComponent implements OnInit {
   removeImage(questionImage: any[]) {
     this.questions[questionImage[0] - 1].images.splice(questionImage[1], 1);
     this.activeQuestion = 0;
+  }
+
+  resetForm() {
+    this.collapseOneTrigger.nativeElement.click();
+    this.questions = [];
+    this.blobs = [];
+    this.course = null;
+    this.year = null;
+    this.semester = null;
+    this.moed = null;
+    this.state = UploadState.Ready;
   }
 }
 
