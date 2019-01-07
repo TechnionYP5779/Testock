@@ -146,5 +146,27 @@ export class UploadComponent implements OnInit {
     this.questions[questionImage[0] - 1].images.splice(questionImage[1], 1);
     this.activeQuestion = 0;
   }
+
+  removeFirstPage() {
+    this.blobs = this.blobs.slice(1);
+  }
+
+  clearEvenPages() {
+    const res = [];
+    for (let i = 0; i < this.blobs.length; i = i + 2) {
+      res.push(this.blobs[i]);
+    }
+
+    this.blobs = res;
+  }
+
+  clearOddPages() {
+    const res = [];
+    for (let i = 1; i < this.blobs.length; i = i + 2) {
+      res.push(this.blobs[i]);
+    }
+
+    this.blobs = res;
+  }
 }
 
