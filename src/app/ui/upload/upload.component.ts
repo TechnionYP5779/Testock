@@ -94,6 +94,7 @@ export class UploadComponent implements OnInit {
       .then(() => {
         this.state = UploadState.UploadSuccess;
         this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
+        this.collapseOneTrigger.nativeElement.click();
         this.resetForm();
       });
   }
@@ -115,6 +116,7 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
+    this.resetForm();
     try {
       this.getCourseDetails(file);
     } catch (e) {
@@ -150,7 +152,6 @@ export class UploadComponent implements OnInit {
   }
 
   resetForm() {
-    this.collapseOneTrigger.nativeElement.click();
     this.questions = [];
     this.blobs = [];
     this.course = null;
