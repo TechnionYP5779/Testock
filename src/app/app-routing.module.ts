@@ -9,6 +9,7 @@ import {ExamComponent} from './ui/exam/exam.component';
 import {UploadComponent} from './ui/upload/upload.component';
 import {UsersOnlyGuard} from './core/users-only.guard';
 import {AdminComponent} from './ui/admin/admin.component';
+import {AdminOnlyGuard} from './core/admin-only.guard';
 
 const routes: Routes = [
   {path: '', component: CoursesComponent},
@@ -20,7 +21,7 @@ const routes: Routes = [
   {path: 'course/:cid/exam/:eid', component: ExamComponent, canActivate: [UsersOnlyGuard]},
   {path: 'upload', component: UploadComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses/:term', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'admin', component: AdminComponent}
+  {path: 'admin', component: AdminComponent, canActivate: [AdminOnlyGuard]}
 ];
 
 @NgModule({
