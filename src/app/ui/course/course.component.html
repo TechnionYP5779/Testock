@@ -1,3 +1,4 @@
+<div class="alert alert-info" *ngIf="adminAccess">You have admin access for this course</div>
 <div class="jumbotron jumbotron" *ngIf="course">
   <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
   <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
