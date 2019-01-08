@@ -7,6 +7,7 @@ export interface Roles {
 export interface UserData {
   uid: string;
   email: string;
+  name: string;
   fbId: string;
   roles: Roles;
 }
