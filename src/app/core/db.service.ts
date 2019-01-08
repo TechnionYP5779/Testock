@@ -6,7 +6,7 @@ import {Question, QuestionId} from './entities/question';
 import {Solution, SolutionId} from './entities/solution';
 import {flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
-import {UserData} from './entities/user';
+import {Roles, UserData} from './entities/user';
 
 @Injectable({
   providedIn: 'root'
@@ -165,5 +165,9 @@ export class DbService {
 
   getAllUsers(): Observable<UserData[]> {
     return this.afs.collection<UserData>('users').valueChanges();
+  }
+
+  setUserRoles(uid: string, roles: any): Promise<void> {
+    return this.afs.doc(`users/${uid}`).set({roles: roles}, {merge: true});
   }
 }
