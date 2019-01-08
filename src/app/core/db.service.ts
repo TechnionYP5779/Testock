@@ -167,7 +167,7 @@ export class DbService {
     return this.afs.collection<UserData>('users').valueChanges();
   }
 
-  setUserRoles(uid: string, roles: any): Promise<void> {
+  setUserRoles(uid: string, roles: Roles): Promise<void> {
     return this.afs.doc(`users/${uid}`).set({roles: roles}, {merge: true});
   }
 }

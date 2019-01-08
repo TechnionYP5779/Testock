@@ -1,7 +1,7 @@
 export interface Roles {
   admin?: boolean;
   faculty_admin?: string[];
-  user: boolean;
+  user?: boolean;
 }
 
 export interface UserData {
