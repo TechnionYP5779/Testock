@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from '../../core/auth.service';
+import {UserData} from '../../core/entities/user';
+import {DbService} from '../../core/db.service';
 
 @Component({
   selector: 'app-admin',
@@ -7,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
 
-  constructor() { }
+  users: UserData[];
+
+  constructor(private db: DbService) {
+    this.db.getAllUsers().subscribe(users => this.users = users);
+  }
 
   ngOnInit() {
   }

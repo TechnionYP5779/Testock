@@ -1,1 +1,21 @@
-<h1>Welcome to Testock Admin Page</h1>
+<h1>Admin Control Panel</h1>
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Email</th>
+    <th scope="col">User?</th>
+    <th scope="col">Admin?</th>
+    <th scope="col">Faculty Admin?</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users; let i = index">
+    <th scope="row">{{i+1}}</th>
+    <td>{{user.email}}</td>
+    <td><input type="checkbox" [ngModel]="user.roles.user"></td>
+    <td><input type="checkbox" [ngModel]="user.roles.admin"></td>
+    <td><div class="badge badge-primary" *ngFor="let f of user.roles.faculty_admin">{{f}}</div></td>
+  </tr>
+  </tbody>
+</table>

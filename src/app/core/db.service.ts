@@ -6,6 +6,7 @@ import {Question, QuestionId} from './entities/question';
 import {Solution, SolutionId} from './entities/solution';
 import {flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
+import {UserData} from './entities/user';
 
 @Injectable({
   providedIn: 'root'
@@ -160,5 +161,9 @@ export class DbService {
 
   setSolutionForQuestion(question: QuestionId, sol: SolutionId): Promise<void> {
     return this.afs.doc(`questions/${question.id}/solutions/${sol.id}`).set(sol);
+  }
+
+  getAllUsers(): Observable<UserData[]> {
+    return this.afs.collection<UserData>('users').valueChanges();
   }
 }
