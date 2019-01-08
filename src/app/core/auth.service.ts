@@ -100,4 +100,8 @@ export class AuthService {
   get isAdmin(): Observable<boolean> {
     return this.user$.pipe(map(user => user && user.roles.admin));
   }
+
+  isAdminOfFaculty(faculty: string): Observable<boolean> {
+    return this.user$.pipe(map(user => user && user.roles.faculty_admin.includes(faculty)));
+  }
 }
