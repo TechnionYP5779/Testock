@@ -4,8 +4,6 @@ import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {Faculty, FacultyId} from '../../core/entities/faculty';
 import {Course} from '../../core/entities/course';
-import {combineLatest, Subscription} from 'rxjs';
-import {flatMap, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin',
@@ -59,13 +57,6 @@ export class AdminComponent implements OnInit {
       this.newFaculty = {name: null};
     });
   }
-
-  // userSelectionChanged() {
-  //   if (this.userRolesSubscription) {
-  //     this.userRolesSubscription.unsubscribe();
-  //   }
-  //   this.userRolesSubscription = this.db.getUserRoles(this.selectedUser.uid).subscribe(roles => this.selectedUserRoles = roles);
-  // }
 
   setUserPermissions() {
     this.db.setUserRoles(this.selectedUser.uid, this.selectedUser.roles).then(() => {
