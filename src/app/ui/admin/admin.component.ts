@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../core/auth.service';
-import {UserData} from '../../core/entities/user';
+import {Roles, UserData} from '../../core/entities/user';
 import {DbService} from '../../core/db.service';
 
 @Component({
@@ -19,4 +19,14 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
   }
 
+  userPermissionChanged(user: UserData, $event: any) {
+    $event.target.disabled = true;
+    const roles: Roles = {user: $event.target.checked};
+    this.db.setUserRoles(user.uid, roles);
+  }
+
+  adminPermissionChanged(user: UserData, $event: any) {
+    const roles = {admin: $event.target.checked};
+    this.db.setUserRoles(user.uid, roles);
+  }
 }
