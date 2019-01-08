@@ -7,8 +7,9 @@ import FacebookAuthProvider = firebase.auth.FacebookAuthProvider;
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import UserCredential = firebase.auth.UserCredential;
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
+import {UserData} from './entities/user';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,19 @@ import {map} from 'rxjs/operators';
 export class AuthService {
 
   authState: User = null;
+  user$: Observable<UserData>;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private router: Router) {
     afAuth.user.subscribe((user) => {
       this.authState = user;
     });
+    this.user$ = this.afAuth.authState.pipe(switchMap(user => {
+      if (user) {
+        return this.db.doc<UserData>(`users/${user.uid}`).valueChanges();
+      } else {
+        return of(null);
+      }
+    }));
   }
 
   get state(): Observable<User|null> {
@@ -56,22 +65,22 @@ export class AuthService {
 
   private socialSignIn(provider: AuthProvider): Promise<firebase.auth.UserCredential|void>  {
     return this.afAuth.auth.signInWithPopup(provider)
-      .then((cred) => this.updateUserData(cred))
+      .then((cred) => { this.updateUserData(cred.user); })
       .catch(error => console.log(error));
   }
 
-  private updateUserData(cred: UserCredential): void {
-    this.authState = cred.user;
-    const path = `users/${this.currentUserId}`; // Endpoint on firebase
-    console.log(path);
-    const data = {
-      name: this.currentUser.displayName,
-      email: this.currentUser.email,
+  private updateUserData(user: User): Promise<void> {
+    const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
+    const data: UserData = {
+      uid: user.uid,
+      email: user.email,
+      fbId: user.providerData[0].uid,
+      roles: {
+        user: true
+      }
     };
 
-    this.db.doc(path).set(data)
-      .catch(error => console.log(error));
-
+   return ref.set(data, { merge: true });
   }
 
   get fbId(): Observable<string> {
