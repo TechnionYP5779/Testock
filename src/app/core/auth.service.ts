@@ -72,6 +72,7 @@ export class AuthService {
     const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
     const data: UserData = {
       uid: user.uid,
+      name: user.displayName,
       email: user.email,
       fbId: user.providerData[0].uid,
       roles: {
