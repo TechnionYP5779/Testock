@@ -33,7 +33,6 @@ import {FormsModule} from '@angular/forms';
 import { HomeComponent } from './ui/home/home.component';
 import { FacebookProfilePictureComponent } from './users/facebook-profile-picture/facebook-profile-picture.component';
 import { SolutionComponent } from './ui/solution/solution.component';
-import {UsersOnlyGuard} from './core/users-only.guard';
 import { AdminComponent } from './ui/admin/admin.component';
 import { FacultyComponent } from './ui/admin/faculty/faculty.component';
 
