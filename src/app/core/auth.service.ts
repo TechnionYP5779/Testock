@@ -6,9 +6,8 @@ import * as firebase from 'firebase';
 import FacebookAuthProvider = firebase.auth.FacebookAuthProvider;
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
-import UserCredential = firebase.auth.UserCredential;
 import {Observable, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {map, switchMap, take} from 'rxjs/operators';
 import {UserData} from './entities/user';
 
 @Injectable({
@@ -97,4 +96,7 @@ export class AuthService {
     }));
   }
 
+  get isAdmin(): Observable<boolean> {
+    return this.user$.pipe(map(user => user && user.roles.admin));
+  }
 }
