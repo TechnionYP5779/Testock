@@ -4,6 +4,7 @@ import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {Faculty, FacultyId} from '../../core/entities/faculty';
 import {Course} from '../../core/entities/course';
+import {AuthService} from '../../core/auth.service';
 
 @Component({
   selector: 'app-admin',
