@@ -191,6 +191,10 @@ export class DbService {
     return this.afs.doc(`courses/${course.id}`).set(course);
   }
 
+  createFaculty(faculty: Faculty): Promise<void> {
+    return this.afs.collection<Faculty>('faculties').add(faculty).then((dr) => {});
+  }
+
   deleteSolution(sol: SolutionId, q: QuestionId): Promise<void> {
     return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).delete();
   }
