@@ -198,4 +198,8 @@ export class DbService {
   deleteSolution(sol: SolutionId, q: QuestionId): Promise<void> {
     return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).delete();
   }
+
+  getUserRoles(uid: string): Observable<Roles> {
+    return this.afs.doc<UserData>(`users/${uid}`).valueChanges().pipe(map(u => u.roles));
+  }
 }
