@@ -8,7 +8,7 @@
     <th scope="col">Email</th>
     <th scope="col">User?</th>
     <th scope="col">Admin?</th>
-    <th scope="col">Faculty Admin?</th>
+    <!--<th scope="col">Faculty Admin?</th>-->
   </tr>
   </thead>
   <tbody>
@@ -18,13 +18,34 @@
     <td>{{user.email}}</td>
     <td><input type="checkbox" [ngModel]="user.roles.user" (change)="userPermissionChanged(user, $event)"></td>
     <td><input type="checkbox" [ngModel]="user.roles.admin" (change)="adminPermissionChanged(user, $event)"></td>
-    <td>
-      <div class="badge badge-info p-2" *ngIf="!user.roles.faculty_admin || user.roles.faculty_admin.length == 0">None</div>
-      <div class="badge badge-success mr-2 p-2" *ngFor="let f of user.roles.faculty_admin"><span class="mr-1">{{f}}</span><fa name="times"></fa></div>
-    </td>
+    <!--<td>-->
+      <!--<div class="badge badge-info p-2" *ngIf="!user.roles.faculty_admin || user.roles.faculty_admin.length == 0">None</div>-->
+      <!--<div class="badge badge-success mr-2 p-2" *ngFor="let f of user.roles.faculty_admin"><span class="mr-1">{{f}}</span><fa name="times"></fa></div>-->
+    <!--</td>-->
   </tr>
   </tbody>
 </table>
+<hr />
+<div class="row">
+  <div class="col-2">
+    <label for="usersList">Pick user:</label>
+  </div>
+  <div class="col-3">
+    <select id="usersList" size="10" class="form-control" [(ngModel)]="selectedUser">
+      <option *ngFor="let user of users;" [ngValue]="user">{{user.name}}</option>
+    </select>
+  </div>
+  <div class="col-3" *ngIf="selectedUser">
+    <h6>Editing User: {{selectedUser.name}}</h6>
+    <div class="form-check" *ngFor="let f of faculties;">
+      <input class="form-check-input" type="checkbox" id="faculty" [checked]="selectedUser && selectedUser.roles.faculty_admin && selectedUser.roles.faculty_admin.includes(f.id)" (change)="changedFacultyPermission($event, f.id)">
+      <label class="form-check-label" for="faculty">{{f.name}}</label>
+    </div>
+  </div>
+  <div class="col-2" *ngIf="selectedUser">
+    <button class="btn btn-success" role="button" (click)="setUserPermissions()">Set Permissions</button>
+  </div>
+</div>
 <hr />
 <h3>Courses</h3>
 <form>

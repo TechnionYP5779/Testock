@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../core/auth.service';
 import {Roles, UserData} from '../../core/entities/user';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
