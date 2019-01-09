@@ -18,8 +18,6 @@ export class AdminComponent implements OnInit {
   newCourse: Course = {id: null, faculty: null, name: null};
   newFaculty: Faculty = {name: null};
   selectedUser: UserData = null;
-  // selectedUserRoles: Roles;
-  // private userRolesSubscription: Subscription;
 
   constructor(private db: DbService, private snackBar: MatSnackBar) {
     this.db.getAllUsers().subscribe(users => this.users = users);
