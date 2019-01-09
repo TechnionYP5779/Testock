@@ -7,6 +7,7 @@ import {Solution, SolutionId} from './entities/solution';
 import {flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
 import {Roles, UserData} from './entities/user';
+import {Faculty, FacultyId} from './entities/faculty';
 
 @Injectable({
   providedIn: 'root'
@@ -169,5 +170,17 @@ export class DbService {
 
   setUserRoles(uid: string, roles: Roles): Promise<void> {
     return this.afs.doc(`users/${uid}`).set({roles: roles}, {merge: true});
+  }
+
+  getFaculties(): Observable<FacultyId[]> {
+    return this.afs.collection<Faculty>('faculties').snapshotChanges().pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as Faculty;
+      const qid = action.payload.doc.id;
+      return {id: qid, ...data};
+    })));
+  }
+
+  createCourse(course: Course): Promise<void> {
+    return this.afs.doc(`courses/${course.id}`).set(course);
   }
 }
