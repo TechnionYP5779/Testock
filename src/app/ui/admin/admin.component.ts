@@ -74,7 +74,11 @@ export class AdminComponent implements OnInit {
 
   changedFacultyPermission(event: any, id: string) {
     if (event.target.checked) {
-      this.selectedUser.roles.faculty_admin.push(id);
+      if (this.selectedUser.roles.faculty_admin) {
+        this.selectedUser.roles.faculty_admin.push(id);
+      } else {
+        this.selectedUser.roles.faculty_admin = [id];
+      }
     } else {
       this.selectedUser.roles.faculty_admin.splice(this.selectedUser.roles.faculty_admin.indexOf(id), 1);
     }
