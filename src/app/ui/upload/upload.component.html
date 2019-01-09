@@ -38,6 +38,13 @@
       </div>
       <div id="imagesCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
         <div class="card-body">
+          <div class="text-center">
+            <div class="btn-group" role="group" aria-label="Clean Pages">
+              <button type="button" class="btn btn-danger" (click)="removeFirstPage()">Remove First Page</button>
+              <button type="button" class="btn btn-danger" (click)="clearEvenPages()">Remove Even Pages</button>
+              <button type="button" class="btn btn-danger" (click)="clearOddPages()">Remove Odd Pages</button>
+            </div>
+          </div>
           <div class="row">
             <div class="col-3" *ngFor="let blob of blobs; let i = index">
               <app-scan-page [blob]="blob" [index]="i" [croppable]="activeQuestion"
