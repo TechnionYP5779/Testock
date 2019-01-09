@@ -1,3 +1,5 @@
+<h1>Admin Control Panel</h1>
+<h2>Users & Permissions</h2>
 <table class="table">
   <thead>
   <tr>
@@ -23,3 +25,25 @@
   </tr>
   </tbody>
 </table>
+<h2>Courses</h2>
+<form>
+  <div class="form-row">
+    <div class="col-2">
+      Add new course:
+    </div>
+    <div class="col-2">
+      <input type="number" class="form-control" placeholder="Course Number" [(ngModel)]="newCourse.id" name="courseId"/>
+    </div>
+    <div class="col-4">
+      <input type="text" class="form-control" placeholder="Course Name" [(ngModel)]="newCourse.name" name="courseName"/>
+    </div>
+    <div class="col-2">
+      <select class="form-control" [(ngModel)]="newCourse.faculty" name="courseFaculty">
+        <option *ngFor="let f of faculties" [value]="f.id">{{f.name}}</option>
+      </select>
+    </div>
+    <div class="col-2">
+      <button type="submit" class="btn btn-success" (click)="createNewCourse();">Create Course</button>
+    </div>
+  </div>
+</form>
