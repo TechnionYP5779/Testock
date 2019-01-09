@@ -113,14 +113,21 @@ export class DbService {
     );
   }
 
-  getQuestion(id: string): Observable<Question> {
-    return this.questionsCollection.doc<Question>(id).valueChanges();
+  getQuestion(id: string): Observable<QuestionId> {
+    return this.questionsCollection.doc<Question>(id).valueChanges()
+      .pipe(map(q => {
+        return {id: id, ...q};
+      }));
   }
 
-  getSolutions(questionId: string): Observable<Solution[]> {
+  getSolutions(questionId: string): Observable<SolutionId[]> {
     return this.afs
       .collection<Solution>('questions/' + questionId + '/solutions', r => r.orderBy('grade', 'desc'))
-      .valueChanges();
+      .snapshotChanges().pipe(map(actions => actions.map(action => {
+        const data = action.payload.doc.data() as Solution;
+        const qid = action.payload.doc.id;
+        return {id: qid, ...data};
+      })));
   }
 
   get courses(): Observable<Course[]> {
