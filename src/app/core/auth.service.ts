@@ -7,8 +7,9 @@ import FacebookAuthProvider = firebase.auth.FacebookAuthProvider;
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
-import {map, switchMap, take} from 'rxjs/operators';
+import {flatMap, map, switchMap} from 'rxjs/operators';
 import {UserData} from './entities/user';
+import {Course} from './entities/course';
 
 @Injectable({
   providedIn: 'root'
@@ -103,5 +104,10 @@ export class AuthService {
 
   isAdminOfFaculty(faculty: string): Observable<boolean> {
     return this.user$.pipe(map(user => user && user.roles.faculty_admin.includes(faculty)));
+  }
+
+  isAdminForCourse(id: number): Observable<boolean> {
+    return this.db.doc<Course>(`courses/${id}`).valueChanges()
+      .pipe(flatMap(course => this.isAdminOfFaculty(course.faculty)));
   }
 }

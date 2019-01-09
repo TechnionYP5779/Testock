@@ -28,8 +28,7 @@ export class CourseComponent implements OnInit {
     this.getCourse();
     this.getQuestions();
     this.getExams();
-    this.db.getCourse(this.id).pipe(flatMap(course => this.auth.isAdminOfFaculty(course.faculty)))
-      .subscribe(is => this.adminAccess = is);
+    this.auth.isAdminForCourse(this.id).subscribe(is => this.adminAccess = is);
   }
 
   getCourse(): void {
