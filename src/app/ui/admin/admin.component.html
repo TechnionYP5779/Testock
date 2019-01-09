@@ -39,6 +39,7 @@
     </div>
     <div class="col-2">
       <select class="form-control" [(ngModel)]="newCourse.faculty" name="courseFaculty">
+        <option [ngValue]="null" disabled>Choose Faculty</option>
         <option *ngFor="let f of faculties" [value]="f.id">{{f.name}}</option>
       </select>
     </div>
