@@ -44,10 +44,14 @@ export class AdminComponent implements OnInit {
     this.db.createCourse(this.newCourse)
       .then(() => {
         this.snackBar.open(`Course ${this.newCourse.name} (${this.newCourse.id}) created successfully!`, 'close', {duration: 3000});
+        this.newCourse = {id: null, name: null, faculty: null};
       });
   }
 
   createNewFaculty() {
-
+    this.db.createFaculty(this.newFaculty).then(() => {
+      this.snackBar.open(`Faculty ${this.newFaculty.name} created successfully!`, 'close', {duration: 3000});
+      this.newFaculty = {name: null};
+    });
   }
 }
