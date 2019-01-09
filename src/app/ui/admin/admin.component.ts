@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Roles, UserData} from '../../core/entities/user';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {Faculty, FacultyId} from '../../core/entities/faculty';
 import {Course} from '../../core/entities/course';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -16,6 +17,9 @@ export class AdminComponent implements OnInit {
   faculties: FacultyId[];
   newCourse: Course = {id: null, faculty: null, name: null};
   newFaculty: Faculty = {name: null};
+  selectedUser: UserData = null;
+  // selectedUserRoles: Roles;
+  // private userRolesSubscription: Subscription;
 
   constructor(private db: DbService, private snackBar: MatSnackBar) {
     this.db.getAllUsers().subscribe(users => this.users = users);
@@ -53,5 +57,26 @@ export class AdminComponent implements OnInit {
       this.snackBar.open(`Faculty ${this.newFaculty.name} created successfully!`, 'close', {duration: 3000});
       this.newFaculty = {name: null};
     });
+  }
+
+  // userSelectionChanged() {
+  //   if (this.userRolesSubscription) {
+  //     this.userRolesSubscription.unsubscribe();
+  //   }
+  //   this.userRolesSubscription = this.db.getUserRoles(this.selectedUser.uid).subscribe(roles => this.selectedUserRoles = roles);
+  // }
+
+  setUserPermissions() {
+    this.db.setUserRoles(this.selectedUser.uid, this.selectedUser.roles).then(() => {
+      this.snackBar.open(`Permissions for ${this.selectedUser.name} set successfully!`, 'close', {duration: 3000});
+    });
+  }
+
+  changedFacultyPermission(event: any, id: string) {
+    if (event.target.checked) {
+      this.selectedUser.roles.faculty_admin.push(id);
+    } else {
+      this.selectedUser.roles.faculty_admin.splice(this.selectedUser.roles.faculty_admin.indexOf(id), 1);
+    }
   }
 }
