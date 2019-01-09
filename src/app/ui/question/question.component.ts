@@ -39,5 +39,7 @@ export class QuestionComponent implements OnInit {
     this.db.getSolutions(this.id).subscribe(sol => this.solutions = sol);
   }
 
-
+  deleteSolution(sol: SolutionId): void {
+    this.db.deleteSolution(sol, this.question).then(() => console.log('Deleted'));
+  }
 }
