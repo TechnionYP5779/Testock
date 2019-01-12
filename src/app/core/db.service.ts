@@ -202,4 +202,10 @@ export class DbService {
   getUserRoles(uid: string): Observable<Roles> {
     return this.afs.doc<UserData>(`users/${uid}`).valueChanges().pipe(map(u => u.roles));
   }
+
+  getAdminsOfFaculty(faculty: FacultyId): Observable<UserData[]> {
+    const ref = r =>
+      r.where('roles.faculty_admin', 'array-contains', faculty.id);
+    return this.afs.collection<UserData>('users', ref).valueChanges();
+  }
 }
