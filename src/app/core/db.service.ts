@@ -208,4 +208,8 @@ export class DbService {
       r.where('roles.faculty_admin', 'array-contains', faculty.id);
     return this.afs.collection<UserData>('users', ref).valueChanges();
   }
+
+  deleteQuestion(q: QuestionId) {
+    return this.afs.doc<Question>(`questions/${q.id}`).delete();
+  }
 }
