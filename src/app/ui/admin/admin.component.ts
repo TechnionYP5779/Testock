@@ -4,7 +4,8 @@ import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {Faculty, FacultyId} from '../../core/entities/faculty';
 import {Course} from '../../core/entities/course';
-import {Subscription} from 'rxjs';
+import {combineLatest, Subscription} from 'rxjs';
+import {flatMap, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin',
