@@ -35,6 +35,7 @@ import { FacebookProfilePictureComponent } from './users/facebook-profile-pictur
 import { SolutionComponent } from './ui/solution/solution.component';
 import {UsersOnlyGuard} from './core/users-only.guard';
 import { AdminComponent } from './ui/admin/admin.component';
+import { FacultyComponent } from './ui/admin/faculty/faculty.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { AdminComponent } from './ui/admin/admin.component';
     ScanPageComponent,
     UploadQuestionComponent,
     SolutionComponent,
-    AdminComponent
+    AdminComponent,
+    FacultyComponent
   ],
   imports: [
     BrowserModule,
