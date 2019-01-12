@@ -88,10 +88,6 @@
 <hr />
 <div class="row">
   <div class="col-3 mb-4" *ngFor="let f of faculties">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{f.name}}</h5>
-      </div>
-    </div>
+    <app-faculty [faculty]="f"></app-faculty>
   </div>
 </div>
