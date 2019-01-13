@@ -8,7 +8,6 @@
     <th scope="col">Email</th>
     <th scope="col">User?</th>
     <th scope="col">Admin?</th>
-    <!--<th scope="col">Faculty Admin?</th>-->
   </tr>
   </thead>
   <tbody>
@@ -18,10 +17,6 @@
     <td>{{user.email}}</td>
     <td><input type="checkbox" [ngModel]="user.roles.user" (change)="userPermissionChanged(user, $event)"></td>
     <td><input type="checkbox" [ngModel]="user.roles.admin" (change)="adminPermissionChanged(user, $event)"></td>
-    <!--<td>-->
-      <!--<div class="badge badge-info p-2" *ngIf="!user.roles.faculty_admin || user.roles.faculty_admin.length == 0">None</div>-->
-      <!--<div class="badge badge-success mr-2 p-2" *ngFor="let f of user.roles.faculty_admin"><span class="mr-1">{{f}}</span><fa name="times"></fa></div>-->
-    <!--</td>-->
   </tr>
   </tbody>
 </table>
