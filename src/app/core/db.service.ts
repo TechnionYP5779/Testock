@@ -230,4 +230,8 @@ export class DbService {
       return {id: dr.id, ...comment};
     });
   }
+
+  markAsAnswer(topic: TopicId, comment: CommentId): Promise<void> {
+    return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: comment.id});
+  }
 }
