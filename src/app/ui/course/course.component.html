@@ -1,26 +1,26 @@
-<div class="jumbotron jumbotron" *ngIf="this.course">
-  <h1 class="display-4">{{ this.course.name }} ({{ this.course.id }})</h1>
-  <p class="lead">Welcome to the "{{ this.course.name }}" ({{ this.course.id }}) course page. Good luck in your exams!</p>
+<div class="jumbotron jumbotron" *ngIf="course">
+  <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
+  <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
   <p class="lead">
     <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank">Facebook Group</a>
     <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
   </p>
 </div>
-<div class="list-group my-3">
+<div class="list-group my-3" *ngIf="exams">
   <li class="list-group-item list-group-item-primary">
     <fa name="book"></fa>
     Available exams
-    <span class="badge badge-primary">{{this.exams.length}}</span>
+    <span class="badge badge-primary">{{exams.length}}</span>
   </li>
   <div *ngFor="let e of exams">
     <a routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">{{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}</a>
   </div>
 </div>
-<div class="list-group my-3">
+<div class="list-group my-3" *ngIf="questions">
   <li class="list-group-item list-group-item-danger">
     <fa name="fire"></fa>
     Hot questions
-    <span class="badge badge-danger">{{this.questions.length}}</span>
+    <span class="badge badge-danger">{{questions.length}}</span>
   </li>
   <div *ngFor="let q of questions">
     <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action">{{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}</a>
