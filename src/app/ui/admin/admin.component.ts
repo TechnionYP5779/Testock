@@ -19,8 +19,6 @@ export class AdminComponent implements OnInit {
   newCourse: Course = {id: null, faculty: null, name: null};
   newFaculty: Faculty = {name: null};
   selectedUser: UserData = null;
-  // selectedUserRoles: Roles;
-  // private userRolesSubscription: Subscription;
 
   constructor(private db: DbService, private snackBar: MatSnackBar) {
     this.db.getAllUsers().subscribe(users => this.users = users);
@@ -59,13 +57,6 @@ export class AdminComponent implements OnInit {
       this.newFaculty = {name: null};
     });
   }
-
-  // userSelectionChanged() {
-  //   if (this.userRolesSubscription) {
-  //     this.userRolesSubscription.unsubscribe();
-  //   }
-  //   this.userRolesSubscription = this.db.getUserRoles(this.selectedUser.uid).subscribe(roles => this.selectedUserRoles = roles);
-  // }
 
   setUserPermissions() {
     this.db.setUserRoles(this.selectedUser.uid, this.selectedUser.roles).then(() => {
