@@ -1,13 +1,7 @@
 <div class="alert alert-info" *ngIf="adminAccess">You have admin access for this course</div>
-<<<<<<< HEAD
 <div class="jumbotron jumbotron" *ngIf="course">
   <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
   <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
-=======
-<div class="jumbotron jumbotron" *ngIf="this.course">
-  <h1 class="display-4">{{ this.course.name }} ({{ this.course.id }})</h1>
-  <p class="lead">Welcome to the "{{ this.course.name }}" ({{ this.course.id }}) course page. Good luck in your exams!</p>
->>>>>>> fb98d5402209f43acdfd54d222bcd9c4393172fa
   <p class="lead">
     <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank">Facebook Group</a>
     <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
