@@ -9,6 +9,7 @@ import {Exam, ExamId} from './entities/exam';
 import {Roles, UserData} from './entities/user';
 import {Faculty, FacultyId} from './entities/faculty';
 import {Topic, TopicId} from './entities/topic';
+import {Comment, CommentId} from './entities/comment';
 
 @Injectable({
   providedIn: 'root'
@@ -221,6 +222,12 @@ export class DbService {
   createTopic(topic: Topic): Promise<TopicId> {
     return this.afs.collection<Topic>(`topics`).add(topic).then(dr => {
       return {id: dr.id, ...topic};
+    });
+  }
+
+  addComment(topic: TopicId, comment: Comment): Promise<CommentId> {
+    return this.afs.collection<Comment>(`topics/${topic.id}/comments`).add(comment).then(dr => {
+      return {id: dr.id, ...comment};
     });
   }
 }
