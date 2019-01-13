@@ -8,6 +8,7 @@ import {flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
 import {Roles, UserData} from './entities/user';
 import {Faculty, FacultyId} from './entities/faculty';
+import {Topic, TopicId} from './entities/topic';
 
 @Injectable({
   providedIn: 'root'
@@ -215,5 +216,11 @@ export class DbService {
 
   updateSolutionGrade(sol: SolutionId, q: QuestionId): Promise<void> {
     return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).update({grade: sol.grade});
+  }
+
+  createTopic(topic: Topic): Promise<TopicId> {
+    return this.afs.collection<Topic>(`topics`).add(topic).then(dr => {
+      return {id: dr.id, ...topic};
+    });
   }
 }
