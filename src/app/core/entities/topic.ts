@@ -5,3 +5,7 @@ export interface Topic {
   creator: string;
   linkedQuestionId?: string;
 }
+
+export interface TopicId extends Topic {
+  id: string;
+}
