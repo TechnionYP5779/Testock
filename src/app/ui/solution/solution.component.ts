@@ -17,7 +17,7 @@ export class SolutionComponent implements OnInit {
   @Input()
   adminAccess: boolean;
 
-  constructor(private db: DbService, private auth: AuthService) {
+  constructor(private db: DbService) {
   }
 
   ngOnInit() {
@@ -27,4 +27,7 @@ export class SolutionComponent implements OnInit {
     this.db.deleteSolution(sol, this.question).then(() => console.log('Deleted'));
   }
 
+  saveSolution() {
+    this.db.updateSolutionGrade(this.solution, this.question).then(() => console.log('Updated!'));
+  }
 }
