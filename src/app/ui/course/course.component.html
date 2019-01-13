@@ -23,7 +23,7 @@
     Hot questions
     <span class="badge badge-danger">{{questions.length}}</span>
   </li>
-  <div *ngFor="let q of questions">
-    <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action">{{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}</a>
-  </div>
+  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
+    {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
+  </a>
 </div>
