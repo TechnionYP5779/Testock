@@ -212,4 +212,8 @@ export class DbService {
   deleteQuestion(q: QuestionId) {
     return this.afs.doc<Question>(`questions/${q.id}`).delete();
   }
+
+  updateSolutionGrade(sol: SolutionId, q: QuestionId): Promise<void> {
+    return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).update({grade: sol.grade});
+  }
 }
