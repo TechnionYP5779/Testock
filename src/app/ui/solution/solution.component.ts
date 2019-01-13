@@ -17,7 +17,7 @@ export class SolutionComponent implements OnInit {
   @Input()
   adminAccess: boolean;
 
-  constructor(private db: DbService, private auth: AuthService) {
+  constructor(private db: DbService) {
   }
 
   ngOnInit() {
