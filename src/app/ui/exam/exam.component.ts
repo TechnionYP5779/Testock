@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {Question, QuestionId} from '../../core/entities/question';
 import {Exam} from '../../core/entities/exam';
+import {AuthService} from '../../core/auth.service';
 
 @Component({
   selector: 'app-exam',
@@ -16,9 +17,12 @@ export class ExamComponent implements OnInit {
   public questions: QuestionId[];
   public exam: Exam;
 
-  constructor(private route: ActivatedRoute, private db: DbService) {
+  adminAccess: boolean;
+
+  constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.courseId = +route.snapshot.paramMap.get('cid');
     this.examId = route.snapshot.paramMap.get('eid');
+    this.auth.isAdminForCourse(this.courseId).subscribe(is => this.adminAccess = is);
   }
 
   ngOnInit() {
