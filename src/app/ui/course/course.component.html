@@ -1,3 +1,4 @@
+<div class="alert alert-info" *ngIf="adminAccess">You have admin access for this course</div>
 <div class="jumbotron jumbotron" *ngIf="course">
   <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
   <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
@@ -22,7 +23,7 @@
     Hot questions
     <span class="badge badge-danger">{{questions.length}}</span>
   </li>
-  <div *ngFor="let q of questions">
-    <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action">{{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}</a>
-  </div>
+  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
+    {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
+  </a>
 </div>

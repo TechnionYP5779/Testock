@@ -33,6 +33,8 @@ import {FormsModule} from '@angular/forms';
 import { HomeComponent } from './ui/home/home.component';
 import { FacebookProfilePictureComponent } from './users/facebook-profile-picture/facebook-profile-picture.component';
 import { SolutionComponent } from './ui/solution/solution.component';
+import { AdminComponent } from './ui/admin/admin.component';
+import { FacultyComponent } from './ui/admin/faculty/faculty.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { SolutionComponent } from './ui/solution/solution.component';
     FacebookProfilePictureComponent,
     ScanPageComponent,
     UploadQuestionComponent,
-    SolutionComponent
+    SolutionComponent,
+    AdminComponent,
+    FacultyComponent
   ],
   imports: [
     BrowserModule,

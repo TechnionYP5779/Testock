@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, DocumentReference} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {Course} from './entities/course';
 import {Observable} from 'rxjs';
 import {Question, QuestionId} from './entities/question';
 import {Solution, SolutionId} from './entities/solution';
 import {flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
+import {Roles, UserData} from './entities/user';
+import {Faculty, FacultyId} from './entities/faculty';
 
 @Injectable({
   providedIn: 'root'
@@ -111,14 +113,21 @@ export class DbService {
     );
   }
 
-  getQuestion(id: string): Observable<Question> {
-    return this.questionsCollection.doc<Question>(id).valueChanges();
+  getQuestion(id: string): Observable<QuestionId> {
+    return this.questionsCollection.doc<Question>(id).valueChanges()
+      .pipe(map(q => {
+        return {id: id, ...q};
+      }));
   }
 
-  getSolutions(questionId: string): Observable<Solution[]> {
+  getSolutions(questionId: string): Observable<SolutionId[]> {
     return this.afs
       .collection<Solution>('questions/' + questionId + '/solutions', r => r.orderBy('grade', 'desc'))
-      .valueChanges();
+      .snapshotChanges().pipe(map(actions => actions.map(action => {
+        const data = action.payload.doc.data() as Solution;
+        const qid = action.payload.doc.id;
+        return {id: qid, ...data};
+      })));
   }
 
   get courses(): Observable<Course[]> {
@@ -160,5 +169,51 @@ export class DbService {
 
   setSolutionForQuestion(question: QuestionId, sol: SolutionId): Promise<void> {
     return this.afs.doc(`questions/${question.id}/solutions/${sol.id}`).set(sol);
+  }
+
+  getAllUsers(): Observable<UserData[]> {
+    return this.afs.collection<UserData>('users').valueChanges();
+  }
+
+  setUserRoles(uid: string, roles: Roles): Promise<void> {
+    return this.afs.doc(`users/${uid}`).set({roles: roles}, {merge: true});
+  }
+
+  getFaculties(): Observable<FacultyId[]> {
+    return this.afs.collection<Faculty>('faculties').snapshotChanges().pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as Faculty;
+      const qid = action.payload.doc.id;
+      return {id: qid, ...data};
+    })));
+  }
+
+  createCourse(course: Course): Promise<void> {
+    return this.afs.doc(`courses/${course.id}`).set(course);
+  }
+
+  createFaculty(faculty: Faculty): Promise<void> {
+    return this.afs.collection<Faculty>('faculties').add(faculty).then((dr) => {});
+  }
+
+  deleteSolution(sol: SolutionId, q: QuestionId): Promise<void> {
+    return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).delete();
+  }
+
+  getUserRoles(uid: string): Observable<Roles> {
+    return this.afs.doc<UserData>(`users/${uid}`).valueChanges().pipe(map(u => u.roles));
+  }
+
+  getAdminsOfFaculty(faculty: FacultyId): Observable<UserData[]> {
+    const ref = r =>
+      r.where('roles.faculty_admin', 'array-contains', faculty.id);
+    return this.afs.collection<UserData>('users', ref).valueChanges();
+  }
+
+  deleteQuestion(q: QuestionId) {
+    return this.afs.doc<Question>(`questions/${q.id}`).delete();
+  }
+
+  updateSolutionGrade(sol: SolutionId, q: QuestionId): Promise<void> {
+    return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).update({grade: sol.grade});
   }
 }

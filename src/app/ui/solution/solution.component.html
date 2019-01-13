@@ -1,20 +1,75 @@
+<div class="text-center mb-2" *ngIf="solution && adminAccess">
+  <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" data-target="#editSolution" role="button"><fa name="edit"></fa></button>
+  <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#deleteConfirm" role="button"><fa name="times"></fa></button>
+</div>
 <div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal"
      [attr.data-target]="'#solution-modal-' + solution.id">
   <img class="card-img" [src]="solution.photos[0]" alt="scan preview" />
   <div class="card-img-overlay align-items-center d-flex justify-content-center">
     <h2 class="card-title text-center">
-      {{solution.grade}} / {{total_grade}}
+      {{solution.grade}} / {{question.total_grade}}
     </h2>
   </div>
 </div>
 
-<div class="modal fade" [attr.id]="'solution-modal-' + solution.id" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade scan-modal" [attr.id]="'solution-modal-' + solution.id" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-body">
         <div *ngFor="let photo of solution.photos">
           <img [src]="photo" alt="solution photo" class="sol-image-modal"/>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="editSolution">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Solution</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-inline">
+          <label class="mr-4" for="solGrade">Grade: </label>
+          <div class="input-group mb-2 mr-sm-2">
+            <input type="number" class="form-control col-3" id="solGrade" name="solGrade" [(ngModel)]="solution.grade">
+            <div class="input-group-prepend">
+              <div class="input-group-text">/</div>
+            </div>
+            <div class="input-group-prepend">
+              <div class="input-group-text">{{question.total_grade}}</div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="saveSolution()" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="deleteConfirm">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Are you sure that you want to delete this solution?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>This action can't be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="deleteSolution(solution)" data-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
