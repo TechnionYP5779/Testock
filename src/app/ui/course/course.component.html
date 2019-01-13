@@ -6,7 +6,7 @@
     <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
   </p>
 </div>
-<div class="list-group my-3">
+<div class="list-group my-3" *ngIf="exams">
   <li class="list-group-item list-group-item-primary">
     <fa name="book"></fa>
     Available exams
@@ -16,7 +16,7 @@
     <a routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">{{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}</a>
   </div>
 </div>
-<div class="list-group my-3">
+<div class="list-group my-3" *ngIf="questions">
   <li class="list-group-item list-group-item-danger">
     <fa name="fire"></fa>
     Hot questions
