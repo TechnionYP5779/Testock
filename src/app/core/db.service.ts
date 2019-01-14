@@ -245,6 +245,16 @@ export class DbService {
     })));
   }
 
+  getTopicsForQuestion(question: QuestionId): Observable<TopicId[]> {
+    const ref = r =>
+      r.where('linkedQuestionId', '==', question.id);
+    return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as Topic;
+      const qid = action.payload.doc.id;
+      return {id: qid, ...data};
+    })));
+  }
+
   getCommentsForTopics(topic: TopicId): Observable<CommentId[]> {
     return this.afs.collection<Comment>(`topics/${topic.id}/comments`).snapshotChanges()
       .pipe(map(actions => actions.map(action => {
