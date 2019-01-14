@@ -10,33 +10,33 @@
 </div>
 
 <div class="list-group my-3" *ngIf="exams">
-  <li class="list-group-item list-group-item-primary">
+  <div class="list-group-item list-group-item-primary">
     <fa name="book"></fa>
     Available exams
     <span class="badge badge-primary">{{exams.length}}</span>
-  </li>
+  </div>
   <a *ngFor="let e of exams" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
     {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
   </a>
 </div>
 
 <div class="list-group my-3" *ngIf="questions">
-  <li class="list-group-item list-group-item-danger">
+  <div class="list-group-item list-group-item-danger">
     <fa name="fire"></fa>
     Hot questions
     <span class="badge badge-danger">{{questions.length}}</span>
-  </li>
+  </div>
   <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
     {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
   </a>
 </div>
 
 <div class="list-group my-3" *ngIf="topics$ | async as topics">
-  <li class="list-group-item list-group-item-info">
+  <div class="list-group-item list-group-item-info">
     <fa name="comment"></fa>
     Forum
     <span class="badge badge-info">{{topics.length}}</span>
-  </li>
+  </div>
   <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics">
     {{ topic.subject }}
   </a>
