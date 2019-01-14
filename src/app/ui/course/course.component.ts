@@ -6,6 +6,8 @@ import {QuestionId} from '../../core/entities/question';
 import {ExamId} from '../../core/entities/exam';
 import {AuthService} from '../../core/auth.service';
 import {flatMap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {TopicId} from '../../core/entities/topic';
 
 @Component({
   selector: 'app-course',
@@ -18,10 +20,12 @@ export class CourseComponent implements OnInit {
   public id: number;
   public questions: QuestionId[];
   public exams: ExamId[];
+  topics$: Observable<TopicId[]>;
   adminAccess: boolean;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.id = +this.route.snapshot.paramMap.get('id');
+    this.topics$ = this.db.getTopicsForCourse(this.id);
   }
 
   ngOnInit() {

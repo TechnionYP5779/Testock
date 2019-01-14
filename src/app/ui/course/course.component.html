@@ -27,3 +27,13 @@
     {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
   </a>
 </div>
+<div class="list-group my-3" *ngIf="topics$ | async as topics">
+  <li class="list-group-item list-group-item-info">
+    <fa name="comment"></fa>
+    Forum
+    <span class="badge badge-info">{{topics.length}}</span>
+  </li>
+  <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics">
+    {{ topic.subject }}
+  </a>
+</div>
