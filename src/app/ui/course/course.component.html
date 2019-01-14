@@ -1,4 +1,5 @@
 <div class="alert alert-info" *ngIf="adminAccess">You have admin access for this course</div>
+
 <div class="jumbotron jumbotron" *ngIf="course">
   <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
   <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
@@ -7,16 +8,18 @@
     <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
   </p>
 </div>
+
 <div class="list-group my-3" *ngIf="exams">
   <li class="list-group-item list-group-item-primary">
     <fa name="book"></fa>
     Available exams
     <span class="badge badge-primary">{{exams.length}}</span>
   </li>
-  <div *ngFor="let e of exams">
-    <a routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">{{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}</a>
-  </div>
+  <a *ngFor="let e of exams" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
+    {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
+  </a>
 </div>
+
 <div class="list-group my-3" *ngIf="questions">
   <li class="list-group-item list-group-item-danger">
     <fa name="fire"></fa>
@@ -27,6 +30,7 @@
     {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
   </a>
 </div>
+
 <div class="list-group my-3" *ngIf="topics$ | async as topics">
   <li class="list-group-item list-group-item-info">
     <fa name="comment"></fa>
