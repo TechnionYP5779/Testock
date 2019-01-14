@@ -8,6 +8,8 @@ import {flatMap, map} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
 import {Roles, UserData} from './entities/user';
 import {Faculty, FacultyId} from './entities/faculty';
+import {Topic, TopicId} from './entities/topic';
+import {Comment, CommentId} from './entities/comment';
 
 @Injectable({
   providedIn: 'root'
@@ -215,5 +217,50 @@ export class DbService {
 
   updateSolutionGrade(sol: SolutionId, q: QuestionId): Promise<void> {
     return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).update({grade: sol.grade});
+  }
+
+  createTopic(topic: Topic): Promise<TopicId> {
+    return this.afs.collection<Topic>(`topics`).add(topic).then(dr => {
+      return {id: dr.id, ...topic};
+    });
+  }
+
+  addComment(topic: TopicId, comment: Comment): Promise<CommentId> {
+    return this.afs.collection<Comment>(`topics/${topic.id}/comments`).add(comment).then(dr => {
+      return {id: dr.id, ...comment};
+    });
+  }
+
+  markAsAnswer(topic: TopicId, comment: CommentId): Promise<void> {
+    return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: comment.id});
+  }
+
+  getTopicsForCourse(courseId: number): Observable<TopicId[]> {
+    const ref = r =>
+      r.where('linkedCourseId', '==', courseId);
+    return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as Topic;
+      const qid = action.payload.doc.id;
+      return {id: qid, ...data};
+    })));
+  }
+
+  getTopicsForQuestion(question: QuestionId): Observable<TopicId[]> {
+    const ref = r =>
+      r.where('linkedQuestionId', '==', question.id);
+    return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as Topic;
+      const qid = action.payload.doc.id;
+      return {id: qid, ...data};
+    })));
+  }
+
+  getCommentsForTopics(topic: TopicId): Observable<CommentId[]> {
+    return this.afs.collection<Comment>(`topics/${topic.id}/comments`).snapshotChanges()
+      .pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as Comment;
+      const qid = action.payload.doc.id;
+      return {id: qid, ...data};
+    })));
   }
 }
