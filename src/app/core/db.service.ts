@@ -234,4 +234,14 @@ export class DbService {
   markAsAnswer(topic: TopicId, comment: CommentId): Promise<void> {
     return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: comment.id});
   }
+
+  getTopicsForCourse(courseId: number): Observable<TopicId[]> {
+    const ref = r =>
+      r.where('linkedCourseId', '==', courseId);
+    return this.afs.collection('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as Topic;
+      const qid = action.payload.doc.id;
+      return {id: qid, ...data};
+    })));
+  }
 }
