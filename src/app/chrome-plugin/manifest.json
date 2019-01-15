@@ -7,11 +7,18 @@
     "scripts": ["background.js"],
     "persistent": false
   },
-  "content_scripts": [{
-    "matches": ["https://grades.technion.ac.il/content.aspx*"],
-    "run_at": "document_idle",
-    "js": ["contentScript.js"]
-  }],
+  "content_scripts": [
+    {
+      "matches": ["https://grades.technion.ac.il/content.aspx*"],
+      "run_at": "document_idle",
+      "js": ["course.js"]
+    },
+    {
+      "matches": ["https://grades.technion.ac.il/scanexam.ashx*"],
+      "run_at": "document_idle",
+      "js": ["scan.js"]
+    }
+  ],
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {

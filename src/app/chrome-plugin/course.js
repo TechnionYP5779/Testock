@@ -14,15 +14,13 @@ let scan_btns = getAllScanButtons();
 for (let i = 0; i < scan_btns.length; i++) {
   scan_btns[i].addEventListener('click', function () {
     const moedMap = {'A' : 1, 'B' : 2, 'C' : 3};
-    let moedStr = this.parentNode.parentNode.childNodes[5].innerText.split('_')[1];
-    alert(moedMap[moedStr]);
+    const moedStr = this.parentNode.parentNode.childNodes[5].innerText.split('_')[1];
+
     chrome.storage.sync.set({
       'moed': moedMap[moedStr]
     }, function(){});
   });
 }
-
-// chrome.storage.sync.get(['student', 'courseid', 'semester'], function (data) {});
 
 function getAllScanButtons(){
   const all_btns = document.getElementsByClassName('btn');
