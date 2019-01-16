@@ -31,13 +31,17 @@
   </a>
 </div>
 
-<div class="list-group my-3" *ngIf="topics$ | async as topics">
+<div class="list-group my3" *ngIf="topics$ | async as topics">
   <div class="list-group-item list-group-item-info">
-    <fa name="comment"></fa>
+    <fa name="comment" class="mr-2"></fa>
     Forum
     <span class="badge badge-info">{{topics.length}}</span>
   </div>
-  <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics">
+  <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
     {{ topic.subject }}
+    <span class="float-right">
+      <small class="mr-2">{{ topic.creator.name }}</small>
+      <app-facebook-profile-picture [fbUid]="topic.creator.fbId" [width]="30" [height]="30" class="mr-2"></app-facebook-profile-picture>
+    </span>
   </a>
 </div>
