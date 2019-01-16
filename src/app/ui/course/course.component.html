@@ -30,8 +30,11 @@
     {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
   </a>
 </div>
-
-<div class="list-group my3" *ngIf="topics$ | async as topics">
+<button role="button" class="btn btn-primary">
+  <fa name="plus" class="mr-1"></fa>
+  Add Topic
+</button>
+<div class="list-group my-3" *ngIf="topics$ | async as topics">
   <div class="list-group-item list-group-item-info">
     <fa name="comment" class="mr-2"></fa>
     Forum
