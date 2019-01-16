@@ -3,6 +3,7 @@ import {SolutionId} from '../../core/entities/solution';
 import {QuestionId} from '../../core/entities/question';
 import {DbService} from '../../core/db.service';
 import {AuthService} from '../../core/auth.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-solution',
@@ -17,17 +18,21 @@ export class SolutionComponent implements OnInit {
   @Input()
   adminAccess: boolean;
 
-  constructor(private db: DbService) {
+  constructor(private db: DbService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
   }
 
   deleteSolution(sol: SolutionId): void {
-    this.db.deleteSolution(sol, this.question).then(() => console.log('Deleted'));
+    this.db.deleteSolution(sol, this.question).then(() => {
+      this.snackBar.open(`Solution Deleted Successfully`, 'close', {duration: 3000});
+    });
   }
 
   saveSolution() {
-    this.db.updateSolutionGrade(this.solution, this.question).then(() => console.log('Updated!'));
+    this.db.updateSolutionGrade(this.solution, this.question).then(() => {
+      this.snackBar.open(`Solution Updated Successfully`, 'close', {duration: 3000});
+    });
   }
 }
