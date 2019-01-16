@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {Course} from './entities/course';
-import {Observable} from 'rxjs';
+import {combineLatest, defer, Observable, of} from 'rxjs';
 import {Question, QuestionId} from './entities/question';
 import {Solution, SolutionId} from './entities/solution';
-import {flatMap, map} from 'rxjs/operators';
+import {flatMap, map, switchMap, tap} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
 import {Roles, UserData} from './entities/user';
 import {Faculty, FacultyId} from './entities/faculty';
@@ -235,14 +235,14 @@ export class DbService {
     return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: comment.id});
   }
 
-  getTopicsForCourse(courseId: number): Observable<TopicId[]> {
+  getTopicsForCourseWithCreators(courseId: number): Observable<any> {
     const ref = r =>
       r.where('linkedCourseId', '==', courseId);
     return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Topic;
       const qid = action.payload.doc.id;
       return {id: qid, ...data};
-    })));
+    }))).pipe(leftJoinDocument(this.afs, 'creator', 'users'));
   }
 
   getTopicsForQuestion(question: QuestionId): Observable<TopicId[]> {
@@ -264,3 +264,54 @@ export class DbService {
     })));
   }
 }
+
+export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
+  return source =>
+    defer(() => {
+      // Operator state
+      let collectionData;
+      const cache = new Map();
+
+      return source.pipe(
+        switchMap(data => {
+          // Clear mapping on each emitted val ;
+          cache.clear();
+
+          // Save the parent data state
+          collectionData = data as any[];
+
+          const reads$ = [];
+          let i = 0;
+          for (const doc of collectionData) {
+            // Skip if doc field does not exist or is already in cache
+            if (!doc[field] || cache.get(doc[field])) {
+              continue;
+            }
+
+            // Push doc read to Array
+            reads$.push(
+              afs
+                .collection(collection)
+                .doc(doc[field])
+                .valueChanges()
+            );
+            cache.set(doc[field], i);
+            i++;
+          }
+
+          return reads$.length ? combineLatest(reads$) : of([]);
+        }),
+        map(joins => {
+          return collectionData.map((v, i) => {
+            const joinIdx = cache.get(v[field]);
+            return { ...v, [field]: joins[joinIdx] || null };
+          });
+        }),
+        tap(final =>
+          console.log(
+            `Queried ${(final as any).length}, Joined ${cache.size} docs`
+          )
+        )
+      );
+    });
+};
