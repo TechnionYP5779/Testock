@@ -202,7 +202,6 @@ export class DbService {
     return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).delete().then(() => {
       const path = `${q.course}\/${q.year}\/${q.semester}\/${q.moed}\/${q.number}\/${sol.id}\/`;
       const deletePromises = sol.photos.map((url, i) => this.storage.ref(`${path}/${i}.jpg`).delete().toPromise());
-      console.log(deletePromises);
       return Promise.all(deletePromises).then(() => {});
     });
   }
