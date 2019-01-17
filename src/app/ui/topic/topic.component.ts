@@ -12,7 +12,7 @@ export class MyTopic implements Topic {
   subject = 'my temp subject';
   text = 'content';
   creator = 'max calderon';
-  // time = new Date();
+  created = new Date();
 }
 
 @Component({
