@@ -5,7 +5,11 @@ import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../core/entities/question';
 import {ExamId} from '../../core/entities/exam';
 import {AuthService} from '../../core/auth.service';
-import {flatMap} from 'rxjs/operators';
+import {flatMap, map, switchMap, tap} from 'rxjs/operators';
+import {combineLatest, defer, Observable, of} from 'rxjs';
+import {TopicId} from '../../core/entities/topic';
+import {UserData} from '../../core/entities/user';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-course',
@@ -18,10 +22,12 @@ export class CourseComponent implements OnInit {
   public id: number;
   public questions: QuestionId[];
   public exams: ExamId[];
+  topics$: Observable<any[]>;
   adminAccess: boolean;
 
-  constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
+  constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.id = +this.route.snapshot.paramMap.get('id');
+    this.topics$ = this.db.getTopicsForCourseWithCreators(this.id);
   }
 
   ngOnInit() {
