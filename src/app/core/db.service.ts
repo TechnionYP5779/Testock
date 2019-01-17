@@ -220,12 +220,14 @@ export class DbService {
   }
 
   createTopic(topic: Topic): Promise<TopicId> {
+    topic.created = new Date();
     return this.afs.collection<Topic>(`topics`).add(topic).then(dr => {
       return {id: dr.id, ...topic};
     });
   }
 
   addComment(topic: TopicId, comment: Comment): Promise<CommentId> {
+    comment.created = new Date();
     return this.afs.collection<Comment>(`topics/${topic.id}/comments`).add(comment).then(dr => {
       return {id: dr.id, ...comment};
     });
