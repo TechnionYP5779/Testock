@@ -237,7 +237,7 @@ export class DbService {
 
   getTopicsForCourse(courseId: number): Observable<TopicId[]> {
     const ref = r =>
-      r.where('linkedCourseId', '==', courseId);
+      r.where('linkedCourseId', '==', courseId).orderBy('created', 'desc');
     return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Topic;
       const qid = action.payload.doc.id;
@@ -247,7 +247,7 @@ export class DbService {
 
   getTopicsForQuestion(question: QuestionId): Observable<TopicId[]> {
     const ref = r =>
-      r.where('linkedQuestionId', '==', question.id);
+      r.where('linkedQuestionId', '==', question.id).orderBy('created', 'desc');
     return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Topic;
       const qid = action.payload.doc.id;
@@ -256,7 +256,8 @@ export class DbService {
   }
 
   getCommentsForTopics(topic: TopicId): Observable<CommentId[]> {
-    return this.afs.collection<Comment>(`topics/${topic.id}/comments`).snapshotChanges()
+    const ref = r => r.orderBy('created', 'desc');
+    return this.afs.collection<Comment>(`topics/${topic.id}/comments`, ref).snapshotChanges()
       .pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Comment;
       const qid = action.payload.doc.id;
