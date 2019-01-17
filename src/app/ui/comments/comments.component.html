@@ -1,0 +1,10 @@
+<div class="list-group my-3" *ngIf="topic">
+  <li class="list-group-item list-group-item-primary">
+    <fa name="comments-o"></fa>
+    Comments
+    <span class="badge badge-primary">comments.length</span>
+  </li>
+  <div *ngFor="let t of [1,2,3,4]">
+    <p class="list-group-item list-group-item-action">comment {{t }} + metadata</p>
+  </div>
+</div>

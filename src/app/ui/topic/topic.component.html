@@ -1,0 +1,9 @@
+<!--div class="alert alert-info" *ngIf="adminAccess">You have admin access for this course</div-->
+<div class="jumbotron jumbotron"><!-- *ngIf-->
+  <h1 class="display-4">{{topic.subject}}</h1>
+  <p class="lead">{{topic.text}}</p>
+  <hr class="my-4">
+  <p><strong>{{creatorName}}</strong> created this topic at topic.time</p>
+</div>
+
+<app-comments [topic]="topic"></app-comments>

@@ -35,6 +35,8 @@ import { FacebookProfilePictureComponent } from './users/facebook-profile-pictur
 import { SolutionComponent } from './ui/solution/solution.component';
 import { AdminComponent } from './ui/admin/admin.component';
 import { FacultyComponent } from './ui/admin/faculty/faculty.component';
+import { TopicComponent } from './ui/topic/topic.component';
+import { CommentsComponent } from './ui/comments/comments.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import { FacultyComponent } from './ui/admin/faculty/faculty.component';
     UploadQuestionComponent,
     SolutionComponent,
     AdminComponent,
-    FacultyComponent
+    FacultyComponent,
+    TopicComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,
