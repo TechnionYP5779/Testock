@@ -36,6 +36,7 @@ import { SolutionComponent } from './ui/solution/solution.component';
 import { AdminComponent } from './ui/admin/admin.component';
 import { FacultyComponent } from './ui/admin/faculty/faculty.component';
 import { CreateTopicComponent } from './ui/create-topic/create-topic.component';
+import {CKEditorModule} from 'ngx-ckeditor';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { CreateTopicComponent } from './ui/create-topic/create-topic.component';
     ImageCropperModule,
     CoreModule,
     MatSnackBarModule,
-    FormsModule
+    FormsModule,
+    CKEditorModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
