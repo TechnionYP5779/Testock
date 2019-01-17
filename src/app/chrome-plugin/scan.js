@@ -40,7 +40,7 @@ chrome.storage.sync.get(['student', 'courseid', 'semester', 'moed'], function (d
           position: absolute;\
           top: 15px;\
           right: 35px;\
-          background: #000;\
+          background: #292929;\
           color: #fff;\
           border-radius: 10px;\
           direction: rtl;\
@@ -48,10 +48,37 @@ chrome.storage.sync.get(['student', 'courseid', 'semester', 'moed'], function (d
           text-align: center;\
           font-family: arial, sans-serif;\
           z-index: 5000;\
+          }\
+        .hide {\
+          -moz-animation: cssAnimation 0.3s linear 15s forwards;\
+          /* Firefox */\
+          -webkit-animation: cssAnimation 0.3s linear 15s forwards;\
+          /* Safari and Chrome */\
+          -o-animation: cssAnimation 0.3s linear 15s forwards;\
+          /* Opera */\
+          animation: cssAnimation 0.3s linear 15s forwards;\
+          -webkit-animation-fill-mode: forwards;\
+          animation-fill-mode: forwards;\
+        }\
+        @keyframes cssAnimation {\
+          to {\
+            width:0;\
+            height:0;\
+            padding:0px 0px;\
+            overflow:hidden;\
+          }\
+        }\
+        @-webkit-keyframes cssAnimation {\
+          to {\
+            width:0;\
+            height:0;\
+            padding:0px 0px;\
+            display:none;\
+          }\
         }\
       </style>\
-      <span class="close-s" id="close" onclick="document.getElementById(`scan-pop`).style.display=`none`; document.getElementById(`close`).style.display=`none`">x</span>\
-      <div class="scan-popup" id="scan-pop">\
+      <span class="close-s hide" id="close" onclick="document.getElementById(`scan-pop`).style.display=`none`; document.getElementById(`close`).style.display=`none`">x</span>\
+      <div class="scan-popup hide" id="scan-pop">\
         <img src="https://testock.tk/assets/images/testock-logo.png" width="190" style="display:block; margin-bottom: 10px;">\
         <a target="_blank" href="http://localhost:4200/upload/' + window.location.href.slice(51) + '/' + pdfname + '   ">העלה את הסריקה</a>\
       </div>\
