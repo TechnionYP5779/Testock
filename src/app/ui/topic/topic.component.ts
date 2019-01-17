@@ -7,8 +7,8 @@ import {Comment} from '../../core/entities/comment';
 import {CommentId} from '../../core/entities/comment';
 import {AuthService} from '../../core/auth.service';
 
-//temp class need to remove after db works:
-class MyTopic implements Topic {
+// Todo: temp class need to remove after db works:
+export class MyTopic implements Topic {
   subject = 'my temp subject';
   text = 'content';
   creator = 'max calderon';
@@ -22,22 +22,33 @@ class MyTopic implements Topic {
 })
 export class TopicComponent implements OnInit {
 
+  // Todo: this comment is the code needed after the DB works:
   // public topic: Topic;
+  // Todo: temp class need to remove after DB works
   public topic: MyTopic;
   public id: number;
-  public answers: CommentId[];
+  public creatorName: string;
 
-  constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
+  constructor(private route: ActivatedRoute, private db: DbService) {
     this.id = +this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit() {
     this.getTopic();
+    this.getCreator();
   }
 
   getTopic(): void {
+    // Todo: this comment is the code needed after the DB works:
     // this.db.getTopic(this.id).subscribe(topic => this.topic = topic);
-    // temp:
+    // Todo: temp need to remove after DB works:
     this.topic = new MyTopic();
+  }
+
+  getCreator(): void {
+    // Todo: this comment is the code needed after the DB works:
+    // this.db.getUser(this.topic.creator).subscribe(user => this.creatorName = user.uid);
+    // Todo: temp need to remove after DB works:
+    this.creatorName = 'max calderon';
   }
 }
