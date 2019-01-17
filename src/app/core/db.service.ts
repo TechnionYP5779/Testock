@@ -271,6 +271,18 @@ export class DbService {
       return {id: qid, ...data};
     })));
   }
+
+  getTopic(id: string): Observable<TopicId> {
+    return this.afs.doc<Topic>(`topics/${id}`).valueChanges().pipe(map(topic => {
+      return {id: id, ...topic};
+    }));
+  }
+
+  getComment(topicId: string, commentId: string): Observable<CommentId> {
+    return this.afs.doc<Comment>(`topics/${topicId}/comments/${commentId}`).valueChanges().pipe(map(comment => {
+      return {id: commentId, ...comment};
+    }));
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
