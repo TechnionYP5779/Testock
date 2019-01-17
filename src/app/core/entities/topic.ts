@@ -5,6 +5,7 @@ export interface Topic {
   creator: string;
   linkedQuestionId?: string;
   linkedCourseId?: number;
+  created: Date;
 }
 
 export interface TopicId extends Topic {
