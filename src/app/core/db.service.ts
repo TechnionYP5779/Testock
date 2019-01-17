@@ -10,6 +10,7 @@ import {Roles, UserData} from './entities/user';
 import {Faculty, FacultyId} from './entities/faculty';
 import {Topic, TopicId} from './entities/topic';
 import {Comment, CommentId} from './entities/comment';
+import {AngularFireStorage} from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class DbService {
 
   private coursesCollection: AngularFirestoreCollection<Course>;
   private questionsCollection: AngularFirestoreCollection<Question>;
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, private storage: AngularFireStorage) {
     this.coursesCollection = afs.collection<Course>('courses');
     this.questionsCollection = afs.collection<Question>('questions');
   }
@@ -198,7 +199,11 @@ export class DbService {
   }
 
   deleteSolution(sol: SolutionId, q: QuestionId): Promise<void> {
-    return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).delete();
+    return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).delete().then(() => {
+      const path = `${q.course}\/${q.year}\/${q.semester}\/${q.moed}\/${q.number}\/${sol.id}\/`;
+      const deletePromises = sol.photos.map((url, i) => this.storage.ref(`${path}/${i}.jpg`).delete().toPromise());
+      return Promise.all(deletePromises).then(() => {});
+    });
   }
 
   getUserRoles(uid: string): Observable<Roles> {
