@@ -59,7 +59,6 @@ import { CommentComponent } from './ui/comment/comment.component';
     AdminComponent,
     FacultyComponent,
     TopicComponent,
-    CommentsComponent,
     CommentComponent
   ],
   imports: [
