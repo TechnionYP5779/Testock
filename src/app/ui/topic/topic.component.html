@@ -27,7 +27,14 @@
 
   <h4 class="mb-4">Comments:</h4>
   <div class="container">
-    <app-comment class="row" [comment]="comment" *ngFor="let comment of (comments$ | async)" [isSolution]="comment.id === topic.correctAnswerId"></app-comment>
+    <app-comment
+      class="row"
+      [topic]="topic"
+      [comment]="comment"
+      *ngFor="let comment of (comments$ | async)"
+      [isSolution]="comment.id === topic.correctAnswerId"
+      [allowToMarkAsSolution]="!topic.correctAnswerId">
+    </app-comment>
   </div>
 </div>
 

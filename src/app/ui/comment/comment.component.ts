@@ -1,5 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CommentId, CommentWithCreatorId} from '../../core/entities/comment';
+import {TopicId} from '../../core/entities/topic';
+import {DbService} from '../../core/db.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-comment',
@@ -14,9 +17,20 @@ export class CommentComponent implements OnInit {
   @Input()
   isSolution = false;
 
-  constructor() { }
+  @Input()
+  allowToMarkAsSolution: boolean;
+
+  @Input()
+  topic: TopicId;
+
+  constructor(private db: DbService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
 
+  markAsAnswer() {
+    this.db.markAsAnswer(this.topic, this.comment).then(() => {
+      this.snackBar.open(`Marked as answer successfully!`, 'close', {duration: 3000});
+    });
+  }
 }

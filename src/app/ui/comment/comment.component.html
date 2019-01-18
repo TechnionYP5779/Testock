@@ -1,7 +1,8 @@
 <div class="col-1">
   <div class="thumbnail">
     <app-facebook-profile-picture class="mb-2 img-thumbnail" [fbUid]="comment.creator.fbId"></app-facebook-profile-picture>
-    <h1 class="mt-2" *ngIf="isSolution"><span class="badge-success badge"><fa name="check"></fa></span></h1>
+    <button *ngIf="isSolution" class="mt-2 btn-success btn-lg" type="button"><fa name="check"></fa></button>
+    <button *ngIf="allowToMarkAsSolution" class="mt-2 btn-outline-success btn-lg" (click)="markAsAnswer();" type="button"><fa name="check"></fa></button>
   </div>
 </div>
 
