@@ -243,6 +243,10 @@ export class DbService {
     return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: comment.id});
   }
 
+  clearMarkAsAnswer(topic: TopicId): Promise<void> {
+    return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: firebase.firestore.FieldValue.delete()});
+  }
+
   getTopicsForCourseWithCreators(courseId: number): Observable<TopicWithCreatorId[]> {
     const ref = r =>
       r.where('linkedCourseId', '==', courseId).orderBy('created', 'desc');
