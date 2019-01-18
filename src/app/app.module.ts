@@ -37,6 +37,8 @@ import { AdminComponent } from './ui/admin/admin.component';
 import { FacultyComponent } from './ui/admin/faculty/faculty.component';
 import { TopicComponent } from './ui/topic/topic.component';
 import { CommentComponent } from './ui/comment/comment.component';
+import { CreateTopicComponent } from './ui/create-topic/create-topic.component';
+import {CKEditorModule} from 'ngx-ckeditor';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,8 @@ import { CommentComponent } from './ui/comment/comment.component';
     AdminComponent,
     FacultyComponent,
     TopicComponent,
-    CommentComponent
+    CommentComponent,
+    CreateTopicComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +77,8 @@ import { CommentComponent } from './ui/comment/comment.component';
     ImageCropperModule,
     CoreModule,
     MatSnackBarModule,
-    FormsModule
+    FormsModule,
+    CKEditorModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
