@@ -11,6 +11,9 @@ export class CommentComponent implements OnInit {
   @Input()
   comment: CommentWithCreatorId;
 
+  @Input()
+  isSolution = false;
+
   constructor() { }
 
   ngOnInit() {

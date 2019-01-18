@@ -1,6 +1,7 @@
 <div class="col-1">
   <div class="thumbnail">
     <app-facebook-profile-picture class="mb-2 img-thumbnail" [fbUid]="comment.creator.fbId"></app-facebook-profile-picture>
+    <h1 class="mt-2" *ngIf="isSolution"><span class="badge-success badge"><fa name="check"></fa></span></h1>
   </div>
 </div>
 
