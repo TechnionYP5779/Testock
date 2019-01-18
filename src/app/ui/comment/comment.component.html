@@ -1,0 +1,16 @@
+<div class="col-1">
+  <div class="thumbnail">
+    <app-facebook-profile-picture class="mb-2 img-thumbnail" [fbUid]="comment.creator.fbId"></app-facebook-profile-picture>
+    <button *ngIf="isSolution" class="mt-2 btn-success btn-lg" (click)="unmarkAsAnswer()" type="button"><fa name="check"></fa></button>
+    <button *ngIf="allowToMarkAsSolution" class="mt-2 btn-outline-success btn-lg" (click)="markAsAnswer();" type="button"><fa name="check"></fa></button>
+  </div>
+</div>
+
+<div class="col-11">
+  <div class="card">
+    <div class="card-header">
+      <strong>{{comment.creator.name}}</strong> <span class="text-muted float-right">Posted {{comment.created.toDate() | date: 'dd/MM/yyyy HH:mm'}}</span>
+    </div>
+    <div class="card-body" [innerHTML]="comment.text"></div>
+  </div>
+</div>

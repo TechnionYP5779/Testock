@@ -35,6 +35,8 @@ import { FacebookProfilePictureComponent } from './users/facebook-profile-pictur
 import { SolutionComponent } from './ui/solution/solution.component';
 import { AdminComponent } from './ui/admin/admin.component';
 import { FacultyComponent } from './ui/admin/faculty/faculty.component';
+import { TopicComponent } from './ui/topic/topic.component';
+import { CommentComponent } from './ui/comment/comment.component';
 import { CreateTopicComponent } from './ui/create-topic/create-topic.component';
 import {CKEditorModule} from 'ngx-ckeditor';
 
@@ -57,6 +59,8 @@ import {CKEditorModule} from 'ngx-ckeditor';
     SolutionComponent,
     AdminComponent,
     FacultyComponent,
+    TopicComponent,
+    CommentComponent,
     CreateTopicComponent
   ],
   imports: [
