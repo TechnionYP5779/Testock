@@ -8,9 +8,10 @@ import {flatMap, map, switchMap, tap} from 'rxjs/operators';
 import {Exam, ExamId} from './entities/exam';
 import {Roles, UserData} from './entities/user';
 import {Faculty, FacultyId} from './entities/faculty';
-import {Topic, TopicId} from './entities/topic';
-import {Comment, CommentId} from './entities/comment';
+import {Topic, TopicId, TopicWithCreatorId} from './entities/topic';
+import {Comment, CommentId, CommentWithCreatorId} from './entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -225,14 +226,14 @@ export class DbService {
   }
 
   createTopic(topic: Topic): Promise<TopicId> {
-    topic.created = new Date();
+    topic.created = firebase.firestore.Timestamp.now();
     return this.afs.collection<Topic>(`topics`).add(topic).then(dr => {
       return {id: dr.id, ...topic};
     });
   }
 
   addComment(topic: TopicId, comment: Comment): Promise<CommentId> {
-    comment.created = new Date();
+    comment.created = firebase.firestore.Timestamp.now();
     return this.afs.collection<Comment>(`topics/${topic.id}/comments`).add(comment).then(dr => {
       return {id: dr.id, ...comment};
     });
@@ -242,40 +243,40 @@ export class DbService {
     return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: comment.id});
   }
 
-  getTopicsForCourseWithCreators(courseId: number): Observable<any> {
+  getTopicsForCourseWithCreators(courseId: number): Observable<TopicWithCreatorId[]> {
     const ref = r =>
       r.where('linkedCourseId', '==', courseId).orderBy('created', 'desc');
     return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Topic;
       const qid = action.payload.doc.id;
       return {id: qid, ...data};
-    }))).pipe(leftJoinDocument(this.afs, 'creator', 'users'));
+    }))).pipe(leftJoinDocument(this.afs, 'creator', 'users')) as Observable<TopicWithCreatorId[]>;
   }
 
-  getTopicsForQuestion(question: QuestionId): Observable<TopicId[]> {
+  getTopicsForQuestion(question: QuestionId): Observable<TopicWithCreatorId[]> {
     const ref = r =>
       r.where('linkedQuestionId', '==', question.id).orderBy('created', 'desc');
     return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Topic;
       const qid = action.payload.doc.id;
       return {id: qid, ...data};
-    })));
+    }))).pipe(leftJoinDocument(this.afs, 'creator', 'users')) as Observable<TopicWithCreatorId[]>;
   }
 
-  getCommentsForTopics(topic: TopicId): Observable<CommentId[]> {
+  getCommentsForTopic(topicId: string): Observable<CommentWithCreatorId[]> {
     const ref = r => r.orderBy('created', 'desc');
-    return this.afs.collection<Comment>(`topics/${topic.id}/comments`, ref).snapshotChanges()
+    return this.afs.collection<Comment>(`topics/${topicId}/comments`, ref).snapshotChanges()
       .pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Comment;
       const qid = action.payload.doc.id;
       return {id: qid, ...data};
-    })));
+    }))).pipe(leftJoinDocument(this.afs, 'creator', 'users')) as Observable<CommentWithCreatorId[]>;
   }
 
-  getTopic(id: string): Observable<TopicId> {
+  getTopic(id: string): Observable<TopicWithCreatorId> {
     return this.afs.doc<Topic>(`topics/${id}`).valueChanges().pipe(map(topic => {
-      return {id: id, ...topic};
-    }));
+      return [{id: id, ...topic}];
+    })).pipe(leftJoinDocument(this.afs, 'creator', 'users'), map(res => res[0]));
   }
 
   getComment(topicId: string, commentId: string): Observable<CommentId> {
