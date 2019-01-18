@@ -36,7 +36,6 @@ import { SolutionComponent } from './ui/solution/solution.component';
 import { AdminComponent } from './ui/admin/admin.component';
 import { FacultyComponent } from './ui/admin/faculty/faculty.component';
 import { TopicComponent } from './ui/topic/topic.component';
-import { CommentsComponent } from './ui/comments/comments.component';
 import { CommentComponent } from './ui/comment/comment.component';
 
 @NgModule({
