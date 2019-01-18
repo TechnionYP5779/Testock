@@ -22,10 +22,13 @@
       </div>
     </div>
   </div>
+
+  <hr>
+
+  <h4 class="mb-4">Comments:</h4>
+  <div class="container">
+    <app-comment class="row" [comment]="comment" *ngFor="let comment of (comments$ | async)" [isSolution]="comment.id === topic.correctAnswerId"></app-comment>
+  </div>
 </div>
 
-<hr>
-<h4 class="mb-4">Comments:</h4>
-<div class="container">
-  <app-comment class="row" [comment]="comment" *ngFor="let comment of (comments$ | async)"></app-comment>
-</div>
+
