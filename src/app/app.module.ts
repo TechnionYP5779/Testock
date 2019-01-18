@@ -35,6 +35,8 @@ import { FacebookProfilePictureComponent } from './users/facebook-profile-pictur
 import { SolutionComponent } from './ui/solution/solution.component';
 import { AdminComponent } from './ui/admin/admin.component';
 import { FacultyComponent } from './ui/admin/faculty/faculty.component';
+import { CreateTopicComponent } from './ui/create-topic/create-topic.component';
+import {CKEditorModule} from 'ngx-ckeditor';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { FacultyComponent } from './ui/admin/faculty/faculty.component';
     UploadQuestionComponent,
     SolutionComponent,
     AdminComponent,
-    FacultyComponent
+    FacultyComponent,
+    CreateTopicComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,8 @@ import { FacultyComponent } from './ui/admin/faculty/faculty.component';
     ImageCropperModule,
     CoreModule,
     MatSnackBarModule,
-    FormsModule
+    FormsModule,
+    CKEditorModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
