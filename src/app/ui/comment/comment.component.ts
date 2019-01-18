@@ -33,4 +33,10 @@ export class CommentComponent implements OnInit {
       this.snackBar.open(`Marked as answer successfully!`, 'close', {duration: 3000});
     });
   }
+
+  unmarkAsAnswer() {
+    this.db.clearMarkAsAnswer(this.topic).then(() => {
+      this.snackBar.open(`Unmarked as answer successfully!`, 'close', {duration: 3000});
+    });
+  }
 }
