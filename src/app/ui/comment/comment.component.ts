@@ -29,13 +29,13 @@ export class CommentComponent implements OnInit {
   }
 
   markAsAnswer() {
-    this.db.markAsAnswer(this.topic, this.comment).then(() => {
+    this.db.markAsAnswer(this.topic.id, this.comment.id).then(() => {
       this.snackBar.open(`Marked as answer successfully!`, 'close', {duration: 3000});
     });
   }
 
   unmarkAsAnswer() {
-    this.db.clearMarkAsAnswer(this.topic).then(() => {
+    this.db.clearMarkAsAnswer(this.topic.id).then(() => {
       this.snackBar.open(`Unmarked as answer successfully!`, 'close', {duration: 3000});
     });
   }

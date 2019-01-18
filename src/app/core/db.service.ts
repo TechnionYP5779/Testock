@@ -239,12 +239,12 @@ export class DbService {
     });
   }
 
-  markAsAnswer(topic: TopicId, comment: CommentId): Promise<void> {
-    return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: comment.id});
+  markAsAnswer(topicId: string, commentId: string): Promise<void> {
+    return this.afs.doc<Topic>(`topics/${topicId}`).update({correctAnswerId: commentId});
   }
 
-  clearMarkAsAnswer(topic: TopicId): Promise<void> {
-    return this.afs.doc<Topic>(`topics/${topic.id}`).update({correctAnswerId: firebase.firestore.FieldValue.delete()});
+  clearMarkAsAnswer(topicId: string): Promise<void> {
+    return this.afs.doc<Topic>(`topics/${topicId}`).update({correctAnswerId: null});
   }
 
   getTopicsForCourseWithCreators(courseId: number): Observable<TopicWithCreatorId[]> {
@@ -268,7 +268,7 @@ export class DbService {
   }
 
   getCommentsForTopic(topicId: string): Observable<CommentWithCreatorId[]> {
-    const ref = r => r.orderBy('created', 'desc');
+    const ref = r => r.orderBy('created');
     return this.afs.collection<Comment>(`topics/${topicId}/comments`, ref).snapshotChanges()
       .pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Comment;
