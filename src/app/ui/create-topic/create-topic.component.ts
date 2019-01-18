@@ -15,7 +15,7 @@ export class CreateTopicComponent implements OnInit {
   public contentValue: string;
 
   @Input()
-  linkedCourseId: string = null;
+  linkedCourseId: number = null;
 
   @Input()
   linkedQuestionId: string = null;
