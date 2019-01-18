@@ -8,8 +8,8 @@ import {AuthService} from '../../core/auth.service';
 })
 export class FacebookProfilePictureComponent implements OnInit {
 
-  @Input() width: number;
-  @Input() height: number;
+  @Input() width = 50;
+  @Input() height = 50;
   url: string;
 
   constructor() {}
