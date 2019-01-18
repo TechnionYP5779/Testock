@@ -20,7 +20,7 @@ export class TopicComponent implements OnInit {
   constructor(private route: ActivatedRoute, private db: DbService) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.topic$ = this.db.getTopic(this.id);
-    this.comments$ = this.db.getTopic(this.id).pipe(switchMap(topic => this.db.getCommentsForTopic(topic.id)));
+    this.comments$ = this.db.getCommentsForTopic(this.id);
   }
 
   ngOnInit() {
