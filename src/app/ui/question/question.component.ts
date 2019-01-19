@@ -5,6 +5,8 @@ import {Question, QuestionId} from '../../core/entities/question';
 import {SolutionId} from '../../core/entities/solution';
 import {AuthService} from '../../core/auth.service';
 import {flatMap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {TopicWithCreatorId} from '../../core/entities/topic';
 
 @Component({
   selector: 'app-question',
@@ -17,10 +19,13 @@ export class QuestionComponent implements OnInit {
   public question: QuestionId;
   public solutions: SolutionId[];
 
+  topics$: Observable<TopicWithCreatorId[]>;
+
   adminAccess: boolean;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.id = this.route.snapshot.paramMap.get('id');
+    this.topics$ = this.db.getTopicsForQuestion(this.id);
   }
 
   ngOnInit() {
