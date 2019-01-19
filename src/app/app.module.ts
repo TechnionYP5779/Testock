@@ -39,6 +39,7 @@ import { TopicComponent } from './ui/topic/topic.component';
 import { CommentComponent } from './ui/comment/comment.component';
 import { CreateTopicComponent } from './ui/create-topic/create-topic.component';
 import {CKEditorModule} from 'ngx-ckeditor';
+import { CreateCommentComponent } from './ui/create-comment/create-comment.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import {CKEditorModule} from 'ngx-ckeditor';
     FacultyComponent,
     TopicComponent,
     CommentComponent,
-    CreateTopicComponent
+    CreateTopicComponent,
+    CreateCommentComponent
   ],
   imports: [
     BrowserModule,

@@ -232,9 +232,9 @@ export class DbService {
     });
   }
 
-  addComment(topic: TopicId, comment: Comment): Promise<CommentId> {
+  addComment(topicId: string, comment: Comment): Promise<CommentId> {
     comment.created = firebase.firestore.Timestamp.now();
-    return this.afs.collection<Comment>(`topics/${topic.id}/comments`).add(comment).then(dr => {
+    return this.afs.collection<Comment>(`topics/${topicId}/comments`).add(comment).then(dr => {
       return {id: dr.id, ...comment};
     });
   }
