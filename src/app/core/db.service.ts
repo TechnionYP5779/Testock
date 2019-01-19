@@ -257,9 +257,9 @@ export class DbService {
     }))).pipe(leftJoinDocument(this.afs, 'creator', 'users')) as Observable<TopicWithCreatorId[]>;
   }
 
-  getTopicsForQuestion(question: QuestionId): Observable<TopicWithCreatorId[]> {
+  getTopicsForQuestion(questionId: string): Observable<TopicWithCreatorId[]> {
     const ref = r =>
-      r.where('linkedQuestionId', '==', question.id).orderBy('created', 'desc');
+      r.where('linkedQuestionId', '==', questionId).orderBy('created', 'desc');
     return this.afs.collection<Topic>('topics', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
       const data = action.payload.doc.data() as Topic;
       const qid = action.payload.doc.id;
