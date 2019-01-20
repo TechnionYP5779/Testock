@@ -20,7 +20,7 @@ const routes: Routes = [
   {path: 'question/:id', component: QuestionComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:cid/exam/:eid', component: ExamComponent, canActivate: [UsersOnlyGuard]},
   {path: 'upload', component: UploadComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'upload/:scanid/:pdfname', component: UploadComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'upload/:source', component: UploadComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses/:term', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AdminOnlyGuard]}
 ];

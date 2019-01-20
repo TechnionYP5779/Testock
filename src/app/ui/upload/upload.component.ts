@@ -62,10 +62,11 @@ export class UploadComponent implements OnInit {
   public state = UploadState.Ready;
 
   ngOnInit() {
-    if (this.route.snapshot.paramMap.get('scanid')) {
-      const fileurl = 'https://grades.technion.ac.il/scanexam.ashx?ScanID=' + this.route.snapshot.paramMap.get('scanid');
-      const file = this.createFile(fileurl, this.route.snapshot.paramMap.get('pdfname'));
-      file.then(() => this.loadFile(file));
+    const source = this.route.snapshot.paramMap.get('source')
+    if (source) {
+      if (source === 'chrome') {
+        this.snackBar.open('Drag&Drop your scan from the bottom bar to the upload area', 'close', {duration: 3000});
+      }
     }
   }
 
@@ -76,7 +77,6 @@ export class UploadComponent implements OnInit {
 
   private getCourseDetails(file: File) {
     const fileName = file.name;
-    alert(file.name);
     if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName)) {
       const split = fileName.split('-');
       const courseId = parseInt(split[2], 10);
@@ -160,7 +160,7 @@ export class UploadComponent implements OnInit {
     this.questions[questionImage[0] - 1].images.splice(questionImage[1], 1);
     this.activeQuestion = 0;
   }
-  
+
   removeFirstPage() {
     this.blobs = this.blobs.slice(1);
   }
@@ -191,17 +191,6 @@ export class UploadComponent implements OnInit {
     this.semester = null;
     this.moed = null;
     this.state = UploadState.Ready;
-  }
-
-  async createFile(fileurl, filename) {
-    const response = await fetch(fileurl, {credentials: 'same-origin'});
-    alert('got here');
-    const data = await response.blob();
-    const metadata = {
-      type: 'application/pdf'
-    };
-    const file = new File([data], filename, metadata);
-    return file;
   }
 }
 
