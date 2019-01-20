@@ -1,6 +1,24 @@
 <div *ngIf="topic$ | async as topic">
   <div class="mb-4">
-    <h2>{{topic.subject}}</h2>
+    <h4 *ngIf="linkedQuestion$ | async as linkedQuestion">
+      <a routerLink="/course/{{course.id}}" class="badge badge-primary mr-2" *ngIf="linkedQuestionCourse$ | async as course">
+        {{ course.name }} ({{ course.id }})
+      </a>
+      <a routerLink="/question/{{linkedQuestion.id}}" class="badge badge-secondary mr-2">
+        {{ linkedQuestion.semester | titlecase }} {{ linkedQuestion.year }} - Moed {{ linkedQuestion.moed }}
+      </a>
+      <a routerLink="/question/{{linkedQuestion.id}}" class="badge badge-info mr-2">
+        Question {{ linkedQuestion.number }}
+      </a>
+    </h4>
+    <h4 *ngIf="linkedCourse$ | async as course">
+      <a routerLink="/course/{{course.id}}" class="badge badge-primary mr-2">
+        {{ course.name }} ({{ course.id }})
+      </a>
+    </h4>
+    <h2>
+      {{topic.subject}}
+    </h2>
   </div>
   <div class="container">
     <div class="row mb-4">
