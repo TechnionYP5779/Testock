@@ -4,6 +4,7 @@ import {PdfService} from '../../core/pdf.service';
 import {Course} from '../../core/entities/course';
 import {UploadService} from '../../core/upload.service';
 import {MatSnackBar} from '@angular/material';
+import {ActivatedRoute} from '@angular/router';
 
 class QuestionSolution {
   public index: number;
@@ -47,7 +48,10 @@ export class UploadComponent implements OnInit {
   public blobs: Blob[];
   public isDragged: boolean;
 
-  constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar) { }
+  constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar,
+              private route: ActivatedRoute) {
+    this.route = route;
+  }
 
   public uploadState = UploadState;
 
@@ -58,6 +62,12 @@ export class UploadComponent implements OnInit {
   public state = UploadState.Ready;
 
   ngOnInit() {
+    const source = this.route.snapshot.paramMap.get('source')
+    if (source) {
+      if (source === 'chrome') {
+        this.snackBar.open('Drag&Drop your scan from the bottom bar to the upload area', 'close', {duration: 3000});
+      }
+    }
   }
 
   onFileSelected(event) {
@@ -150,7 +160,7 @@ export class UploadComponent implements OnInit {
     this.questions[questionImage[0] - 1].images.splice(questionImage[1], 1);
     this.activeQuestion = 0;
   }
-  
+
   removeFirstPage() {
     this.blobs = this.blobs.slice(1);
   }
