@@ -1,7 +1,7 @@
 {
-  "name": "Getting Started Example",
+  "name": "Testock Plugin",
   "version": "1.0",
-  "description": "Build an Extension!",
+  "description": "Upload your exam solutions in no-time",
   "permissions": ["activeTab", "storage"],
   "content_scripts": [
     {
