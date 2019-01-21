@@ -9,27 +9,6 @@
   </p>
 </div>
 
-<div class="list-group my-3" *ngIf="exams">
-  <div class="list-group-item list-group-item-primary">
-    <fa name="book"></fa>
-    Available exams
-    <span class="badge badge-primary">{{exams.length}}</span>
-  </div>
-  <a *ngFor="let e of exams" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
-    {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
-  </a>
-</div>
-
-<div class="list-group my-3" *ngIf="questions">
-  <div class="list-group-item list-group-item-danger">
-    <fa name="fire"></fa>
-    Hot questions
-    <span class="badge badge-danger">{{questions.length}}</span>
-  </div>
-  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
-    {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
-  </a>
-</div>
 <button role="button" class="btn btn-primary" data-toggle="modal" data-target="#createTopicModal">
   <fa name="plus" class="mr-1"></fa>
   Add Topic
@@ -64,4 +43,27 @@
     </div>
   </div>
 </div>
+
+<div class="list-group my-3" *ngIf="exams">
+  <div class="list-group-item list-group-item-primary">
+    <fa name="book"></fa>
+    Available exams
+    <span class="badge badge-primary">{{exams.length}}</span>
+  </div>
+  <a *ngFor="let e of exams" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
+    {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
+  </a>
+</div>
+
+<div class="list-group my-3" *ngIf="questions">
+  <div class="list-group-item list-group-item-danger">
+    <fa name="fire"></fa>
+    Hot questions
+    <span class="badge badge-danger">{{questions.length}}</span>
+  </div>
+  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
+    {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
+  </a>
+</div>
+
 
