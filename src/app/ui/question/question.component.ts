@@ -7,6 +7,7 @@ import {AuthService} from '../../core/auth.service';
 import {flatMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../core/entities/topic';
+import {Course} from '../../core/entities/course';
 
 @Component({
   selector: 'app-question',
@@ -17,6 +18,7 @@ export class QuestionComponent implements OnInit {
 
   private id: string;
   public question: QuestionId;
+  public course: Observable<Course>;
   public solutions: SolutionId[];
 
   topics$: Observable<TopicWithCreatorId[]>;
@@ -29,18 +31,19 @@ export class QuestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getQuestion();
+    this.db.getQuestion(this.id).subscribe(q => this.getQuestionAndCourse(q));
     this.getSolutions();
     this.db.getQuestion(this.id)
       .pipe(flatMap(q => this.auth.isAdminForCourse(q.course))).subscribe(isAdmin => this.adminAccess = isAdmin);
   }
 
-  getQuestion(): void {
-    this.db.getQuestion(this.id).subscribe(q => this.question = q);
-
+  private getQuestionAndCourse(q: QuestionId) {
+    this.question = q;
+    this.course = this.db.getCourse(q.course);
   }
 
   getSolutions(): void {
     this.db.getSolutions(this.id).subscribe(sol => this.solutions = sol);
   }
+
 }
