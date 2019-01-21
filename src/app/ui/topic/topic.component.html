@@ -16,10 +16,14 @@
         {{ course.name }} ({{ course.id }})
       </a>
     </h4>
+    <hr>
     <h2>
       {{topic.subject}}
     </h2>
   </div>
+
+  <hr>
+
   <div class="container">
     <div class="row mb-4">
       <div class="col-1">
@@ -41,9 +45,9 @@
     </div>
   </div>
 
+  <h4 class="mb-4">Comments:</h4>
   <hr>
 
-  <h4 class="mb-4">Comments:</h4>
   <div class="container">
     <app-comment
       class="row mb-4"
@@ -55,7 +59,9 @@
     </app-comment>
   </div>
 
-  <h4>Add comment</h4>
+  <hr>
+
+  <h4>Your Answer</h4>
   <app-create-comment [topicId]="topic.id"></app-create-comment>
 </div>
 
