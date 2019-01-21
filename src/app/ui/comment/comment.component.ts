@@ -5,7 +5,6 @@ import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {AuthService} from '../../core/auth.service';
 import {Observable} from 'rxjs';
-import {isCreationMode} from '@angular/core/src/render3/state';
 
 @Component({
   selector: 'app-comment',
