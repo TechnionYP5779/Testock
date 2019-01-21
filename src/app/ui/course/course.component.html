@@ -9,7 +9,7 @@
       Add Topic
     </button>
     <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank">Facebook Group</a>
-    <a class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
+    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
   </p>
 </div>
 
