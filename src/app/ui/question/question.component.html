@@ -9,23 +9,27 @@
       <app-solution [solution]="sol" [question]="question" [adminAccess]="adminAccess"></app-solution>
     </div>
   </div>
-
-  <hr>
-  <h2 class="mb-4">Discussions about this question:</h2>
-  <button role="button" class="btn btn-primary" data-toggle="modal" data-target="#createTopicModal">
-    <fa name="plus" class="mr-1"></fa>
-    Add Topic
-  </button>
+  
   <div class="list-group my-3" *ngIf="topics$ | async as topics">
+    <div class="list-group-item list-group-item-info">
+      <fa name="comment" class="mr-2"></fa>
+      Forum
+      <span class="badge badge-info">{{topics.length}}</span>
+      <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
+        <fa name="plus" class="mr-1"></fa>
+        Add Topic
+      </button>
+    </div>
     <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
       {{ topic.subject }}
       <span class="float-right col-4">
-      <app-facebook-profile-picture [fbUid]="topic.creator.fbId" [width]="30" [height]="30" class="mr-2"></app-facebook-profile-picture>
-      <small class="mr-2">{{ topic.creator.name }}</small>
-      <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
-    </span>
+        <app-facebook-profile-picture [fbUid]="topic.creator.fbId" [width]="30" [height]="30" class="mr-2"></app-facebook-profile-picture>
+        <small class="mr-2">{{ topic.creator.name }}</small>
+        <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
+      </span>
     </a>
   </div>
+
 
   <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
