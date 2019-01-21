@@ -5,6 +5,7 @@ import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {AuthService} from '../../core/auth.service';
 import {Observable} from 'rxjs';
+import {isCreationMode} from '@angular/core/src/render3/state';
 
 @Component({
   selector: 'app-comment',
@@ -25,14 +26,16 @@ export class CommentComponent implements OnInit {
   @Input()
   topic: TopicWithCreatorId;
 
+  isCreator: boolean;
+  isAdmin: Observable<boolean>;
   canMark: boolean;
-  isAdmin: boolean;
 
   constructor(private db: DbService, private snackBar: MatSnackBar, private auth: AuthService) { }
 
   ngOnInit() {
-    this.auth.isAdminForCourse(this.topic.linkedCourseId).subscribe(is => this.isAdmin = is);
-    this.canMark = this.auth.currentUserId === this.topic.creator.uid || this.isAdmin;
+    this.isAdmin = this.auth.isAdminForCourse(this.topic.linkedCourseId);
+    this.isCreator = this.auth.currentUserId === this.topic.creator.uid;
+    this.isAdmin.subscribe(isAdmin =>  this.canMark = this.isCreator || isAdmin );
   }
 
   markAsAnswer() {
