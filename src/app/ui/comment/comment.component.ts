@@ -1,8 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CommentId, CommentWithCreatorId} from '../../core/entities/comment';
-import {TopicId} from '../../core/entities/topic';
+import {TopicId, TopicWithCreatorId} from '../../core/entities/topic';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
+import {AuthService} from '../../core/auth.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-comment',
@@ -21,11 +23,16 @@ export class CommentComponent implements OnInit {
   allowToMarkAsSolution: boolean;
 
   @Input()
-  topic: TopicId;
+  topic: TopicWithCreatorId;
 
-  constructor(private db: DbService, private snackBar: MatSnackBar) { }
+  canMark: boolean;
+  isAdmin: boolean;
+
+  constructor(private db: DbService, private snackBar: MatSnackBar, private auth: AuthService) { }
 
   ngOnInit() {
+    this.auth.isAdminForCourse(this.topic.linkedCourseId).subscribe(is => this.isAdmin = is);
+    this.canMark = this.auth.currentUserId === this.topic.creator.uid || this.isAdmin;
   }
 
   markAsAnswer() {
