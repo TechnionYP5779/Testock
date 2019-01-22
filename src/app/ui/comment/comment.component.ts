@@ -1,8 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CommentId, CommentWithCreatorId} from '../../core/entities/comment';
-import {TopicId} from '../../core/entities/topic';
+import {TopicId, TopicWithCreatorId} from '../../core/entities/topic';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
+import {AuthService} from '../../core/auth.service';
+import {Observable} from 'rxjs';
+import {QuestionId} from '../../core/entities/question';
 
 @Component({
   selector: 'app-comment',
@@ -21,7 +24,7 @@ export class CommentComponent implements OnInit {
   allowToMarkAsSolution: boolean;
 
   @Input()
-  topic: TopicId;
+  topic: TopicWithCreatorId;
 
   constructor(private db: DbService, private snackBar: MatSnackBar) { }
 
