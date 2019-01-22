@@ -32,6 +32,7 @@
     <button *ngIf="topicsLimit < topics.length" type="button" class="btn btn-link" (click)="topicsLimit = min(topics.length, topicsLimit + 10);">See More</button>
     <button *ngIf="topicsLimit < topics.length" type="button" class="btn btn-link" (click)="topicsLimit = topics.length;">See All</button>
     <button *ngIf="topicsLimit > 0" type="button" class="btn btn-link float-right" (click)="topicsLimit = max(0, topicsLimit - 10);">See Less</button>
+    <button *ngIf="topicsLimit > 0" type="button" class="btn btn-link float-right" (click)="topicsLimit = 0;">Hide All</button>
   </p>
 </div>
 <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -63,6 +64,7 @@
     <button *ngIf="examsLimit < exams.length" type="button" class="btn btn-link" (click)="examsLimit = min(exams.length, examsLimit + 10);">See More</button>
     <button *ngIf="examsLimit < exams.length" type="button" class="btn btn-link" (click)="examsLimit = exams.length;">See All</button>
     <button *ngIf="examsLimit > 0" type="button" class="btn btn-link float-right" (click)="examsLimit = max(0, examsLimit - 10);">See Less</button>
+    <button *ngIf="examsLimit > 0" type="button" class="btn btn-link float-right" (click)="examsLimit = 0;">Hide All</button>
   </p>
 </div>
 
@@ -79,5 +81,6 @@
     <button *ngIf="questionsLimit < questions.length" type="button" class="btn btn-link" (click)="questionsLimit = min(questions.length, questionsLimit + 10);">See More</button>
     <button *ngIf="questionsLimit < questions.length" type="button" class="btn btn-link" (click)="questionsLimit = questions.length;">See All</button>
     <button *ngIf="questionsLimit > 0" type="button" class="btn btn-link float-right" (click)="questionsLimit = max(0, questionsLimit - 10);">See Less</button>
+    <button *ngIf="questionsLimit > 0" type="button" class="btn btn-link float-right" (click)="questionsLimit = 0;">Hide All</button>
   </p>
 </div>
