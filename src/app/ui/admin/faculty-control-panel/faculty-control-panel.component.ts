@@ -6,10 +6,10 @@ import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-faculty',
-  templateUrl: './faculty.component.html',
-  styleUrls: ['./faculty.component.scss']
+  templateUrl: './faculty-control-panel.component.html',
+  styleUrls: ['./faculty-control-panel.component.scss']
 })
-export class FacultyComponent implements OnInit {
+export class FacultyControlPanelComponent implements OnInit {
 
   _faculty: FacultyId;
 
