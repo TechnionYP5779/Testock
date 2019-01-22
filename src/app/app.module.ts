@@ -40,6 +40,7 @@ import { CommentComponent } from './ui/comment/comment.component';
 import { CreateTopicComponent } from './ui/create-topic/create-topic.component';
 import {CKEditorModule} from 'ngx-ckeditor';
 import { CreateCommentComponent } from './ui/create-comment/create-comment.component';
+import { FacultiesComponent } from './ui/faculties/faculties.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { CreateCommentComponent } from './ui/create-comment/create-comment.compo
     TopicComponent,
     CommentComponent,
     CreateTopicComponent,
-    CreateCommentComponent
+    CreateCommentComponent,
+    FacultiesComponent
   ],
   imports: [
     BrowserModule,
