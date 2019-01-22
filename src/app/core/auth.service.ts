@@ -10,6 +10,7 @@ import {Observable, of} from 'rxjs';
 import {flatMap, map, switchMap} from 'rxjs/operators';
 import {UserData} from './entities/user';
 import {Course} from './entities/course';
+import {Question} from './entities/question';
 
 @Injectable({
   providedIn: 'root'
@@ -109,5 +110,10 @@ export class AuthService {
   isAdminForCourse(id: number): Observable<boolean> {
     return this.db.doc<Course>(`courses/${id}`).valueChanges()
       .pipe(flatMap(course => this.isAdminOfFaculty(course.faculty)));
+  }
+
+  isAdminForQuestion(id: string): Observable<boolean> {
+    return this.db.doc<Question>(`questions/${id}`).valueChanges()
+      .pipe(flatMap(q => this.isAdminForCourse(q.course)));
   }
 }
