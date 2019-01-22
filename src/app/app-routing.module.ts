@@ -11,6 +11,7 @@ import {UsersOnlyGuard} from './core/users-only.guard';
 import {AdminComponent} from './ui/admin/admin.component';
 import {AdminOnlyGuard} from './core/admin-only.guard';
 import { TopicComponent } from './ui/topic/topic.component';
+import {FacultiesComponent} from './ui/faculties/faculties.component';
 
 const routes: Routes = [
   {path: '', component: CoursesComponent},
@@ -24,7 +25,8 @@ const routes: Routes = [
   {path: 'upload/:source', component: UploadComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses/:term', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AdminOnlyGuard]},
-  {path: 'topic/:id', component: TopicComponent, canActivate: [UsersOnlyGuard]}
+  {path: 'topic/:id', component: TopicComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'faculties', component: FacultiesComponent, canActivate: [UsersOnlyGuard]}
 ];
 
 @NgModule({
