@@ -22,6 +22,9 @@ export class CourseComponent implements OnInit {
   public id: number;
   public questions: QuestionId[];
   public exams: ExamId[];
+  public topicsLimit: number;
+  public questionsLimit: number;
+  public examsLimit: number;
   topics$: Observable<any[]>;
   adminAccess: boolean;
 
@@ -31,6 +34,9 @@ export class CourseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.topicsLimit = 0;
+    this.questionsLimit = 0;
+    this.examsLimit = 0;
     this.getCourse();
     this.getQuestions();
     this.getExams();
@@ -48,5 +54,4 @@ export class CourseComponent implements OnInit {
   getExams(): void {
     this.db.getExamsOfCourse(this.id).subscribe(exams => this.exams = exams);
   }
-
 }

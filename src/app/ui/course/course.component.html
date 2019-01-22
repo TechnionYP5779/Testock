@@ -20,7 +20,7 @@
     Forum
     <span class="badge badge-info">{{topics.length}}</span>
   </div>
-  <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
+  <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics.slice(0, topicsLimit);">
     {{ topic.subject }}
     <span class="float-right col-4">
       <app-facebook-profile-picture [fbUid]="topic.creator.fbId" [width]="30" [height]="30" class="mr-2"></app-facebook-profile-picture>
@@ -28,6 +28,11 @@
       <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
     </span>
   </a>
+  <p>
+    <button *ngIf="topicsLimit < topics.length" type="button" class="btn btn-link" (click)="topicsLimit = topicsLimit + 1;">See More</button>
+    <button *ngIf="topicsLimit < topics.length" type="button" class="btn btn-link" (click)="topicsLimit = topics.length;">See All</button>
+    <button *ngIf="topicsLimit > 0" type="button" class="btn btn-link float-right" (click)="topicsLimit = topicsLimit - 1;">See Less</button>
+  </p>
 </div>
 <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -51,9 +56,14 @@
     Available exams
     <span class="badge badge-primary">{{exams.length}}</span>
   </div>
-  <a *ngFor="let e of exams" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
+  <a *ngFor="let e of exams.slice(0, examsLimit)" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
     {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
   </a>
+  <p>
+    <button *ngIf="examsLimit < exams.length" type="button" class="btn btn-link" (click)="examsLimit = examsLimit + 1;">See More</button>
+    <button *ngIf="examsLimit < exams.length" type="button" class="btn btn-link" (click)="examsLimit = exams.length;">See All</button>
+    <button *ngIf="examsLimit > 0" type="button" class="btn btn-link float-right" (click)="examsLimit = examsLimit - 1;">See Less</button>
+  </p>
 </div>
 
 <div class="list-group my-3" *ngIf="questions">
@@ -62,9 +72,12 @@
     Hot questions
     <span class="badge badge-danger">{{questions.length}}</span>
   </div>
-  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
+  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions.slice(0, questionsLimit)">
     {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
   </a>
+  <p>
+    <button *ngIf="questionsLimit < questions.length" type="button" class="btn btn-link" (click)="questionsLimit = questionsLimit + 1;">See More</button>
+    <button *ngIf="questionsLimit < questions.length" type="button" class="btn btn-link" (click)="questionsLimit = questions.length;">See All</button>
+    <button *ngIf="questionsLimit > 0" type="button" class="btn btn-link float-right" (click)="questionsLimit = questionsLimit - 1;">See Less</button>
+  </p>
 </div>
-
-
