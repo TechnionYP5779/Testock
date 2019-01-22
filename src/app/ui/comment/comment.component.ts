@@ -26,7 +26,7 @@ export class CommentComponent implements OnInit {
   @Input()
   topic: TopicWithCreatorId;
 
-  constructor(private db: DbService, private snackBar: MatSnackBar, private auth: AuthService) { }
+  constructor(private db: DbService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
