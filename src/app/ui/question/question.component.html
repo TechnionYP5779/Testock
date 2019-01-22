@@ -1,9 +1,9 @@
 <div *ngIf="question">
   <div class="alert alert-info" *ngIf="adminAccess">You have admin access for this question</div>
-  <h1>{{(course | async).name}} ({{question.course}}) - {{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h1>
+  <h1>{{ (course$ | async)?.name}} ({{question.course}})</h1>
+  <h2>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h2>
   <br/>
 
-  <h2>Solutions:</h2>
   <div class="row p-3">
     <div class="col-3 p-3" *ngFor="let sol of solutions">
       <app-solution [solution]="sol" [question]="question" [adminAccess]="adminAccess"></app-solution>

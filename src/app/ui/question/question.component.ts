@@ -18,10 +18,10 @@ export class QuestionComponent implements OnInit {
 
   private id: string;
   public question: QuestionId;
-  public course: Observable<Course>;
   public solutions: SolutionId[];
 
   topics$: Observable<TopicWithCreatorId[]>;
+  course$: Observable<Course>;
 
   adminAccess: boolean;
 
@@ -35,11 +35,12 @@ export class QuestionComponent implements OnInit {
     this.getSolutions();
     this.db.getQuestion(this.id)
       .pipe(flatMap(q => this.auth.isAdminForCourse(q.course))).subscribe(isAdmin => this.adminAccess = isAdmin);
+    this.course$ = this.db.getQuestion(this.id)
+      .pipe(flatMap(q => this.db.getCourse(q.course)));
   }
 
   private getQuestionAndCourse(q: QuestionId) {
     this.question = q;
-    this.course = this.db.getCourse(q.course);
   }
 
   getSolutions(): void {
