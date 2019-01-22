@@ -25,16 +25,10 @@ export class CommentComponent implements OnInit {
   @Input()
   topic: TopicWithCreatorId;
 
-  isCreator: boolean;
-  isAdmin: Observable<boolean>;
-  canMark: boolean;
-
   constructor(private db: DbService, private snackBar: MatSnackBar, private auth: AuthService) { }
 
   ngOnInit() {
-    this.isAdmin = this.auth.isAdminForCourse(this.topic.linkedCourseId);
-    this.isCreator = this.auth.currentUserId === this.topic.creator.uid;
-    this.isAdmin.subscribe(isAdmin =>  this.canMark = this.isCreator || isAdmin );
+
   }
 
   markAsAnswer() {

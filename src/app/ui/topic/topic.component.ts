@@ -7,6 +7,7 @@ import {flatMap, map, switchMap} from 'rxjs/operators';
 import {CommentWithCreatorId} from '../../core/entities/comment';
 import {Course} from '../../core/entities/course';
 import {QuestionId} from '../../core/entities/question';
+import {AuthService} from '../../core/auth.service';
 
 @Component({
   selector: 'app-topic',
@@ -21,11 +22,23 @@ export class TopicComponent implements OnInit {
   public linkedCourse$: Observable<Course>;
   public linkedQuestion$: Observable<QuestionId>;
   public linkedQuestionCourse$: Observable<Course>;
+  public adminAccess$: Observable<boolean>;
 
-  constructor(private route: ActivatedRoute, private db: DbService) {
+  constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.topic$ = this.db.getTopic(this.id);
     this.comments$ = this.db.getCommentsForTopic(this.id);
+
+    this.adminAccess$ = this.db.getTopic(this.id).pipe(flatMap(topic => {
+      if (topic.linkedCourseId) {
+        return this.auth.isAdminForCourse(topic.linkedCourseId);
+      } else if (topic.linkedQuestionId) {
+        return this.auth.isAdminForQuestion(topic.linkedQuestionId);
+      } else {
+        return of(null);
+      }
+    }));
+
     this.linkedCourse$ = this.db.getTopic(this.id).pipe(flatMap(topic => {
       if (topic.linkedCourseId) {
         return this.db.getCourse(topic.linkedCourseId);
