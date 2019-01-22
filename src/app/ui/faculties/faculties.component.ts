@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DbService} from '../../core/db.service';
-import {Faculty} from '../../core/entities/faculty';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {FacultyId} from '../../core/entities/faculty';
 
 @Component({
   selector: 'app-faculties',
@@ -10,19 +9,17 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 })
 export class FacultiesComponent implements OnInit {
 
-  faculties: Faculty[];
-  route: ActivatedRoute;
-  router: Router;
+  faculties: FacultyId[];
 
-  constructor(private rtr: Router, private r: ActivatedRoute, private db: DbService) {
-    this.route = r;
-    this.router = rtr;
+  constructor(private db: DbService) {
   }
 
   ngOnInit() {
-    this.db.getFaculties().subscribe(faculties => {
-      this.faculties = faculties;
-    });
+    this.getFaculties();
+  }
+
+  getFaculties(): void {
+    this.db.getFaculties().subscribe(faculties => { this.faculties = faculties; });
   }
 
 }
