@@ -34,9 +34,9 @@ export class CourseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.topicsLimit = 0;
-    this.questionsLimit = 0;
-    this.examsLimit = 0;
+    this.topicsLimit = 10;
+    this.questionsLimit = 10;
+    this.examsLimit = 10;
     this.getCourse();
     this.getQuestions();
     this.getExams();
@@ -53,5 +53,13 @@ export class CourseComponent implements OnInit {
 
   getExams(): void {
     this.db.getExamsOfCourse(this.id).subscribe(exams => this.exams = exams);
+  }
+
+  min(a: number, b: number) {
+    return Math.min(a, b);
+  }
+
+  max(a: number, b: number) {
+    return Math.max(a, b);
   }
 }
