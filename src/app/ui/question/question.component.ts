@@ -17,34 +17,21 @@ import {Course} from '../../core/entities/course';
 export class QuestionComponent implements OnInit {
 
   private id: string;
-  public question: QuestionId;
-  public solutions: SolutionId[];
-
+  question$: Observable<QuestionId>;
+  solutions$: Observable<SolutionId[]>;
   topics$: Observable<TopicWithCreatorId[]>;
   course$: Observable<Course>;
-
-  adminAccess: boolean;
+  isAdmin$: Observable<boolean>;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForQuestion(this.id);
+    this.question$ = this.db.getQuestion(this.id);
+    this.solutions$ = this.db.getSolutions(this.id);
+    this.isAdmin$ = this.db.getQuestion(this.id).pipe(flatMap(q => this.auth.isAdminForCourse(q.course)));
+    this.course$ = this.db.getQuestion(this.id).pipe(flatMap(q => this.db.getCourse(q.course)));
   }
 
   ngOnInit() {
-    this.db.getQuestion(this.id).subscribe(q => this.getQuestionAndCourse(q));
-    this.getSolutions();
-    this.db.getQuestion(this.id)
-      .pipe(flatMap(q => this.auth.isAdminForCourse(q.course))).subscribe(isAdmin => this.adminAccess = isAdmin);
-    this.course$ = this.db.getQuestion(this.id)
-      .pipe(flatMap(q => this.db.getCourse(q.course)));
   }
-
-  private getQuestionAndCourse(q: QuestionId) {
-    this.question = q;
-  }
-
-  getSolutions(): void {
-    this.db.getSolutions(this.id).subscribe(sol => this.solutions = sol);
-  }
-
 }
