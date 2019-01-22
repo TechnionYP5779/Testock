@@ -10,11 +10,12 @@ import {UploadComponent} from './ui/upload/upload.component';
 import {UsersOnlyGuard} from './core/users-only.guard';
 import {AdminComponent} from './ui/admin/admin.component';
 import {AdminOnlyGuard} from './core/admin-only.guard';
-import { TopicComponent } from './ui/topic/topic.component';
+import {TopicComponent} from './ui/topic/topic.component';
 import {FacultiesComponent} from './ui/faculties/faculties.component';
+import {FacultyComponent} from './ui/faculty/faculty.component';
 
 const routes: Routes = [
-  {path: '', component: CoursesComponent},
+  {path: '', component: FacultiesComponent},
   {path: 'login', component: UserLoginComponent},
   {path: 'profile', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
@@ -26,7 +27,8 @@ const routes: Routes = [
   {path: 'courses/:term', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AdminOnlyGuard]},
   {path: 'topic/:id', component: TopicComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'faculties', component: FacultiesComponent, canActivate: [UsersOnlyGuard]}
+  {path: 'faculties', component: FacultiesComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'faculty/:id', component: FacultyComponent, canActivate: [UsersOnlyGuard]}
 ];
 
 @NgModule({
