@@ -4,10 +4,6 @@
   <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
   <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
   <p class="lead">
-    <button role="button" class="btn btn-info m-1" data-toggle="modal" data-target="#createTopicModal">
-      <fa name="plus" class="mr-1"></fa>
-      Add Topic
-    </button>
     <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank">Facebook Group</a>
     <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
   </p>
@@ -19,6 +15,10 @@
     <fa name="comment" class="mr-2"></fa>
     Forum
     <span class="badge badge-info">{{topics.length}}</span>
+    <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
+      <fa name="plus" class="mr-1"></fa>
+      Add Topic
+    </button>
   </div>
   <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
     {{ topic.subject }}
