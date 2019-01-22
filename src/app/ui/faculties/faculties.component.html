@@ -1,10 +1,12 @@
 <h1 class="display-4">Faculties</h1>
-<ul class="list-group-flush">
-  <li class="list-group-item" *ngFor="let faculty of faculties">
-    <h6 class="m-2">
-      <a routerLink="/faculty/{{ faculty.id }}">
-        {{ faculty.name }}
-      </a>
-    </h6>
-  </li>
-</ul>
+<div *ngIf="faculties$ | async as faculties">
+  <ul class="list-group-flush">
+    <li class="list-group-item" *ngFor="let faculty of faculties">
+      <h6 class="m-2">
+        <a routerLink="/faculty/{{ faculty.id }}">
+          {{ faculty.name }}
+        </a>
+      </h6>
+    </li>
+  </ul>
+</div>

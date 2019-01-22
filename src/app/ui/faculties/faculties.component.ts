@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {FacultyId} from '../../core/entities/faculty';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-faculties',
@@ -9,17 +10,13 @@ import {FacultyId} from '../../core/entities/faculty';
 })
 export class FacultiesComponent implements OnInit {
 
-  faculties: FacultyId[];
+  public faculties$: Observable<FacultyId[]>;
 
   constructor(private db: DbService) {
   }
 
   ngOnInit() {
-    this.getFaculties();
-  }
-
-  getFaculties(): void {
-    this.db.getFaculties().subscribe(faculties => { this.faculties = faculties; });
+    this.faculties$ = this.db.getFaculties();
   }
 
 }
