@@ -5,6 +5,7 @@ import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {AuthService} from '../../core/auth.service';
 import {Observable} from 'rxjs';
+import {QuestionId} from '../../core/entities/question';
 
 @Component({
   selector: 'app-comment',
@@ -28,7 +29,6 @@ export class CommentComponent implements OnInit {
   constructor(private db: DbService, private snackBar: MatSnackBar, private auth: AuthService) { }
 
   ngOnInit() {
-
   }
 
   markAsAnswer() {
