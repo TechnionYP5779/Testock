@@ -32,13 +32,13 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {
     let isAdmin;
-    // if (this.topic.linkedCourseId) {
+    if (this.topic.linkedCourseId) {
       isAdmin = this.auth.isAdminForCourse(this.topic.linkedCourseId);
-    /* } else {
+    } else { // assuming linkedQuestionId is not null
       let question;
       question = this.db.getQuestion(this.topic.linkedQuestionId);
       question.subscribe(q => isAdmin = this.auth.isAdminForCourse(q.course));
-    }*/
+    }
     const isCreator = this.auth.currentUserId === this.topic.creator.uid;
     isAdmin.subscribe(is =>  this.canMark = isCreator || is );
   }
