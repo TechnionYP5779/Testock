@@ -4,8 +4,8 @@
   <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
   <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
   <p class="lead">
-    <a class="btn btn-primary m-1" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank">Facebook Group</a>
-    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary m-1" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">Webcourse</a>
+    <a class="btn btn-primary mr-2" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
+    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
   </p>
 </div>
 
