@@ -6,7 +6,7 @@
         {{ course.id }}: {{ course.name }}
       </a>
     </h6>
-    <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank">facebook group</a>
-    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">webcourse</a>
+    <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
+    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
   </li>
 </ul>
