@@ -34,12 +34,14 @@ import { HomeComponent } from './ui/home/home.component';
 import { FacebookProfilePictureComponent } from './users/facebook-profile-picture/facebook-profile-picture.component';
 import { SolutionComponent } from './ui/solution/solution.component';
 import { AdminComponent } from './ui/admin/admin.component';
-import { FacultyComponent } from './ui/admin/faculty/faculty.component';
+import { FacultyControlPanelComponent } from './ui/admin/faculty-control-panel/faculty-control-panel.component';
 import { TopicComponent } from './ui/topic/topic.component';
 import { CommentComponent } from './ui/comment/comment.component';
 import { CreateTopicComponent } from './ui/create-topic/create-topic.component';
 import {CKEditorModule} from 'ngx-ckeditor';
 import { CreateCommentComponent } from './ui/create-comment/create-comment.component';
+import { FacultiesComponent } from './ui/faculties/faculties.component';
+import { FacultyComponent } from './ui/faculty/faculty.component';
 
 @NgModule({
   declarations: [
@@ -59,11 +61,13 @@ import { CreateCommentComponent } from './ui/create-comment/create-comment.compo
     UploadQuestionComponent,
     SolutionComponent,
     AdminComponent,
-    FacultyComponent,
+    FacultyControlPanelComponent,
     TopicComponent,
     CommentComponent,
     CreateTopicComponent,
-    CreateCommentComponent
+    CreateCommentComponent,
+    FacultiesComponent,
+    FacultyComponent
   ],
   imports: [
     BrowserModule,

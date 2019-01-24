@@ -288,6 +288,19 @@ export class DbService {
       return {id: commentId, ...comment};
     }));
   }
+
+  getCoursesOfFaculty(facultyId: string): Observable<Course[]> {
+    const order = r =>
+      r.where('faculty', '==', facultyId);
+
+    return this.afs.collection<Course>('courses', order).valueChanges();
+  }
+
+  getFaculty(facultyId: string): Observable<FacultyId> {
+    return this.afs.doc<Faculty>(`faculties/${facultyId}`).valueChanges().pipe(map(faculty => {
+      return {id: facultyId, ...faculty};
+    }));
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {

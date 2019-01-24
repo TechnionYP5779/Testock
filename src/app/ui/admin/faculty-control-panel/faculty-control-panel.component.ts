@@ -5,11 +5,11 @@ import {UserData} from '../../../core/entities/user';
 import {Subscription} from 'rxjs';
 
 @Component({
-  selector: 'app-faculty',
-  templateUrl: './faculty.component.html',
-  styleUrls: ['./faculty.component.scss']
+  selector: 'app-faculty-control-panel',
+  templateUrl: './faculty-control-panel.component.html',
+  styleUrls: ['./faculty-control-panel.component.scss']
 })
-export class FacultyComponent implements OnInit {
+export class FacultyControlPanelComponent implements OnInit {
 
   _faculty: FacultyId;
 

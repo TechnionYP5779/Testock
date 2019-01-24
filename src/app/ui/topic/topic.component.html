@@ -51,11 +51,11 @@
       [comment]="comment"
       *ngFor="let comment of (comments$ | async)"
       [isSolution]="comment.id === topic.correctAnswerId"
-      [allowToMarkAsSolution]="!topic.correctAnswerId">
+      [allowToMarkAsSolution]="(adminAccess$ | async) || auth.currentUserId == topic.creator.uid">
     </app-comment>
   </div>
 
-  <h4>Add comment</h4>
+  <h4 class="mb-4">Add comment</h4>
   <app-create-comment [topicId]="topic.id"></app-create-comment>
 </div>
 
