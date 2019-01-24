@@ -5,6 +5,7 @@ import {Course} from '../../core/entities/course';
 import {UploadService} from '../../core/upload.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
+import {FacultyId} from '../../core/entities/faculty';
 
 class QuestionSolution {
   public index: number;
@@ -60,6 +61,7 @@ export class UploadComponent implements OnInit {
   public semester: number;
   public moed: string;
   public state = UploadState.Ready;
+  public faculty: FacultyId;
 
   ngOnInit() {
     const source = this.route.snapshot.paramMap.get('source')
@@ -84,7 +86,10 @@ export class UploadComponent implements OnInit {
       this.semester = parseInt(split[1].substr(5, 2), 10);
       const moedId = parseInt(split[3], 10);
       this.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
-      this.db.getCourse(courseId).subscribe(course => this.course = course);
+      this.db.getCourse(courseId).subscribe(course => {
+        this.course = course;
+        this.db.getFaculty(course.faculty).subscribe(faculty => this.faculty = faculty);
+      });
     } else {
       throw new Error('undefined file name!');
     }
@@ -193,4 +198,3 @@ export class UploadComponent implements OnInit {
     this.state = UploadState.Ready;
   }
 }
-
