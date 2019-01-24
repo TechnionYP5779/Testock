@@ -6,9 +6,6 @@ import {UploadService} from '../../core/upload.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {FacultyId} from '../../core/entities/faculty';
-import {Observable, of} from 'rxjs';
-import {flatMap, take} from 'rxjs/operators';
-import {async} from 'rxjs/internal/scheduler/async';
 
 class QuestionSolution {
   public index: number;
@@ -59,12 +56,12 @@ export class UploadComponent implements OnInit {
 
   public uploadState = UploadState;
 
-  public course$: Observable<Course>;
+  public course: Course;
   public year: number;
   public semester: number;
   public moed: string;
   public state = UploadState.Ready;
-  public faculty$: Observable<FacultyId>;
+  public faculty: FacultyId;
 
   ngOnInit() {
     const source = this.route.snapshot.paramMap.get('source')
@@ -89,21 +86,10 @@ export class UploadComponent implements OnInit {
       this.semester = parseInt(split[1].substr(5, 2), 10);
       const moedId = parseInt(split[3], 10);
       this.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
-      this.course$ = this.db.getCourse(courseId);
-      this.faculty$ = this.db.getCourse(courseId).pipe(flatMap(course => {
-          if (course.faculty) {
-            return this.db.getFaculty(course.faculty);
-          } else {
-            return of(null);
-          }
-        })
-      );
-
-      // this.db.getCourse(courseId).subscribe(course => {
-      //     this.course = course;
-      //     this.db.getFaculty(course.faculty).subscribe(faculty => this.faculty = faculty);
-      // });
-
+      this.db.getCourse(courseId).subscribe(course => {
+        this.course = course;
+        this.db.getFaculty(course.faculty).subscribe(faculty => this.faculty = faculty);
+      });
     } else {
       throw new Error('undefined file name!');
     }
@@ -119,17 +105,13 @@ export class UploadComponent implements OnInit {
     const points = this.questions.map(q => q.points);
     const images = this.questions.map(q => q.images);
 
-    this.course$.pipe(take(1)).toPromise().then(course => {
-      this.uploadService.uploadScan(course.id, this.year, sem, moed, nums, grades, points, images)
-        .then(() => {
-          this.state = UploadState.UploadSuccess;
-          this.snackBar.open('Scan for ' + course.name + ' uploaded successfully.', 'close', {duration: 3000});
-          this.collapseOneTrigger.nativeElement.click();
-          this.resetForm();
-        });
-    });
-
-
+    this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, points, images)
+      .then(() => {
+        this.state = UploadState.UploadSuccess;
+        this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
+        this.collapseOneTrigger.nativeElement.click();
+        this.resetForm();
+      });
   }
 
   onDragOver(event): void {
@@ -209,11 +191,10 @@ export class UploadComponent implements OnInit {
   resetForm() {
     this.questions = [];
     this.blobs = [];
-    this.course$ = null;
+    this.course = null;
     this.year = null;
     this.semester = null;
     this.moed = null;
     this.state = UploadState.Ready;
   }
 }
-
