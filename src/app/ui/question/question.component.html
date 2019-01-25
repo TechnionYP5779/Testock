@@ -1,11 +1,51 @@
-<div *ngIf="question">
-  <h1>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h1>
-  <br/>
+<div *ngIf="question$ | async as question">
+  <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
+  <h1>{{ (course$ | async)?.name}} ({{question.course}})</h1>
+  <h2>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h2>
 
-  <h2>Solutions:</h2>
-  <div class="row p-3">
-    <div class="col-3 p-3" *ngFor="let sol of solutions">
-      <app-solution [solution]="sol" [total_grade]="question.total_grade"></app-solution>
+  <div *ngFor="let isAdmin of [isAdmin$ | async]">
+    <div class="row p-3" *ngIf="solutions$ | async as solutions">
+      <div class="col-3 p-3" *ngFor="let sol of solutions">
+        <app-solution [solution]="sol" [question]="question" [adminAccess]="isAdmin"></app-solution>
+      </div>
+    </div>
+  </div>
+  
+  <div class="list-group my-3" *ngIf="topics$ | async as topics">
+    <div class="list-group-item list-group-item-info">
+      <fa name="comment" class="mr-2"></fa>
+      Forum
+      <span class="badge badge-info">{{topics.length}}</span>
+      <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
+        <fa name="plus" class="mr-1"></fa>
+        Add Topic
+      </button>
+    </div>
+    <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
+      {{ topic.subject }}
+      <span class="float-right col-4">
+        <app-facebook-profile-picture [fbUid]="topic.creator.fbId" [width]="30" [height]="30" class="mr-2"></app-facebook-profile-picture>
+        <small class="mr-2">{{ topic.creator.name }}</small>
+        <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
+      </span>
+    </a>
+  </div>
+
+
+  <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Create new topic</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-create-topic [linkedQuestionId]="question.id"></app-create-topic>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+

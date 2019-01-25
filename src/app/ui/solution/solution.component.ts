@@ -1,5 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SolutionId} from '../../core/entities/solution';
+import {QuestionId} from '../../core/entities/question';
+import {DbService} from '../../core/db.service';
+import {AuthService} from '../../core/auth.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-solution',
@@ -9,11 +13,26 @@ import {SolutionId} from '../../core/entities/solution';
 export class SolutionComponent implements OnInit {
 
   @Input() solution: SolutionId;
-  @Input() total_grade: number;
+  @Input() question: QuestionId;
 
-  constructor() { }
+  @Input()
+  adminAccess: boolean;
+
+  constructor(private db: DbService, private snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
   }
 
+  deleteSolution(sol: SolutionId): void {
+    this.db.deleteSolution(sol, this.question).then(() => {
+      this.snackBar.open(`Solution Deleted Successfully`, 'close', {duration: 3000});
+    });
+  }
+
+  saveSolution() {
+    this.db.updateSolutionGrade(this.solution, this.question).then(() => {
+      this.snackBar.open(`Solution Updated Successfully`, 'close', {duration: 3000});
+    });
+  }
 }

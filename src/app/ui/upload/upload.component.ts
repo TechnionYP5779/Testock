@@ -4,6 +4,8 @@ import {PdfService} from '../../core/pdf.service';
 import {Course} from '../../core/entities/course';
 import {UploadService} from '../../core/upload.service';
 import {MatSnackBar} from '@angular/material';
+import {ActivatedRoute} from '@angular/router';
+import {FacultyId} from '../../core/entities/faculty';
 
 class QuestionSolution {
   public index: number;
@@ -39,6 +41,7 @@ export class UploadComponent implements OnInit {
 
   @ViewChild('file') file;
   @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
+  @ViewChild('collapseOne') collapseOneTrigger;
 
   public questions: QuestionSolution[] = [];
   private activeQuestion = 0;
@@ -46,7 +49,10 @@ export class UploadComponent implements OnInit {
   public blobs: Blob[];
   public isDragged: boolean;
 
-  constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar) { }
+  constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar,
+              private route: ActivatedRoute) {
+    this.route = route;
+  }
 
   public uploadState = UploadState;
 
@@ -55,8 +61,15 @@ export class UploadComponent implements OnInit {
   public semester: number;
   public moed: string;
   public state = UploadState.Ready;
+  public faculty: FacultyId;
 
   ngOnInit() {
+    const source = this.route.snapshot.paramMap.get('source')
+    if (source) {
+      if (source === 'chrome') {
+        this.snackBar.open('Drag&Drop your scan from the bottom bar to the upload area', 'close', {duration: 3000});
+      }
+    }
   }
 
   onFileSelected(event) {
@@ -73,7 +86,10 @@ export class UploadComponent implements OnInit {
       this.semester = parseInt(split[1].substr(5, 2), 10);
       const moedId = parseInt(split[3], 10);
       this.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
-      this.db.getCourse(courseId).subscribe(course => this.course = course);
+      this.db.getCourse(courseId).subscribe(course => {
+        this.course = course;
+        this.db.getFaculty(course.faculty).subscribe(faculty => this.faculty = faculty);
+      });
     } else {
       throw new Error('undefined file name!');
     }
@@ -93,6 +109,8 @@ export class UploadComponent implements OnInit {
       .then(() => {
         this.state = UploadState.UploadSuccess;
         this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
+        this.collapseOneTrigger.nativeElement.click();
+        this.resetForm();
       });
   }
 
@@ -113,6 +131,7 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
+    this.resetForm();
     try {
       this.getCourseDetails(file);
     } catch (e) {
@@ -146,5 +165,36 @@ export class UploadComponent implements OnInit {
     this.questions[questionImage[0] - 1].images.splice(questionImage[1], 1);
     this.activeQuestion = 0;
   }
-}
 
+  removeFirstPage() {
+    this.blobs = this.blobs.slice(1);
+  }
+
+  clearEvenPages() {
+    const res = [];
+    for (let i = 0; i < this.blobs.length; i = i + 2) {
+      res.push(this.blobs[i]);
+    }
+
+    this.blobs = res;
+  }
+
+  clearOddPages() {
+    const res = [];
+    for (let i = 1; i < this.blobs.length; i = i + 2) {
+      res.push(this.blobs[i]);
+    }
+
+    this.blobs = res;
+  }
+
+  resetForm() {
+    this.questions = [];
+    this.blobs = [];
+    this.course = null;
+    this.year = null;
+    this.semester = null;
+    this.moed = null;
+    this.state = UploadState.Ready;
+  }
+}

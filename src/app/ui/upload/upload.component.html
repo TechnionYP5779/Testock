@@ -4,7 +4,7 @@
       <div class="card-header" id="headingOne">
         <h5 class="mb-0">
           <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                  aria-expanded="true" aria-controls="collapseOne">
+                  aria-expanded="true" aria-controls="collapseOne" #collapseOne>
             Upload a new scan
           </button>
         </h5>
@@ -38,6 +38,13 @@
       </div>
       <div id="imagesCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
         <div class="card-body">
+          <div class="text-center">
+            <div class="btn-group" role="group" aria-label="Clean Pages">
+              <button type="button" class="btn btn-danger" (click)="removeFirstPage()">Remove First Page</button>
+              <button type="button" class="btn btn-danger" (click)="clearEvenPages()">Remove Even Pages</button>
+              <button type="button" class="btn btn-danger" (click)="clearOddPages()">Remove Odd Pages</button>
+            </div>
+          </div>
           <div class="row">
             <div class="col-3" *ngFor="let blob of blobs; let i = index">
               <app-scan-page [blob]="blob" [index]="i" [croppable]="activeQuestion"
@@ -70,12 +77,12 @@
                 {{ course.id }}
               </span>
             </li>
-            <li class="col-6">
+            <li class="col-6" *ngIf="faculty">
               <span class="scan-properties-icon">
                 <fa name="home"></fa>
               </span>
               <span class="scan-properties-text">
-                {{ course.faculty }}
+                {{ faculty.name }}
               </span>
             </li>
           </ul>
@@ -105,5 +112,4 @@
     </div>
   </div>
 </div>
-
 
