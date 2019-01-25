@@ -344,12 +344,7 @@ export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
             const joinIdx = cache.get(v[field]);
             return { ...v, [field]: joins[joinIdx] || null };
           });
-        }),
-        tap(final =>
-          console.log(
-            `Queried ${(final as any).length}, Joined ${cache.size} docs`
-          )
-        )
+        })
       );
     });
 };
