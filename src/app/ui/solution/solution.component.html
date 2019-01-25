@@ -1,6 +1,6 @@
 <div class="text-center mb-2" *ngIf="solution && adminAccess">
-  <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" data-target="#editSolution" role="button"><fa name="edit"></fa></button>
-  <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#deleteConfirm" role="button"><fa name="times"></fa></button>
+  <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa name="edit"></fa></button>
+  <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa name="times"></fa></button>
 </div>
 <div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal"
      [attr.data-target]="'#solution-modal-' + solution.id">
@@ -24,7 +24,7 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="editSolution">
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" [id]="'editSolution-' + solution.id">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -55,7 +55,7 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="deleteConfirm">
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" [id]="'deleteSolution-' + solution.id">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
