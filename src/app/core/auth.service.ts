@@ -11,6 +11,7 @@ import {flatMap, map, switchMap} from 'rxjs/operators';
 import {UserData} from './entities/user';
 import {Course} from './entities/course';
 import {Question} from './entities/question';
+import OAuthProvider = firebase.auth.OAuthProvider;
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,11 @@ export class AuthService {
     return this.socialSignIn(new FacebookAuthProvider());
   }
 
+  loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
+    const provider = new firebase.auth.OAuthProvider('microsoft.com');
+    return this.socialSignIn(provider);
+  }
+
   signOut(): void {
     this.afAuth.auth.signOut();
     this.router.navigate(['/']);
@@ -66,7 +72,7 @@ export class AuthService {
 
   private socialSignIn(provider: AuthProvider): Promise<firebase.auth.UserCredential|void>  {
     return this.afAuth.auth.signInWithPopup(provider)
-      .then((cred) => { this.updateUserData(cred.user); })
+      .then((cred) => { console.log(cred); this.updateUserData(cred.user); })
       .catch(error => console.log(error));
   }
 
