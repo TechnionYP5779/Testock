@@ -23,5 +23,9 @@ export class UserLoginComponent implements OnInit {
   signInWithFacebook() {
     this.auth.loginWithFacebook();
   }
+
+  signInWithTechnion() {
+    this.auth.loginWithCampus();
+  }
 }
 
