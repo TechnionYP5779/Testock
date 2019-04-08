@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Injectable, OnInit, ViewChild} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../../core/pdf.service';
 import {Course} from '../../core/entities/course';
@@ -6,13 +6,16 @@ import {UploadService} from '../../core/upload.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {FacultyId} from '../../core/entities/faculty';
+import { HttpClient } from '@angular/common/http';
+import construct = Reflect.construct;
+import {log} from 'util';
 
+@Injectable()
 class QuestionSolution {
   public index: number;
   public images: string[];
   public grade: number;
   public points: number;
-
   constructor(index: number) {
     this.index = index;
     this.images = [];
@@ -37,6 +40,7 @@ enum UploadState {
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss']
 })
+@Injectable()
 export class UploadComponent implements OnInit {
 
   @ViewChild('file') file;
@@ -48,10 +52,13 @@ export class UploadComponent implements OnInit {
 
   public blobs: Blob[];
   public isDragged: boolean;
+  public http: HttpClient;
+
 
   constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute, http: HttpClient) {
     this.route = route;
+    this.http = http;
   }
 
   public uploadState = UploadState;
@@ -77,9 +84,22 @@ export class UploadComponent implements OnInit {
     this.loadFile(file);
   }
 
-  private getCourseDetails(file: File) {
-    const fileName = file.name;
-    if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName)) {
+  private matchInArray(regex, expressions) {
+
+    const len = expressions.length;
+    let i = 0;
+
+    for (; i < len; i++) {
+      if (expressions[i].match(regex)) {
+        return expressions[i];
+      }
+    }
+
+    return '';
+  }
+
+  private getCourseDetailsByName(fileName: String){
+    if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
       const split = fileName.split('-');
       const courseId = parseInt(split[2], 10);
       this.year = parseInt(split[1].substr(0, 4), 10);
@@ -93,6 +113,49 @@ export class UploadComponent implements OnInit {
     } else {
       throw new Error('undefined file name!');
     }
+  }
+
+  private getCourseDetails(file: File) {
+    const fileName = file.name;
+    try{
+      this.getCourseDetailsByName(fileName);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  private getCourseDetailsBySticker(firstPage: Blob) {
+    const p = new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      let base64data: any;
+      reader.readAsDataURL(firstPage);
+      reader.onloadend = function () {
+        base64data = reader.result;
+        resolve(base64data);
+      };
+    });
+    p.then(res => {
+      const json = {
+        'requests': [
+          {
+            'image': {
+              'content': res.toString().substr(23)
+            },
+            'features': [
+              {
+                'type': 'TEXT_DETECTION',
+                'maxResults': 10000
+              }
+            ]
+          }
+        ]
+      };
+      this.http.post('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBPgqzt5VUAa-Jqc5Qu9DSFcO851rj8p5Q', json)
+        .subscribe(result => {
+          const info = this.matchInArray(/^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
+            result['responses'][0].textAnnotations.map((val, ind) => val['description']));
+        });
+    });
   }
 
   uploadImages() {
@@ -132,14 +195,14 @@ export class UploadComponent implements OnInit {
 
   loadFile(file): void {
     this.resetForm();
-    try {
+    try{
       this.getCourseDetails(file);
-    } catch (e) {
-      this.snackBar.open('Invalid file name', 'close', {duration: 3000});
-      return;
-    }
+    } catch (e) {}
     this.questions = [];
-    this.pdf.getImagesOfFile(file).then(res => this.blobs = res);
+    this.pdf.getImagesOfFile(file).then(res => {
+      this.blobs = res;
+      this.getCourseDetailsBySticker(this.blobs[0]);
+    });
     this.imagesCollpaseTrigger.nativeElement.click();
   }
 
