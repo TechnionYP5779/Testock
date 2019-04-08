@@ -154,6 +154,19 @@ export class UploadComponent implements OnInit {
         .subscribe(result => {
           const info = this.matchInArray(/^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
             result['responses'][0].textAnnotations.map((val, ind) => val['description']));
+          if (info !== '') {
+            const year = info.toString().substr(0,4);
+            const semester = info.toString().substr(5,2);
+            const number = info.toString().substr(8,6);
+            const moed = info.toString().substr(15,1);
+            const fileName = '000000000-' + year + semester + '-' + number + '-' + moed;
+            try{
+              this.getCourseDetailsByName(fileName);
+            } catch (e) {
+              this.snackBar.open('Invalid file name', 'close', {duration: 3000});
+              return;
+            }
+          }
         });
     });
   }
