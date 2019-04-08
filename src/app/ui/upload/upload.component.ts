@@ -98,11 +98,7 @@ export class UploadComponent implements OnInit {
 
   private getCourseDetails(file: File) {
     const fileName = file.name;
-    try {
-      this.getCourseDetailsByName(fileName);
-    } catch (e) {
-      throw e;
-    }
+    this.getCourseDetailsByName(fileName);
   }
 
   private getCourseDetailsBySticker(firstPage: Blob) {
