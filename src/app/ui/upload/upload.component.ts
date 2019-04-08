@@ -9,7 +9,6 @@ import {FacultyId} from '../../core/entities/faculty';
 import {OCRService} from '../../core/ocr.service';
 
 
-@Injectable()
 class QuestionSolution {
   public index: number;
   public images: string[];
@@ -40,7 +39,6 @@ enum UploadState {
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss']
 })
-@Injectable()
 export class UploadComponent implements OnInit {
 
   @ViewChild('file') file;
