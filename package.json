@@ -25,7 +25,6 @@
     "@fortawesome/angular-fontawesome": "^0.3.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
-    "@google-cloud/vision": "^0.25.0",
     "add": "^2.0.6",
     "angular-font-awesome": "^3.1.2",
     "bootstrap": "^4.3.1",
