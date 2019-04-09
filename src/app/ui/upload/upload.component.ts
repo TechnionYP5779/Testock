@@ -105,10 +105,10 @@ export class UploadComponent implements OnInit {
   private getCourseDetailsBySticker(firstPage: Blob) {
     this.ocr.getInfoFromSticker(firstPage).then(info => {
         if (info !== '') {
-        const year = info.toString().substr(0, 4);
-        const semester = info.toString().substr(5, 2);
-        const number = info.toString().substr(8, 6);
-        const moed = info.toString().substr(15, 1);
+        const year = info.substr(0, 4);
+        const semester = info.substr(5, 2);
+        const number = info.substr(8, 6);
+        const moed = info.substr(15, 1);
         const fileName = '000000000-' + year + semester + '-' + number + '-' + moed;
         try {
           this.getCourseDetailsByName(fileName);

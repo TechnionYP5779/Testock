@@ -54,7 +54,16 @@ export class OCRService {
     };
     const retJson = await this.http.post('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBPgqzt5VUAa-Jqc5Qu9DSFcO851rj8p5Q'
       , json).toPromise();
-    return this.matchInArray(/^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
+    const info =this.matchInArray(/^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
       retJson['responses'][0].textAnnotations.map((val, ind) => val['description']));
+    const info2 = this.matchInArray(/^[/\d]{7}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
+      retJson['responses'][0].textAnnotations.map((val, ind) => val['description']));
+    let infoStr = '';
+    if (info !== '') {
+      infoStr = info.toString();
+    } else if ( info2 !== '') {
+      infoStr = info2.toString().substring(3);
+    }
+    return infoStr;
   }
 }
