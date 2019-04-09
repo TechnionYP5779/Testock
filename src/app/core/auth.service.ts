@@ -79,7 +79,8 @@ export class AuthService {
       fbId: user.providerData[0].uid,
       roles: {
         user: true
-      }
+      },
+      points: 0
     };
 
    return ref.set(data, { merge: true });

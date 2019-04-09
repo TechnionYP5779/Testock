@@ -10,4 +10,5 @@ export interface UserData {
   name: string;
   fbId: string;
   roles: Roles;
+  points: number;
 }

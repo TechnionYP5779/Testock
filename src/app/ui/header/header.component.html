@@ -40,6 +40,13 @@
             </button>
           </div>
 
+          <div *ngIf="auth.currentUser">
+            <button class="btn btn-warning mr-2" type="button">
+              <fa name="diamond"></fa>
+              {{ (auth.user$ | async).points }}
+            </button>
+          </div>
+
           <div *ngIf="isAdmin">
             <button class="btn btn-outline-danger mr-2" type="button" routerLink="/admin">
               <fa name="cog"></fa>
