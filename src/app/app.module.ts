@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import {AppComponent} from './app.component';
 import {AngularFireModule} from '@angular/fire';
@@ -84,7 +85,8 @@ import { FacultyComponent } from './ui/faculty/faculty.component';
     CoreModule,
     MatSnackBarModule,
     FormsModule,
-    CKEditorModule
+    CKEditorModule,
+    HttpClientModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]

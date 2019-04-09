@@ -6,6 +6,8 @@ import {UploadService} from '../../core/upload.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {FacultyId} from '../../core/entities/faculty';
+import {OCRService} from '../../core/ocr.service';
+
 
 class QuestionSolution {
   public index: number;
@@ -49,7 +51,7 @@ export class UploadComponent implements OnInit {
   public blobs: Blob[];
   public isDragged: boolean;
 
-  constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService, public snackBar: MatSnackBar,
+  constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService, public snackBar: MatSnackBar,
               private route: ActivatedRoute) {
     this.route = route;
   }
@@ -64,7 +66,7 @@ export class UploadComponent implements OnInit {
   public faculty: FacultyId;
 
   ngOnInit() {
-    const source = this.route.snapshot.paramMap.get('source')
+    const source = this.route.snapshot.paramMap.get('source');
     if (source) {
       if (source === 'chrome') {
         this.snackBar.open('Drag&Drop your scan from the bottom bar to the upload area', 'close', {duration: 3000});
@@ -77,9 +79,8 @@ export class UploadComponent implements OnInit {
     this.loadFile(file);
   }
 
-  private getCourseDetails(file: File) {
-    const fileName = file.name;
-    if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName)) {
+  private getCourseDetailsByName(fileName: String) {
+    if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
       const split = fileName.split('-');
       const courseId = parseInt(split[2], 10);
       this.year = parseInt(split[1].substr(0, 4), 10);
@@ -93,6 +94,29 @@ export class UploadComponent implements OnInit {
     } else {
       throw new Error('undefined file name!');
     }
+  }
+
+  private getCourseDetails(file: File) {
+    const fileName = file.name;
+    this.getCourseDetailsByName(fileName);
+  }
+
+  private getCourseDetailsBySticker(firstPage: Blob) {
+    this.ocr.getInfoFromSticker(firstPage).then(info => {
+        if (info !== '') {
+        const year = info.toString().substr(0, 4);
+        const semester = info.toString().substr(5, 2);
+        const number = info.toString().substr(8, 6);
+        const moed = info.toString().substr(15, 1);
+        const fileName = '000000000-' + year + semester + '-' + number + '-' + moed;
+        try {
+          this.getCourseDetailsByName(fileName);
+        } catch (e) {
+          this.snackBar.open('Invalid file name', 'close', {duration: 3000});
+          return;
+        }
+      }
+    });
   }
 
   uploadImages() {
@@ -135,11 +159,12 @@ export class UploadComponent implements OnInit {
     try {
       this.getCourseDetails(file);
     } catch (e) {
-      this.snackBar.open('Invalid file name', 'close', {duration: 3000});
-      return;
     }
     this.questions = [];
-    this.pdf.getImagesOfFile(file).then(res => this.blobs = res);
+    this.pdf.getImagesOfFile(file).then(res => {
+      this.blobs = res;
+      this.getCourseDetailsBySticker(this.blobs[0]);
+    });
     this.imagesCollpaseTrigger.nativeElement.click();
   }
 
