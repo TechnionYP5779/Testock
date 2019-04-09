@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   isAdmin: boolean;
   points: number;
 
-  constructor(private rtr: Router, public auth: AuthService, private db: DbService) {
+  constructor(private rtr: Router, public auth: AuthService) {
     this.main_menu_opened = false;
     this.main_menu_triggered = new EventEmitter();
     this.router = rtr;
