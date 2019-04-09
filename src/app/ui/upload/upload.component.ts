@@ -7,6 +7,7 @@ import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {FacultyId} from '../../core/entities/faculty';
 import {OCRService} from '../../core/ocr.service';
+import {fas} from '@fortawesome/free-solid-svg-icons';
 
 
 class QuestionSolution {
@@ -155,15 +156,19 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
+    let fileNameIsGood = true;
     this.resetForm();
     try {
       this.getCourseDetails(file);
     } catch (e) {
+      fileNameIsGood = false;
     }
     this.questions = [];
     this.pdf.getImagesOfFile(file).then(res => {
       this.blobs = res;
-      this.getCourseDetailsBySticker(this.blobs[0]);
+      if (!fileNameIsGood) {
+        this.getCourseDetailsBySticker(this.blobs[0]);
+      }
     });
     this.imagesCollpaseTrigger.nativeElement.click();
   }
