@@ -13,6 +13,7 @@ import {AdminOnlyGuard} from './core/admin-only.guard';
 import {TopicComponent} from './ui/topic/topic.component';
 import {FacultiesComponent} from './ui/faculties/faculties.component';
 import {FacultyComponent} from './ui/faculty/faculty.component';
+import {ShopComponent} from './ui/shop/shop.component';
 
 const routes: Routes = [
   {path: '', component: FacultiesComponent},
@@ -28,7 +29,8 @@ const routes: Routes = [
   {path: 'admin', component: AdminComponent, canActivate: [AdminOnlyGuard]},
   {path: 'topic/:id', component: TopicComponent, canActivate: [UsersOnlyGuard]},
   {path: 'faculties', component: FacultiesComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'faculty/:id', component: FacultyComponent, canActivate: [UsersOnlyGuard]}
+  {path: 'faculty/:id', component: FacultyComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'shop', component: ShopComponent, canActivate: [UsersOnlyGuard]}
 ];
 
 @NgModule({
