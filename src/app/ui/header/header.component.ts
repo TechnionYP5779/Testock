@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AuthService} from '../../core/auth.service';
 import {Router} from '@angular/router';
+import {DbService} from '../../core/db.service';
 
 @Component({
   selector: 'app-header',
@@ -13,12 +14,14 @@ export class HeaderComponent implements OnInit {
   @Input() term: any;
   router: any;
   isAdmin: boolean;
+  points: number;
 
-  constructor(private rtr: Router, public auth: AuthService) {
+  constructor(private rtr: Router, public auth: AuthService, private db: DbService) {
     this.main_menu_opened = false;
     this.main_menu_triggered = new EventEmitter();
     this.router = rtr;
     this.auth.isAdmin.subscribe(res => this.isAdmin = res);
+    this.auth.points.subscribe(res => this.points = res);
   }
 
   trigger_menu() {

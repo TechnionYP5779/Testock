@@ -79,7 +79,8 @@ export class AuthService {
       fbId: user.providerData[0].uid,
       roles: {
         user: true
-      }
+      },
+      points: 100
     };
 
    return ref.set(data, { merge: true });
@@ -101,6 +102,10 @@ export class AuthService {
 
   get isAdmin(): Observable<boolean> {
     return this.user$.pipe(map(user => user && user.roles.admin));
+  }
+
+  get points(): Observable<number> {
+    return this.user$.pipe(map(user => user.points));
   }
 
   isAdminOfFaculty(faculty: string): Observable<boolean> {

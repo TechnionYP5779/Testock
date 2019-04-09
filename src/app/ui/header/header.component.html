@@ -31,6 +31,10 @@
               Logout
             </button>
             <img class="mr-2" [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+            <button class="btn btn-warning mr-2" type="button">
+              <fa name="diamond"></fa>
+              {{ points }}
+            </button>
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">
