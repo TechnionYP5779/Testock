@@ -88,7 +88,7 @@ export class AuthService {
       uid: user.uid,
       name: user.displayName,
       email: user.email,
-      fbId: user.providerData[0].uid,
+      microsoftId: user.providerData[0].uid,
       roles: {
         user: true
       }

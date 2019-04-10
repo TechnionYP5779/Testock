@@ -8,6 +8,6 @@ export interface UserData {
   uid: string;
   email: string;
   name: string;
-  fbId: string;
+  microsoftId: string;
   roles: Roles;
 }
