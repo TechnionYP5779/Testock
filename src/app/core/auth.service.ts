@@ -77,12 +77,14 @@ export class AuthService {
         if (!cred.user.email.endsWith('technion.ac.il')) {
           this.signOut();
         }
-        this.updateUserData(cred.user);
+        if (cred.additionalUserInfo.isNewUser) {
+          return this.createNewUser(cred.user);
+        }
       })
       .catch(error => console.log(error));
   }
 
-  private updateUserData(user: User): Promise<void> {
+  private createNewUser(user: User): Promise<void> {
     const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
     const data: UserData = {
       uid: user.uid,
@@ -95,7 +97,7 @@ export class AuthService {
       points: 0
     };
 
-   return ref.set(data, { merge: true });
+   return ref.set(data);
   }
 
   get fbId(): Observable<string> {
