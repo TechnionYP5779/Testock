@@ -61,6 +61,7 @@ export class AuthService {
   }
 
   loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
+    // @ts-ignore
     const provider = new firebase.auth.OAuthProvider('microsoft.com');
     return this.socialSignIn(provider);
   }
@@ -72,7 +73,12 @@ export class AuthService {
 
   private socialSignIn(provider: AuthProvider): Promise<firebase.auth.UserCredential|void>  {
     return this.afAuth.auth.signInWithPopup(provider)
-      .then((cred) => { console.log(cred); this.updateUserData(cred.user); })
+      .then((cred) => {
+        if (!cred.user.email.endsWith('technion.ac.il')) {
+          this.signOut();
+        }
+        this.updateUserData(cred.user);
+      })
       .catch(error => console.log(error));
   }
 
