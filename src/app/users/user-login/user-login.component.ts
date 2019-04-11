@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../core/auth.service';
 import {Router} from '@angular/router';
+import {MsGraphService} from '../../core/msgraph.service';
 
 @Component({
   selector: 'app-user-login',
@@ -21,7 +22,7 @@ export class UserLoginComponent implements OnInit {
   }
 
   signInWithFacebook() {
-    this.auth.loginWithFacebook();
+    this.auth.loginWithCampus();
   }
 
   signInWithTechnion() {

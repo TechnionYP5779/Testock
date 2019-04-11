@@ -10,6 +10,7 @@ import {flatMap, map, switchMap} from 'rxjs/operators';
 import {UserData} from './entities/user';
 import {Course} from './entities/course';
 import {Question} from './entities/question';
+import OAuthCredential = firebase.auth.OAuthCredential;
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,21 @@ export class AuthService {
       }
     }));
   }
+
+  get msToken(): Promise<String> {
+    if (sessionStorage.getItem('ms-access-token')) {
+      return Promise.resolve(sessionStorage.getItem('ms-access-token'));
+    } else {
+      return this.loginWithCampus().then(() => {
+        if (sessionStorage.getItem('ms-access-token')) {
+          return sessionStorage.getItem('ms-access-token');
+        } else {
+          return null;
+        }
+      });
+    }
+  }
+
 
   get state(): Observable<User|null> {
     return this.afAuth.user;
@@ -61,6 +77,7 @@ export class AuthService {
   }
 
   signOut(): void {
+    sessionStorage.removeItem('ms-access-token');
     this.afAuth.auth.signOut();
     this.router.navigate(['/']);
   }
@@ -71,6 +88,7 @@ export class AuthService {
         if (!cred.user.email.endsWith('technion.ac.il')) {
           this.signOut();
         }
+        sessionStorage.setItem('ms-access-token', (cred.credential as OAuthCredential).accessToken);
         if (cred.additionalUserInfo.isNewUser) {
           return this.createNewUser(cred.user);
         }
