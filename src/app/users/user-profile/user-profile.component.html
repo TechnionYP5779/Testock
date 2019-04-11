@@ -5,14 +5,14 @@
         <div class="card-header">
           Profile page
         </div>
-        <div class="card-body">
+        <div class="card-body" *ngIf="(user$ | async) as user">
           <!-- User logged in -->
-          <div *ngIf="auth.currentUser">
-            <h3>Hi {{ auth.currentUser.displayName }}</h3>
-            <app-facebook-profile-picture [fbUid]="currentUserFbId" [width]="100" [height]="100"></app-facebook-profile-picture>
+          <div *ngIf="user">
+            <h3>Hi {{ user.name }}</h3>
+<!--            <app-facebook-profile-picture [fbUid]="user.microsoftId" [width]="100" [height]="100"></app-facebook-profile-picture>-->
           </div>
           <!-- User NOT logged in -->
-          <div *ngIf="!auth.currentUser">
+          <div *ngIf="!user">
             <h3>Hi guest</h3>
           </div>
         </div>
