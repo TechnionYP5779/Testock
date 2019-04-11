@@ -44,6 +44,7 @@ import { CreateCommentComponent } from './ui/create-comment/create-comment.compo
 import { FacultiesComponent } from './ui/faculties/faculties.component';
 import { FacultyComponent } from './ui/faculty/faculty.component';
 import {MsGraphService} from './core/msgraph.service';
+import { MsUserProfilePicComponent } from './users/ms-user-profile-pic/ms-user-profile-pic.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {MsGraphService} from './core/msgraph.service';
     CreateTopicComponent,
     CreateCommentComponent,
     FacultiesComponent,
-    FacultyComponent
+    FacultyComponent,
+    MsUserProfilePicComponent
   ],
   imports: [
     BrowserModule,

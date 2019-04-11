@@ -22,4 +22,17 @@ export class MsGraphService {
       }
     );
   }
+
+  getProfilePictureForUserAsBlob(uid: string): Promise<Blob> {
+    return this.auth.msToken.then(accessToken => {
+        const httpOptions = {
+          headers: new HttpHeaders({
+            'Authorization': 'Bearer ' + accessToken
+          }),
+          responseType: 'blob' as 'blob'
+        };
+        return this.http.get(`https://graph.microsoft.com/v1.0/users/${uid}/photos/64x64/$value`, httpOptions).toPromise();
+      }
+    );
+  }
 }

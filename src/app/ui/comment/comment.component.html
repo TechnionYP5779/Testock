@@ -1,6 +1,6 @@
 <div class="col-1">
   <div class="thumbnail">
-    <app-facebook-profile-picture class="mb-2 img-thumbnail" [fbUid]="comment.creator.fbId"></app-facebook-profile-picture>
+    <app-ms-user-profile-pic [uid]="comment.creator.microsoftId" class="mb-2 img-thumbnail"></app-ms-user-profile-pic>
     <div *ngIf="allowToMarkAsSolution">
       <button *ngIf="isSolution" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsAnswer()" type="button"><fa name="check"></fa></button>
       <button *ngIf="!isSolution" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsAnswer();" type="button"><fa name="check"></fa></button>
