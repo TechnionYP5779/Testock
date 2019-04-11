@@ -43,6 +43,7 @@ import {CKEditorModule} from 'ngx-ckeditor';
 import { CreateCommentComponent } from './ui/create-comment/create-comment.component';
 import { FacultiesComponent } from './ui/faculties/faculties.component';
 import { FacultyComponent } from './ui/faculty/faculty.component';
+import {MsGraphService} from './core/msgraph.service';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,7 @@ import { FacultyComponent } from './ui/faculty/faculty.component';
     CKEditorModule,
     HttpClientModule
   ],
-  providers: [AuthService, PdfService],
+  providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
