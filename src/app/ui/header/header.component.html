@@ -30,7 +30,7 @@
               <fa name="sign-out"></fa>
               Logout
             </button>
-            <img class="mr-2" [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+            <img class="mr-2" [src]="photoUrl | safeUrl" *ngIf="(profilePhoto | async) as photoUrl" width=35px routerLink="/profile">
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">

@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AuthService} from '../../core/auth.service';
 import {Router} from '@angular/router';
+import {MsGraphService} from '../../core/msgraph.service';
 
 @Component({
   selector: 'app-header',
@@ -13,12 +14,14 @@ export class HeaderComponent implements OnInit {
   @Input() term: any;
   router: any;
   isAdmin: boolean;
+  profilePhoto: Promise<Blob>;
 
-  constructor(private rtr: Router, public auth: AuthService) {
+  constructor(private rtr: Router, public auth: AuthService, public msgraph: MsGraphService) {
     this.main_menu_opened = false;
     this.main_menu_triggered = new EventEmitter();
     this.router = rtr;
     this.auth.isAdmin.subscribe(res => this.isAdmin = res);
+    this.profilePhoto = msgraph.profilePictureAsBlob;
   }
 
   trigger_menu() {
