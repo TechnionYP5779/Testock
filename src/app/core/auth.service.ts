@@ -71,7 +71,6 @@ export class AuthService {
   }
 
   loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
-    // @ts-ignore
     const provider = new firebase.auth.OAuthProvider('microsoft.com');
     return this.socialSignIn(provider);
   }
