@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DbService} from '../../core/db.service';
-import {Course} from '../../core/entities/course';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {combineLatest, zip} from 'rxjs';
+import {Course} from '../../entities/course';
+import {ActivatedRoute, Router} from '@angular/router';
+import {combineLatest} from 'rxjs';
 
 @Component({
   selector: 'app-courses',

@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
-import {Course} from './entities/course';
+import {Course} from '../entities/course';
 import {combineLatest, defer, Observable, of} from 'rxjs';
-import {Question, QuestionId} from './entities/question';
-import {Solution, SolutionId} from './entities/solution';
-import {flatMap, map, switchMap, tap} from 'rxjs/operators';
-import {Exam, ExamId} from './entities/exam';
-import {Roles, UserData} from './entities/user';
-import {Faculty, FacultyId} from './entities/faculty';
-import {Topic, TopicId, TopicWithCreatorId} from './entities/topic';
-import {Comment, CommentId, CommentWithCreatorId} from './entities/comment';
+import {Question, QuestionId} from '../entities/question';
+import {Solution, SolutionId} from '../entities/solution';
+import {flatMap, map, switchMap} from 'rxjs/operators';
+import {Exam, ExamId} from '../entities/exam';
+import {Roles, UserData} from '../entities/user';
+import {Faculty, FacultyId} from '../entities/faculty';
+import {Topic, TopicId, TopicWithCreatorId} from '../entities/topic';
+import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
 

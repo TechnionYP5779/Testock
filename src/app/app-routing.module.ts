@@ -1,22 +1,20 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {UserLoginComponent} from './users/user-login/user-login.component';
 import {UserProfileComponent} from './users/user-profile/user-profile.component';
 import {CoursesComponent} from './ui/courses/courses.component';
 import {CourseComponent} from './ui/course/course.component';
 import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
-import {UploadComponent} from './ui/upload/upload.component';
-import {UsersOnlyGuard} from './core/users-only.guard';
-import {AdminComponent} from './ui/admin/admin.component';
-import {AdminOnlyGuard} from './core/admin-only.guard';
-import {TopicComponent} from './ui/topic/topic.component';
+import {UploadComponent} from './upload/upload/upload.component';
+import {UsersOnlyGuard} from './users/guards/users-only.guard';
+import {AdminComponent} from './admin/admin/admin.component';
+import {AdminOnlyGuard} from './users/guards/admin-only.guard';
+import {TopicComponent} from './discussions/topic/topic.component';
 import {FacultiesComponent} from './ui/faculties/faculties.component';
 import {FacultyComponent} from './ui/faculty/faculty.component';
 
 const routes: Routes = [
   {path: '', component: FacultiesComponent},
-  {path: 'login', component: UserLoginComponent},
   {path: 'profile', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:id', component: CourseComponent, canActivate: [UsersOnlyGuard]},

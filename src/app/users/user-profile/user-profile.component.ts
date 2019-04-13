@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../core/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../auth.service';
 import {Observable} from 'rxjs';
-import {UserData} from '../../core/entities/user';
+import {UserData} from '../../entities/user';
 
 @Component({
   selector: 'app-user-profile',

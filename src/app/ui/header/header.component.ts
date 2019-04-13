@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AuthService} from '../../core/auth.service';
+import {AuthService} from '../../users/auth.service';
 import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
 
