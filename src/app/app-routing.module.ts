@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {UserLoginComponent} from './users/user-login/user-login.component';
 import {UserProfileComponent} from './users/user-profile/user-profile.component';
 import {CoursesComponent} from './ui/courses/courses.component';
 import {CourseComponent} from './ui/course/course.component';
@@ -16,7 +15,6 @@ import {FacultyComponent} from './ui/faculty/faculty.component';
 
 const routes: Routes = [
   {path: '', component: FacultiesComponent},
-  {path: 'login', component: UserLoginComponent},
   {path: 'profile', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:id', component: CourseComponent, canActivate: [UsersOnlyGuard]},
