@@ -34,7 +34,7 @@
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">
-            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">
+            <button class="btn btn-outline-success mr-2" type="button" (click)="login()">
             <fa name="sign-in"></fa>
               Login
             </button>

@@ -45,6 +45,7 @@ import { FacultiesComponent } from './ui/faculties/faculties.component';
 import { FacultyComponent } from './ui/faculty/faculty.component';
 import {MsGraphService} from './core/msgraph.service';
 import { UserProfilePicComponent } from './users/user-profile-pic/user-profile-pic.component';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { UserProfilePicComponent } from './users/user-profile-pic/user-profile-p
     MatSnackBarModule,
     FormsModule,
     CKEditorModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxSpinnerModule
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent]
