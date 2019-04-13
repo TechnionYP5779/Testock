@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {SolutionId} from '../../entities/solution';
 import {QuestionId} from '../../entities/question';
 import {DbService} from '../../core/db.service';
-import {AuthService} from '../../users/auth.service';
 import {MatSnackBar} from '@angular/material';
 
 @Component({

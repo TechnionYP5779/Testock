@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { FacultyControlPanelComponent } from './faculty-control-panel.component';
+import {FacultyControlPanelComponent} from './faculty-control-panel.component';
 
 describe('FacultyControlPanelComponent', () => {
   let component: FacultyControlPanelComponent;

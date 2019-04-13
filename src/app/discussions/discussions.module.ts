@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {CommentComponent} from './comment/comment.component';
 import {CreateCommentComponent} from './create-comment/create-comment.component';
 import {CreateTopicComponent} from './create-topic/create-topic.component';

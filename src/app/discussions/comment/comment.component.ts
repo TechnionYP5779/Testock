@@ -1,11 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CommentId, CommentWithCreatorId} from '../../entities/comment';
-import {TopicId, TopicWithCreatorId} from '../../entities/topic';
+import {CommentWithCreatorId} from '../../entities/comment';
+import {TopicWithCreatorId} from '../../entities/topic';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
-import {AuthService} from '../../users/auth.service';
-import {Observable} from 'rxjs';
-import {QuestionId} from '../../entities/question';
 
 @Component({
   selector: 'app-comment',

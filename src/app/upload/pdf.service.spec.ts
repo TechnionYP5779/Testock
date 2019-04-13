@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { PdfService } from './pdf.service';
+import {PdfService} from './pdf.service';
 
 describe('PdfService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

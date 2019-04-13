@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FacultyId} from '../../../core/entities/faculty';
-import {DbService} from '../../../core/db.service';
-import {UserData} from '../../../core/entities/user';
 import {Subscription} from 'rxjs';
+import {FacultyId} from '../../entities/faculty';
+import {UserData} from '../../entities/user';
+import {DbService} from '../../core/db.service';
 
 @Component({
   selector: 'app-faculty-control-panel',

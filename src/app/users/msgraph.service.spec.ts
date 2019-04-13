@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { MsgraphService } from './msgraph.service';
+import {MsgraphService} from './msgraph.service';
 
 describe('MsgraphService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

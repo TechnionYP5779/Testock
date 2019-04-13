@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { OCRService } from './ocr.service';
+import {OCRService} from './ocr.service';
 
 describe('OCRService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

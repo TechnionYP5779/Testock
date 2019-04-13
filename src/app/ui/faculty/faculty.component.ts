@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Course} from '../../entities/course';
 import {DbService} from '../../core/db.service';
 import {ActivatedRoute} from '@angular/router';

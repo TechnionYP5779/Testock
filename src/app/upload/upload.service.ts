@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {DbService} from '../core/db.service';
 import {Exam} from '../entities/exam';
 import {Question} from '../entities/question';

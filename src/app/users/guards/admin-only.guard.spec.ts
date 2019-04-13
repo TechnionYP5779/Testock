@@ -1,6 +1,6 @@
-import { TestBed, async, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { AdminOnlyGuard } from './admin-only.guard';
+import {AdminOnlyGuard} from './admin-only.guard';
 
 describe('AdminOnlyGuard', () => {
   beforeEach(() => {

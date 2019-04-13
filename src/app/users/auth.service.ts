@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {User} from 'firebase';
 import * as firebase from 'firebase';
+import {User} from 'firebase';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
@@ -9,10 +9,10 @@ import {flatMap, map, switchMap} from 'rxjs/operators';
 import {UserData} from '../entities/user';
 import {Course} from '../entities/course';
 import {Question} from '../entities/question';
-import UserCredential = firebase.auth.UserCredential;
-import OAuthCredential = firebase.auth.OAuthCredential;
 import {MsGraphService} from './msgraph.service';
 import {AngularFireStorage} from '@angular/fire/storage';
+import UserCredential = firebase.auth.UserCredential;
+import OAuthCredential = firebase.auth.OAuthCredential;
 
 @Injectable({
   providedIn: 'root'

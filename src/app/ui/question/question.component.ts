@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
-import {Question, QuestionId} from '../../entities/question';
+import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
 import {AuthService} from '../../users/auth.service';
 import {flatMap} from 'rxjs/operators';

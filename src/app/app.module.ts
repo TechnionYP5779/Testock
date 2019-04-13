@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 
 import {AppComponent} from './app.component';
 import {AngularFireModule} from '@angular/fire';
@@ -18,12 +17,10 @@ import {HeaderComponent} from './ui/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {ImageCropperModule} from 'ngx-image-cropper';
 import {CoreModule} from './core/core.module';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FormsModule} from '@angular/forms';
-import { FacultiesComponent } from './ui/faculties/faculties.component';
-import { FacultyComponent } from './ui/faculty/faculty.component';
+import {FacultiesComponent} from './ui/faculties/faculties.component';
+import {FacultyComponent} from './ui/faculty/faculty.component';
 import {MsGraphService} from './users/msgraph.service';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {SolutionComponent} from './ui/solution/solution.component';

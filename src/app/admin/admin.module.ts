@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {AdminComponent} from './admin/admin.component';
 import {FacultyControlPanelComponent} from './faculty-control-panel/faculty-control-panel.component';
 import {CoreModule} from '../core/core.module';

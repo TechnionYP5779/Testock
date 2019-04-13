@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
-import {Question, QuestionId} from '../../entities/question';
+import {QuestionId} from '../../entities/question';
 import {Exam} from '../../entities/exam';
 import {AuthService} from '../../users/auth.service';
 import {Course} from '../../entities/course';

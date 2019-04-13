@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
-import {TopicId, TopicWithCreatorId} from '../../entities/topic';
+import {TopicWithCreatorId} from '../../entities/topic';
 import {Observable, of} from 'rxjs';
-import {flatMap, map, switchMap} from 'rxjs/operators';
+import {flatMap} from 'rxjs/operators';
 import {CommentWithCreatorId} from '../../entities/comment';
 import {Course} from '../../entities/course';
 import {QuestionId} from '../../entities/question';

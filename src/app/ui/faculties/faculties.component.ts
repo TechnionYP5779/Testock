@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {FacultyId} from '../../entities/faculty';
 import {Observable} from 'rxjs';

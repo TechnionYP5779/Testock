@@ -1,6 +1,6 @@
-import { TestBed, async, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { UsersOnlyGuard } from './users-only.guard';
+import {UsersOnlyGuard} from './users-only.guard';
 
 describe('UsersOnlyGuard', () => {
   beforeEach(() => {

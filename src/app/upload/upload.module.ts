@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {UploadComponent} from './upload/upload.component';
 import {ScanPageComponent} from './upload/scan-page/scan-page.component';
 import {UploadQuestionComponent} from './upload/upload-question/upload-question.component';
