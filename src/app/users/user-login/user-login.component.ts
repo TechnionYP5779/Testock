@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../core/auth.service';
 import {Router} from '@angular/router';
-import {MsGraphService} from '../../core/msgraph.service';
 
 @Component({
   selector: 'app-user-login',
@@ -16,13 +15,8 @@ export class UserLoginComponent implements OnInit {
     this.auth.state.subscribe((res) => {
       if (res) {
         this.router.navigateByUrl('/');
-        console.log('Already logged in, redirecting');
       }
     });
-  }
-
-  signInWithFacebook() {
-    this.auth.loginWithCampus();
   }
 
   signInWithTechnion() {
