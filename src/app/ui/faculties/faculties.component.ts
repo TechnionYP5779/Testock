@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DbService} from '../../core/db.service';
-import {FacultyId} from '../../core/entities/faculty';
+import {FacultyId} from '../../entities/faculty';
 import {Observable} from 'rxjs';
 
 @Component({

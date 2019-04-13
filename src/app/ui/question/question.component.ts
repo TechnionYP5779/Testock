@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
-import {Question, QuestionId} from '../../core/entities/question';
-import {SolutionId} from '../../core/entities/solution';
-import {AuthService} from '../../core/auth.service';
+import {Question, QuestionId} from '../../entities/question';
+import {SolutionId} from '../../entities/solution';
+import {AuthService} from '../../users/auth.service';
 import {flatMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {TopicWithCreatorId} from '../../core/entities/topic';
-import {Course} from '../../core/entities/course';
+import {TopicWithCreatorId} from '../../entities/topic';
+import {Course} from '../../entities/course';
 
 @Component({
   selector: 'app-question',

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Course} from '../../core/entities/course';
+import {Course} from '../../entities/course';
 import {DbService} from '../../core/db.service';
-import {QuestionId} from '../../core/entities/question';
-import {ExamId} from '../../core/entities/exam';
-import {AuthService} from '../../core/auth.service';
+import {QuestionId} from '../../entities/question';
+import {ExamId} from '../../entities/exam';
+import {AuthService} from '../../users/auth.service';
 import {flatMap, map, switchMap, tap} from 'rxjs/operators';
 import {combineLatest, defer, Observable, of} from 'rxjs';
-import {TopicId} from '../../core/entities/topic';
-import {UserData} from '../../core/entities/user';
+import {TopicId} from '../../entities/topic';
+import {UserData} from '../../entities/user';
 import {AngularFirestore} from '@angular/fire/firestore';
 
 @Component({

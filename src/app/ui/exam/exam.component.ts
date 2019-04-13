@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
-import {Question, QuestionId} from '../../core/entities/question';
-import {Exam} from '../../core/entities/exam';
-import {AuthService} from '../../core/auth.service';
-import {Course} from '../../core/entities/course';
+import {Question, QuestionId} from '../../entities/question';
+import {Exam} from '../../entities/exam';
+import {AuthService} from '../../users/auth.service';
+import {Course} from '../../entities/course';
 
 @Component({
   selector: 'app-exam',
