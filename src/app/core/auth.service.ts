@@ -10,7 +10,10 @@ import {flatMap, map, switchMap} from 'rxjs/operators';
 import {UserData} from './entities/user';
 import {Course} from './entities/course';
 import {Question} from './entities/question';
+import UserCredential = firebase.auth.UserCredential;
 import OAuthCredential = firebase.auth.OAuthCredential;
+import {MsGraphService} from './msgraph.service';
+import {AngularFireStorage} from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +23,8 @@ export class AuthService {
   authState: User = null;
   user$: Observable<UserData>;
 
-  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private router: Router) {
+  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private storage: AngularFireStorage,
+              private msgraph: MsGraphService, private router: Router) {
     afAuth.user.subscribe((user) => {
       this.authState = user;
     });
@@ -32,21 +36,6 @@ export class AuthService {
       }
     }));
   }
-
-  get msToken(): Promise<String> {
-    if (sessionStorage.getItem('ms-access-token')) {
-      return Promise.resolve(sessionStorage.getItem('ms-access-token'));
-    } else {
-      return this.loginWithCampus().then(() => {
-        if (sessionStorage.getItem('ms-access-token')) {
-          return sessionStorage.getItem('ms-access-token');
-        } else {
-          return null;
-        }
-      });
-    }
-  }
-
 
   get state(): Observable<User|null> {
     return this.afAuth.user;
@@ -72,43 +61,49 @@ export class AuthService {
 
   loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
     const provider = new firebase.auth.OAuthProvider('microsoft.com');
-    return this.socialSignIn(provider);
-  }
-
-  signOut(): void {
-    sessionStorage.removeItem('ms-access-token');
-    this.afAuth.auth.signOut();
-    this.router.navigate(['/']);
-  }
-
-  private socialSignIn(provider: AuthProvider): Promise<firebase.auth.UserCredential|void>  {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((cred) => {
         if (!cred.user.email.endsWith('technion.ac.il')) {
           this.signOut();
         }
-        sessionStorage.setItem('ms-access-token', (cred.credential as OAuthCredential).accessToken);
         if (cred.additionalUserInfo.isNewUser) {
-          return this.createNewUser(cred.user);
+          return this.createNewUser(cred);
         }
       })
       .catch(error => console.log(error));
   }
 
-  private createNewUser(user: User): Promise<void> {
-    const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
-    const data: UserData = {
-      uid: user.uid,
-      name: user.displayName,
-      email: user.email,
-      microsoftId: user.providerData[0].uid,
-      roles: {
-        user: true
-      },
-      points: 0
-    };
+  signOut(): void {
+    this.afAuth.auth.signOut();
+    this.router.navigate(['/']);
+  }
 
-   return ref.set(data);
+  private createNewUser(cred: UserCredential): Promise<any> {
+    const user = cred.user;
+    const accessToken = (cred.credential as OAuthCredential).accessToken;
+    const getFacultyPromise =  this.msgraph.getFaculty(accessToken).toPromise().then(res => {
+      const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
+      const data: UserData = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        microsoftId: user.providerData[0].uid,
+        roles: {
+          user: true
+        },
+        points: 0,
+        faculty: (res as any).department
+      };
+
+      return ref.set(data);
+    });
+
+    const getProfilePicturePromise = this.msgraph.selfProfilePicture(accessToken).toPromise().then(blob => {
+      this.storage.ref(`users/${user.uid}/profile.jpg`).put(blob).then(us => us.ref.getDownloadURL())
+        .then(url => user.updateProfile({photoURL: url})).then(() => console.log('done'));
+    });
+
+    return Promise.all([getFacultyPromise, getProfilePicturePromise]);
   }
 
   get isAdmin(): Observable<boolean> {
