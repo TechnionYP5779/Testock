@@ -23,7 +23,7 @@
   <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
     {{ topic.subject }}
     <span class="float-right col-4">
-      <app-facebook-profile-picture [fbUid]="topic.creator.fbId" [width]="30" [height]="30" class="mr-2"></app-facebook-profile-picture>
+      <app-user-profile-pic [uid]="topic.creator.uid" class="mr-2 topic-creator-profile-pic"></app-user-profile-pic>
       <small class="mr-2">{{ topic.creator.name }}</small>
       <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
     </span>
