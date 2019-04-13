@@ -4,8 +4,13 @@
   </div>
   <ul class="list-group">
     <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let admin of admins">
-      {{ admin.name }}
-      <span class="badge badge-primary badge-pill" *ngIf="admin.roles.admin">Admin</span>
+      <div class="media">
+        <img [src]="admin.photoUrl" class="rounded-circle mr-2" width="30"  alt=""/>
+        <div class="media-body">
+          {{ admin.name }}
+          <small><span class="badge badge-primary badge-sm badge-pill ml-1" *ngIf="admin.roles.admin">Admin</span></small>
+        </div>
+      </div>
     </li>
   </ul>
 </div>
