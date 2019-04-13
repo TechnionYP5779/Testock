@@ -11,4 +11,5 @@ export interface UserData {
   microsoftId: string;
   roles: Roles;
   points: number;
+  faculty: string;
 }
