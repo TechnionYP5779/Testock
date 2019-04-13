@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MsUserProfilePicComponent } from './ms-user-profile-pic.component';
+import { UserProfilePicComponent } from './user-profile-pic.component';
 
-describe('MsUserProfilePicComponent', () => {
-  let component: MsUserProfilePicComponent;
-  let fixture: ComponentFixture<MsUserProfilePicComponent>;
+describe('UserProfilePicComponent', () => {
+  let component: UserProfilePicComponent;
+  let fixture: ComponentFixture<UserProfilePicComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MsUserProfilePicComponent ]
+      declarations: [ UserProfilePicComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MsUserProfilePicComponent);
+    fixture = TestBed.createComponent(UserProfilePicComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
