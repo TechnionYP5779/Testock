@@ -43,7 +43,7 @@
           <div *ngIf="auth.currentUser">
             <button class="btn btn-warning mr-2" type="button">
               <fa name="diamond"></fa>
-              {{ (auth.user$ | async).points }}
+              {{ (auth.user$ | async)?.points }}
             </button>
           </div>
 

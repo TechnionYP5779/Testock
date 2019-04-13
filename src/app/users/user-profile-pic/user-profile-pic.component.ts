@@ -9,7 +9,7 @@ import {Observable} from 'rxjs';
 })
 export class UserProfilePicComponent implements OnInit {
 
-  private url: Observable<any>;
+  url: Observable<any>;
 
   @Input()
   set uid(uid: string) {
