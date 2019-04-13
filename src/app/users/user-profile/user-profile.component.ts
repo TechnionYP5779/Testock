@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../core/auth.service';
 import {Observable} from 'rxjs';
 import {UserData} from '../../core/entities/user';
-import {MsGraphService} from '../../core/msgraph.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -10,15 +9,13 @@ import {MsGraphService} from '../../core/msgraph.service';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  private profilePic: Promise<Blob>;
 
-  constructor(public auth: AuthService, private msgraph: MsGraphService) { }
+  constructor(public auth: AuthService) { }
 
   user$: Observable<UserData>;
 
   ngOnInit() {
     this.user$ = this.auth.user$;
-    this.profilePic = this.msgraph.profilePictureAsBlob;
   }
 
   logout() {

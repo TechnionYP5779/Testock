@@ -9,7 +9,7 @@
           <!-- User logged in -->
           <div *ngIf="user">
             <h3>Hi {{ user.name }}</h3>
-            <img [src]="pic | safeUrl" *ngIf="(profilePic | async) as pic"/>
+            <img [src]="auth.currentUser.photoURL" />
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!user">
