@@ -1,44 +1,44 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as PDFDocument from 'pdfkit';
 import * as https from 'https';
+import * as PDFDocument from 'pdfkit';
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
 admin.initializeApp(functions.config().firebase);
 
-export class Question {
-  public course: number;
-  public year: number;
-  public moed: string;
-  public semester: string;
-  public photo: string;
-  public number: number;
-  public total_grade: number;
+export interface Question {
+  course: number;
+  year: number;
+  moed: string;
+  semester: string;
+  photo: string;
+  number: number;
+  total_grade: number;
 }
 
-export class QuestionId extends  Question {
-  public id: string;
+export interface QuestionId extends Question {
+  id: string;
 }
 
-export class Solution {
-  public photo: string;
-  public grade: number;
-  public photos: string[];
+export interface Solution {
+  photo: string;
+  grade: number;
+  photos: string[];
 }
 
-export class Course {
-  public id: number;
-  public name: string;
-  public faculty: string;
+export interface Course {
+  id: number;
+  name: string;
+  faculty: string;
 }
 
 function capStr(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-async function addSolImage(pdf: PDFDocument, url){
+async function addSolImage(pdf: PDFKit.PDFDocument, url: string){
   return new Promise(async(resolve, reject) => {
     const req = await https.get(url, (res) => {
       res.setEncoding('base64');
@@ -47,7 +47,7 @@ async function addSolImage(pdf: PDFDocument, url){
         body += d;
       });
       res.on('end', () => {
-        pdf.image(body, { width: 500, align: 'center' });
+        pdf.image(body, { width: 500, align: 'center' } as PDFKit.Mixins.ImageOption);
         resolve(res);
       });
     });
@@ -60,15 +60,21 @@ async function addSolImage(pdf: PDFDocument, url){
 
 }
 
-async function getBestSolutionFor(q: QuestionId): Promise<Solution> {
+async function getBestSolutionFor(q: QuestionId): Promise<Solution|null> {
   const query = admin.firestore().collection(`questions/${q.id}/solutions`).orderBy('grade', 'desc').limit(1);
-  return query.get().then(res => res.docs[0].data() as Solution);
+  return query.get().then(res => res.docs.length > 0 ? res.docs[0].data() as Solution : null);
 }
 
-async function addQuestion(pdf: PDFDocument, q: QuestionId) {
+async function addQuestion(pdf: PDFKit.PDFDocument, q: QuestionId) {
   pdf.addPage();
   const sol = await getBestSolutionFor(q);
-  pdf.fontSize(25).text(`Question ${q.number} (${sol.grade}/${q.total_grade})`, 50, 50);
+  if (sol == null) {
+    pdf.fontSize(25).text(`Question ${q.number} (${q.total_grade})`, 50, 50, { link: `https://testock.tk/questions/${q.id}` });
+    pdf.moveDown();
+    pdf.text(`We don't have any solutions for this question :(`);
+    return;
+  }
+  pdf.fontSize(25).text(`Question ${q.number} (${sol.grade}/${q.total_grade})`, 50, 50, { link: `https://testock.tk/questions/${q.id}` });
   pdf.moveDown();
   let first = true;
   for (const photo of sol.photos) {
@@ -76,7 +82,7 @@ async function addQuestion(pdf: PDFDocument, q: QuestionId) {
       first = false;
     } else {
       pdf.addPage();
-      pdf.fontSize(25).text(`Question ${q.number} (Cont.)`, 50, 50);
+      pdf.fontSize(25).text(`Question ${q.number} (Cont.)`, 50, 50, { link: `https://testock.tk/questions/${q.id}` });
     }
     await addSolImage(pdf, photo);
   }
@@ -90,10 +96,10 @@ async function getQuestionsOfExam(course: number, year: number, semester: string
     .where('moed', '==', moed)
     .orderBy('number')
     .get().then(docs => {
-    return docs.docs.map(snap => {
-      return {id: snap.id, ...snap.data() as Question};
+      return docs.docs.map(snap => {
+        return {id: snap.id, ...snap.data() as Question};
+      });
     });
-  });
 }
 
 async function getCourse(course: number): Promise<Course> {
@@ -111,6 +117,8 @@ export const getPDFofExam = functions.https.onRequest(async (request, response) 
 
   const courseData = await getCourse(course);
 
+  console.log(`Getting best scan for course ${courseData.name}`)
+
   const questions = await getQuestionsOfExam(course, year, semester, moed);
 
   console.log(`Found ${questions.length} questions for ${course}, ${year}, ${semester}, ${moed}`);
@@ -119,18 +127,16 @@ export const getPDFofExam = functions.https.onRequest(async (request, response) 
 
   pdf.pipe(response);
 
-  pdf.fontSize(30).text(`${courseData.id} ${courseData.name}`, { align: 'center' });
+  pdf.fontSize(30).text(`${courseData.id} ${courseData.name}`, { align: 'center', link: `https://testock.tk/course/${courseData.id}` });
   pdf.moveDown(2);
   pdf.fontSize(26).text(`${capStr(semester)} ${year}`, { align: 'center' });
   pdf.moveDown();
   pdf.fontSize(26).text(`Moed ${moed}`, { align: 'center' });
   pdf.moveDown(5);
-  pdf.fontSize(20).text('Automatically Generated by Testock', { align: 'center', link: 'http://www.testock.com', underline: true })
+  pdf.fontSize(20).text('Automatically Generated by Testock', { align: 'center', link: 'https://testock.tk', underline: true })
 
   for (const q of questions) {
-
     await addQuestion(pdf, q);
-
   }
 
   pdf.end();
