@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {User} from 'firebase';
-import AuthProvider = firebase.auth.AuthProvider;
 import * as firebase from 'firebase';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
@@ -81,7 +80,14 @@ export class AuthService {
   private createNewUser(cred: UserCredential): Promise<any> {
     const user = cred.user;
     const accessToken = (cred.credential as OAuthCredential).accessToken;
-    const getFacultyPromise =  this.msgraph.getFaculty(accessToken).toPromise().then(res => {
+    const getFacultyPromise: Promise<Object> =  this.msgraph.getFaculty(accessToken).toPromise();
+
+    const uploadProfilePicturePromise: Promise<string> = this.msgraph.selfProfilePicture(accessToken).toPromise()
+      .then(blob => this.storage.ref(`users/${user.uid}/profile.jpg`).put(blob))
+      .then(us => us.ref.getDownloadURL())
+      .then(url => Promise.all([user.updateProfile({photoURL: url}), Promise.resolve(url)])).then(res => res[1]);
+
+    return Promise.all([getFacultyPromise, uploadProfilePicturePromise]).then(results => {
       const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
       const data: UserData = {
         uid: user.uid,
@@ -91,19 +97,13 @@ export class AuthService {
         roles: {
           user: true
         },
-        points: 0,
-        faculty: (res as any).department
+        points: 100,
+        faculty: (results[0] as any).department,
+        photoUrl: results[1]
       };
 
       return ref.set(data);
     });
-
-    const getProfilePicturePromise = this.msgraph.selfProfilePicture(accessToken).toPromise().then(blob => {
-      this.storage.ref(`users/${user.uid}/profile.jpg`).put(blob).then(us => us.ref.getDownloadURL())
-        .then(url => user.updateProfile({photoURL: url})).then(() => console.log('done'));
-    });
-
-    return Promise.all([getFacultyPromise, getProfilePicturePromise]);
   }
 
   get isAdmin(): Observable<boolean> {

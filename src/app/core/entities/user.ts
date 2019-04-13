@@ -12,4 +12,5 @@ export interface UserData {
   roles: Roles;
   points: number;
   faculty: string;
+  photoUrl: string;
 }
