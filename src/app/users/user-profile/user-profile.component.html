@@ -1,32 +1,23 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-4">
-      <div class="card text-center" id="login">
-        <div class="card-header">
-          Profile page
-        </div>
-        <div class="card-body" *ngIf="(user$ | async) as user">
-          <!-- User logged in -->
-          <div *ngIf="user">
-            <h3>Hi {{ user.name }}</h3>
-            <img [src]="auth.currentUser.photoURL" />
+    <div class="col-8">
+      <div class="jumbotron" *ngIf="(user$ | async) as user">
+        <div class="media">
+          <img class="mr-4 rounded-circle" [src]="user.photoUrl" height=100 alt="">
+
+          <div class="media-body">
+            <h1 class="display-4">
+              {{user.name}}
+            </h1>
+            <p class="lead">{{user.faculty}}</p>
           </div>
-          <!-- User NOT logged in -->
-          <div *ngIf="!user">
-            <h3>Hi guest</h3>
-          </div>
+
+          <button class="btn btn-lg btn-warning ml-2" type="button">
+            <fa name="diamond"></fa>
+            {{ user.points }}
+          </button>
         </div>
 
-        <div class="card-footer text-muted">
-          <!-- User logged in -->
-          <div *ngIf="auth.currentUser">
-            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">Logout</button>
-          </div>
-          <!-- User NOT logged in -->
-          <div *ngIf="!auth.currentUser">
-            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">Login</button>
-          </div>
-        </div>
       </div>
     </div>
   </div>

@@ -18,7 +18,7 @@ export class MsGraphService {
       }),
       responseType: 'blob' as 'blob'
     };
-    return this.http.get('https://graph.microsoft.com/v1.0/me/photos/64x64/$value', httpOptions);
+    return this.http.get('https://graph.microsoft.com/v1.0/me/photos/120x120/$value', httpOptions);
   }
 
   getFaculty(accessToken: string) {
