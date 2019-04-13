@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AuthService} from '../../core/auth.service';
 import {Router} from '@angular/router';
-import {MsGraphService} from '../../core/msgraph.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
@@ -40,7 +39,6 @@ export class HeaderComponent implements OnInit {
   }
 
   login() {
-    this.spinner.show();
-    this.auth.loginWithCampus().finally(() => this.spinner.hide());
+    this.spinner.show().then(() => this.auth.loginWithCampus()).finally(() => this.spinner.hide());
   }
 }

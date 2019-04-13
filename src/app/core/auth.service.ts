@@ -68,8 +68,7 @@ export class AuthService {
         if (cred.additionalUserInfo.isNewUser) {
           return this.createNewUser(cred);
         }
-      })
-      .catch(error => console.log(error));
+      });
   }
 
   signOut(): void {
