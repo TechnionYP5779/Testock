@@ -1,0 +1,4 @@
+<img [src]="u" alt="" *ngIf="(url | async) as u; else loading"/>
+<ng-template #loading>
+  <fa name="spinner" animation="spin"></fa>
+</ng-template>

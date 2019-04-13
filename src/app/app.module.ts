@@ -43,6 +43,9 @@ import {CKEditorModule} from 'ngx-ckeditor';
 import { CreateCommentComponent } from './ui/create-comment/create-comment.component';
 import { FacultiesComponent } from './ui/faculties/faculties.component';
 import { FacultyComponent } from './ui/faculty/faculty.component';
+import {MsGraphService} from './core/msgraph.service';
+import { UserProfilePicComponent } from './users/user-profile-pic/user-profile-pic.component';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -68,7 +71,8 @@ import { FacultyComponent } from './ui/faculty/faculty.component';
     CreateTopicComponent,
     CreateCommentComponent,
     FacultiesComponent,
-    FacultyComponent
+    FacultyComponent,
+    UserProfilePicComponent
   ],
   imports: [
     BrowserModule,
@@ -86,9 +90,10 @@ import { FacultyComponent } from './ui/faculty/faculty.component';
     MatSnackBarModule,
     FormsModule,
     CKEditorModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxSpinnerModule
   ],
-  providers: [AuthService, PdfService],
+  providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

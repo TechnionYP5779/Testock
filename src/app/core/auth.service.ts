@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {User} from 'firebase';
-import AuthProvider = firebase.auth.AuthProvider;
 import * as firebase from 'firebase';
-import FacebookAuthProvider = firebase.auth.FacebookAuthProvider;
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
@@ -11,6 +9,10 @@ import {flatMap, map, switchMap} from 'rxjs/operators';
 import {UserData} from './entities/user';
 import {Course} from './entities/course';
 import {Question} from './entities/question';
+import UserCredential = firebase.auth.UserCredential;
+import OAuthCredential = firebase.auth.OAuthCredential;
+import {MsGraphService} from './msgraph.service';
+import {AngularFireStorage} from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,8 @@ export class AuthService {
   authState: User = null;
   user$: Observable<UserData>;
 
-  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private router: Router) {
+  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private storage: AngularFireStorage,
+              private msgraph: MsGraphService, private router: Router) {
     afAuth.user.subscribe((user) => {
       this.authState = user;
     });
@@ -55,8 +58,17 @@ export class AuthService {
     return this.authenticated ? this.authState.displayName : '';
   }
 
-  loginWithFacebook(): Promise<firebase.auth.UserCredential|void> {
-    return this.socialSignIn(new FacebookAuthProvider());
+  loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
+    const provider = new firebase.auth.OAuthProvider('microsoft.com');
+    return this.afAuth.auth.signInWithPopup(provider)
+      .then((cred) => {
+        if (!cred.user.email.endsWith('technion.ac.il')) {
+          this.signOut();
+        }
+        if (cred.additionalUserInfo.isNewUser) {
+          return this.createNewUser(cred);
+        }
+      });
   }
 
   signOut(): void {
@@ -64,40 +76,33 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  private socialSignIn(provider: AuthProvider): Promise<firebase.auth.UserCredential|void>  {
-    return this.afAuth.auth.signInWithPopup(provider)
-      .then((cred) => { this.updateUserData(cred.user); })
-      .catch(error => console.log(error));
-  }
+  private createNewUser(cred: UserCredential): Promise<any> {
+    const user = cred.user;
+    const accessToken = (cred.credential as OAuthCredential).accessToken;
+    const getFacultyPromise: Promise<Object> =  this.msgraph.getFaculty(accessToken).toPromise();
 
-  private updateUserData(user: User): Promise<void> {
-    const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
-    const data: UserData = {
-      uid: user.uid,
-      name: user.displayName,
-      email: user.email,
-      fbId: user.providerData[0].uid,
-      roles: {
-        user: true
-      },
-      points: 0
-    };
+    const uploadProfilePicturePromise: Promise<string> = this.msgraph.selfProfilePicture(accessToken).toPromise()
+      .then(blob => this.storage.ref(`users/${user.uid}/profile.jpg`).put(blob))
+      .then(us => us.ref.getDownloadURL())
+      .then(url => Promise.all([user.updateProfile({photoURL: url}), Promise.resolve(url)])).then(res => res[1]);
 
-   return ref.set(data, { merge: true });
-  }
+    return Promise.all([getFacultyPromise, uploadProfilePicturePromise]).then(results => {
+      const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
+      const data: UserData = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        microsoftId: user.providerData[0].uid,
+        roles: {
+          user: true
+        },
+        points: 100,
+        faculty: (results[0] as any).department,
+        photoUrl: results[1]
+      };
 
-  get fbId(): Observable<string> {
-    // In the current nature of our app, this should be the facebook id
-    return this.afAuth.user.pipe(map(u => u ? u.providerData[0].uid : ''));
-  }
-
-  fbPhotoUrl(width: number, height: number): Observable<string> {
-    return this.fbId.pipe(map(id => {
-      if (id === '') {
-        return '';
-      }
-      return `https://graph.facebook.com/${id}/picture?height=${height}&width=${width}`;
-    }));
+      return ref.set(data);
+    });
   }
 
   get isAdmin(): Observable<boolean> {
@@ -105,7 +110,7 @@ export class AuthService {
   }
 
   isAdminOfFaculty(faculty: string): Observable<boolean> {
-    return this.user$.pipe(map(user => user && user.roles.faculty_admin.includes(faculty)));
+    return this.user$.pipe(map(user => user && user.roles.faculty_admin && user.roles.faculty_admin.includes(faculty)));
   }
 
   isAdminForCourse(id: number): Observable<boolean> {

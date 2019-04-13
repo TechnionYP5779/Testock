@@ -15,13 +15,12 @@ export class UserLoginComponent implements OnInit {
     this.auth.state.subscribe((res) => {
       if (res) {
         this.router.navigateByUrl('/');
-        console.log('Already logged in, redirecting');
       }
     });
   }
 
-  signInWithFacebook() {
-    this.auth.loginWithFacebook();
+  signInWithTechnion() {
+    this.auth.loginWithCampus();
   }
 }
 
