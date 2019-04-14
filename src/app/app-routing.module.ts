@@ -16,6 +16,7 @@ import {FacultyComponent} from './ui/faculty/faculty.component';
 const routes: Routes = [
   {path: '', component: FacultiesComponent},
   {path: 'profile', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'profile/:uid', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:id', component: CourseComponent, canActivate: [UsersOnlyGuard]},
   {path: 'question/:id', component: QuestionComponent, canActivate: [UsersOnlyGuard]},
