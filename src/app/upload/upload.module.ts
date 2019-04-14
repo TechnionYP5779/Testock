@@ -10,6 +10,7 @@ import {UploadService} from './upload.service';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {ImageCropperModule} from 'ngx-image-cropper';
 import {MatSnackBarModule} from '@angular/material';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {MatSnackBarModule} from '@angular/material';
     UsersModule,
     AngularFontAwesomeModule,
     ImageCropperModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxSpinnerModule
   ],
   providers: [
     UploadService,
