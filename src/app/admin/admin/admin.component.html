@@ -11,8 +11,8 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let user of users; let i = index">
-    <th><img [src]="user.photoUrl" width="30" height="30" class="rounded-circle mr-3" />{{user.name}}</th>
+  <tr *ngFor="let user of users" [routerLink]="'/profile/' + user.uid">
+    <th [routerLink]="'/profile/' + user.uid"><img [src]="user.photoUrl" width="30" height="30" class="rounded-circle mr-3" />{{user.name}}</th>
     <td>{{user.faculty}}</td>
     <td>{{user.email}}</td>
     <td><input type="checkbox" [ngModel]="user.roles.user" (change)="userPermissionChanged(user, $event)"></td>

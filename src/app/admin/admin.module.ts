@@ -5,6 +5,7 @@ import {FacultyControlPanelComponent} from './faculty-control-panel/faculty-cont
 import {CoreModule} from '../core/core.module';
 import {UsersModule} from '../users/users.module';
 import {FormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {FormsModule} from '@angular/forms';
     FormsModule,
     CommonModule,
     CoreModule,
-    UsersModule
+    UsersModule,
+    RouterModule
   ],
   exports: [
     AdminComponent
