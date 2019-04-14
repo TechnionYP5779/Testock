@@ -4,7 +4,6 @@
       <div class="jumbotron" *ngIf="(user$ | async) as user">
         <div class="media">
           <img class="mr-4 rounded-circle" [src]="user.photoUrl" height=100 alt="">
-
           <div class="media-body">
             <h1 class="display-4">
               {{user.name}}
@@ -17,7 +16,6 @@
             {{ user.points }}
           </button>
         </div>
-
       </div>
     </div>
   </div>
