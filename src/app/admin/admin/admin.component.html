@@ -11,7 +11,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let user of users" [routerLink]="'/profile/' + user.uid">
+  <tr *ngFor="let user of users">
     <th [routerLink]="'/profile/' + user.uid"><img [src]="user.photoUrl" width="30" height="30" class="rounded-circle mr-3" />{{user.name}}</th>
     <td>{{user.faculty}}</td>
     <td>{{user.email}}</td>
