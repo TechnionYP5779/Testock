@@ -7,6 +7,7 @@ import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {FacultyId} from '../../core/entities/faculty';
 import {OCRService} from '../../core/ocr.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 
 
@@ -53,7 +54,7 @@ export class UploadComponent implements OnInit {
   public isDragged: boolean;
 
   constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService, public snackBar: MatSnackBar,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute, private spinner: NgxSpinnerService) {
     this.route = route;
   }
 
@@ -219,6 +220,7 @@ export class UploadComponent implements OnInit {
   }
 
   async clearBlankPages() {
+    this.spinner.show();
     const res = [];
     for (let i = 0; i < this.blobs.length; i = i + 1) {
       const isBlank = await this.ocr.isImageBlank(this.blobs[i]);
@@ -227,6 +229,7 @@ export class UploadComponent implements OnInit {
       }
     }
     this.blobs = res;
+    this.spinner.hide();
   }
 
   resetForm() {

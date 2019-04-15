@@ -43,6 +43,7 @@ import {CKEditorModule} from 'ngx-ckeditor';
 import { CreateCommentComponent } from './ui/create-comment/create-comment.component';
 import { FacultiesComponent } from './ui/faculties/faculties.component';
 import { FacultyComponent } from './ui/faculty/faculty.component';
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { FacultyComponent } from './ui/faculty/faculty.component';
     MatSnackBarModule,
     FormsModule,
     CKEditorModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxSpinnerModule
   ],
   providers: [AuthService, PdfService],
   bootstrap: [AppComponent]
