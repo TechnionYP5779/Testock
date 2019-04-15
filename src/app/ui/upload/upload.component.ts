@@ -218,6 +218,17 @@ export class UploadComponent implements OnInit {
     this.blobs = res;
   }
 
+  async clearBlankPages() {
+    const res = [];
+    for (let i = 0; i < this.blobs.length; i = i + 1) {
+      const isBlank = await this.ocr.isImageBlank(this.blobs[i]);
+      if (!isBlank) {
+        res.push(this.blobs[i]);
+      }
+    }
+    this.blobs = res;
+  }
+
   resetForm() {
     this.questions = [];
     this.blobs = [];
