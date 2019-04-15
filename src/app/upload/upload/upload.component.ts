@@ -1,12 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
-import {Course} from '../../entities/course';
+import {CourseWithFaculty} from '../../entities/course';
 import {UploadService} from '../upload.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
-import {FacultyId} from '../../entities/faculty';
 import {OCRService} from '../../core/ocr.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {take} from 'rxjs/operators';
 
 
 class QuestionSolution {
@@ -51,19 +52,18 @@ export class UploadComponent implements OnInit {
   public blobs: Blob[];
   public isDragged: boolean;
 
-  constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService, public snackBar: MatSnackBar,
-              private route: ActivatedRoute) {
+  constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
+              public snackBar: MatSnackBar, private route: ActivatedRoute, private spinner: NgxSpinnerService) {
     this.route = route;
   }
 
   public uploadState = UploadState;
 
-  public course: Course;
   public year: number;
   public semester: number;
   public moed: string;
   public state = UploadState.Ready;
-  public faculty: FacultyId;
+  public course: CourseWithFaculty;
 
   ngOnInit() {
     const source = this.route.snapshot.paramMap.get('source');
@@ -79,7 +79,7 @@ export class UploadComponent implements OnInit {
     this.loadFile(file);
   }
 
-  private getCourseDetailsByName(fileName: String) {
+  private getDetailsByFileName(fileName: String): Promise<CourseWithFaculty> {
     if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
       const split = fileName.split('-');
       const courseId = parseInt(split[2], 10);
@@ -87,36 +87,29 @@ export class UploadComponent implements OnInit {
       this.semester = parseInt(split[1].substr(5, 2), 10);
       const moedId = parseInt(split[3], 10);
       this.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
-      this.db.getCourse(courseId).subscribe(course => {
-        this.course = course;
-        this.db.getFaculty(course.faculty).subscribe(faculty => this.faculty = faculty);
-      });
-    } else {
-      throw new Error('undefined file name!');
+      return this.db.getCourseWithFaculty(courseId).pipe(take(1)).toPromise();
     }
+    return null;
   }
 
-  private getCourseDetails(file: File) {
+  private getDetailsFromFile(file: File): Promise<CourseWithFaculty> {
     const fileName = file.name;
-    this.getCourseDetailsByName(fileName);
+    return this.getDetailsByFileName(fileName);
   }
 
-  private getCourseDetailsBySticker(firstPage: Blob) {
-    this.ocr.getInfoFromSticker(firstPage).then(info => {
-        if (info !== '') {
+  private getDetailsBySticker(firstPage: Blob): Promise<CourseWithFaculty> {
+    return this.ocr.getInfoFromSticker(firstPage).then(info => {
+      if (info !== '') {
         const year = info.toString().substr(0, 4);
         const semester = info.toString().substr(5, 2);
         const number = info.toString().substr(8, 6);
         const moed = info.toString().substr(15, 1);
         const fileName = '000000000-' + year + semester + '-' + number + '-' + moed;
-        try {
-          this.getCourseDetailsByName(fileName);
-        } catch (e) {
-          this.snackBar.open('Invalid file name', 'close', {duration: 3000});
-          return;
-        }
+        return fileName;
+      } else {
+        throw new Error('OCR Failed');
       }
-    });
+    }).then(fileName => this.getDetailsByFileName(fileName));
   }
 
   uploadImages() {
@@ -155,17 +148,24 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
+    this.spinner.show();
     this.resetForm();
-    try {
-      this.getCourseDetails(file);
-    } catch (e) {
-    }
     this.questions = [];
-    this.pdf.getImagesOfFile(file).then(res => {
-      this.blobs = res;
-      this.getCourseDetailsBySticker(this.blobs[0]);
-    });
-    this.imagesCollpaseTrigger.nativeElement.click();
+    const filenameFetching: Promise<CourseWithFaculty> = this.getDetailsFromFile(file);
+    const pdfImagesExtraction: Promise<Blob[]> = this.pdf.getImagesOfFile(file).then(res => { this.blobs = res; return res; });
+
+    let courseDetailsPromise: Promise<CourseWithFaculty>;
+    if (filenameFetching == null) {
+      courseDetailsPromise = pdfImagesExtraction.then(blobs => this.getDetailsBySticker(blobs[0]));
+    } else {
+      courseDetailsPromise = filenameFetching;
+    }
+
+    Promise.all([courseDetailsPromise, pdfImagesExtraction]).then(results => this.course = results[0])
+      .finally(() => {
+        this.imagesCollpaseTrigger.nativeElement.click();
+        return this.spinner.hide();
+      });
   }
 
   addQuestion() {
