@@ -311,6 +311,10 @@ export class DbService {
       return {id: facultyId, ...faculty};
     }));
   }
+
+  getUser(uid: string): Observable<UserData> {
+    return this.afs.doc<UserData>(`users/${uid}`).valueChanges();
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
