@@ -65,7 +65,7 @@
           <h5 class="card-title">
             {{ course.name }}
             <span style="display: block">
-              {{ this.semester | semester }} {{ this.year }}, Moed {{ this.moed }}
+              {{ semester | semester }} {{ year }}, Moed {{ moed }}
             </span>
           </h5>
           <ul class="scan-properties row">
@@ -77,12 +77,12 @@
                 {{ course.id }}
               </span>
             </li>
-            <li class="col-6" *ngIf="faculty">
+            <li class="col-6">
               <span class="scan-properties-icon">
                 <fa name="home"></fa>
               </span>
               <span class="scan-properties-text">
-                {{ faculty.name }}
+                {{ course.faculty.name }}
               </span>
             </li>
           </ul>
