@@ -87,7 +87,7 @@ export class OCRService {
   public async isImageBlank(image: Blob) {
     const imageBase64 = await this.blobToBase64(image);
     const retJson = await this.httpResult(imageBase64, 'IMAGE_PROPERTIES');
-    const retJsonLabel = await this.httpResult(imageBase64, 'label_DETECTION');
+    const retJsonLabel = await this.httpResult(imageBase64, 'LABEL_DETECTION');
     const dominantColorFraction = retJson['responses'][0].imagePropertiesAnnotation.dominantColors.colors[0]['score'];
     const textlLabel = retJsonLabel['responses'][0].labelAnnotations.filter(label => label['description'] === 'Text');
     if (dominantColorFraction > this.BLANK_THRESHOLD && (textlLabel.length < 1 || textlLabel[0]['score'] < this.BLANK_THRESHOLD)) {
