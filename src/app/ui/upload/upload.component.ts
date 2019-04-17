@@ -222,14 +222,19 @@ export class UploadComponent implements OnInit {
   async clearBlankPages() {
     this.spinner.show();
     const res = [];
+    const promises = [];
     for (let i = 0; i < this.blobs.length; i = i + 1) {
-      const isBlank = await this.ocr.isImageBlank(this.blobs[i]);
-      if (!isBlank) {
-        res.push(this.blobs[i]);
-      }
+      promises.push(this.ocr.isImageBlank(this.blobs[i]));
     }
-    this.blobs = res;
-    this.spinner.hide();
+    Promise.all(promises).then(blanks => {
+      for (let i = 0; i < this.blobs.length; i = i + 1) {
+        if (!blanks[i]){
+          res.push(this.blobs[i]);
+        }
+      }
+      this.blobs = res;
+      this.spinner.hide();
+    });
   }
 
   resetForm() {
