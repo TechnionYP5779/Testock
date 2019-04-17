@@ -220,9 +220,9 @@ export class UploadComponent implements OnInit {
     for (let i = 0; i < this.blobs.length; i = i + 1) {
       promises.push(this.ocr.isImageBlank(this.blobs[i]));
     }
-    Promise.all(promises).then(blanks => {
+    Promise.all(promises).then(isPageBlank => {
       for (let i = 0; i < this.blobs.length; i = i + 1) {
-        if (!blanks[i]){
+        if (!isPageBlank[i]){
           res.push(this.blobs[i]);
         }
       }
