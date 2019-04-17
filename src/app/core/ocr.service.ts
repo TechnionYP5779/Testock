@@ -7,7 +7,8 @@ import {HttpClient} from '@angular/common/http';
 export class OCRService {
 
   public http: HttpClient;
-  private BLANK_THRESHOLD = 0.88;
+  private DOMINANT_FRACTION_THRESHOLD = 0.88;
+  private TEXT_SCORE_THRESHOLD = 0.95;
 
   constructor(http: HttpClient) {
     this.http = http;
@@ -90,7 +91,8 @@ export class OCRService {
     const retJsonLabel = await this.httpResult(imageBase64, 'LABEL_DETECTION');
     const dominantColorFraction = retJson['responses'][0].imagePropertiesAnnotation.dominantColors.colors[0]['score'];
     const textlLabel = retJsonLabel['responses'][0].labelAnnotations.filter(label => label['description'] === 'Text');
-    if (dominantColorFraction > this.BLANK_THRESHOLD && (textlLabel.length < 1 || textlLabel[0]['score'] < this.BLANK_THRESHOLD)) {
+    if (dominantColorFraction > this.DOMINANT_FRACTION_THRESHOLD && (textlLabel.length < 1
+      || textlLabel[0]['score'] < this.TEXT_SCORE_THRESHOLD)) {
       return true;
     }
     return false;
