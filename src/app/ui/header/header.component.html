@@ -30,13 +30,20 @@
               <fa name="sign-out"></fa>
               Logout
             </button>
-            <img class="mr-2" [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+            <img class="mr-2 rounded" [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">
-            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">
+            <button class="btn btn-outline-success mr-2" type="button" (click)="login()">
             <fa name="sign-in"></fa>
               Login
+            </button>
+          </div>
+
+          <div *ngIf="auth.currentUser">
+            <button class="btn btn-warning mr-2" type="button">
+              <fa name="diamond"></fa>
+              {{ (auth.user$ | async)?.points }}
             </button>
           </div>
 

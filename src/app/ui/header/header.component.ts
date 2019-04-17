@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AuthService} from '../../core/auth.service';
+import {AuthService} from '../../users/auth.service';
 import {Router} from '@angular/router';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +15,7 @@ export class HeaderComponent implements OnInit {
   router: any;
   isAdmin: boolean;
 
-  constructor(private rtr: Router, public auth: AuthService) {
+  constructor(private rtr: Router, public auth: AuthService, private spinner: NgxSpinnerService) {
     this.main_menu_opened = false;
     this.main_menu_triggered = new EventEmitter();
     this.router = rtr;
@@ -35,5 +36,9 @@ export class HeaderComponent implements OnInit {
   onSearchChange(value: any) {
     this.term = value;
     this.router.navigate(['../courses/' + this.term.toString()]);
+  }
+
+  login() {
+    this.spinner.show().then(() => this.auth.loginWithCampus()).finally(() => this.spinner.hide());
   }
 }

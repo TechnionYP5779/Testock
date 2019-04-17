@@ -1,0 +1,62 @@
+<div *ngIf="topic$ | async as topic">
+  <div class="mb-4">
+    <h4 *ngIf="linkedQuestion$ | async as linkedQuestion">
+      <a routerLink="/course/{{course.id}}" class="badge badge-primary mr-2" *ngIf="linkedQuestionCourse$ | async as course">
+        {{ course.name }} ({{ course.id }})
+      </a>
+      <a routerLink="/question/{{linkedQuestion.id}}" class="badge badge-secondary mr-2">
+        {{ linkedQuestion.semester | titlecase }} {{ linkedQuestion.year }} - Moed {{ linkedQuestion.moed }}
+      </a>
+      <a routerLink="/question/{{linkedQuestion.id}}" class="badge badge-info mr-2">
+        Question {{ linkedQuestion.number }}
+      </a>
+    </h4>
+    <h4 *ngIf="linkedCourse$ | async as course">
+      <a routerLink="/course/{{course.id}}" class="badge badge-primary mr-2">
+        {{ course.name }} ({{ course.id }})
+      </a>
+    </h4>
+    <h2>
+      {{topic.subject}}
+    </h2>
+  </div>
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-1">
+        <div class="thumbnail">
+          <img class="mb-2 img-thumbnail" [src]="topic.creator.photoUrl"  alt=""/>
+        </div>
+      </div>
+
+      <div class="col-11">
+        <div class="card">
+          <div class="card-header">
+            <strong>{{topic.creator.name}}</strong>
+            <span class="text-muted float-right">Posted {{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="card-body" [innerHTML]="topic.text">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h4 class="mb-4">Comments:</h4>
+  <div class="container">
+    <app-comment
+      class="row mb-4"
+      [topic]="topic"
+      [comment]="comment"
+      *ngFor="let comment of (comments$ | async)"
+      [isSolution]="comment.id === topic.correctAnswerId"
+      [allowToMarkAsSolution]="(adminAccess$ | async) || auth.currentUserId == topic.creator.uid">
+    </app-comment>
+  </div>
+
+  <h4 class="mb-4">Add comment</h4>
+  <app-create-comment [topicId]="topic.id"></app-create-comment>
+</div>
+
+

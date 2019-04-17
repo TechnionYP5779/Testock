@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../core/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../auth.service';
+import {Observable} from 'rxjs';
+import {UserData} from '../../entities/user';
 
 @Component({
   selector: 'app-user-profile',
@@ -10,10 +12,10 @@ export class UserProfileComponent implements OnInit {
 
   constructor(public auth: AuthService) { }
 
-  currentUserFbId: string;
+  user$: Observable<UserData>;
 
   ngOnInit() {
-    this.auth.fbId.subscribe(next => this.currentUserFbId = next);
+    this.user$ = this.auth.user$;
   }
 
   logout() {

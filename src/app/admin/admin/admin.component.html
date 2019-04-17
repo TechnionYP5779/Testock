@@ -1,0 +1,88 @@
+<h1>Admin Control Panel</h1>
+<h3>Users & Permissions</h3>
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col">User</th>
+    <th scope="col">Faculty</th>
+    <th scope="col">Email</th>
+    <th scope="col">User?</th>
+    <th scope="col">Admin?</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users; let i = index">
+    <th><img [src]="user.photoUrl" width="30" height="30" class="rounded-circle mr-3" />{{user.name}}</th>
+    <td>{{user.faculty}}</td>
+    <td>{{user.email}}</td>
+    <td><input type="checkbox" [ngModel]="user.roles.user" (change)="userPermissionChanged(user, $event)"></td>
+    <td><input type="checkbox" [ngModel]="user.roles.admin" (change)="adminPermissionChanged(user, $event)"></td>
+  </tr>
+  </tbody>
+</table>
+<hr />
+<div class="row">
+  <div class="col-2">
+    <label for="usersList">Pick user:</label>
+  </div>
+  <div class="col-3">
+    <select id="usersList" size="10" class="form-control" [(ngModel)]="selectedUser">
+      <option *ngFor="let user of users;" [ngValue]="user">{{user.name}}</option>
+    </select>
+  </div>
+  <div class="col-3" *ngIf="selectedUser">
+    <h6>Editing User: {{selectedUser.name}}</h6>
+    <div class="form-check" *ngFor="let f of faculties;">
+      <input class="form-check-input" type="checkbox" id="faculty" [checked]="selectedUser && selectedUser.roles.faculty_admin && selectedUser.roles.faculty_admin.includes(f.id)" (change)="changedFacultyPermission($event, f.id)">
+      <label class="form-check-label" for="faculty">{{f.name}}</label>
+    </div>
+  </div>
+  <div class="col-2" *ngIf="selectedUser">
+    <button class="btn btn-success" role="button" (click)="setUserPermissions()">Set Permissions</button>
+  </div>
+</div>
+<hr />
+<h3>Courses</h3>
+<form>
+  <div class="form-row">
+    <div class="col-2">
+      Add new course:
+    </div>
+    <div class="col-2">
+      <input type="number" class="form-control" placeholder="Course Number" [(ngModel)]="newCourse.id" name="courseId"/>
+    </div>
+    <div class="col-4">
+      <input type="text" class="form-control" placeholder="Course Name" [(ngModel)]="newCourse.name" name="courseName"/>
+    </div>
+    <div class="col-2">
+      <select class="form-control" [(ngModel)]="newCourse.faculty" name="courseFaculty">
+        <option [ngValue]="null" disabled>Choose Faculty</option>
+        <option *ngFor="let f of faculties" [value]="f.id">{{f.name}}</option>
+      </select>
+    </div>
+    <div class="col-2">
+      <button type="submit" class="btn btn-success" (click)="createNewCourse();">Create Course</button>
+    </div>
+  </div>
+</form>
+<hr />
+<h3>Faculties</h3>
+<form>
+  <div class="form-row">
+    <div class="col-2">
+      Add new faculty:
+    </div>
+    <div class="col-4">
+      <input type="text" class="form-control" placeholder="Faculty Name" [(ngModel)]="newFaculty.name" name="facultyName"/>
+    </div>
+    <div class="col-2">
+      <button type="submit" class="btn btn-success" (click)="createNewFaculty();">Create Faculty</button>
+    </div>
+  </div>
+</form>
+<hr />
+<div class="row">
+  <div class="col-3 mb-4" *ngFor="let f of faculties">
+    <app-faculty-control-panel [faculty]="f"></app-faculty-control-panel>
+  </div>
+</div>

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {Course} from '../../core/entities/course';
+import {Component, OnInit} from '@angular/core';
+import {Course} from '../../entities/course';
 import {DbService} from '../../core/db.service';
 import {ActivatedRoute} from '@angular/router';
-import {FacultyId} from '../../core/entities/faculty';
+import {FacultyId} from '../../entities/faculty';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 
