@@ -115,6 +115,7 @@ export const visionLabelDetection = functions.https.onRequest(async (request, re
   const image = +request.body['image'];
   response.set('Access-Control-Allow-Origin', '*');
   response.set('Access-Control-Allow-Methods', 'GET, POST');
+  response.status(200);
 
   if (request.method === 'OPTIONS') {
     // Send response to OPTIONS requests
@@ -130,6 +131,7 @@ export const visionTextDetection = functions.https.onRequest(async (request, res
   const image = +request.body['image'];
   response.set('Access-Control-Allow-Origin', '*');
   response.set('Access-Control-Allow-Methods', 'GET, POST');
+  response.status(200);
 
   if (request.method === 'OPTIONS') {
     // Send response to OPTIONS requests
@@ -145,6 +147,7 @@ export const visionImageProperties = functions.https.onRequest(async (request, r
   const image = +request.body['image'];
   response.set('Access-Control-Allow-Origin', '*');
   response.set('Access-Control-Allow-Methods', 'GET, POST');
+  response.status(200);
 
   if (request.method === 'OPTIONS') {
     // Send response to OPTIONS requests
