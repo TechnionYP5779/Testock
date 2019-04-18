@@ -22,26 +22,88 @@
   .planet-text {
     position: absolute;
     .planet-title {
-      font-size: 37px;
+      font-size: 32px;
       color: #ffffff;
       margin-bottom: 0;
+      white-space: nowrap;
     }
 
     .planet-description {
-      font-size: 25px;
+      font-size: 22px;
       color: #ce89ce;
+      white-space: nowrap;
     }
   }
 }
 
 #planet-0 {
+  top: 210px;
   left: 40px;
-  top: 230px;
   .planet-thumb {
     width: 160px;
   }
   .planet-text {
-    left: -40px;
     top: 150px;
+    left: -40px;
+  }
+}
+
+#planet-1 {
+  top: 450px;
+  left: 240px;
+  .planet-thumb {
+    width: 140px;
+  }
+  .planet-text {
+    top: 100px;
+    left: 120px;
+  }
+}
+
+#planet-2 {
+  top: 410px;
+  right: 270px;
+  .planet-thumb {
+    width: 120px;
+  }
+  .planet-text {
+    top: 100px;
+    left: 100px;
+  }
+}
+
+#planet-3 {
+  top: 110px;
+  right: 140px;
+  .planet-thumb {
+    width: 130px;
+  }
+  .planet-text {
+    top: 150px;
+    left: 100px;
+  }
+}
+
+#planet-4 {
+  top: 50px;
+  left: 420px;
+  .planet-thumb {
+    width: 120px;
+  }
+  .planet-text {
+    top: 90px;
+    left: -100px;
+  }
+}
+
+#planet-5 {
+  top: 200px;
+  left: 520px;
+  .planet-thumb {
+    width: 160px;
+  }
+  .planet-text {
+    top: 110px;
+    left: -80px;
   }
 }
