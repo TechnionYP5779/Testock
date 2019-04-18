@@ -2,11 +2,14 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as https from 'https';
 import * as PDFDocument from 'pdfkit';
+// @ts-ignore
+import * as vision from '@google-cloud/vision';
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
 admin.initializeApp(functions.config().firebase);
+const visionClient = new vision.ImageAnnotatorClient();
 
 const bucket = admin.storage().bucket();
 
@@ -107,6 +110,22 @@ async function getQuestionsOfExam(course: number, year: number, semester: string
 async function getCourse(course: number): Promise<Course> {
   return admin.firestore().collection('courses').doc(course.toString()).get().then(doc => doc.data() as Course);
 }
+
+export const visionLabelDetection = functions.https.onRequest(async (request, response) => {
+  // @ts-ignore
+  visionClient.labelDetection(request).then(result => response.send(result));
+});
+
+export const visionTextDetection = functions.https.onRequest(async (request, response) => {
+  // @ts-ignore
+  visionClient.textDetection(request).then(result => response.send(result));
+});
+
+export const visionImageProperties = functions.https.onRequest(async (request, response) => {
+  // @ts-ignore
+  visionClient.imageProperties(request).then(result => response.send(result));
+});
+
 
 export const getPDFofExam = functions.https.onRequest(async (request, response) => {
 
