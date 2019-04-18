@@ -111,55 +111,22 @@ async function getCourse(course: number): Promise<Course> {
   return admin.firestore().collection('courses').doc(course.toString()).get().then(doc => doc.data() as Course);
 }
 
-export const visionLabelDetection = functions.https.onCall(async (data, context) => {
-  // Checking that the user is authenticated.
-  if (!context.auth) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-      'while authenticated.');
-  }
-
-  const image = data.image;
-
-  try{
-    return visionClient.labelDetection(image);
-  } catch (e) {
-    return {error: e};
-  }
+export const visionLabelDetection = functions.https.onRequest(async (request, response) => {
+  const image = +request.query.image;
+  // @ts-ignore
+  visionClient.labelDetection(image).then(result => response.send(result));
 });
 
-export const visionTextDetection = functions.https.onCall(async (data, context) => {
-  // Checking that the user is authenticated.
-  if (!context.auth) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-      'while authenticated.');
-  }
-
-  const image = data.image;
-
-  try{
-    return visionClient.textDetection(image);
-  } catch (e) {
-    return {error: e};
-  }
+export const visionTextDetection = functions.https.onRequest(async (request, response) => {
+  const image = +request.query.image;
+  // @ts-ignore
+  visionClient.textDetection(image).then(result => response.send(result));
 });
 
-export const visionImageProperties = functions.https.onCall(async (data, context) => {
-  // Checking that the user is authenticated.
-  if (!context.auth) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-      'while authenticated.');
-  }
-
-  const image = data.image;
-
-  try{
-    return visionClient.imageProperties(image);
-  } catch (e) {
-    return {error: e};
-  }
+export const visionImageProperties = functions.https.onRequest(async (request, response) => {
+  const image = +request.query.image;
+  // @ts-ignore
+  visionClient.imageProperties(image).then(result => response.send(result));
 });
 
 
