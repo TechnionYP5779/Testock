@@ -1,5 +1,9 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+body.world > app-root > .container {
+  max-width: 100%;
+}
+
 .modal-backdrop.show {
   opacity: 0.75;
 }
