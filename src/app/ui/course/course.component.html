@@ -1,13 +1,70 @@
-<h1 *ngIf="this.course"> {{ this.course.id }} - {{ this.course.name }}</h1>
-<ul>
-  <li *ngFor="let q of questions">
-    <a routerLink="/question/{{ q.id }}">{{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }} </a>
-  </li>
-</ul>
-<hr>
-<h2>Exams</h2>
-<ul>
-  <li *ngFor="let e of exams">
-    <a routerLink="exam/{{ e.id }}">{{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}</a>
-  </li>
-</ul>
+<div class="alert alert-info" *ngIf="adminAccess">You have admin access for this course</div>
+
+<div class="jumbotron jumbotron" *ngIf="course">
+  <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
+  <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
+  <p class="lead">
+    <a class="btn btn-primary mr-2" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
+    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
+  </p>
+</div>
+
+
+<div class="list-group my-3" *ngIf="topics$ | async as topics">
+  <div class="list-group-item list-group-item-info">
+    <fa name="comment" class="mr-2"></fa>
+    Forum
+    <span class="badge badge-info">{{topics.length}}</span>
+    <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
+      <fa name="plus" class="mr-1"></fa>
+      Add Topic
+    </button>
+  </div>
+  <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
+    {{ topic.subject }}
+    <span class="float-right col-4">
+      <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic" alt=""/>
+      <small class="mr-2">{{ topic.creator.name }}</small>
+      <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
+    </span>
+  </a>
+</div>
+<div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create new topic</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-create-topic [linkedCourseId]="id"></app-create-topic>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="list-group my-3" *ngIf="exams">
+  <div class="list-group-item list-group-item-primary">
+    <fa name="book"></fa>
+    Available exams
+    <span class="badge badge-primary">{{exams.length}}</span>
+  </div>
+  <a *ngFor="let e of exams" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
+    {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
+  </a>
+</div>
+
+<div class="list-group my-3" *ngIf="questions">
+  <div class="list-group-item list-group-item-danger">
+    <fa name="fire"></fa>
+    Hot questions
+    <span class="badge badge-danger">{{questions.length}}</span>
+  </div>
+  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
+    {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
+  </a>
+</div>
+
+

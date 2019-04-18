@@ -1,14 +1,22 @@
-<!-- User logged in -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <div class="jumbotron" *ngIf="(user$ | async) as user">
+        <div class="media">
+          <img class="mr-4 rounded-circle" [src]="user.photoUrl" height=100 alt="">
+          <div class="media-body">
+            <h1 class="display-4">
+              {{user.name}}
+            </h1>
+            <p class="lead">{{user.faculty}}</p>
+          </div>
 
-<div *ngIf="auth.currentUser">
-  <h3>Howdy, {{ auth.currentUser.displayName }}</h3>
-  <img [src]="auth.currentUser.photoURL" width=50px>
-  <button (click)="logout()">Logout</button>
-</div>
-
-<!-- User NOT logged in -->
-<div *ngIf="!auth.currentUser">
-  <h3>Howdy, {{ auth.currentUserDisplayName }}</h3>
-  <p>Login to get started...</p>
-  <button routerLink="/login">Login</button>
+          <button class="btn btn-lg btn-warning ml-2" type="button">
+            <fa name="diamond"></fa>
+            {{ user.points }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

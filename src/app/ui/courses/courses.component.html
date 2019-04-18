@@ -1,6 +1,12 @@
-<h1>Courses</h1>
-<ul>
-  <li *ngFor="let course of courses">
-    <a routerLink="/course/{{ course.id }}">{{ course.id }} - {{ course.name }} @ {{ course.faculty }}</a>
+<h1 class="display-4">All Courses</h1>
+<ul class="list-group-flush">
+  <li class="list-group-item"  *ngFor="let course of courses">
+    <h6 class="course-title m-2">
+      <a routerLink="/course/{{ course.id }}">
+        {{ course.id }}: {{ course.name }}
+      </a>
+    </h6>
+    <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
+    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
   </li>
 </ul>

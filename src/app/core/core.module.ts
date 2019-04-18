@@ -1,11 +1,32 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SemesterPipe } from './semester.pipe';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {SemesterPipe} from './semester.pipe';
+import {SafeUrlPipe} from './safe-url.pipe';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {DbService} from './db.service';
+import {OCRService} from './ocr.service';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AngularFireStorageModule} from '@angular/fire/storage';
 
 @NgModule({
-  declarations: [SemesterPipe],
+  declarations: [
+    SemesterPipe,
+    SafeUrlPipe
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    HttpClientModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule
+  ],
+  providers: [
+    HttpClient,
+    DbService,
+    OCRService
+  ],
+  exports: [
+    SemesterPipe,
+    SafeUrlPipe
   ]
 })
 export class CoreModule { }

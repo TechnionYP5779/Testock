@@ -1,0 +1,115 @@
+<div class="row">
+  <div class="accordion col-8" id="accordionExample">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                  aria-expanded="true" aria-controls="collapseOne" #collapseOne>
+            Upload a new scan
+          </button>
+        </h5>
+      </div>
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+          <div class="box has-advanced-upload" [ngClass]="{'is-dragover':isDragged == true}" (drop)="onDrop($event)"
+               (dragover)="onDragOver($event)"
+               (dragleave)="onDragLeave($event)" enctype="multipart/form-data">
+            <div class="box-input">
+              <fa name="upload" class="box-icon"></fa>
+              <input class="box-file" type="file" id="file" accept="application/pdf" #file (change)="onFileSelected($event)">
+              <div class="box-file-label-text" style="text-align: center;">
+                <label class="box-file-label" for="file">
+                  <strong> Browse your scan </strong> or drop it here
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" #imagesCollpaseTrigger type="button" data-toggle="collapse"
+                  data-target="#imagesCollapse" aria-expanded="false" aria-controls="imagesCollapse">
+            Choose pages for uploading
+          </button>
+        </h5>
+      </div>
+      <div id="imagesCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        <div class="card-body">
+          <div class="text-center">
+            <div class="btn-group" role="group" aria-label="Clean Pages">
+              <button type="button" class="btn btn-danger" (click)="removeFirstPage()">Remove First Page</button>
+              <button type="button" class="btn btn-danger" (click)="clearEvenPages()">Remove Even Pages</button>
+              <button type="button" class="btn btn-danger" (click)="clearOddPages()">Remove Odd Pages</button>
+              <button type="button" class="btn btn-danger" (click)="clearBlankPages()">Remove Blank Pages</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3" *ngFor="let blob of blobs; let i = index">
+              <app-scan-page [blob]="blob" [index]="i" [croppable]="activeQuestion"
+                             (imageSelected)="addImage($event)"></app-scan-page>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-4">
+    <div *ngIf="course">
+      <div class="card">
+        <div class="upload-thumbnail-image-placeholder">
+          <img class="align-middle" src="/assets/images/testock-logo.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ course.name }}
+            <span style="display: block">
+              {{ semester | semester }} {{ year }}, Moed {{ moed }}
+            </span>
+          </h5>
+          <ul class="scan-properties row">
+            <li class="col-6">
+              <span class="scan-properties-icon">
+                <fa name="hashtag"></fa>
+              </span>
+              <span class="scan-properties-text">
+                {{ course.id }}
+              </span>
+            </li>
+            <li class="col-6">
+              <span class="scan-properties-icon">
+                <fa name="home"></fa>
+              </span>
+              <span class="scan-properties-text">
+                {{ course.faculty.name }}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="questions-wrapper">
+        <div class="accordion" id="questions">
+          <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images" [(grade)]="q.grade"
+                               [(points)]="q.points"
+                               (imageAddRequested)="enableImageAdding($event)"
+                               (imageRemoveRequested)="removeImage($event)"></app-upload-question>
+        </div>
+
+        <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">
+          Add Question
+        </button>
+      </div>
+
+      <Button id="upload-scan-button" class="btn btn-success btn-block" [disabled]="state !== uploadState.Ready"
+              (click)="uploadImages()">
+        <span [hidden]="state !== uploadState.Uploading">
+          <fa name="spinner" animation="spin"></fa>
+        </span>
+        Upload Scan
+      </Button>
+    </div>
+  </div>
+</div>

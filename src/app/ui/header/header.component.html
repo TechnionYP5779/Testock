@@ -1,40 +1,60 @@
 <header>
   <div id="topbar">
     <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" routerLink="/">
           <img src="/assets/images/testock-logo.png" alt="" height="25">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home</a>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/faculties">Faculties</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" routerLink="/courses">Courses</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/upload">Upload</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">ScoreBoard</a>
-            </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <form class="form-inline my-2 my-lrg-0">
+            <input class="form-control mr-sm-2" type="text" (keyup)="onSearchChange($event.target.value)" placeholder="Search course..." aria-label="Search">
           </form>
+          <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">
+            <fa name="upload"></fa>
+            Upload scan
+          </button>
+          <!-- User logged in -->
+          <div *ngIf="auth.currentUser">
+            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">
+              <fa name="sign-out"></fa>
+              Logout
+            </button>
+            <img class="mr-2 rounded" [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+          </div>
+          <!-- User NOT logged in -->
+          <div *ngIf="!auth.currentUser">
+            <button class="btn btn-outline-success mr-2" type="button" (click)="login()">
+            <fa name="sign-in"></fa>
+              Login
+            </button>
+          </div>
+
+          <div *ngIf="auth.currentUser">
+            <button class="btn btn-warning mr-2" type="button">
+              <fa name="diamond"></fa>
+              {{ (auth.user$ | async)?.points }}
+            </button>
+          </div>
+
+          <div *ngIf="isAdmin">
+            <button class="btn btn-outline-danger mr-2" type="button" routerLink="/admin">
+              <fa name="cog"></fa>
+              Admin CP
+            </button>
+          </div>
         </div>
       </nav>
     </div>
   </div>
-
-  <app-breadcrumbs></app-breadcrumbs>
-
 </header>
-
-
