@@ -116,11 +116,11 @@ export const visionLabelDetection = functions.https.onRequest(async (request, re
   response.set('Access-Control-Allow-Origin', '*');
   response.set('Access-Control-Allow-Methods', 'GET, POST');
 
-  if (req.method === 'OPTIONS') {
+  if (request.method === 'OPTIONS') {
     // Send response to OPTIONS requests
-    res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
-    res.set('Access-Control-Max-Age', '3600');
+    response.set('Access-Control-Allow-Methods', 'GET');
+    response.set('Access-Control-Allow-Headers', 'Content-Type');
+    response.set('Access-Control-Max-Age', '3600');
   }
   // @ts-ignore
   visionClient.labelDetection(image).then(result => response.send(result));
@@ -131,11 +131,11 @@ export const visionTextDetection = functions.https.onRequest(async (request, res
   response.set('Access-Control-Allow-Origin', '*');
   response.set('Access-Control-Allow-Methods', 'GET, POST');
 
-  if (req.method === 'OPTIONS') {
+  if (request.method === 'OPTIONS') {
     // Send response to OPTIONS requests
-    res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
-    res.set('Access-Control-Max-Age', '3600');
+    response.set('Access-Control-Allow-Methods', 'GET');
+    response.set('Access-Control-Allow-Headers', 'Content-Type');
+    response.set('Access-Control-Max-Age', '3600');
   }
   // @ts-ignore
   visionClient.textDetection(image).then(result => response.send(result));
@@ -146,11 +146,11 @@ export const visionImageProperties = functions.https.onRequest(async (request, r
   response.set('Access-Control-Allow-Origin', '*');
   response.set('Access-Control-Allow-Methods', 'GET, POST');
 
-  if (req.method === 'OPTIONS') {
+  if (request.method === 'OPTIONS') {
     // Send response to OPTIONS requests
-    res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
-    res.set('Access-Control-Max-Age', '3600');
+    response.set('Access-Control-Allow-Methods', 'GET');
+    response.set('Access-Control-Allow-Headers', 'Content-Type');
+    response.set('Access-Control-Max-Age', '3600');
   }
   // @ts-ignore
   visionClient.imageProperties(image).then(result => response.send(result));
