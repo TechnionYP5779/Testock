@@ -1,7 +1,12 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "assets/fonts/feast-of-flesh/style.css";
 
-body.world > app-root > .container {
-  max-width: 100%;
+body.world  {
+  background-color: #532a5c;
+
+  #topbar {
+    margin-bottom: 0;
+  }
 }
 
 .modal-backdrop.show {

@@ -1,0 +1,46 @@
+@import "../../../assets/styles/animations.scss";
+
+:host {
+  display: block;
+  position: relative;
+  background: #532a5c url("../../../assets/images/gamification/world-bg.png") center center no-repeat;
+  background-size: contain;
+}
+
+.planet {
+  position: absolute;
+  list-style: none;
+  font-family: "feast of flesh BB", sans-serif;
+
+  .planet-thumb {
+    width: 170px;
+    height: auto;
+    animation: float 2s ease-in-out infinite;
+  }
+
+  .planet-text {
+    position: absolute;
+    .planet-title {
+      font-size: 37px;
+      color: #ffffff;
+      margin-bottom: 0;
+    }
+
+    .planet-description {
+      font-size: 25px;
+      color: #ce89ce;
+    }
+  }
+}
+
+#planet-0 {
+  left: 40px;
+  top: 230px;
+  .planet-thumb {
+    width: 160px;
+  }
+  .planet-text {
+    left: -40px;
+    top: 150px;
+  }
+}
