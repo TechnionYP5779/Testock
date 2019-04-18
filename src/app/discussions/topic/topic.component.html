@@ -24,7 +24,7 @@
     <div class="row mb-4">
       <div class="col-1">
         <div class="thumbnail">
-          <img class="mb-2 img-thumbnail" [src]="topic.creator.photoUrl"  alt=""/>
+          <img class="mb-2 img-thumbnail" [src]="topic.creator.photoUrl" alt="" [routerLink]="'/profile/' + topic.creator.uid"/>
         </div>
       </div>
 
