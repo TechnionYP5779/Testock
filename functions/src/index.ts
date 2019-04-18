@@ -112,19 +112,19 @@ async function getCourse(course: number): Promise<Course> {
 }
 
 export const visionLabelDetection = functions.https.onRequest(async (request, response) => {
-  const image = +request.query.image;
+  const image = +request.body['image'];
   // @ts-ignore
   visionClient.labelDetection(image).then(result => response.send(result));
 });
 
 export const visionTextDetection = functions.https.onRequest(async (request, response) => {
-  const image = +request.query.image;
+  const image = +request.body['image'];
   // @ts-ignore
   visionClient.textDetection(image).then(result => response.send(result));
 });
 
 export const visionImageProperties = functions.https.onRequest(async (request, response) => {
-  const image = +request.query.image;
+  const image = +request.body['image'];
   // @ts-ignore
   visionClient.imageProperties(image).then(result => response.send(result));
 });
