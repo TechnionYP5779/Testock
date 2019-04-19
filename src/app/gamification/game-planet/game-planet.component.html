@@ -1,6 +1,6 @@
 <button class="exit" (click)="closePlanet()">x</button>
 <div class="sidebar">
-  <img class="planet-image" src="../../../assets/images/gamification/planets/planet-level-1.png" alt="Planets">
+  <img class="planet-image" [src]="'../../../assets/images/gamification/planets/' + planet.image" alt="Planets">
   <div class="scoreboard">
     <h4 class="title">Scoreboard</h4>
     <ul class="users">
