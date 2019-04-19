@@ -151,52 +151,52 @@ async function getCourse(course: number): Promise<Course> {
   return admin.firestore().collection('courses').doc(course.toString()).get().then(doc => doc.data() as Course);
 }
 
-export const visionLabelDetection = functions.https.onRequest(async (request, response) => {
-  const image = +request.body['image'];
-  response.set('Access-Control-Allow-Origin', '*');
-  response.set('Access-Control-Allow-Methods', 'GET, POST');
-  response.status(200);
-
-  if (request.method === 'OPTIONS') {
-    // Send response to OPTIONS requests
-    response.set('Access-Control-Allow-Methods', 'GET');
-    response.set('Access-Control-Allow-Headers', 'Content-Type');
-    response.set('Access-Control-Max-Age', '3600');
+export const visionLabelDetection = functions.https.onCall(async (data, context) => {
+  // Checking that the user is authenticated.
+  if (!context.auth) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+      'while authenticated.');
   }
-  // @ts-ignore
-  visionClient.labelDetection(image).then(result => response.send(result));
+
+  const image = data.image;
+  try{
+    return visionClient.labelDetection(image);
+  } catch (e) {
+    return {error: e};
+  }
 });
 
-export const visionTextDetection = functions.https.onRequest(async (request, response) => {
-  const image = +request.body['image'];
-  response.set('Access-Control-Allow-Origin', '*');
-  response.set('Access-Control-Allow-Methods', 'GET, POST');
-  response.status(200);
-
-  if (request.method === 'OPTIONS') {
-    // Send response to OPTIONS requests
-    response.set('Access-Control-Allow-Methods', 'GET');
-    response.set('Access-Control-Allow-Headers', 'Content-Type');
-    response.set('Access-Control-Max-Age', '3600');
+export const visionTextDetection = functions.https.onCall(async (data, context) => {
+  // Checking that the user is authenticated.
+  if (!context.auth) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+      'while authenticated.');
   }
-  // @ts-ignore
-  visionClient.textDetection(image).then(result => response.send(result));
+
+  const image = data.image;
+  try{
+    return visionClient.textDetection(image);
+  } catch (e) {
+    return {error: e};
+  }
 });
 
-export const visionImageProperties = functions.https.onRequest(async (request, response) => {
-  const image = +request.body['image'];
-  response.set('Access-Control-Allow-Origin', '*');
-  response.set('Access-Control-Allow-Methods', 'GET, POST');
-  response.status(200);
-
-  if (request.method === 'OPTIONS') {
-    // Send response to OPTIONS requests
-    response.set('Access-Control-Allow-Methods', 'GET');
-    response.set('Access-Control-Allow-Headers', 'Content-Type');
-    response.set('Access-Control-Max-Age', '3600');
+export const visionImageProperties = functions.https.onCall(async (data, context) => {
+  // Checking that the user is authenticated.
+  if (!context.auth) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+      'while authenticated.');
   }
-  // @ts-ignore
-  visionClient.imageProperties(image).then(result => response.send(result));
+
+  const image = data.image;
+  try{
+    return visionClient.imageProperties(image);
+  } catch (e) {
+    return {error: e};
+  }
 });
 
 
