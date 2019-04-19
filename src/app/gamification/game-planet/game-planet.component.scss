@@ -1,10 +1,12 @@
 :host {
   display: flex;
-  padding: 40px 0;
+  padding: 40px 0 0;
   color: #ffffff;
   background-color: #2f142f;
+  transform: skew(-5deg);
 
   .content {
+    transform: skew(5deg);
     flex: 1;
 
     .text {
@@ -28,14 +30,15 @@
 
       .monsters {
         display: block;
-        width: 530px;
+        width: 660px;
         text-align: center;
+        margin-top: 40px;
 
         .monster {
           display: inline-block;
           width: 125px;
           list-style: none;
-          margin: 0 10px 10px;
+          margin: 0 40px 10px;
 
           .monster-thumb-button {
             width: 100%;
@@ -46,12 +49,14 @@
             .monster-thumb {
               width: 100%;
               filter: grayscale(100%);
+              opacity: 0.3;
             }
           }
         }
 
         :host.owned .monster-thumb {
           filter: none !important;
+          opacity: 1 !important;
         }
       }
     }
@@ -59,6 +64,7 @@
 
   .sidebar {
     width: 400px;
+    transform: skew(5deg);
 
     .planet-image {
       width: 140px;
