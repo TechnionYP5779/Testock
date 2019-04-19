@@ -45,8 +45,13 @@
 
             .monster-thumb {
               width: 100%;
+              filter: grayscale(100%);
             }
           }
+        }
+
+        :host.owned .monster-thumb {
+          filter: none !important;
         }
       }
     }
