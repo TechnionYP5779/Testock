@@ -1,5 +1,6 @@
 <ul id="planets">
   <li [attr.id]="'planet-' + planet.order" class="planet" *ngFor="let planet of planets">
+    <img class="here-label" src="../../../assets/images/gamification/planets/here-label.png" alt="You are here" *ngIf="(auth.user$ | async)?.points >= planet.min_points && (auth.user$ | async)?.points <= planet.max_points">
     <button class="planet-thumb-button" (click)="openPlanetPopup(planet.order)">
       <img class="planet-thumb" [src]="'../../../assets/images/gamification/planets/' + planet.image" alt="Planet">
     </button>

@@ -40,6 +40,12 @@
       white-space: nowrap;
     }
   }
+
+  .here-label {
+    position: absolute;
+    top: -70px; left: 0;
+    width: 45px;
+  }
 }
 
 #planet-0 {
@@ -51,6 +57,9 @@
   .planet-text {
     top: 130px;
     left: -40px;
+  }
+  .here-label {
+    left: 55px;
   }
 }
 
@@ -64,6 +73,9 @@
     top: 100px;
     left: 120px;
   }
+  .here-label {
+    left: 45px;
+  }
 }
 
 #planet-2 {
@@ -75,6 +87,9 @@
   .planet-text {
     top: 100px;
     left: 100px;
+  }
+  .here-label {
+    left: 45px;
   }
 }
 
@@ -88,6 +103,9 @@
     top: 120px;
     left: 100px;
   }
+  .here-label {
+    left: 45px;
+  }
 }
 
 #planet-4 {
@@ -100,6 +118,9 @@
     top: 90px;
     left: -80px;
   }
+  .here-label {
+    left: 45px;
+  }
 }
 
 #planet-5 {
@@ -111,6 +132,10 @@
   .planet-text {
     top: 110px;
     left: -80px;
+  }
+  .here-label {
+    left: 70px;
+    top: -40px;
   }
 }
 

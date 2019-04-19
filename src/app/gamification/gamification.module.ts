@@ -4,6 +4,7 @@ import { GameWorldComponent } from './game-world/game-world.component';
 import { GamePlanetComponent } from './game-planet/game-planet.component';
 import {Planet} from './entities/planet';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import {UsersModule} from '../users/users.module';
 
 const planets: Planet[] = [
   {
@@ -74,6 +75,7 @@ const planets: Planet[] = [
   ],
   imports: [
     CommonModule,
+    UsersModule,
     AngularFontAwesomeModule
   ]
 })
