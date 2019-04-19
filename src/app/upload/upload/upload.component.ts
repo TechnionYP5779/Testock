@@ -99,16 +99,12 @@ export class UploadComponent implements OnInit {
 
   private getDetailsBySticker(firstPage: Blob): Promise<CourseWithFaculty> {
     return this.ocr.getInfoFromSticker(firstPage).then(info => {
-      if (info !== '') {
-        const year = info.toString().substr(0, 4);
-        const semester = info.toString().substr(5, 2);
-        const number = info.toString().substr(8, 6);
-        const moed = info.toString().substr(15, 1);
-        const fileName = '000000000-' + year + semester + '-' + number + '-' + moed;
-        return fileName;
-      } else {
-        throw new Error('OCR Failed');
-      }
+      const year = info.year;
+      const semester = info.semester;
+      const number = info.course;
+      const moed = info.moed;
+      const fileName = '000000000-' + year + semester + '-' + number + '-' + moed;
+      return fileName;
     }).then(fileName => this.getDetailsByFileName(fileName));
   }
 

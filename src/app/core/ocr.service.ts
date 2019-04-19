@@ -60,29 +60,9 @@ export class OCRService {
     return retJson;
   }
 
-  public async getInfoFromSticker(firstPage: Blob) {
-    const firstPageBase64 = await this.blobToBase64(firstPage);
-
-    const retJson = await this.httpResult(firstPageBase64, 'TEXT_DETECTION');
-    const retInStrs = retJson['responses'][0].textAnnotations.map((val, ind) => val['description']);
-    let possibleRegex: RegExp[];
-    possibleRegex = [/^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
-      /^[/\d]{7}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
-      /^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]{3}[.][/\d]{2}[.][/\d]{2}$/];
-
-    const matchReg1 = this.matchInArray(possibleRegex[0], retInStrs);
-    const matchReg2 = this.matchInArray(possibleRegex[1], retInStrs);
-    const matchReg3 = this.matchInArray(possibleRegex[2], retInStrs);
-
-    let infoStr = '';
-    if (matchReg1 !== '') {
-      infoStr = matchReg1.toString();
-    } else if (matchReg2 !== '') {
-      infoStr = matchReg2.toString().substring(3);
-    } else if (matchReg3 !== ''){
-      infoStr = matchReg3.toString().substring(0, 16);
-    }
-    return infoStr;
+  public getInfoFromSticker(firstPage: Blob): Promise<any> {
+    return this.http.post<string>('https://us-central1-yp5779-testock.cloudfunctions.net/getStickerInfoFromTitlePage', firstPage)
+      .toPromise();
   }
 
   public async isImageBlank(image: Blob) {
