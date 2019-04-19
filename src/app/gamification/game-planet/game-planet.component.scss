@@ -5,6 +5,19 @@
   background-color: #2f142f;
   transform: skew(-5deg);
 
+  .exit {
+    position: absolute;
+    right: 20px; top: 10px;
+    z-index: 10;
+    transform: skew(5deg);
+    font-family: 'feast of flesh BB', sans-serif;
+    font-size: 42px;
+    color: #ffffff;
+    background: 0;
+    border: 0;
+    outline: 0;
+  }
+
   .content {
     transform: skew(5deg);
     flex: 1;
