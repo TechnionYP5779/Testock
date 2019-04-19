@@ -29,7 +29,7 @@ function matchInArray(regex: RegExp, arrayOfString: string[]): string {
   return '';
 }
 
-export const isImageBlank = functions.https.onRequest((request, response) => {
+export const isImageBlank = functions.https.onRequest(async (request, response) => {
   return cors(request, response, async () => {
     const [imagePropertiesResult] = await visionClient.imageProperties(request.body);
     const [labelDetectionResult] = await visionClient.labelDetection(request.body);
@@ -38,9 +38,9 @@ export const isImageBlank = functions.https.onRequest((request, response) => {
     const textlLabel = labelDetectionResult.labelAnnotations.filter(label => label['description'] === 'Text');
     if (dominantColorFraction > DOMINANT_FRACTION_THRESHOLD && (textlLabel.length < 1
       || textlLabel[0]['score'] < TEXT_SCORE_THRESHOLD)) {
-      response.status(200).send({isBlank: true});
+      response.status(200).send( {isBlank: true});
     } else {
-      response.status(200).send({isBlank: false});
+      response.status(200).send( {isBlank: false});
     }
   });
 });
@@ -183,55 +183,6 @@ async function getQuestionsOfExam(course: number, year: number, semester: string
 async function getCourse(course: number): Promise<Course> {
   return admin.firestore().collection('courses').doc(course.toString()).get().then(doc => doc.data() as Course);
 }
-
-export const visionLabelDetection = functions.https.onCall(async (data, context) => {
-  // Checking that the user is authenticated.
-  if (!context.auth) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-      'while authenticated.');
-  }
-
-  const image = data.image;
-  try{
-    return visionClient.labelDetection(image);
-  } catch (e) {
-    return {error: e};
-  }
-});
-
-export const visionTextDetection = functions.https.onCall(async (data, context) => {
-  // Checking that the user is authenticated.
-  if (!context.auth) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-      'while authenticated.');
-  }
-
-  const image = data.image;
-  try{
-    return visionClient.textDetection(image);
-  } catch (e) {
-    return {error: e};
-  }
-});
-
-export const visionImageProperties = functions.https.onCall(async (data, context) => {
-  // Checking that the user is authenticated.
-  if (!context.auth) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-      'while authenticated.');
-  }
-
-  const image = data.image;
-  try{
-    return visionClient.imageProperties(image);
-  } catch (e) {
-    return {error: e};
-  }
-});
-
 
 export const getPDFofExam = functions.https.onRequest(async (request, response) => {
 

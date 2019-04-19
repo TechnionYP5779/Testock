@@ -18,7 +18,7 @@ export class OCRService {
   }
 
   public async isImageBlank(image: Blob): Promise<any> {
-    return this.http.post<string>('https://us-central1-yp5779-testock.cloudfunctions.net/isImageBlank', image)
-      .toPromise();
+    return this.http.post<string>('https://us-central1-yp5779-testock.cloudfunctions.net/isImageBlank',
+      image).toPromise();
   }
 }
