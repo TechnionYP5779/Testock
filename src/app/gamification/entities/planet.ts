@@ -1,3 +1,5 @@
+import {Monster} from './monster';
+
 export interface Planet {
   order: number;
   title: string;
@@ -5,4 +7,5 @@ export interface Planet {
   image: string;
   min_points: number;
   max_points: number;
+  monsters: Monster[];
 }
