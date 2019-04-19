@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as https from 'https';
 import * as PDFDocument from 'pdfkit';
+import * as corsMod from 'cors';
 // @ts-ignore
 import * as vision from '@google-cloud/vision';
 
@@ -10,6 +11,7 @@ import * as vision from '@google-cloud/vision';
 
 admin.initializeApp(functions.config().firebase);
 const visionClient = new vision.ImageAnnotatorClient();
+const cors = corsMod({origin: true});
 
 function matchInArray(regex: RegExp, arrayOfString: string[]): string {
 
@@ -24,30 +26,42 @@ function matchInArray(regex: RegExp, arrayOfString: string[]): string {
   return '';
 }
 
-export const getStickerInfoFromTitlePage = functions.https.onRequest(async (request, response) => {
-  const [result]= await visionClient.textDetection(request.body);
-  // @ts-ignore
-  const detections = result.textAnnotations.map(val => val['description']);
+export const getStickerInfoFromTitlePage = functions.https.onRequest((request, response) => {
+  return cors(request, response, async () => {
+    const [result]= await visionClient.textDetection(request.body);
+    // @ts-ignore
+    const detections = result.textAnnotations.map(val => val['description']);
 
-  let possibleRegex: RegExp[];
-  possibleRegex = [/^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
-    /^[/\d]{7}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
-    /^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]{3}[.][/\d]{2}[.][/\d]{2}$/];
+    let possibleRegex: RegExp[];
+    possibleRegex = [/^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
+      /^[/\d]{7}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
+      /^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]{3}[.][/\d]{2}[.][/\d]{2}$/];
 
-  const matchReg1 = matchInArray(possibleRegex[0], detections);
-  const matchReg2 = matchInArray(possibleRegex[1], detections);
-  const matchReg3 = matchInArray(possibleRegex[2], detections);
+    const matchReg1 = matchInArray(possibleRegex[0], detections);
+    const matchReg2 = matchInArray(possibleRegex[1], detections);
+    const matchReg3 = matchInArray(possibleRegex[2], detections);
 
-  let infoStr = '';
-  if (matchReg1 !== '') {
-    infoStr = matchReg1.toString();
-  } else if (matchReg2 !== '') {
-    infoStr = matchReg2.toString().substring(3);
-  } else if (matchReg3 !== ''){
-    infoStr = matchReg3.toString().substring(0, 16);
-  }
+    let infoStr = '';
+    if (matchReg1 !== '') {
+      infoStr = matchReg1.toString();
+    } else if (matchReg2 !== '') {
+      infoStr = matchReg2.toString().substring(3);
+    } else if (matchReg3 !== ''){
+      infoStr = matchReg3.toString().substring(0, 16);
+    }
 
-  response.status(200).send(infoStr);
+    const year = infoStr.substr(0, 4);
+    const semester = infoStr.substr(5, 2);
+    const number = infoStr.substr(8, 6);
+    const moed = infoStr.substr(15, 1);
+
+    response.status(200).send({
+      year: year,
+      semester: semester,
+      course: number,
+      moed: moed
+    });
+  });
 });
 
 
