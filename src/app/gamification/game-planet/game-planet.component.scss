@@ -61,7 +61,7 @@
 
             .monster-thumb {
               width: 100%;
-              filter: grayscale(100%);
+              filter: grayscale(100%) blur(3px);;
               opacity: 0.3;
             }
           }
