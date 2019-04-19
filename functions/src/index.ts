@@ -13,6 +13,9 @@ admin.initializeApp(functions.config().firebase);
 const visionClient = new vision.ImageAnnotatorClient();
 const cors = corsMod({origin: true});
 
+const DOMINANT_FRACTION_THRESHOLD = 0.88;
+const TEXT_SCORE_THRESHOLD = 0.95;
+
 function matchInArray(regex: RegExp, arrayOfString: string[]): string {
 
   const len = arrayOfString.length;
@@ -25,6 +28,22 @@ function matchInArray(regex: RegExp, arrayOfString: string[]): string {
   }
   return '';
 }
+
+export const isImageBlank = functions.https.onRequest((request, response) => {
+  return cors(request, response, async () => {
+    const [imagePropertiesResult] = await visionClient.imageProperties(request.body);
+    const [labelDetectionResult] = await visionClient.labelDetection(request.body);
+    const dominantColorFraction = imagePropertiesResult.imagePropertiesAnnotation.dominantColors.colors[0]['score'];
+    // @ts-ignore
+    const textlLabel = labelDetectionResult.labelAnnotations.filter(label => label['description'] === 'Text');
+    if (dominantColorFraction > DOMINANT_FRACTION_THRESHOLD && (textlLabel.length < 1
+      || textlLabel[0]['score'] < TEXT_SCORE_THRESHOLD)) {
+      response.status(200).send({isBlank: true});
+    } else {
+      response.status(200).send({isBlank: false});
+    }
+  });
+});
 
 export const getStickerInfoFromTitlePage = functions.https.onRequest((request, response) => {
   return cors(request, response, async () => {

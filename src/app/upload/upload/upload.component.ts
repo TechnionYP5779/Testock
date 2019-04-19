@@ -218,7 +218,7 @@ export class UploadComponent implements OnInit {
     }
     Promise.all(promises).then(isPageBlank => {
       for (let i = 0; i < this.blobs.length; i = i + 1) {
-        if (!isPageBlank[i]){
+        if (!isPageBlank[i].isBlank) {
           res.push(this.blobs[i]);
         }
       }
