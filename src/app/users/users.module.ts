@@ -7,6 +7,8 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import {AppModule} from '../app.module';
+import {AppRoutingModule} from '../app-routing.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import {AngularFontAwesomeModule} from 'angular-font-awesome';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    AppRoutingModule
   ],
   exports: [
     UserProfileComponent

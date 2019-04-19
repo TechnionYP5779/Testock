@@ -41,7 +41,7 @@
           </div>
 
           <div *ngIf="auth.currentUser">
-            <button class="btn btn-warning mr-2" type="button">
+            <button class="btn btn-warning mr-2" type="button" routerLink="/world">
               <fa name="diamond"></fa>
               {{ (auth.user$ | async)?.points }}
             </button>
