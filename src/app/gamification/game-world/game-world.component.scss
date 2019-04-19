@@ -13,10 +13,16 @@
   list-style: none;
   font-family: "feast of flesh BB", sans-serif;
 
-  .planet-thumb {
-    width: 170px;
-    height: auto;
-    animation: float 2s ease-in-out infinite;
+  .planet-thumb-button {
+    border: 0;
+    outline: 0;
+    background: 0;
+
+    .planet-thumb {
+      width: 170px;
+      height: auto;
+      animation: float 2s ease-in-out infinite;
+    }
   }
 
   .planet-text {
@@ -109,8 +115,16 @@
 }
 
 .popup-container {
+  display: none;
   position: absolute;
   top: 0; bottom: 0;
   right: 0; left: 0;
-  background: rgba(0,0,0,0.8);
+
+  .popup-content {
+    margin-top: 20px;
+  }
+}
+
+.popup-container.show {
+  display: block;
 }
