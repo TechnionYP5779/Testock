@@ -17,7 +17,7 @@ export class GamePlanetComponent implements OnInit {
   ngOnInit() {
   }
 
-  private closePlanet() {
+  public closePlanet() {
     this.planetClosed.emit(this.planet.order);
   }
 
