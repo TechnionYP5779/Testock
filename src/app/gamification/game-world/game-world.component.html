@@ -1,0 +1,18 @@
+<ul id="planets">
+  <li [attr.id]="'planet-' + planet.order" class="planet" *ngFor="let planet of planets">
+    <img class="here-label" src="../../../assets/images/gamification/planets/here-label.png" alt="You are here" *ngIf="(auth.user$ | async)?.points >= planet.min_points && (auth.user$ | async)?.points <= planet.max_points">
+    <button class="planet-thumb-button" (click)="openPlanetPopup(planet.order)">
+      <img class="planet-thumb" [src]="'../../../assets/images/gamification/planets/' + planet.image" alt="Planet">
+    </button>
+    <div class="planet-text">
+      <h2 class="planet-title">{{ planet.title }}</h2>
+      <h3 class="planet-description">{{ planet.description }}</h3>
+    </div>
+  </li>
+</ul>
+
+<div [class]="'popup-container' + ((selected_planet >= 0) ? ' show' : '')">
+  <div class="popup-content" *ngIf="selected_planet >= 0">
+    <app-game-planet [planet]="planets[selected_planet]" (planetClosed)="closePlanetPopup($event)"></app-game-planet>
+  </div>
+</div>

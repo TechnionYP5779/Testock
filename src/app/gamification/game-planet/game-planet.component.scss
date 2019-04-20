@@ -1,0 +1,132 @@
+:host {
+  display: flex;
+  padding: 40px 0 0;
+  color: #ffffff;
+  background-color: #2f142f;
+  transform: skew(-5deg);
+
+  .exit {
+    position: absolute;
+    right: 20px; top: 10px;
+    z-index: 10;
+    transform: skew(5deg);
+    font-family: 'feast of flesh BB', sans-serif;
+    font-size: 42px;
+    color: #ffffff;
+    background: 0;
+    border: 0;
+    outline: 0;
+  }
+
+  .content {
+    transform: skew(5deg);
+    flex: 1;
+
+    .text {
+      margin-top: 10px;
+      font-family: 'feast of flesh BB', sans-serif;
+      .title {
+        font-size: 50px;
+        color: #ffffff;
+        margin-bottom: 0;
+        white-space: nowrap;
+      }
+
+      .description {
+        font-size: 35px;
+        color: #ce89ce;
+        white-space: nowrap;
+      }
+    }
+    .monsters-container {
+      margin-top: 55px;
+
+      .monsters {
+        display: block;
+        width: 660px;
+        text-align: center;
+        margin-top: 40px;
+
+        .monster {
+          display: inline-block;
+          width: 125px;
+          list-style: none;
+          margin: 0 40px 10px;
+
+          .monster-thumb-button {
+            width: 100%;
+            background: 0;
+            border: 0;
+            outline: 0;
+
+            .monster-thumb {
+              width: 100%;
+              filter: grayscale(100%) blur(3px);;
+              opacity: 0.3;
+            }
+          }
+        }
+
+        :host.owned .monster-thumb {
+          filter: none !important;
+          opacity: 1 !important;
+        }
+      }
+    }
+  }
+
+  .sidebar {
+    width: 400px;
+    transform: skew(5deg);
+
+    .planet-image {
+      width: 140px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .scoreboard {
+      .title {
+        margin-top: 40px;
+        text-align: center;
+      }
+
+      .users {
+        display: block;
+        margin-top: 20px;
+
+        .user {
+          display: flex;
+          align-items: center;
+          list-style: none;
+          padding: 0 30px;
+          margin-bottom: 10px;
+
+          :last-of-type {
+            margin-bottom: 0;
+          }
+
+          .user-rating {
+            width: 30px;
+            font-size: 18px;
+            font-family: 'feast of flesh BB', sans-serif;
+          }
+
+          .user-image {
+            width: 45px;
+            height: 45px;
+            margin: 0 20px;
+          }
+
+          .user-text {
+            flex: 1;
+
+            .user-name {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}

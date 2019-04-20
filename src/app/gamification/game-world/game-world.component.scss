@@ -1,0 +1,155 @@
+@import "../../../assets/styles/animations.scss";
+
+:host {
+  display: block;
+  flex: 1;
+  position: relative;
+  background: #532a5c url("../../../assets/images/gamification/world-bg.png") center center no-repeat;
+  background-size: contain;
+}
+
+.planet {
+  position: absolute;
+  list-style: none;
+  font-family: "feast of flesh BB", sans-serif;
+
+  .planet-thumb-button {
+    border: 0;
+    outline: 0;
+    background: 0;
+
+    .planet-thumb {
+      width: 170px;
+      height: auto;
+      animation: float 2s ease-in-out infinite;
+    }
+  }
+
+  .planet-text {
+    position: absolute;
+    .planet-title {
+      font-size: 32px;
+      color: #ffffff;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+
+    .planet-description {
+      font-size: 22px;
+      color: #ce89ce;
+      white-space: nowrap;
+    }
+  }
+
+  .here-label {
+    position: absolute;
+    top: -70px; left: 0;
+    width: 45px;
+  }
+}
+
+#planet-0 {
+  top: 190px;
+  left: 40px;
+  .planet-thumb {
+    width: 160px;
+  }
+  .planet-text {
+    top: 130px;
+    left: -40px;
+  }
+  .here-label {
+    left: 55px;
+  }
+}
+
+#planet-1 {
+  top: 450px;
+  left: 240px;
+  .planet-thumb {
+    width: 140px;
+  }
+  .planet-text {
+    top: 100px;
+    left: 120px;
+  }
+  .here-label {
+    left: 45px;
+  }
+}
+
+#planet-2 {
+  top: 410px;
+  right: 270px;
+  .planet-thumb {
+    width: 120px;
+  }
+  .planet-text {
+    top: 100px;
+    left: 100px;
+  }
+  .here-label {
+    left: 45px;
+  }
+}
+
+#planet-3 {
+  top: 130px;
+  right: 140px;
+  .planet-thumb {
+    width: 130px;
+  }
+  .planet-text {
+    top: 120px;
+    left: 100px;
+  }
+  .here-label {
+    left: 45px;
+  }
+}
+
+#planet-4 {
+  top: 50px;
+  left: 420px;
+  .planet-thumb {
+    width: 120px;
+  }
+  .planet-text {
+    top: 90px;
+    left: -80px;
+  }
+  .here-label {
+    left: 45px;
+  }
+}
+
+#planet-5 {
+  top: 230px;
+  left: 490px;
+  .planet-thumb {
+    width: 160px;
+  }
+  .planet-text {
+    top: 110px;
+    left: -80px;
+  }
+  .here-label {
+    left: 70px;
+    top: -40px;
+  }
+}
+
+.popup-container {
+  display: none;
+  position: absolute;
+  top: 0; bottom: 0;
+  right: 0; left: 0;
+
+  .popup-content {
+    margin-top: 20px;
+  }
+}
+
+.popup-container.show {
+  display: block;
+}
