@@ -7,6 +7,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class UploadQuestionComponent implements OnInit {
 
+  @Input() pointsReadOnly: boolean;
+
   @Input() index: number;
   @Input() images: string[] = [];
 
