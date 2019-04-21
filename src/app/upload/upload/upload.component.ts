@@ -15,12 +15,14 @@ class QuestionSolution {
   public images: string[];
   public grade: number;
   public points: number;
+  public pointsReadOnly: boolean;
 
-  constructor(index: number) {
+  constructor(index: number, points: number = 0) {
     this.index = index;
     this.images = [];
     this.grade = 0;
-    this.points = 0;
+    this.points = points;
+    this.pointsReadOnly = points > 0;
   }
 
   addImage(image: string) {
@@ -60,7 +62,7 @@ export class UploadComponent implements OnInit {
   public uploadState = UploadState;
 
   public year: number;
-  public semester: number;
+  public semester: string;
   public moed: string;
   public state = UploadState.Ready;
   public course: CourseWithFaculty;
@@ -84,7 +86,8 @@ export class UploadComponent implements OnInit {
       const split = fileName.split('-');
       const courseId = parseInt(split[2], 10);
       this.year = parseInt(split[1].substr(0, 4), 10);
-      this.semester = parseInt(split[1].substr(5, 2), 10);
+      const semNum = parseInt(split[1].substr(5, 2), 10);
+      this.semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
       const moedId = parseInt(split[3], 10);
       this.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
       return this.db.getCourseWithFaculty(courseId).pipe(take(1)).toPromise();
@@ -115,7 +118,7 @@ export class UploadComponent implements OnInit {
   uploadImages() {
     this.state = UploadState.Uploading;
 
-    const sem = (this.semester === 1) ? 'winter' : (this.semester === 2) ? 'spring' : 'summer';
+    const sem = this.semester;
     const moed = this.moed;
     const nums = this.questions.map(q => q.index);
     const grades = this.questions.map(q => q.grade);
@@ -162,6 +165,9 @@ export class UploadComponent implements OnInit {
     }
 
     Promise.all([courseDetailsPromise, pdfImagesExtraction]).then(results => this.course = results[0])
+      .then(() => this.db.getExamByDetails(this.course.id, this.year, this.semester, this.moed).pipe(take(1)).toPromise())
+      .then(exam => this.db.getQuestionsOfExam(this.course.id, exam.id).pipe(take(1)).toPromise())
+      .then(questions => questions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade))))
       .finally(() => {
         this.imagesCollpaseTrigger.nativeElement.click();
         return this.spinner.hide();
@@ -222,7 +228,7 @@ export class UploadComponent implements OnInit {
     }
     Promise.all(promises).then(isPageBlank => {
       for (let i = 0; i < this.blobs.length; i = i + 1) {
-        if (!isPageBlank[i]){
+        if (!isPageBlank[i]) {
           res.push(this.blobs[i]);
         }
       }
