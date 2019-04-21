@@ -8,6 +8,7 @@ import {ActivatedRoute} from '@angular/router';
 import {OCRService} from '../../core/ocr.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {take} from 'rxjs/operators';
+import {QuestionId} from '../../entities/question';
 
 
 class QuestionSolution {
@@ -28,6 +29,13 @@ class QuestionSolution {
   addImage(image: string) {
     this.images.push(image);
   }
+}
+
+class ScanDetails {
+  course: number;
+  year: number;
+  semester: string;
+  moed: string;
 }
 
 enum UploadState {
@@ -81,34 +89,35 @@ export class UploadComponent implements OnInit {
     this.loadFile(file);
   }
 
-  private getDetailsByFileName(fileName: String): Promise<CourseWithFaculty> {
+  private getDetailsByFileName(fileName: String): ScanDetails {
     if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
       const split = fileName.split('-');
       const courseId = parseInt(split[2], 10);
-      this.year = parseInt(split[1].substr(0, 4), 10);
+      const year = parseInt(split[1].substr(0, 4), 10);
       const semNum = parseInt(split[1].substr(5, 2), 10);
-      this.semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
+      const semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
       const moedId = parseInt(split[3], 10);
-      this.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
-      return this.db.getCourseWithFaculty(courseId).pipe(take(1)).toPromise();
+      const moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
+      return {course: courseId, year: year, semester: semester, moed: moed};
+    } else {
+      return null;
     }
-    return null;
   }
 
-  private getDetailsFromFile(file: File): Promise<CourseWithFaculty> {
-    const fileName = file.name;
-    return this.getDetailsByFileName(fileName);
+  private getDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
+    return this.ocr.getInfoFromSticker(firstPage).then(details => {
+      const semNum = parseInt(details.semester, 10);
+      details.semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
+      const moedId = parseInt(details.moed, 10);
+      details.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
+      details.course = parseInt(details.course, 10);
+      details.year = parseInt(details.year, 10);
+      return details;
+    });
   }
 
-  private getDetailsBySticker(firstPage: Blob): Promise<CourseWithFaculty> {
-    return this.ocr.getInfoFromSticker(firstPage).then(info => {
-      const year = info.year;
-      const semester = info.semester;
-      const number = info.course;
-      const moed = info.moed;
-      const fileName = '000000000-' + year + semester + '-' + number + '-' + moed;
-      return fileName;
-    }).then(fileName => this.getDetailsByFileName(fileName));
+  private getCourseWithFaculty(details: ScanDetails): Promise<CourseWithFaculty> {
+    return this.db.getCourseWithFaculty(details.course).pipe(take(1)).toPromise();
   }
 
   uploadImages() {
@@ -147,27 +156,49 @@ export class UploadComponent implements OnInit {
   }
 
   loadFile(file): void {
+    if (!file) {
+      this.resetForm();
+      return;
+    }
     this.spinner.show();
     this.resetForm();
-    this.questions = [];
-    const filenameFetching: Promise<CourseWithFaculty> = this.getDetailsFromFile(file);
-    const pdfImagesExtraction: Promise<Blob[]> = this.pdf.getImagesOfFile(file).then(res => { this.blobs = res; return res; });
 
-    let courseDetailsPromise: Promise<CourseWithFaculty>;
-    if (filenameFetching == null) {
-      courseDetailsPromise = pdfImagesExtraction.then(blobs => this.getDetailsBySticker(blobs[0]));
+    const filenameDetails: ScanDetails = this.getDetailsByFileName(file.name);
+    const pdfImagesExtraction: Promise<Blob[]> = this.pdf.getImagesOfFile(file);
+
+    let detailsPromise: Promise<ScanDetails>;
+    if (filenameDetails) {
+      detailsPromise = Promise.resolve(filenameDetails);
     } else {
-      courseDetailsPromise = filenameFetching;
+      detailsPromise = pdfImagesExtraction.then(blobs => this.getDetailsBySticker(blobs[0]));
     }
 
-    Promise.all([courseDetailsPromise, pdfImagesExtraction]).then(results => this.course = results[0])
-      .then(() => this.db.getExamByDetails(this.course.id, this.year, this.semester, this.moed).pipe(take(1)).toPromise())
-      .then(exam => this.db.getQuestionsOfExam(this.course.id, exam.id).pipe(take(1)).toPromise())
-      .then(questions => questions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade))))
-      .finally(() => {
-        this.imagesCollpaseTrigger.nativeElement.click();
-        return this.spinner.hide();
+    const courseDetailsPromise: Promise<CourseWithFaculty> = detailsPromise.then(details => this.getCourseWithFaculty(details));
+    const existingQuestionsPromise: Promise<QuestionId[]> = detailsPromise
+      .then(details => this.db.getExamByDetails(details.course, details.year, details.semester, details.moed).pipe(take(1)).toPromise())
+      .then(exam => {
+        if (exam) {
+          return this.db.getQuestionsOfExam(exam.course, exam.id).pipe(take(1)).toPromise();
+        } else {
+          return Promise.resolve(null);
+        }
       });
+
+    Promise.all([detailsPromise, courseDetailsPromise, pdfImagesExtraction, existingQuestionsPromise])
+      .then(([details, courseWithFaculty, blobs, existingQuestions]) => {
+        if (existingQuestions) {
+          existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade)));
+        }
+        this.blobs = blobs;
+        this.year = details.year;
+        this.moed = details.moed;
+        this.semester = details.semester;
+        this.course = courseWithFaculty;
+        this.imagesCollpaseTrigger.nativeElement.click();
+      }, reason => {
+        this.snackBar.open(reason, 'close', {duration: 5000});
+      })
+      .finally(() => this.spinner.hide());
   }
 
   addQuestion() {
