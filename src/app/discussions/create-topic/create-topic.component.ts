@@ -3,6 +3,7 @@ import {DbService} from '../../core/db.service';
 import {AuthService} from '../../users/auth.service';
 import {Topic} from '../../entities/topic';
 import {MatSnackBar} from '@angular/material';
+import {GamificationService, Rewards} from '../../gamification/gamification.service';
 
 @Component({
   selector: 'app-create-topic',
@@ -20,7 +21,7 @@ export class CreateTopicComponent implements OnInit {
   @Input()
   linkedQuestionId: string = null;
 
-  constructor(private auth: AuthService, private db: DbService, private snackBar: MatSnackBar) { }
+  constructor(private auth: AuthService, private db: DbService, private snackBar: MatSnackBar, private gamification: GamificationService) { }
 
   ngOnInit() {
   }
@@ -37,6 +38,8 @@ export class CreateTopicComponent implements OnInit {
       topic.linkedQuestionId = this.linkedQuestionId;
     }
     this.db.createTopic(topic).then(() => {
+      return this.gamification.reward(Rewards.TOPIC_CREATION).toPromise();
+    }).then(() => {
       this.snackBar.open(`Topic created successfully!`, 'close', {duration: 3000});
     });
     this.subjectValue = null;

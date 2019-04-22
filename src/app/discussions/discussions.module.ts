@@ -9,6 +9,7 @@ import {UsersModule} from '../users/users.module';
 import {CKEditorModule} from 'ngx-ckeditor';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {AppRoutingModule} from '../app-routing.module';
+import {GamificationModule} from '../gamification/gamification.module';
 
 @NgModule({
   declarations: [CommentComponent,
@@ -23,6 +24,7 @@ import {AppRoutingModule} from '../app-routing.module';
     CKEditorModule,
     AngularFontAwesomeModule,
     AppRoutingModule,
+    GamificationModule
   ],
   exports: [
     TopicComponent,

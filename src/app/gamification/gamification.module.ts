@@ -6,6 +6,7 @@ import {Planet} from './entities/planet';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {UsersModule} from '../users/users.module';
 import {GamificationService} from './gamification.service';
+import {AngularFireFunctions, AngularFireFunctionsModule} from '@angular/fire/functions';
 
 const planets: Planet[] = [
   {
@@ -78,7 +79,8 @@ const planets: Planet[] = [
   imports: [
     CommonModule,
     UsersModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    AngularFireFunctionsModule
   ]
 })
 export class GamificationModule {
