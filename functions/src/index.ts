@@ -237,3 +237,18 @@ export const onSolutionDeleted = functions.firestore.document('questions/{questi
 
   return Promise.all(promises);
 });
+
+export const addPointsToUser = functions.https.onCall(async (data, context) => {
+  if (!context.auth)
+    return;
+
+  const document = admin.firestore().collection('users').doc(context.auth.uid);
+  const currentUser = (await document.get()).data();
+  if(!currentUser)
+    return;
+
+  console.log(currentUser);
+  return document.update({
+    points: (currentUser.points ? currentUser.points : 0) + data.pointsDelta
+  });
+});
