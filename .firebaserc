@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "yp5779-testock"
+    "prod": "yp5779-testock",
+    "dev": "testock-development"
   }
 }
