@@ -247,7 +247,6 @@ export const addPointsToUser = functions.https.onCall(async (data, context) => {
   if(!currentUser)
     return;
 
-  console.log(currentUser);
   return document.update({
     points: (currentUser.points ? currentUser.points : 0) + data.pointsDelta
   });
