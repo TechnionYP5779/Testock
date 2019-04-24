@@ -257,16 +257,19 @@ export const addPointsToUser = functions.https.onCall(async (data, context) => {
 });
 
 export const onCommentChanged = functions.firestore.document('topics/{topicId}').onUpdate(async (change, context) => {
-  const pointsDelta = 10;
+  const pointsDelta = 5;
 
   const dataAfter = change.after.data();
   const dataBefore = change.after.data();
+  console.log(dataBefore);
+  console.log(dataAfter);
   if(!dataAfter || !dataBefore)
     return;
 
   if(dataAfter.correctAnswerId !== '' && dataAfter.correctAnswerId !== dataBefore.correctAnswerId){
     const commentDoc = admin.firestore().collection(`topics/${context.params.topicId}/comments`).doc(dataAfter.correctAnswerId);
     const correctAnswer = (await commentDoc.get()).data();
+    console.log(correctAnswer);
     if(!correctAnswer)
       return;
     const creatorId = correctAnswer.creator;
