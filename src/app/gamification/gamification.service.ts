@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import {AngularFireFunctions} from '@angular/fire/functions';
 
 export enum Rewards {
-  SCAN_UPLOAD,
-  TOPIC_CREATION
+  SCAN_UPLOAD
 }
 
 @Injectable({
@@ -16,10 +15,7 @@ export class GamificationService {
     let pointsDelta = 0;
     switch (reward) {
       case Rewards.SCAN_UPLOAD:
-        pointsDelta = 100;
-        break;
-      case Rewards.TOPIC_CREATION:
-        pointsDelta = 10;
+        pointsDelta = 15;
         break;
       default:
         pointsDelta = 0;
