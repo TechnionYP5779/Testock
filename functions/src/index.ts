@@ -238,16 +238,41 @@ export const onSolutionDeleted = functions.firestore.document('questions/{questi
   return Promise.all(promises);
 });
 
-export const addPointsToUser = functions.https.onCall(async (data, context) => {
-  if (!context.auth)
-    return;
-
-  const document = admin.firestore().collection('users').doc(context.auth.uid);
+async function localAddPoints(userId: string, pointsDelta: number) {
+  const document = admin.firestore().collection('users').doc(userId);
   const currentUser = (await document.get()).data();
   if(!currentUser)
     return;
 
   return document.update({
-    points: (currentUser.points ? currentUser.points : 0) + data.pointsDelta
+    points: (currentUser.points ? currentUser.points : 0) + pointsDelta
   });
+}
+
+export const addPointsToUser = functions.https.onCall(async (data, context) => {
+  if (!context.auth)
+    return;
+
+  return localAddPoints(context.auth.uid, data.pointsDelta);
+});
+
+export const onCommentChanged = functions.firestore.document('topics/{topicId}').onUpdate(async (change, context) => {
+  const pointsDelta = 10;
+
+  const dataAfter = change.after.data();
+  const dataBefore = change.after.data();
+  if(!dataAfter || !dataBefore)
+    return;
+
+  if(dataAfter.correctAnswerId !== '' && dataAfter.correctAnswerId !== dataBefore.correctAnswerId){
+    const commentDoc = admin.firestore().collection(`topics/${context.params.topicId}/comments`).doc(dataAfter.correctAnswerId);
+    const correctAnswer = (await commentDoc.get()).data();
+    if(!correctAnswer)
+      return;
+    const creatorId = correctAnswer.creator;
+
+    return localAddPoints(creatorId, pointsDelta);
+  }
+
+  return '';
 });
