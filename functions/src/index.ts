@@ -279,3 +279,12 @@ export const onTopicChanged = functions.firestore.document('topics/{topicId}').o
   // No points reduction when user's answer is deselected as the correct one, because it was correct at some points :-)
   return '';
 });
+
+export const onTopicCreated = functions.firestore.document('topics/{topicId}').onCreate(async (snap, context) => {
+  const pointsDelta = 5;
+
+  if (!context.auth)
+    return;
+
+  return localAddPoints(context.auth.uid, pointsDelta);
+});
