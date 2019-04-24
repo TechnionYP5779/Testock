@@ -3,7 +3,6 @@ import {DbService} from '../../core/db.service';
 import {AuthService} from '../../users/auth.service';
 import {Topic} from '../../entities/topic';
 import {MatSnackBar} from '@angular/material';
-import {GamificationService, Rewards} from '../../gamification/gamification.service';
 
 @Component({
   selector: 'app-create-topic',
