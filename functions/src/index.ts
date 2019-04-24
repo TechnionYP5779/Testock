@@ -280,11 +280,12 @@ export const onTopicChanged = functions.firestore.document('topics/{topicId}').o
   return;
 });
 
-export const onTopicCreated = functions.firestore.document('topics/{topicId}').onCreate(async (snap, context) => {
-  const pointsDelta = 5;
+export const onTopicCreated = functions.firestore.document('topics/{topicId}').onCreate((snap, context) => {
+  const pointsDelta = 8;
 
-  if (!context.auth)
+  const topic = snap.data();
+  if(!topic)
     return;
 
-  return localAddPoints(context.auth.uid, pointsDelta);
+  return localAddPoints(topic.creator, pointsDelta);
 });
