@@ -256,25 +256,21 @@ export const addPointsToUser = functions.https.onCall(async (data, context) => {
   return localAddPoints(context.auth.uid, data.pointsDelta);
 });
 
-export const onCommentChanged = functions.firestore.document('topics/{topicId}').onUpdate(async (change, context) => {
+export const onTopicChanged = functions.firestore.document('topics/{topicId}').onUpdate(async (change, context) => {
   const pointsDelta = 5;
 
+  const dataBefore = change.before.data();
   const dataAfter = change.after.data();
-  const dataBefore = change.after.data();
-  console.log(dataBefore);
-  console.log(dataAfter);
   if(!dataAfter || !dataBefore)
     return;
 
   if(dataAfter.correctAnswerId !== '' && dataAfter.correctAnswerId !== dataBefore.correctAnswerId){
     const commentDoc = admin.firestore().collection(`topics/${context.params.topicId}/comments`).doc(dataAfter.correctAnswerId);
     const correctAnswer = (await commentDoc.get()).data();
-    console.log(correctAnswer);
     if(!correctAnswer)
       return;
-    const creatorId = correctAnswer.creator;
 
-    return localAddPoints(creatorId, pointsDelta);
+    return localAddPoints(correctAnswer.creator, pointsDelta);
   }
 
   // No points reduction when user's answer is deselected as the correct one, because it was correct at some points :-)
