@@ -259,15 +259,18 @@ export const addPointsToUser = functions.https.onCall(async (data, context) => {
 export const onTopicChanged = functions.firestore.document('topics/{topicId}').onUpdate(async (change, context) => {
   const pointsDelta = 5;
 
-  const dataBefore = change.before.data();
-  const dataAfter = change.after.data();
-  if(!dataAfter || !dataBefore)
+  const topicBefore = change.before.data();
+  const topicAfter = change.after.data();
+  if(!topicAfter || !topicBefore)
     return;
 
-  if(dataAfter.correctAnswerId !== '' && dataAfter.correctAnswerId !== dataBefore.correctAnswerId){
-    const commentDoc = admin.firestore().collection(`topics/${context.params.topicId}/comments`).doc(dataAfter.correctAnswerId);
+  if(topicAfter.correctAnswerId !== '' && topicAfter.correctAnswerId !== topicBefore.correctAnswerId){
+    const commentDoc = admin.firestore().collection(`topics/${context.params.topicId}/comments`).doc(topicAfter.correctAnswerId);
     const correctAnswer = (await commentDoc.get()).data();
     if(!correctAnswer)
+      return;
+
+    if(topicAfter.creator === correctAnswer.creator)
       return;
 
     return localAddPoints(correctAnswer.creator, pointsDelta);
