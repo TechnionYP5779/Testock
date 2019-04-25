@@ -22,7 +22,7 @@ import {AppRoutingModule} from '../app-routing.module';
     UsersModule,
     CKEditorModule,
     AngularFontAwesomeModule,
-    AppRoutingModule,
+    AppRoutingModule
   ],
   exports: [
     TopicComponent,

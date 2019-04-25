@@ -5,6 +5,8 @@ import { GamePlanetComponent } from './game-planet/game-planet.component';
 import {Planet} from './entities/planet';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {UsersModule} from '../users/users.module';
+import {GamificationService} from './gamification.service';
+import {AngularFireFunctions, AngularFireFunctionsModule} from '@angular/fire/functions';
 
 const planets: Planet[] = [
   {
@@ -71,12 +73,14 @@ const planets: Planet[] = [
 @NgModule({
   declarations: [GameWorldComponent, GamePlanetComponent],
   providers: [
-    {provide: 'Planets', useValue: planets}
+    {provide: 'Planets', useValue: planets},
+    GamificationService
   ],
   imports: [
     CommonModule,
     UsersModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    AngularFireFunctionsModule
   ]
 })
 export class GamificationModule {

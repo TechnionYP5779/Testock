@@ -5,13 +5,14 @@ import {Question} from '../entities/question';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {Solution} from '../entities/solution';
 import {first} from 'rxjs/operators';
+import {GamificationService, Rewards} from '../gamification/gamification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
 
-  constructor(private db: DbService, private storage: AngularFireStorage) {
+  constructor(private db: DbService, private storage: AngularFireStorage, private gamification: GamificationService) {
   }
 
   async uploadScan(course: number, year: number, semester: string, moed: string,
@@ -35,6 +36,7 @@ export class UploadService {
 
     await Promise.all(promises);
 
+    await this.gamification.reward(Rewards.SCAN_UPLOAD);
   }
 
   private async uploadQuestion(course: number, year: number, semester: string, moed: string,
