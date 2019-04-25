@@ -11,7 +11,7 @@
   </li>
 </ul>
 
-<div [class]="'popup-container' + ((selected_planet >= 0) ? ' show' : '')">
+<div class="popup-container" [class.show]="selected_planet >= 0">
   <div class="popup-content" *ngIf="selected_planet >= 0">
     <app-game-planet [planet]="planets[selected_planet]" (planetClosed)="closePlanetPopup($event)"></app-game-planet>
   </div>
