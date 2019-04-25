@@ -9,10 +9,9 @@ import {AuthService} from '../../users/auth.service';
 })
 export class GamePlanetComponent implements OnInit {
   @Input() planet: Planet;
-  planet_users: any[];
+  planet_users: any[] = [1, 2, 3, 4];
   @Output() planetClosed = new EventEmitter();
   constructor(private auth: AuthService) {
-    this.planet_users = [1, 2, 3, 4];
     this.auth.user$.subscribe(user => {
       for (let i = 0; i < this.planet.monsters.length; ++i) {
         const monster = this.planet.monsters[i];
