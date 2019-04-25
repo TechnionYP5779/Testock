@@ -26,7 +26,7 @@
   <div class="monsters-container">
     <h4>Planet's Monsters</h4>
     <ul class="monsters">
-      <li class="monster" *ngFor="let monster of planet.monsters">
+      <li [class]="'monster' + ((monster.owned) ? ' owned' : '')" *ngFor="let monster of planet.monsters">
         <button class="monster-thumb-button">
           <img [src]="'../../../assets/images/gamification/monsters/' + monster.image" alt="" class="monster-thumb">
         </button>
