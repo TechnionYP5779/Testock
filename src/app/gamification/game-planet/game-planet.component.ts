@@ -16,7 +16,7 @@ export class GamePlanetComponent implements OnInit {
       for (let i = 0; i < this.planet.monsters.length; ++i) {
         const monster = this.planet.monsters[i];
         const monsterStep = (this.planet.max_points - this.planet.min_points) / this.planet.monsters.length;
-        if (user.points >= this.planet.min_points + (i * monsterStep)) {
+        if (user.points >= this.planet.min_points + ((i+1) * monsterStep)) {
           monster.owned = true;
         }
       }
