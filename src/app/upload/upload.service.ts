@@ -28,14 +28,17 @@ export class UploadService {
 
     const promises = [];
     for (let i = 0; i < nums.length; ++i) {
-      promises.push(this.uploadQuestion(course, year, semester, moed, nums[i], grades[i], points[i], images[i]));
+      if (images[i].length > 0) {
+        promises.push(this.uploadQuestion(course, year, semester, moed, nums[i], grades[i], points[i], images[i]));
+      }
     }
 
     await Promise.all(promises);
 
   }
 
-  private async uploadQuestion(course: number, year: number, semester: string, moed: string, number: number, grade: number, points: number, images: string[]) {
+  private async uploadQuestion(course: number, year: number, semester: string, moed: string,
+                               number: number, grade: number, points: number, images: string[]) {
 
     let question = await this.db.getQuestionByDetails(course, year, semester, moed, number).pipe(first()).toPromise();
 

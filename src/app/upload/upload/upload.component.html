@@ -66,7 +66,7 @@
           <h5 class="card-title">
             {{ course.name }}
             <span style="display: block">
-              {{ semester | semester }} {{ year }}, Moed {{ moed }}
+              {{ semester | titlecase }} {{ year }}, Moed {{ moed }}
             </span>
           </h5>
           <ul class="scan-properties row">
@@ -94,6 +94,7 @@
         <div class="accordion" id="questions">
           <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images" [(grade)]="q.grade"
                                [(points)]="q.points"
+                               [pointsReadOnly]="q.pointsReadOnly"
                                (imageAddRequested)="enableImageAdding($event)"
                                (imageRemoveRequested)="removeImage($event)"></app-upload-question>
         </div>

@@ -3,12 +3,13 @@
     <h5 class="mb-0">
       <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#question' + index" aria-expanded="true" [attr.aria-controls]="'question' + index">
         Question {{ index }}
+        <span class="badge badge-success ml-1" *ngIf="pointsReadOnly">Auto Fetch</span>
       </button>
       <button class="btn add-images-button float-right" aria-expanded="true" [attr.aria-controls]="'question' + index" (click)="requestImageAdd()">
         <fa name="plus"></fa>
       </button>
       <div class="grades-container float-right">
-        <input class="lhs" type="number" [value]="grade" (input)="updateGrade($event.target.value)"> / <input class="rhs" type="number" [value]="points" (input)="updatePoints($event.target.value)">
+        <input class="lhs" type="number" [value]="grade" (input)="updateGrade($event.target.value)"> / <input class="rhs" type="number" [value]="points" [readOnly]="pointsReadOnly" (input)="updatePoints($event.target.value)">
       </div>
     </h5>
   </div>
