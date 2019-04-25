@@ -34,7 +34,7 @@ export class UploadService {
 
     await Promise.all(promises);
 
-    this.gamification.reward(Rewards.SCAN_UPLOAD);
+    await this.gamification.reward(Rewards.SCAN_UPLOAD);
   }
 
   private async uploadQuestion(course: number, year: number, semester: string, moed: string, number: number, grade: number, points: number, images: string[]) {

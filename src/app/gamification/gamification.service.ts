@@ -11,7 +11,7 @@ export enum Rewards {
 export class GamificationService {
   constructor(private fns: AngularFireFunctions) { }
 
-  public reward (reward: Rewards) {
+  public reward (reward: Rewards): Promise<void> {
     let pointsDelta = 0;
     switch (reward) {
       case Rewards.SCAN_UPLOAD:
@@ -21,6 +21,6 @@ export class GamificationService {
         pointsDelta = 0;
     }
     const callable = this.fns.httpsCallable('addPointsToUser');
-    return callable({ pointsDelta: pointsDelta });
+    return callable({ pointsDelta: pointsDelta }).toPromise();
   }
 }
