@@ -5,6 +5,18 @@
   background-color: #2f142f;
   transform: skew(-5deg);
 
+  .label {
+    display: inline-block;
+    position: relative;
+    top: -5px;
+    margin-left: 30px;
+    font-size: 50%;
+    background-color: #532A5C;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #ffffff;
+  }
+
   .exit {
     position: absolute;
     right: 20px; top: 10px;

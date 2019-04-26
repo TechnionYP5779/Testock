@@ -21,10 +21,16 @@
 <div class="content">
   <div class="text">
     <h2 class="title">{{ planet.title }}</h2>
-    <h3 class="description">{{ planet.description }}</h3>
+    <h3 class="description">
+      {{ planet.description }}
+      <span class="limits label">{{planet.min_points}} - {{planet.max_points}} Points</span>
+    </h3>
   </div>
   <div class="monsters-container">
-    <h4>Planet's Monsters</h4>
+    <h4>
+      Planet's Monsters
+      <span class="next-monster label" *ngIf="pointsForNextMonster > 0">next monster at {{pointsForNextMonster}} points</span>
+    </h4>
     <ul class="monsters">
       <li class="monster" [class.owned]="monster.owned" *ngFor="let monster of planet.monsters">
         <button class="monster-thumb-button">
