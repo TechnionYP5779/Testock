@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import {AngularFireFunctions} from '@angular/fire/functions';
+import {Planet} from './entities/planet';
+import {UserData} from '../entities/user';
 
 export enum Rewards {
   SCAN_UPLOAD
@@ -9,7 +11,11 @@ export enum Rewards {
   providedIn: 'root'
 })
 export class GamificationService {
-  constructor(private fns: AngularFireFunctions) { }
+  planets: Planet[];
+
+  constructor(private fns: AngularFireFunctions, private injector: Injector) {
+    this.planets = this.injector.get<Planet[]>('Planets' as any);
+  }
 
   public reward (reward: Rewards): Promise<void> {
     let pointsDelta = 0;
@@ -22,5 +28,15 @@ export class GamificationService {
     }
     const callable = this.fns.httpsCallable('addPointsToUser');
     return callable({ pointsDelta: pointsDelta }).toPromise();
+  }
+
+  public getUsersByWorld(planetId: number, limit = 3): Promise<UserData[]> {
+    const planet = this.planets[planetId];
+
+    const callable = this.fns.httpsCallable('getUsersByPoints');
+    return callable({
+      min_points: planet.min_points,
+      max_points: planet.max_points,
+      limit: limit }).toPromise();
   }
 }
