@@ -4,7 +4,7 @@
   <div class="scoreboard">
     <h4 class="title">Planet Leaders</h4>
     <ul class="users">
-      <li class="user" *ngFor="let planetUser of (planet_users | async); index as i">
+      <li class="user" *ngFor="let planetUser of (planetUsers | async); index as i">
         <span class="user-rating"># {{i + 1}}</span>
         <img class="user-image" src="{{planetUser.photoUrl}}" alt="Profile image">
         <div class="user-text">
@@ -16,7 +16,7 @@
         </div>
       </li>
     </ul>
-    <p class="empty-planet-notice" *ngIf="(planet_users | async).length == 0">Still no users on this planet</p>
+    <p class="empty-planet-notice" *ngIf="(planetUsers | async).length == 0">Still no users on this planet</p>
   </div>
 </div>
 <div class="content">
