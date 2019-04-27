@@ -30,7 +30,7 @@ export class GamificationService {
     return callable({ pointsDelta: pointsDelta }).toPromise();
   }
 
-  public getUsersByWorld(planetId: number, limit = 3): Promise<UserData[]> {
+  public getUsersByWorld(planetId: number, limit = 3): Promise<any> {
     const planet = this.planets[planetId];
 
     const callable = this.fns.httpsCallable('getUsersByPoints');

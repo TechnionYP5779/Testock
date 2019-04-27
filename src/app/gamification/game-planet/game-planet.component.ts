@@ -33,9 +33,10 @@ export class GamePlanetComponent implements OnInit {
       }
     });
 
-    this.gamification.getUsersByWorld(this.planet.order).then(users => {
-      this.planet_users = users;
-      console.log(users);
+    this.gamification.getUsersByWorld(this.planet.order).then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        console.log(doc.data());
+      });
     });
   }
 
