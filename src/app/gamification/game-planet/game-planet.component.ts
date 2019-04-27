@@ -3,6 +3,7 @@ import {Planet} from '../entities/planet';
 import {AuthService} from '../../users/auth.service';
 import {GamificationService} from '../gamification.service';
 import {UserData} from '../../entities/user';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-game-planet',
@@ -11,7 +12,7 @@ import {UserData} from '../../entities/user';
 })
 export class GamePlanetComponent implements OnInit {
   @Input() planet: Planet;
-  planet_users: UserData[];
+  planet_users: Observable<UserData[]>;
   pointsForNextMonster = -1;
   @Output() planetClosed = new EventEmitter();
 
@@ -33,11 +34,7 @@ export class GamePlanetComponent implements OnInit {
       }
     });
 
-    this.gamification.getUsersByWorld(this.planet.order).then(querySnapshot => {
-      querySnapshot.forEach(doc => {
-        console.log(doc.data());
-      });
-    });
+    this.planet_users = this.gamification.getUsersByWorld(this.planet.order);
   }
 
   public closePlanet() {

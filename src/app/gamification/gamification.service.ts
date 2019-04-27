@@ -2,19 +2,18 @@ import {Injectable, Injector} from '@angular/core';
 import {AngularFireFunctions} from '@angular/fire/functions';
 import {Planet} from './entities/planet';
 import {UserData} from '../entities/user';
-
-export enum Rewards {
-  SCAN_UPLOAD
-}
-
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {Question} from '../entities/question';
 @Injectable({
   providedIn: 'root'
 })
 export class GamificationService {
   planets: Planet[];
+  private usersCollection: AngularFirestoreCollection<UserData>;
 
-  constructor(private fns: AngularFireFunctions, private injector: Injector) {
+  constructor(private fns: AngularFireFunctions, private afs: AngularFirestore, private injector: Injector) {
     this.planets = this.injector.get<Planet[]>('Planets' as any);
+    this.usersCollection = afs.collection<UserData>('users');
   }
 
   public reward (reward: Rewards): Promise<void> {
@@ -30,13 +29,21 @@ export class GamificationService {
     return callable({ pointsDelta: pointsDelta }).toPromise();
   }
 
-  public getUsersByWorld(planetId: number, limit = 3): Promise<any> {
+  public getUsersByWorld(planetId: number, limit = 5): Observable<UserData[]> {
     const planet = this.planets[planetId];
 
-    const callable = this.fns.httpsCallable('getUsersByPoints');
-    return callable({
-      min_points: planet.min_points,
-      max_points: planet.max_points,
-      limit: limit }).toPromise();
+    const qureies = r =>
+      r.where('points', '>=', planet.min_points)
+        .where('points', '<=', planet.max_points)
+        .orderBy('points', 'desc')
+        .limit(limit);
+
+    return this.afs.collection<UserData>('users', qureies).valueChanges();
   }
+}
+
+import {Observable} from 'rxjs';
+
+export enum Rewards {
+  SCAN_UPLOAD
 }
