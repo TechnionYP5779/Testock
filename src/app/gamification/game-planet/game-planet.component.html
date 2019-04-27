@@ -6,7 +6,7 @@
     <ul class="users">
       <li class="user" *ngFor="let planetUser of (planetUsers | async); index as i">
         <span class="user-rating"># {{i + 1}}</span>
-        <img class="user-image" src="{{planetUser.photoUrl}}" alt="Profile image">
+        <img class="user-image" src="{{planetUser.photoUrl}}" alt="Profile image" [routerLink]="'/profile/' + planetUser.uid"/>
         <div class="user-text">
           <span class="user-name">{{planetUser.name}}</span>
           <span class="user-score">

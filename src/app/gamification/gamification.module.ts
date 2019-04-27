@@ -7,6 +7,7 @@ import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {UsersModule} from '../users/users.module';
 import {GamificationService} from './gamification.service';
 import {AngularFireFunctions, AngularFireFunctionsModule} from '@angular/fire/functions';
+import {AppRoutingModule} from '../app-routing.module';
 
 const planets: Planet[] = [
   {
@@ -80,7 +81,8 @@ const planets: Planet[] = [
     CommonModule,
     UsersModule,
     AngularFontAwesomeModule,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
+    AppRoutingModule
   ]
 })
 export class GamificationModule {
