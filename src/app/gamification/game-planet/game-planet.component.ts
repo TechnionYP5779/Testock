@@ -10,20 +10,26 @@ import {AuthService} from '../../users/auth.service';
 export class GamePlanetComponent implements OnInit {
   @Input() planet: Planet;
   planet_users: any[] = [1, 2, 3, 4];
+  pointsForNextMonster = -1;
   @Output() planetClosed = new EventEmitter();
-  constructor(private auth: AuthService) {
-    this.auth.user$.subscribe(user => {
-      for (let i = 0; i < this.planet.monsters.length; ++i) {
-        const monster = this.planet.monsters[i];
-        const monsterStep = (this.planet.max_points - this.planet.min_points) / this.planet.monsters.length;
-        if (user.points >= this.planet.min_points + ((i+1) * monsterStep)) {
-          monster.owned = true;
-        }
-      }
-    });
-  }
+
+  constructor(private auth: AuthService) {}
 
   ngOnInit() {
+    this.auth.user$.subscribe(user => {
+      const monsterStep = (this.planet.max_points - this.planet.min_points) / this.planet.monsters.length;
+      for (let i = 0; i < this.planet.monsters.length; ++i) {
+        const monster = this.planet.monsters[i];
+        const currentMonsterStep = this.planet.min_points + ((i + 1) * monsterStep);
+        if (user.points >= currentMonsterStep) {
+          monster.owned = true;
+          this.pointsForNextMonster = currentMonsterStep;
+        }
+      }
+      if (this.pointsForNextMonster > 0) {
+        this.pointsForNextMonster += monsterStep;
+      }
+    });
   }
 
   public closePlanet() {
