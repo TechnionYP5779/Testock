@@ -16,6 +16,7 @@
         </div>
       </li>
     </ul>
+    <p class="empty-planet-notice" *ngIf="(planet_users | async).length == 0">Still no users on this planet</p>
   </div>
 </div>
 <div class="content">
