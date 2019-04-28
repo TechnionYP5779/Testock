@@ -3,8 +3,8 @@
   <img class="planet-image" [src]="'../../../assets/images/gamification/planets/' + planet.image" alt="Planets">
   <div class="scoreboard">
     <h4 class="title">Planet Leaders</h4>
-    <ul class="users">
-      <li class="user" *ngFor="let planetUser of (planetUsers | async); index as i">
+    <ul class="users" *ngIf="(planetUsers$ | async) as planetUsers">
+      <li class="user" *ngFor="let planetUser of planetUsers; index as i">
         <span class="user-rating"># {{i + 1}}</span>
         <img class="user-image" src="{{planetUser.photoUrl}}" alt="Profile image" [routerLink]="'/profile/' + planetUser.uid"/>
         <div class="user-text">
@@ -16,7 +16,7 @@
         </div>
       </li>
     </ul>
-    <p class="empty-planet-notice" *ngIf="(planetUsers | async).length == 0">Still no users on this planet</p>
+    <p class="empty-planet-notice" *ngIf="(planetUsers$ | async)?.length == 0">Still no users on this planet</p>
   </div>
 </div>
 <div class="content">

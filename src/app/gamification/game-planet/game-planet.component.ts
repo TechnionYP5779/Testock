@@ -12,7 +12,7 @@ import {Observable} from 'rxjs';
 })
 export class GamePlanetComponent implements OnInit {
   @Input() planet: Planet;
-  planetUsers: Observable<UserData[]>;
+  planetUsers$: Observable<UserData[]>;
   pointsForNextMonster = -1;
   @Output() planetClosed = new EventEmitter();
 
@@ -34,7 +34,7 @@ export class GamePlanetComponent implements OnInit {
       }
     });
 
-    this.planetUsers = this.gamification.getUsersByWorld(this.planet.order);
+    this.planetUsers$ = this.gamification.getUsersByWorld(this.planet.order);
   }
 
   public closePlanet() {
