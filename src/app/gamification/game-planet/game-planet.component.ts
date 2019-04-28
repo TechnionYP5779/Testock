@@ -1,6 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Planet} from '../entities/planet';
 import {AuthService} from '../../users/auth.service';
+import {GamificationService} from '../gamification.service';
+import {UserData} from '../../entities/user';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-game-planet',
@@ -9,11 +12,11 @@ import {AuthService} from '../../users/auth.service';
 })
 export class GamePlanetComponent implements OnInit {
   @Input() planet: Planet;
-  planet_users: any[] = [1, 2, 3, 4];
+  planetUsers$: Observable<UserData[]>;
   pointsForNextMonster = -1;
   @Output() planetClosed = new EventEmitter();
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private gamification: GamificationService) { }
 
   ngOnInit() {
     this.auth.user$.subscribe(user => {
@@ -30,6 +33,8 @@ export class GamePlanetComponent implements OnInit {
         this.pointsForNextMonster += monsterStep;
       }
     });
+
+    this.planetUsers$ = this.gamification.getUsersByWorld(this.planet.order);
   }
 
   public closePlanet() {
