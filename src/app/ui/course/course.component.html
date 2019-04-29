@@ -44,16 +44,42 @@
   </div>
 </div>
 
-<div class="list-group my-3" *ngIf="exams">
-  <div class="list-group-item list-group-item-primary">
-    <fa name="book"></fa>
-    Available exams
-    <span class="badge badge-primary">{{exams.length}}</span>
-  </div>
-  <a *ngFor="let e of exams" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
-    {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
-  </a>
-</div>
+<table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams" >
+  <thead>
+  <tr class="table-primary">
+    <th colspan="9">
+      Available Exams
+      <span class="badge badge-primary">{{exams.length}}</span>
+    </th>
+  </tr>
+  <tr class="table-light">
+    <th class="text-center" scope="col" style="width: 5%"></th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year">Year</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
+    <th class="text-center" scope="col" mat-sort-header="grade">Grade</th>
+    <th class="text-center" scope="col"></th>
+    <th class="text-center" scope="col"></th>
+    <th class="text-center" scope="col"></th>
+    <th class="text-center" scope="col"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let e of exams" routerLink="exam/{{ e.id }}">
+    <td class="clickable" routerLink="/exam/{{ e.id }}">
+      <fa name="external-link-square" style="color: Dodgerblue"></fa>
+    </td>
+    <td>{{ e.year }}</td>
+    <td>{{ e.semester | titlecase}}</td>
+    <td>{{ e.moed | titlecase}}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  </tbody>
+</table>
 
 <table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
   <thead>
