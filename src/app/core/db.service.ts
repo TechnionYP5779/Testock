@@ -12,6 +12,7 @@ import {Topic, TopicId, TopicWithCreatorId} from '../entities/topic';
 import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
+import {SolvedQuestion, SolvedQuestionId} from '../entities/solved-question';
 
 @Injectable({
   providedIn: 'root'
@@ -144,14 +145,20 @@ export class DbService {
       })));
   }
 
-  getSolvedQuestions(uId: string): Observable<QuestionId[]> {
-    return this.afs.collection<string>('users/' + uId + '/solved_questions')
-      .valueChanges()
-      .pipe(leftJoinDocument(this.afs, 'qid', 'questions')) as Observable<QuestionId[]>;
+  // getSolvedQuestions(uId: string): Observable<SolvedQuestionId[]> {
+  //   return this.afs.collection<SolvedQuestionId>('users/' + uId + '/solvedQuestions')
+  //     .valueChanges()
+  //     .pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<QuestionId[]>;
+  // }
+
+  addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<SolvedQuestionId> {
+    return this.afs.collection<SolvedQuestion>('users/' + uId + '/solvedQuestions').add(q).then(dr => {
+      return {id: dr.id, ...q};
+    });
   }
 
-  addSolvedQuestion(uId: string, qId: string): Promise<void> {
-    return this.afs.collection<string>('users/' + uId + '/solved_questions').add(qId).then((dr) => {});
+  deleteSolvedQuestion(uId: string, q: SolvedQuestionId): Promise<void> {
+    return this.afs.doc<SolvedQuestionId>('users/' + uId + `/solvedQuestions/${q.id}`).delete();
   }
 
   getSolutions(questionId: string): Observable<SolutionId[]> {

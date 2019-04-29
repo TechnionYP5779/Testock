@@ -1,12 +1,13 @@
 <div *ngIf="question$ | async as question">
   <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
-  <h1 class="display-3" style="color:DodgerBlue"> {{ (course$ | async)?.name}} ({{question.course}})</h1>
-  <h2 class="display-4">
+  <h1 style="color:DodgerBlue"> {{ (course$ | async)?.name}} ({{question.course}})</h1>
+  <h2>
     Question {{ question.number }} ({{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }})
   </h2>
-  <!--<mat-checkbox-->
-  <!--class="example-margin">-->
-  <!--</mat-checkbox>-->
+
+  <button *ngIf="hasSolved" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()" type="button"><fa name="check"></fa></button>
+  <button *ngIf="!hasSolved" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();" type="button"><fa name="check"></fa></button>
+
   <div *ngFor="let isAdmin of [isAdmin$ | async]">
     <div class="row p-3" *ngIf="solutions$ | async as solutions">
       <div class="col-3 p-3" *ngFor="let sol of solutions">
@@ -34,7 +35,6 @@
       </span>
     </a>
   </div>
-
 
   <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

@@ -9,6 +9,7 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {AppModule} from '../app.module';
 import {AppRoutingModule} from '../app-routing.module';
+import {MatSortModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {AppRoutingModule} from '../app-routing.module';
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFontAwesomeModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatSortModule
   ],
   exports: [
     UserProfileComponent

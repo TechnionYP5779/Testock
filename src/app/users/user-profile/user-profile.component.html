@@ -40,7 +40,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr class="text-center" *ngFor="let q of questions">
+  <tr *ngFor="let q of questions">
     <td class="clickable" routerLink="/question/{{ q.id }}">
       <fa name="external-link-square" style="color: forestgreen"></fa>
     </td>
