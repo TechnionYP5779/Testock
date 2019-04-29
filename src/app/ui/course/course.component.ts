@@ -82,6 +82,10 @@ export class CourseComponent implements OnInit {
       }
     });
   }
+
+  onClick($event: MouseEvent) {
+    this.db.addSolvedQuestion(id, )
+  }
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {

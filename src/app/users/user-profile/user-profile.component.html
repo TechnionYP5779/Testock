@@ -36,7 +36,7 @@
     <th scope="col" mat-sort-header="moed">Moed</th>
     <th scope="col" mat-sort-header="number">Question No.</th>
     <th scope="col" mat-sort-header="difficulty">Difficulty</th>
-    <th scope="col">Remove?</th>
+    <!--<th scope="col">Remove?</th>-->
   </tr>
   </thead>
   <tbody>
@@ -50,11 +50,11 @@
     <td>{{ q.moed | titlecase}}</td>
     <td>{{ q.number }}</td>
     <td></td>
-    <td>
-      <button class="btn btn-danger btn-circle mr-2" type="button" (click)="remove()">
-        <fa name="trash-o"></fa>
-      </button>
-    </td>
+    <!--<td>-->
+      <!--<button class="btn btn-danger btn-circle mr-2" type="button" (click)="remove()">-->
+        <!--<fa name="trash-o"></fa>-->
+      <!--</button>-->
+    <!--</td>-->
   </tr>
   </tbody>
 </table>

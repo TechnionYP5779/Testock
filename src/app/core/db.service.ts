@@ -150,6 +150,10 @@ export class DbService {
       .pipe(leftJoinDocument(this.afs, 'qid', 'questions')) as Observable<QuestionId[]>;
   }
 
+  addSolvedQuestion(uId: string, qId: string): Promise<void> {
+    return this.afs.collection<string>('users/' + uId + '/solved_questions').add(qId).then((dr) => {});
+  }
+
   getSolutions(questionId: string): Observable<SolutionId[]> {
     return this.afs
       .collection<Solution>('questions/' + questionId + '/solutions', r => r.orderBy('grade', 'desc'))
