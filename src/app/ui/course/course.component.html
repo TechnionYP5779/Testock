@@ -9,7 +9,6 @@
   </p>
 </div>
 
-
 <div class="list-group my-3" *ngIf="topics$ | async as topics">
   <div class="list-group-item list-group-item-info">
     <fa name="comment" class="mr-2"></fa>
@@ -56,15 +55,40 @@
   </a>
 </div>
 
-<div class="list-group my-3" *ngIf="questions">
-  <div class="list-group-item list-group-item-danger">
-    <fa name="fire"></fa>
-    Hot questions
-    <span class="badge badge-danger">{{questions.length}}</span>
-  </div>
-  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
-    {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
-  </a>
-</div>
-
+<table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
+  <thead>
+  <tr class="table-danger">
+    <th colspan="9">
+      Questions
+      <span class="badge badge-danger">{{questions.length}}</span>
+    </th>
+  </tr>
+  <tr class="table-light rounded">
+    <th class="text-center" scope="col" style="width: 5%"></th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year" >Year</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
+    <th class="text-center" scope="col" mat-sort-header="number">Question No.</th>
+    <th class="text-center" scope="col" mat-sort-header="best_solution">Best solution (%)</th>
+    <th class="text-center" scope="col" mat-sort-header="difficulty">Difficulty</th>
+    <th class="text-center" scope="col" mat-sort-header="readability">Readability</th>
+    <th class="text-center" scope="col" mat-sort-header="is_solved">I Solved It</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let q of questions">
+    <td class="clickable" routerLink="/question/{{ q.id }}">
+      <fa name="external-link-square" style="color: indianred"></fa>
+    </td>
+    <td>{{ q.year }}</td>
+    <td>{{ q.semester | titlecase}}</td>
+    <td>{{ q.moed | titlecase}}</td>
+    <td>{{ q.number }}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><mat-checkbox class="example-margin"></mat-checkbox></td>
+  </tr>
+  </tbody>
+</table>
 
