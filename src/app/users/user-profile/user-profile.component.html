@@ -29,7 +29,7 @@
     </th>
   </tr>
   <tr class="table-light text-center" >
-    <th scope="col"></th>
+    <!--<th scope="col"></th>-->
     <th scope="col" mat-sort-header="course">Course</th>
     <th scope="col" mat-sort-header="year">Year</th>
     <th scope="col" mat-sort-header="semester">Semester</th>
@@ -41,9 +41,9 @@
   </thead>
   <tbody>
   <tr *ngFor="let q of questions">
-    <td class="clickable" routerLink="/question/{{ q.id }}">
-      <fa name="external-link-square" style="color: forestgreen"></fa>
-    </td>
+    <!--<td class="clickable" routerLink="/question/{{ q.id }}">-->
+      <!--<fa name="external-link-square" style="color: forestgreen"></fa>-->
+    <!--</td>-->
     <td>{{ q.course }}</td>
     <td>{{ q.year }}</td>
     <td>{{ q.semester | titlecase}}</td>

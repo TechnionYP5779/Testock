@@ -135,21 +135,12 @@ export class DbService {
       }));
   }
 
-  getAllQuestions(): Observable<QuestionId[]> {
-    return this.afs.collection('questions')
-      .snapshotChanges()
-      .pipe(map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as Question;
-        const qid = a.payload.doc.id;
-        return {id: qid, ...data};
-      })));
+  getSolvedQuestions(uId: string): Observable<Question[]> {
+    return (this.afs
+      .collection('users/' + uId + '/solvedQuestions')
+      .valueChanges().pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<any[]>)
+      .pipe(map(result => result.map(item => item.linkedQuestionId)));
   }
-
-  // getSolvedQuestions(uId: string): Observable<SolvedQuestionId[]> {
-  //   return this.afs.collection<SolvedQuestionId>('users/' + uId + '/solvedQuestions')
-  //     .valueChanges()
-  //     .pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<QuestionId[]>;
-  // }
 
   addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<SolvedQuestionId> {
     return this.afs.collection<SolvedQuestion>('users/' + uId + '/solvedQuestions').add(q).then(dr => {

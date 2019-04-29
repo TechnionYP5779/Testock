@@ -5,7 +5,7 @@ import {UserData} from '../../entities/user';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
-import {QuestionId} from '../../entities/question';
+import {Question} from '../../entities/question';
 import {Sort} from '@angular/material';
 
 @Component({
@@ -17,10 +17,10 @@ export class UserProfileComponent implements OnInit {
 
   user$: Observable<UserData>;
   userId: string;
-  public questions: QuestionId[];
+  public questions: Question[];
 
   constructor(public auth: AuthService, private db: DbService, private route: ActivatedRoute) {
-    this.userId = this.route.snapshot.paramMap.get('uid');
+    this.userId = this.auth.currentUserId;
     this.user$ = this.userId ?  this.db.getUser(this.userId) : this.auth.user$;
   }
 
@@ -29,7 +29,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.db.getAllQuestions().subscribe(questions => this.questions = questions);
+    this.db.getSolvedQuestions(this.userId).subscribe(questions => this.questions = questions);
   }
 
   sortQuestions(sort: Sort) {
