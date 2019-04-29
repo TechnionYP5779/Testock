@@ -10,7 +10,6 @@
             </h1>
             <p class="lead">{{user.faculty}}</p>
           </div>
-
           <button class="btn btn-lg btn-warning ml-2" type="button" routerLink="/world">
             <fa name="diamond"></fa>
             {{ user.points }}
@@ -20,3 +19,42 @@
     </div>
   </div>
 </div>
+<h1 class="display-4">Personal progress:</h1>
+<table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
+  <thead>
+  <tr class="table-success">
+    <th colspan="9">
+      Questions you solved:
+      <span class="badge badge-success">{{questions.length}}</span>
+    </th>
+  </tr>
+  <tr class="table-light text-center" >
+    <th scope="col"></th>
+    <th scope="col" mat-sort-header="course">Course</th>
+    <th scope="col" mat-sort-header="year">Year</th>
+    <th scope="col" mat-sort-header="semester">Semester</th>
+    <th scope="col" mat-sort-header="moed">Moed</th>
+    <th scope="col" mat-sort-header="number">Question No.</th>
+    <th scope="col" mat-sort-header="difficulty">Difficulty</th>
+    <th scope="col">Remove?</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="text-center" *ngFor="let q of questions">
+    <td class="clickable" routerLink="/question/{{ q.id }}">
+      <fa name="external-link-square" style="color: forestgreen"></fa>
+    </td>
+    <td>{{ q.course }}</td>
+    <td>{{ q.year }}</td>
+    <td>{{ q.semester | titlecase}}</td>
+    <td>{{ q.moed | titlecase}}</td>
+    <td>{{ q.number }}</td>
+    <td></td>
+    <td>
+      <button class="btn btn-danger btn-circle mr-2" type="button" (click)="remove()">
+        <fa name="trash-o"></fa>
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
