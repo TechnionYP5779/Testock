@@ -29,7 +29,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.db.getSolvedQuestions(this.userId).subscribe(questions => this.questions = questions);
+    this.db.getSolvedQuestionsAsQuestions(this.userId).subscribe(questions => this.questions = questions);
   }
 
   sortQuestions(sort: Sort) {

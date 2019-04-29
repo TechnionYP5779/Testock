@@ -27,7 +27,8 @@ export class QuestionComponent implements OnInit {
   isAdmin$: Observable<boolean>;
   userId: string;
   hasSolved = false;
-  solvedQuestion: SolvedQuestionId;
+  solvedQuestion: SolvedQuestionId = null;
+  solvedQuestions$: Observable<SolvedQuestionId[]>;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar) {
     this.qId = this.route.snapshot.paramMap.get('id');
@@ -37,23 +38,35 @@ export class QuestionComponent implements OnInit {
     this.isAdmin$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.auth.isAdminForCourse(q.course)));
     this.course$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course)));
     this.userId = this.auth.currentUserId;
+    this.solvedQuestions$ = this.db.getSolvedQuestions(this.userId);
+    this.solvedQuestions$.subscribe(value => {
+      this.solvedQuestion = value.find((x) => x.linkedQuestionId === this.qId);
+      if (this.solvedQuestion) {
+        this.hasSolved = true;
+      }
+    });
   }
 
   ngOnInit() {
   }
 
   markAsSolved() {
-    this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId}).then(solvedQuestion => {
-      this.hasSolved = true;
-      this.solvedQuestion = solvedQuestion;
-      this.snackBar.open(`This question was added to your solved question list!`, 'close', {duration: 3000});
-    });
+    if (!this.hasSolved) {
+      this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId}).then(solvedQuestion => {
+        this.hasSolved = true;
+        this.solvedQuestion = solvedQuestion;
+        this.snackBar.open(`This question was added to your solved question list!`, 'close', {duration: 3000});
+      });
+    }
   }
 
   unmarkAsSolved() {
-    this.db.deleteSolvedQuestion(this.userId, this.solvedQuestion).then(() => {
-      this.hasSolved = false;
-      this.snackBar.open(`This question was removed from your solved question list!`, 'close', {duration: 3000});
-    });
+    if (this.hasSolved) {
+      this.db.deleteSolvedQuestion(this.userId, this.solvedQuestion).then(() => {
+        this.hasSolved = false;
+        this.solvedQuestion = null;
+        this.snackBar.open(`This question was removed from your solved question list!`, 'close', {duration: 3000});
+      });
+    }
   }
 }

@@ -135,7 +135,26 @@ export class DbService {
       }));
   }
 
-  getSolvedQuestions(uId: string): Observable<Question[]> {
+  // getSolvedQuestion(uId: string, qId: string): Observable<SolvedQuestionId[]> {
+  //   const ref = r => r.where('linkedQuestionId', '==', qId);
+  //   return this.afs
+  //     .collection<SolvedQuestion>('users/' + uId + '/solvedQuestions', ref)
+  //     .valueChanges();
+  //
+  // }
+
+  getSolvedQuestions(uId: string): Observable<SolvedQuestionId[]> {
+    return this.afs
+      .collection<SolvedQuestionId>('users/' + uId + '/solvedQuestions')
+      .snapshotChanges()
+      .pipe(map(actions => actions.map(action => {
+        const data = action.payload.doc.data() as SolvedQuestion;
+        const qid = action.payload.doc.id;
+        return {id: qid, ...data};
+      })));
+  }
+
+  getSolvedQuestionsAsQuestions(uId: string): Observable<Question[]> {
     return (this.afs
       .collection('users/' + uId + '/solvedQuestions')
       .valueChanges().pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<any[]>)
@@ -149,6 +168,8 @@ export class DbService {
   }
 
   deleteSolvedQuestion(uId: string, q: SolvedQuestionId): Promise<void> {
+    console.log(uId);
+    console.log(q.id);
     return this.afs.doc<SolvedQuestionId>('users/' + uId + `/solvedQuestions/${q.id}`).delete();
   }
 
