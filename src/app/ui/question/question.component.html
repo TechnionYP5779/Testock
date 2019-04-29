@@ -1,8 +1,12 @@
 <div *ngIf="question$ | async as question">
   <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
-  <h1>{{ (course$ | async)?.name}} ({{question.course}})</h1>
-  <h2>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h2>
-
+  <h1 class="display-3" style="color:DodgerBlue"> {{ (course$ | async)?.name}} ({{question.course}})</h1>
+  <h2 class="display-4">
+    Question {{ question.number }} ({{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }})
+  </h2>
+  <!--<mat-checkbox-->
+  <!--class="example-margin">-->
+  <!--</mat-checkbox>-->
   <div *ngFor="let isAdmin of [isAdmin$ | async]">
     <div class="row p-3" *ngIf="solutions$ | async as solutions">
       <div class="col-3 p-3" *ngFor="let sol of solutions">
@@ -10,7 +14,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="list-group my-3" *ngIf="topics$ | async as topics">
     <div class="list-group-item list-group-item-info">
       <fa name="comment" class="mr-2"></fa>
@@ -48,4 +52,3 @@
     </div>
   </div>
 </div>
-

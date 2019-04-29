@@ -29,6 +29,7 @@ import {UploadModule} from './upload/upload.module';
 import {AdminModule} from './admin/admin.module';
 import {DiscussionsModule} from './discussions/discussions.module';
 import {GamificationModule} from './gamification/gamification.module';
+import {MatSortModule} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import {GamificationModule} from './gamification/gamification.module';
     MatInputModule,
     MatCheckboxModule,
     NgxSpinnerModule,
-    GamificationModule
+    GamificationModule,
+    MatSortModule
   ],
   declarations: [
     AppComponent,

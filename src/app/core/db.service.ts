@@ -134,6 +134,22 @@ export class DbService {
       }));
   }
 
+  getAllQuestions(): Observable<QuestionId[]> {
+    return this.afs.collection('questions')
+      .snapshotChanges()
+      .pipe(map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Question;
+        const qid = a.payload.doc.id;
+        return {id: qid, ...data};
+      })));
+  }
+
+  getSolvedQuestions(uId: string): Observable<QuestionId[]> {
+    return this.afs.collection<string>('users/' + uId + '/solved_questions')
+      .valueChanges()
+      .pipe(leftJoinDocument(this.afs, 'qid', 'questions')) as Observable<QuestionId[]>;
+  }
+
   getSolutions(questionId: string): Observable<SolutionId[]> {
     return this.afs
       .collection<Solution>('questions/' + questionId + '/solutions', r => r.orderBy('grade', 'desc'))
