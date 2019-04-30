@@ -19,30 +19,32 @@
     </div>
   </div>
 </div>
-<h1 class="display-4">Personal progress:</h1>
-<table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
-  <thead>
-  <tr class="table-success">
-    <th colspan="9">
-      Questions you solved:
-      <span class="badge badge-success">{{questions.length}}</span>
-    </th>
-  </tr>
-  <tr class="table-light text-center" >
-    <th scope="col" mat-sort-header="course">Course</th>
-    <th scope="col" mat-sort-header="year">Year</th>
-    <th scope="col" mat-sort-header="semester">Semester</th>
-    <th scope="col" mat-sort-header="moed">Moed</th>
-    <th scope="col" mat-sort-header="number">Question No.</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let q of questions">
-    <td>{{ q.course }}</td>
-    <td>{{ q.year }}</td>
-    <td>{{ q.semester | titlecase}}</td>
-    <td>{{ q.moed | titlecase}}</td>
-    <td>{{ q.number }}</td>
-  </tr>
-  </tbody>
-</table>
+<div *ngIf="isMyProfile">
+  <h1 class="display-4">Personal progress:</h1>
+  <table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
+    <thead>
+    <tr class="table-success">
+      <th colspan="9">
+        Questions you solved:
+        <span class="badge badge-success">{{questions.length}}</span>
+      </th>
+    </tr>
+    <tr class="table-light text-center" >
+      <th scope="col" mat-sort-header="course">Course</th>
+      <th scope="col" mat-sort-header="year">Year</th>
+      <th scope="col" mat-sort-header="semester">Semester</th>
+      <th scope="col" mat-sort-header="moed">Moed</th>
+      <th scope="col" mat-sort-header="number">Question No.</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let q of questions">
+      <td>{{ q.course }}</td>
+      <td>{{ q.year }}</td>
+      <td>{{ q.semester | titlecase}}</td>
+      <td>{{ q.moed | titlecase}}</td>
+      <td>{{ q.number }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

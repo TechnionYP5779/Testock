@@ -17,11 +17,13 @@ export class UserProfileComponent implements OnInit {
 
   user$: Observable<UserData>;
   userId: string;
-  public questions: Question[];
+  questions: Question[];
+  isMyProfile: boolean;
 
   constructor(public auth: AuthService, private db: DbService, private route: ActivatedRoute) {
-    this.userId = this.auth.currentUserId;
-    this.user$ = this.userId ?  this.db.getUser(this.userId) : this.auth.user$;
+    this.userId = this.route.snapshot.paramMap.get('uid');
+    this.user$ = this.userId ? this.db.getUser(this.userId) : this.auth.user$;
+    this.isMyProfile = (this.userId === null);
   }
 
   ngOnInit() {
@@ -29,7 +31,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.db.getSolvedQuestionsAsQuestions(this.userId).subscribe(questions => this.questions = questions);
+    this.db.getSolvedQuestionsAsQuestions(this.auth.currentUserId).subscribe(questions => this.questions = questions);
   }
 
   sortQuestions(sort: Sort) {
@@ -45,15 +47,9 @@ export class UserProfileComponent implements OnInit {
         case 'semester': return compare(a.semester, b.semester, isAsc);
         case 'moed': return compare(a.moed, b.moed, isAsc);
         case 'number': return compare(a.number, b.number, isAsc);
-        // TODO: case 'difficulty': return compare(a.difficulty, b.difficulty, isAsc);
-        // TODO: case 'is_solved': return compare(a.is_solved, b.is_solved, isAsc);
         default: return 0;
       }
     });
-  }
-
-  remove() {
-    return;
   }
 }
 
