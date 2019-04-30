@@ -31,7 +31,7 @@
     <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
       {{ topic.subject }}
       <span class="float-right col-4">
-        <img [src]="topic.creator.photoUrl" class="mr-2" />
+        <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic" />
         <small class="mr-2">{{ topic.creator.name }}</small>
         <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
       </span>
