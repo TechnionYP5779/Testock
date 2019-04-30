@@ -12,35 +12,23 @@
 <table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams" >
   <thead>
   <tr class="table-primary">
-    <th colspan="9">
+    <th colspan="4">
       Available Exams
       <span class="badge badge-primary">{{exams.length}}</span>
     </th>
   </tr>
   <tr class="table-light">
-    <th class="text-center" scope="col" style="width: 5%"></th>
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year">Year</th>
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
-    <th class="text-center" scope="col" mat-sort-header="grade">Grade</th>
-    <th class="text-center" scope="col"></th>
-    <th class="text-center" scope="col"></th>
-    <th class="text-center" scope="col"></th>
-    <th class="text-center" scope="col"></th>
+    <th class="text-center" scope="col" style="width: 10%"></th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let e of exams" routerLink="exam/{{ e.id }}">
-    <td class="clickable" routerLink="/exam/{{ e.id }}">
-      <fa name="external-link-square" style="color: Dodgerblue"></fa>
-    </td>
+  <tr class="clickable" routerLink="exam/{{ e.id }}" *ngFor="let e of exams">
     <td>{{ e.year }}</td>
     <td>{{ e.semester | titlecase}}</td>
     <td>{{ e.moed | titlecase}}</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
     <td></td>
   </tr>
   </tbody>
@@ -49,38 +37,24 @@
 <table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
   <thead>
   <tr class="table-danger">
-    <th colspan="9">
+    <th colspan="4">
       Questions
       <span class="badge badge-danger">{{questions.length}}</span>
     </th>
   </tr>
-  <tr class="table-light rounded">
-    <th class="text-center" scope="col" style="width: 5%"></th>
+  <tr class="table-light">
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year" >Year</th>
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
-    <th class="text-center" scope="col" mat-sort-header="number">Question No.</th>
-    <th class="text-center" scope="col" mat-sort-header="best_solution">Best solution (%)</th>
-    <th class="text-center" scope="col" mat-sort-header="difficulty">Difficulty</th>
-    <th class="text-center" scope="col" mat-sort-header="readability">Readability</th>
-    <!--<th class="text-center" scope="col" mat-sort-header="is_solved">I Solved It</th>-->
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="number">Question No.</th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let q of questions">
-    <td class="clickable" routerLink="/question/{{ q.id }}">
-      <fa name="external-link-square" style="color: indianred"></fa>
-    </td>
+  <tr class="clickable" routerLink="/question/{{ q.id }}" *ngFor="let q of questions">
     <td>{{ q.year }}</td>
     <td>{{ q.semester | titlecase}}</td>
     <td>{{ q.moed | titlecase}}</td>
     <td>{{ q.number }}</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <!--<td>-->
-      <!--<mat-checkbox class="btn-block" (click)="onClick($event, q.id)"></mat-checkbox>-->
-    <!--</td>-->
   </tr>
   </tbody>
 </table>

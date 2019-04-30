@@ -12,7 +12,7 @@ import {Topic, TopicId, TopicWithCreatorId} from '../entities/topic';
 import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
-import {SolvedQuestion, SolvedQuestionId} from '../entities/solved-question';
+import {SolvedQuestion} from '../entities/solved-question';
 
 @Injectable({
   providedIn: 'root'
@@ -135,42 +135,24 @@ export class DbService {
       }));
   }
 
-  // getSolvedQuestion(uId: string, qId: string): Observable<SolvedQuestionId[]> {
-  //   const ref = r => r.where('linkedQuestionId', '==', qId);
-  //   return this.afs
-  //     .collection<SolvedQuestion>('users/' + uId + '/solvedQuestions', ref)
-  //     .valueChanges();
-  //
-  // }
+  addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<void> {
+    return this.afs.doc<SolvedQuestion>('users/' + uId + `/solvedQuestions/${q.linkedQuestionId}`).set(q);
+  }
 
-  getSolvedQuestions(uId: string): Observable<SolvedQuestionId[]> {
-    return this.afs
-      .collection<SolvedQuestionId>('users/' + uId + '/solvedQuestions')
-      .snapshotChanges()
-      .pipe(map(actions => actions.map(action => {
-        const data = action.payload.doc.data() as SolvedQuestion;
-        const qid = action.payload.doc.id;
-        return {id: qid, ...data};
-      })));
+  deleteSolvedQuestion(uId: string, qId: string): Promise<void> {
+    return this.afs.doc<SolvedQuestion>('users/' + uId + '/solvedQuestions/' + qId).delete();
+  }
+
+  getSolvedQuestion(uId: string, qId: string): Observable<SolvedQuestion> {
+    return this.afs.doc<SolvedQuestion>('users/' + uId + '/solvedQuestions/' + qId).valueChanges();
   }
 
   getSolvedQuestionsAsQuestions(uId: string): Observable<Question[]> {
     return (this.afs
       .collection('users/' + uId + '/solvedQuestions')
-      .valueChanges().pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<any[]>)
+      .valueChanges()
+      .pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<any[]>)
       .pipe(map(result => result.map(item => item.linkedQuestionId)));
-  }
-
-  addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<SolvedQuestionId> {
-    return this.afs.collection<SolvedQuestion>('users/' + uId + '/solvedQuestions').add(q).then(dr => {
-      return {id: dr.id, ...q};
-    });
-  }
-
-  deleteSolvedQuestion(uId: string, q: SolvedQuestionId): Promise<void> {
-    console.log(uId);
-    console.log(q.id);
-    return this.afs.doc<SolvedQuestionId>('users/' + uId + `/solvedQuestions/${q.id}`).delete();
   }
 
   getSolutions(questionId: string): Observable<SolutionId[]> {

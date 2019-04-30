@@ -4,13 +4,12 @@ import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
 import {AuthService} from '../../users/auth.service';
-import {flatMap} from 'rxjs/operators';
+import {flatMap, map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
-import {UserData} from '../../entities/user';
 import {MatSnackBar} from '@angular/material';
-import {SolvedQuestionId} from '../../entities/solved-question';
+import {SolvedQuestion} from '../../entities/solved-question';
 
 @Component({
   selector: 'app-question',
@@ -19,16 +18,14 @@ import {SolvedQuestionId} from '../../entities/solved-question';
 })
 export class QuestionComponent implements OnInit {
 
-  private qId: string;
+  qId: string;
   question$: Observable<QuestionId>;
   solutions$: Observable<SolutionId[]>;
   topics$: Observable<TopicWithCreatorId[]>;
   course$: Observable<Course>;
   isAdmin$: Observable<boolean>;
   userId: string;
-  hasSolved = false;
-  solvedQuestion: SolvedQuestionId = null;
-  solvedQuestions$: Observable<SolvedQuestionId[]>;
+  solvedQuestion$: Observable<SolvedQuestion>;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar) {
     this.qId = this.route.snapshot.paramMap.get('id');
@@ -38,35 +35,21 @@ export class QuestionComponent implements OnInit {
     this.isAdmin$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.auth.isAdminForCourse(q.course)));
     this.course$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course)));
     this.userId = this.auth.currentUserId;
-    this.solvedQuestions$ = this.db.getSolvedQuestions(this.userId);
-    this.solvedQuestions$.subscribe(value => {
-      this.solvedQuestion = value.find((x) => x.linkedQuestionId === this.qId);
-      if (this.solvedQuestion) {
-        this.hasSolved = true;
-      }
-    });
+    this.solvedQuestion$ = this.db.getSolvedQuestion(this.userId, this.qId);
   }
 
   ngOnInit() {
   }
 
   markAsSolved() {
-    if (!this.hasSolved) {
-      this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId}).then(solvedQuestion => {
-        this.hasSolved = true;
-        this.solvedQuestion = solvedQuestion;
-        this.snackBar.open(`This question was added to your solved question list!`, 'close', {duration: 3000});
-      });
-    }
+    this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId}).then(() => {
+      this.snackBar.open(`This question was added to your solved question list!`, 'close', {duration: 3000});
+    });
   }
 
   unmarkAsSolved() {
-    if (this.hasSolved) {
-      this.db.deleteSolvedQuestion(this.userId, this.solvedQuestion).then(() => {
-        this.hasSolved = false;
-        this.solvedQuestion = null;
-        this.snackBar.open(`This question was removed from your solved question list!`, 'close', {duration: 3000});
-      });
-    }
+    this.db.deleteSolvedQuestion(this.userId, this.qId).then(() => {
+      this.snackBar.open(`This question was removed from your solved question list!`, 'close', {duration: 3000});
+    });
   }
 }

@@ -5,8 +5,10 @@
     Question {{ question.number }} ({{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }})
   </h2>
 
-  <button *ngIf="hasSolved" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()" type="button"><fa name="check"></fa></button>
-  <button *ngIf="!hasSolved" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();" type="button"><fa name="check"></fa></button>
+  <div>
+    <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()" type="button"><fa name="check"></fa></button>
+    <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();" type="button"><fa name="check"></fa></button>
+  </div>
 
   <div *ngFor="let isAdmin of [isAdmin$ | async]">
     <div class="row p-3" *ngIf="solutions$ | async as solutions">
