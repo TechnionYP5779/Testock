@@ -1,7 +1,14 @@
 <div *ngIf="question$ | async as question">
   <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
-  <h1>{{ (course$ | async)?.name}} ({{question.course}})</h1>
-  <h2>{{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }} - Question {{ question.number }}</h2>
+  <h1 style="color:DodgerBlue"> {{ (course$ | async)?.name}} ({{question.course}})</h1>
+  <h2>
+    Question {{ question.number }} ({{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }})
+  </h2>
+
+  <div>
+    <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()" type="button"><fa name="check"></fa></button>
+    <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();" type="button"><fa name="check"></fa></button>
+  </div>
 
   <div *ngFor="let isAdmin of [isAdmin$ | async]">
     <div class="row p-3" *ngIf="solutions$ | async as solutions">
@@ -10,7 +17,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="list-group my-3" *ngIf="topics$ | async as topics">
     <div class="list-group-item list-group-item-info">
       <fa name="comment" class="mr-2"></fa>
@@ -24,13 +31,12 @@
     <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
       {{ topic.subject }}
       <span class="float-right col-4">
-        <img [src]="topic.creator.photoUrl" class="mr-2" />
+        <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic" />
         <small class="mr-2">{{ topic.creator.name }}</small>
         <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
       </span>
     </a>
   </div>
-
 
   <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -48,4 +54,3 @@
     </div>
   </div>
 </div>
-

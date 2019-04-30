@@ -9,11 +9,59 @@
   </p>
 </div>
 
+<table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams" >
+  <thead>
+  <tr class="table-primary">
+    <th colspan="4">
+      Available Exams
+      <span class="badge badge-primary">{{exams.length}}</span>
+    </th>
+  </tr>
+  <tr class="table-light">
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year">Year</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
+    <th class="text-center" scope="col" style="width: 10%"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="clickable" routerLink="exam/{{ e.id }}" *ngFor="let e of exams">
+    <td>{{ e.year }}</td>
+    <td>{{ e.semester | titlecase}}</td>
+    <td>{{ e.moed | titlecase}}</td>
+    <td></td>
+  </tr>
+  </tbody>
+</table>
+
+<table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
+  <thead>
+  <tr class="table-danger">
+    <th colspan="4">
+      Questions
+      <span class="badge badge-danger">{{questions.length}}</span>
+    </th>
+  </tr>
+  <tr class="table-light">
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year" >Year</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="number">Question No.</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="clickable" routerLink="/question/{{ q.id }}" *ngFor="let q of questions">
+    <td>{{ q.year }}</td>
+    <td>{{ q.semester | titlecase}}</td>
+    <td>{{ q.moed | titlecase}}</td>
+    <td>{{ q.number }}</td>
+  </tr>
+  </tbody>
+</table>
 
 <div class="list-group my-3" *ngIf="topics$ | async as topics">
   <div class="list-group-item list-group-item-info">
-    <fa name="comment" class="mr-2"></fa>
-    Forum
+    <b>Forum </b>
     <span class="badge badge-info">{{topics.length}}</span>
     <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
       <fa name="plus" class="mr-1"></fa>
@@ -44,27 +92,3 @@
     </div>
   </div>
 </div>
-
-<div class="list-group my-3" *ngIf="exams">
-  <div class="list-group-item list-group-item-primary">
-    <fa name="book"></fa>
-    Available exams
-    <span class="badge badge-primary">{{exams.length}}</span>
-  </div>
-  <a *ngFor="let e of exams" routerLink="exam/{{ e.id }}" class="list-group-item list-group-item-action">
-    {{e.semester | titlecase}} {{ e.year }} - Moed {{e.moed}}
-  </a>
-</div>
-
-<div class="list-group my-3" *ngIf="questions">
-  <div class="list-group-item list-group-item-danger">
-    <fa name="fire"></fa>
-    Hot questions
-    <span class="badge badge-danger">{{questions.length}}</span>
-  </div>
-  <a routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action" *ngFor="let q of questions">
-    {{ q.semester | titlecase}} {{ q.year }} - Moed {{ q.moed | titlecase}}: Question {{ q.number }}
-  </a>
-</div>
-
-
