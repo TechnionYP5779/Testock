@@ -20,7 +20,7 @@ export class GamePlanetComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user$.subscribe(user => {
-      const monsterStep = (this.planet.max_points - this.planet.min_points) / this.planet.monsters.length;
+      const monsterStep = Math.floor((this.planet.max_points - this.planet.min_points) / this.planet.monsters.length);
       for (let i = 0; i < this.planet.monsters.length; ++i) {
         const monster = this.planet.monsters[i];
         const currentMonsterStep = this.planet.min_points + ((i + 1) * monsterStep);
