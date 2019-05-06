@@ -90,6 +90,13 @@
         </div>
       </div>
 
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Upload Options</h5>
+          <mat-slide-toggle [(ngModel)]="isQuickMode">Quick Mode</mat-slide-toggle>
+        </div>
+      </div>
+
       <div class="questions-wrapper">
         <div class="accordion" id="questions">
           <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images" [(grade)]="q.grade"

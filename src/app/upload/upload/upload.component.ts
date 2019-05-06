@@ -75,6 +75,8 @@ export class UploadComponent implements OnInit {
   public state = UploadState.Ready;
   public course: CourseWithFaculty;
 
+  public isQuickMode: boolean;
+
   ngOnInit() {
     const source = this.route.snapshot.paramMap.get('source');
     if (source) {

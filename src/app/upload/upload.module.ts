@@ -9,9 +9,10 @@ import {PdfService} from './pdf.service';
 import {UploadService} from './upload.service';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {ImageCropperModule} from 'ngx-image-cropper';
-import {MatSnackBarModule} from '@angular/material';
+import {MatSlideToggleModule, MatSnackBarModule} from '@angular/material';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {GamificationModule} from '../gamification/gamification.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,9 @@ import {GamificationModule} from '../gamification/gamification.module';
     ImageCropperModule,
     MatSnackBarModule,
     NgxSpinnerModule,
-    GamificationModule
+    GamificationModule,
+    MatSlideToggleModule,
+    FormsModule
   ],
   providers: [
     UploadService,
