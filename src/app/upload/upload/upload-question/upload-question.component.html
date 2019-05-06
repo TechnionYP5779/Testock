@@ -9,7 +9,7 @@
         <fa name="plus"></fa>
       </button>
       <div class="grades-container float-right">
-        <input class="lhs" type="number" [value]="grade" (input)="updateGrade($event.target.value)"> / <input class="rhs" type="number" [value]="points" [readOnly]="pointsReadOnly" (input)="updatePoints($event.target.value)">
+        <input class="lhs" type="number" [value]="grade" (input)="updateGrade($event.target.value)" min="0" [max]="points"> / <input class="rhs" type="number" [value]="points" [readOnly]="pointsReadOnly" (input)="updatePoints($event.target.value)">
       </div>
     </h5>
   </div>
