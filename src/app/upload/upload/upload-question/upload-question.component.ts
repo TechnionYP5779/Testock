@@ -21,6 +21,8 @@ export class UploadQuestionComponent implements OnInit {
   @Output() imageAddRequested = new EventEmitter<number>();
   @Output() imageRemoveRequested = new EventEmitter<any[]>();
 
+  @Input() quickMode: boolean;
+
   constructor() { }
 
   ngOnInit() {

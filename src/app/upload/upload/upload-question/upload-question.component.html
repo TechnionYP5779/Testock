@@ -5,7 +5,7 @@
         Question {{ index }}
         <span class="badge badge-success ml-1" *ngIf="pointsReadOnly">Auto Fetch</span>
       </button>
-      <button class="btn add-images-button float-right" aria-expanded="true" [attr.aria-controls]="'question' + index" (click)="requestImageAdd()">
+      <button class="btn add-images-button float-right" aria-expanded="true" [attr.aria-controls]="'question' + index" (click)="requestImageAdd()" *ngIf="!quickMode">
         <fa name="plus"></fa>
       </button>
       <div class="grades-container float-right">
