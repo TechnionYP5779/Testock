@@ -132,7 +132,7 @@ export class UploadComponent implements OnInit {
     const points = this.questions.map(q => q.points);
     const images = this.questions.map(q => q.images);
 
-    this.uploadService.uploadScan(this.course.id, this.year, sem, moed, nums, grades, points, images)
+    this.uploadService.uploadScan(this.isQuickMode, this.blobs, this.course.id, this.year, sem, moed, nums, grades, points, images)
       .then(() => {
         this.state = UploadState.UploadSuccess;
         this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});

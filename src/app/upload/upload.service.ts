@@ -6,6 +6,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import {Solution} from '../entities/solution';
 import {first} from 'rxjs/operators';
 import {GamificationService, Rewards} from '../gamification/gamification.service';
+import {PendingScanId} from '../entities/pending-scan';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class UploadService {
   constructor(private db: DbService, private storage: AngularFireStorage, private gamification: GamificationService) {
   }
 
-  async uploadScan(course: number, year: number, semester: string, moed: string,
+  async uploadScan(quickMode: boolean, pages: Blob[], course: number, year: number, semester: string, moed: string,
                    nums: number[], grades: number[], points: number[], images: string[][]): Promise<void> {
     let exam = await this.db.getExamByDetails(course, year, semester, moed).pipe(first()).toPromise();
 
@@ -25,6 +26,10 @@ export class UploadService {
       e.year = year;
       e.semester = semester;
       exam = await this.db.createExamForCourse(course, e);
+    }
+
+    if (quickMode) {
+      const pendingScan = await this.uploadPendingScan(course, year, semester, moed, pages);
     }
 
     const promises = [];
@@ -69,5 +74,26 @@ export class UploadService {
     }
 
     await this.db.setSolutionForQuestion(question, createdSol);
+  }
+
+  private async uploadPendingScan(course: number, year: number, semester: string, moed: string, pages: Blob[]): Promise<PendingScanId> {
+
+    const createdPendingScan = await this.db.createPendingScan({
+      course: course,
+      year: year,
+      moed: moed,
+      semester: semester,
+      pages: []
+    });
+
+    for (let i = 0; i < pages.length; ++i) {
+      const p = `${course}\/${year}\/${semester}\/${moed}\/pending\/${createdPendingScan.id}\/${i}.jpg`;
+      await this.storage.ref(p).put(pages[i]);
+
+      createdPendingScan.pages.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
+    }
+
+    await this.db.setPendingScan(createdPendingScan);
+    return createdPendingScan;
   }
 }
