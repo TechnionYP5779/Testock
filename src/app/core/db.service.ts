@@ -344,6 +344,13 @@ export class DbService {
   setPendingScan(createdPendingScan: PendingScanId): Promise<void> {
     return this.afs.collection<PendingScan>('pendingScans').doc(createdPendingScan.id).set(createdPendingScan as PendingScan);
   }
+
+  getPendingScan(id: string): Observable<PendingScanId> {
+    return this.afs.collection<PendingScan>('pendingScans').doc<PendingScan>(id).valueChanges()
+      .pipe(map(ps => {
+        return {id: id, ...ps};
+      }));
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
