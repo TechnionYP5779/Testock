@@ -28,14 +28,15 @@ export class UploadService {
       exam = await this.db.createExamForCourse(course, e);
     }
 
+    let pendingScan = null;
     if (quickMode) {
-      const pendingScan = await this.uploadPendingScan(course, year, semester, moed, pages);
+      pendingScan = await this.uploadPendingScan(course, year, semester, moed, pages);
     }
 
     const promises = [];
     for (let i = 0; i < nums.length; ++i) {
-      if (images[i].length > 0) {
-        promises.push(this.uploadQuestion(course, year, semester, moed, nums[i], grades[i], points[i], images[i]));
+      if (images[i].length > 0 || quickMode) {
+        promises.push(this.uploadQuestion(course, year, semester, moed, nums[i], grades[i], points[i], images[i], pendingScan));
       }
     }
 
@@ -45,7 +46,7 @@ export class UploadService {
   }
 
   private async uploadQuestion(course: number, year: number, semester: string, moed: string,
-                               number: number, grade: number, points: number, images: string[]) {
+                               number: number, grade: number, points: number, images: string[], pendingScan: PendingScanId) {
 
     let question = await this.db.getQuestionByDetails(course, year, semester, moed, number).pipe(first()).toPromise();
 
@@ -63,17 +64,24 @@ export class UploadService {
     const sol = {} as Solution;
     sol.grade = grade;
 
-    const createdSol = await this.db.addSolutionForQuestion(question, sol);
-
-    createdSol.photos = [];
-    for (let i = 0; i < images.length; ++i) {
-      const p = `${course}\/${year}\/${semester}\/${moed}\/${number}\/${createdSol.id}\/${i}.jpg`;
-      await this.storage.ref(p).putString(images[i], 'data_url');
-
-      createdSol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
+    if (images.length === 0) {
+      // If we chose to upload this question and it has 0 photos then it is pending upload..
+      sol.pendingScanId = pendingScan.id;
     }
 
-    await this.db.setSolutionForQuestion(question, createdSol);
+    const createdSol = await this.db.addSolutionForQuestion(question, sol);
+
+    if (images.length > 0) {
+      createdSol.photos = [];
+      for (let i = 0; i < images.length; ++i) {
+        const p = `${course}\/${year}\/${semester}\/${moed}\/${number}\/${createdSol.id}\/${i}.jpg`;
+        await this.storage.ref(p).putString(images[i], 'data_url');
+
+        createdSol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
+      }
+
+      await this.db.setSolutionForQuestion(question, createdSol);
+    }
   }
 
   private async uploadPendingScan(course: number, year: number, semester: string, moed: string, pages: Blob[]): Promise<PendingScanId> {
