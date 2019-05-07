@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {Observable} from 'rxjs';
 import {UserData} from '../../entities/user';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {Question} from '../../entities/question';
