@@ -3,6 +3,7 @@ import {SolutionId} from '../../entities/solution';
 import {QuestionId} from '../../entities/question';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-solution',
@@ -17,7 +18,7 @@ export class SolutionComponent implements OnInit {
   @Input()
   adminAccess: boolean;
 
-  constructor(private db: DbService, private snackBar: MatSnackBar) {
+  constructor(private db: DbService, private snackBar: MatSnackBar, private router: Router,) {
   }
 
   ngOnInit() {
@@ -33,5 +34,11 @@ export class SolutionComponent implements OnInit {
     this.db.updateSolutionGrade(this.solution, this.question).then(() => {
       this.snackBar.open(`Solution Updated Successfully`, 'close', {duration: 3000});
     });
+  }
+
+  solThumbClick() {
+    if (this.solution.pendingScanId) {
+      this.router.navigateByUrl(`/pendingScan/${this.solution.pendingScanId}`);
+    }
   }
 }

@@ -2,7 +2,7 @@
   <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa name="edit"></fa></button>
   <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa name="times"></fa></button>
 </div>
-<div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal"
+<div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal" (click)="solThumbClick()"
      [attr.data-target]="solution.pendingScanId ? '' : '#solution-modal-' + solution.id">
   <img class="card-img" [src]="solution.photos[0]" alt="scan preview" *ngIf="solution.photos && solution.photos.length > 0"/>
   <div class="card-img text-center" *ngIf="solution.pendingScanId">

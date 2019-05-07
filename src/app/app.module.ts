@@ -30,6 +30,7 @@ import {AdminModule} from './admin/admin.module';
 import {DiscussionsModule} from './discussions/discussions.module';
 import {GamificationModule} from './gamification/gamification.module';
 import {MatSortModule} from '@angular/material';
+import {PendingScansModule} from './pending-scans/pending-scans.module';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import {MatSortModule} from '@angular/material';
     MatCheckboxModule,
     NgxSpinnerModule,
     GamificationModule,
-    MatSortModule
+    MatSortModule,
+    PendingScansModule
   ],
   declarations: [
     AppComponent,
