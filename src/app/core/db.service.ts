@@ -13,6 +13,7 @@ import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
 import {SolvedQuestion} from '../entities/solved-question';
+import {Notification} from '../entities/notification';
 
 @Injectable({
   providedIn: 'root'
@@ -331,6 +332,14 @@ export class DbService {
 
   getUser(uid: string): Observable<UserData> {
     return this.afs.doc<UserData>(`users/${uid}`).valueChanges();
+  }
+
+  getNotificationsForUser(uid: string): Observable<Notification[]> {
+    const queries = r =>
+      r.where('recipientId', '==', uid)
+        .orderBy('datetime', 'desc');
+
+    return this.afs.collection<Notification>('notifications', queries).valueChanges();
   }
 }
 
