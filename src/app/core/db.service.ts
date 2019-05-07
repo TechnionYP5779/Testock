@@ -13,6 +13,7 @@ import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
 import {SolvedQuestion} from '../entities/solved-question';
+import {PendingScan, PendingScanId} from '../entities/pending-scan';
 
 @Injectable({
   providedIn: 'root'
@@ -331,6 +332,17 @@ export class DbService {
 
   getUser(uid: string): Observable<UserData> {
     return this.afs.doc<UserData>(`users/${uid}`).valueChanges();
+  }
+
+  createPendingScan(pendingScan: PendingScan): Promise<PendingScanId> {
+    return this.afs.collection<PendingScan>('pendingScans').add(pendingScan)
+      .then(dr => {
+        return {id: dr.id, ...pendingScan};
+      });
+  }
+
+  setPendingScan(createdPendingScan: PendingScanId): Promise<void> {
+    return this.afs.collection<PendingScan>('pendingScans').doc(createdPendingScan.id).set(createdPendingScan as PendingScan);
   }
 }
 
