@@ -6,6 +6,21 @@
   .container {
     padding: 5px 0;
   }
+
+  .profile-image {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+
+    .notification-badge {
+      position: absolute;
+      top: -8px;
+      display: block;
+      right: -5px;
+      font-size: 70%;
+      border: 1px solid #8d6805;
+    }
+  }
 }
 
 

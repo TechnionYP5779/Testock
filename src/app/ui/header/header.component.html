@@ -30,7 +30,10 @@
               <fa name="sign-out"></fa>
               Logout
             </button>
-            <img class="mr-2 rounded" [src]="user.photoUrl" width=35px routerLink="/profile">
+            <div class="profile-image mr-2" routerLink="/profile">
+              <span class="notification-badge badge badge-warning" routerLink="/profile">1</span>
+              <img class="rounded" [src]="user.photoUrl" width="35px">
+            </div>
             <button class="btn btn-warning mr-2" type="button" routerLink="/world">
               <fa name="diamond"></fa>
               {{ user.points }}
