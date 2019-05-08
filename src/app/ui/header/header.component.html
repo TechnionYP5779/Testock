@@ -31,7 +31,7 @@
               Logout
             </button>
             <div class="profile-image mr-2" routerLink="/profile">
-              <span class="notification-badge badge badge-warning" routerLink="/profile">1</span>
+              <span class="notification-badge badge badge-warning" routerLink="/profile" *ngIf="(notificationsCount$ | async) && (notificationsCount$ | async) > 0">{{ (notificationsCount$ | async) }}</span>
               <img class="rounded" [src]="user.photoUrl" width="35px">
             </div>
             <button class="btn btn-warning mr-2" type="button" routerLink="/world">

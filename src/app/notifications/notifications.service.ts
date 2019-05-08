@@ -25,4 +25,14 @@ export class NotificationsService {
       }))
     );
   }
+
+  getUnseenNotificationsCountForUser(uid: string): Observable<number> {
+    const queries = r =>
+      r.where('recipientId', '==', uid)
+        .where('seen', '==', false);
+
+    return this.afs.collection<Notification>('notifications', queries).snapshotChanges().pipe(
+      map(notifications => notifications.length)
+    );
+  }
 }
