@@ -6,9 +6,6 @@ import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {Question} from '../../entities/question';
 import {Sort} from '@angular/material';
-import {Notification} from '../../entities/notification';
-import {flatMap} from 'rxjs/operators';
-import {NotificationsService} from '../../notifications/notifications.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -21,9 +18,8 @@ export class UserProfileComponent implements OnInit {
   userId: string;
   questions: Question[];
   isMyProfile: boolean;
-  notifications$: Observable<Notification[]>;
 
-  constructor(public auth: AuthService, private db: DbService, private route: ActivatedRoute, private notifications: NotificationsService) {
+  constructor(public auth: AuthService, private db: DbService, private route: ActivatedRoute) {
     this.userId = this.route.snapshot.paramMap.get('uid');
     this.user$ = this.userId ? this.db.getUser(this.userId) : this.auth.user$;
     this.isMyProfile = (this.userId === null);
@@ -31,9 +27,6 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit() {
     this.getQuestions();
-    this.notifications$ = this.user$.pipe(
-      flatMap(user => this.notifications.getNotificationsForUser(user.uid))
-    );
   }
 
   getQuestions(): void {

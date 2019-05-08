@@ -1,5 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { Notification } from '../../entities/notification';
+import {NotificationId} from '../../entities/notification';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {Observable} from 'rxjs';
+import {NotificationsService} from '../notifications.service';
+import {flatMap} from 'rxjs/operators';
+import {UserData} from '../../entities/user';
 
 @Component({
   selector: 'app-notifications-list',
@@ -7,11 +12,25 @@ import { Notification } from '../../entities/notification';
   styleUrls: ['./notifications-list.component.scss']
 })
 export class NotificationsListComponent implements OnInit {
-  @Input() notifications: Notification[];
+  @Input() user: Observable<UserData>;
+  notifications$: Observable<NotificationId[]>;
 
-  constructor() { }
+  constructor(private notifications: NotificationsService, private afs: AngularFirestore) { }
 
   ngOnInit() {
+    this.notifications$ = this.user.pipe(
+      flatMap(user => this.notifications.getNotificationsForUser(user.uid))
+    );
   }
 
+  seen(event: MouseEvent, notification: NotificationId) {
+    event.preventDefault();
+    this.updateNotificationState(notification.id, true);
+  }
+
+  updateNotificationState(notificationId: string, seen: boolean) {
+    this.afs.collection('notifications').doc(notificationId).update({
+      seen: seen
+    });
+  }
 }
