@@ -10,6 +10,9 @@ import {NotificationsService} from './notifications.service';
   providers: [
     NotificationsService
   ],
+  exports: [
+    NotificationsListComponent
+  ],
   imports: [
     CommonModule
   ]

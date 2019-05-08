@@ -1,0 +1,8 @@
+<div class="list-group" *ngIf="notifications">
+  <a [href]="notification.url" class="list-group-item list-group-item-action flex-column align-items-start" *ngFor="let notification of notifications">
+    <div class="d-flex w-100 justify-content-between">
+      <p class="mb-1">{{ notification.content }}</p>
+      <small>{{ notification.datetime.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
+    </div>
+  </a>
+</div>
