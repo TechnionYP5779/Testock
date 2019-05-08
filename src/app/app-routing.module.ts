@@ -13,6 +13,7 @@ import {TopicComponent} from './discussions/topic/topic.component';
 import {FacultiesComponent} from './ui/faculties/faculties.component';
 import {FacultyComponent} from './ui/faculty/faculty.component';
 import {GameWorldComponent} from './gamification/game-world/game-world.component';
+import {PendingScanComponent} from './pending-scans/pending-scan/pending-scan.component';
 
 const routes: Routes = [
   {path: '', component: FacultiesComponent},
@@ -29,7 +30,8 @@ const routes: Routes = [
   {path: 'topic/:id', component: TopicComponent, canActivate: [UsersOnlyGuard]},
   {path: 'faculties', component: FacultiesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'faculty/:id', component: FacultyComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'world', component: GameWorldComponent, canActivate: [UsersOnlyGuard]}
+  {path: 'world', component: GameWorldComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'pendingScan/:id', component: PendingScanComponent, canActivate: [UsersOnlyGuard]}
 ];
 
 @NgModule({

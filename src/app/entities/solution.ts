@@ -1,7 +1,7 @@
 export interface Solution {
-  photo: string;
   grade: number;
-  photos: string[];
+  photos?: string[];
+  pendingScanId?: string;
 }
 
 export interface SolutionId extends Solution {
