@@ -14,7 +14,6 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
 import {SolvedQuestion} from '../entities/solved-question';
 import {PendingScan, PendingScanId} from '../entities/pending-scan';
-import {Notification} from '../entities/notification';
 
 @Injectable({
   providedIn: 'root'
