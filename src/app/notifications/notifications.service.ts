@@ -35,4 +35,10 @@ export class NotificationsService {
       map(notifications => notifications.length)
     );
   }
+
+  updateNotificationState(notificationId: string, seen: boolean) {
+    this.afs.collection('notifications').doc(notificationId).update({
+      seen: seen
+    });
+  }
 }

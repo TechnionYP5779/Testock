@@ -25,12 +25,6 @@ export class NotificationsListComponent implements OnInit {
 
   seen(event: MouseEvent, notification: NotificationId) {
     event.preventDefault();
-    this.updateNotificationState(notification.id, true);
-  }
-
-  updateNotificationState(notificationId: string, seen: boolean) {
-    this.afs.collection('notifications').doc(notificationId).update({
-      seen: seen
-    });
+    this.notifications.updateNotificationState(notification.id, true);
   }
 }
