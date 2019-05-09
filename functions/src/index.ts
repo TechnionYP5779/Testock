@@ -7,6 +7,7 @@ import * as corsMod from 'cors';
 import * as vision from '@google-cloud/vision';
 import {Topic} from '../../src/app/entities/topic';
 import {UserData} from '../../src/app/entities/user';
+import {environment} from '../../src/environments/environment';
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
@@ -308,6 +309,6 @@ export const onCommentCreated = functions.firestore.document('topics/{topicId}/c
       datetime: new Date(),
       recipientId: topic.creator,
       seen: false,
-      url: 'http://abc.com'
+      url: 'topic/' + tid
     });
   });
