@@ -293,22 +293,21 @@ export const onTopicCreated = functions.firestore.document('topics/{topicId}').o
   return localAddPoints(topic.creator, pointsDelta);
 });
 
-export const onCommentCreated = functions.firestore.document('topics/{topicId}/comments/{commentId}')
-  .onCreate(async (snap, context) => {
-    const comment = snap.data();
-    if (!comment) {
-      return
-    }
+export const onCommentCreated = functions.firestore.document('topics/{topicId}/comments/{commentId}').onCreate(async (snap, context) => {
+  const comment = snap.data();
+  if (!comment) {
+    return
+  }
 
-    const commentUser: UserData = await admin.firestore().doc(`users/${comment.creator}`).get().then(doc => doc.data() as UserData);
-    const tid = context.params.topicId;
-    const topic: Topic = await admin.firestore().doc(`topics/${tid}`).get().then(doc => doc.data() as Topic);
+  const commentUser: UserData = await admin.firestore().doc(`users/${comment.creator}`).get().then(doc => doc.data() as UserData);
+  const tid = context.params.topicId;
+  const topic: Topic = await admin.firestore().doc(`topics/${tid}`).get().then(doc => doc.data() as Topic);
 
-    admin.firestore().collection('notifications').add({
-      content: commentUser.name + ' has commented on your topic: ' + topic.subject,
-      datetime: new Date(),
-      recipientId: topic.creator,
-      seen: false,
-      url: 'topic/' + tid
-    });
+  admin.firestore().collection('notifications').add({
+    content: commentUser.name + ' has commented on your topic: ' + topic.subject,
+    datetime: new Date(),
+    recipientId: topic.creator,
+    seen: false,
+    url: 'topic/' + tid
   });
+});
