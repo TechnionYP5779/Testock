@@ -10,6 +10,7 @@ import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {AppModule} from '../app.module';
 import {AppRoutingModule} from '../app-routing.module';
 import {MatSortModule} from '@angular/material';
+import {NotificationsModule} from '../notifications/notifications.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {MatSortModule} from '@angular/material';
     AngularFireStorageModule,
     AngularFontAwesomeModule,
     AppRoutingModule,
-    MatSortModule
+    MatSortModule,
+    NotificationsModule
   ],
   exports: [
     UserProfileComponent
