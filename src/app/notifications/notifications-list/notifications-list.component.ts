@@ -23,8 +23,10 @@ export class NotificationsListComponent implements OnInit {
     );
   }
 
-  seen(event: MouseEvent, notification: NotificationId) {
-    event.preventDefault();
+  seen(event: MouseEvent, notification: NotificationId, redirect: boolean) {
+    if (redirect === false) {
+      event.preventDefault();
+    }
     this.notifications.updateNotificationState(notification.id, true);
   }
 }
