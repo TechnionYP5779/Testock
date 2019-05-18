@@ -5,5 +5,4 @@
 # Typescript v1 declaration files
 typings/
 
-# node modules
-/node_modules
+node_modules/
