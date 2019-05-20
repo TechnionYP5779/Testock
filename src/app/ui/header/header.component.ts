@@ -2,6 +2,9 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AuthService} from '../../users/auth.service';
 import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {NotificationsService} from '../../notifications/notifications.service';
+import {flatMap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -14,12 +17,16 @@ export class HeaderComponent implements OnInit {
   @Input() term: any;
   router: any;
   isAdmin: boolean;
+  notificationsCount$: Observable<number>;
 
-  constructor(private rtr: Router, public auth: AuthService, private spinner: NgxSpinnerService) {
+  constructor(private rtr: Router, public auth: AuthService, private spinner: NgxSpinnerService, private notifications: NotificationsService) {
     this.main_menu_opened = false;
     this.main_menu_triggered = new EventEmitter();
     this.router = rtr;
     this.auth.isAdmin.subscribe(res => this.isAdmin = res);
+    this.notificationsCount$ = this.auth.user$.pipe(
+      flatMap(user => this.notifications.getUnseenNotificationsCountForUser(user.uid))
+    );
   }
 
   trigger_menu() {

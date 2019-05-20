@@ -1,0 +1,10 @@
+<div *ngIf="pendingScan$ | async as pendingScan">
+  <h3>Pending scan for</h3>
+  <h1 style="color:DodgerBlue">{{ (course$ | async)?.name}} ({{pendingScan.course}})</h1>
+  <h2>
+    ({{ pendingScan.semester | titlecase }} {{ pendingScan.year }} - Moed {{ pendingScan.moed }})
+  </h2>
+  <div class="p-3 text-center" *ngFor="let img of pendingScan.pages; let i = index">
+    <img class="ml-4" [src]="img" alt="" width="75%"/>
+  </div>
+</div>

@@ -12,6 +12,8 @@ import {Topic, TopicId, TopicWithCreatorId} from '../entities/topic';
 import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
+import {SolvedQuestion} from '../entities/solved-question';
+import {PendingScan, PendingScanId} from '../entities/pending-scan';
 
 @Injectable({
   providedIn: 'root'
@@ -132,6 +134,26 @@ export class DbService {
       .pipe(map(q => {
         return {id: id, ...q};
       }));
+  }
+
+  addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<void> {
+    return this.afs.doc<SolvedQuestion>('users/' + uId + `/solvedQuestions/${q.linkedQuestionId}`).set(q);
+  }
+
+  deleteSolvedQuestion(uId: string, qId: string): Promise<void> {
+    return this.afs.doc<SolvedQuestion>('users/' + uId + '/solvedQuestions/' + qId).delete();
+  }
+
+  getSolvedQuestion(uId: string, qId: string): Observable<SolvedQuestion> {
+    return this.afs.doc<SolvedQuestion>('users/' + uId + '/solvedQuestions/' + qId).valueChanges();
+  }
+
+  getSolvedQuestionsAsQuestions(uId: string): Observable<Question[]> {
+    return (this.afs
+      .collection('users/' + uId + '/solvedQuestions')
+      .valueChanges()
+      .pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<any[]>)
+      .pipe(map(result => result.map(item => item.linkedQuestionId)));
   }
 
   getSolutions(questionId: string): Observable<SolutionId[]> {
@@ -310,6 +332,24 @@ export class DbService {
 
   getUser(uid: string): Observable<UserData> {
     return this.afs.doc<UserData>(`users/${uid}`).valueChanges();
+  }
+
+  createPendingScan(pendingScan: PendingScan): Promise<PendingScanId> {
+    return this.afs.collection<PendingScan>('pendingScans').add(pendingScan)
+      .then(dr => {
+        return {id: dr.id, ...pendingScan};
+      });
+  }
+
+  setPendingScan(createdPendingScan: PendingScanId): Promise<void> {
+    return this.afs.collection<PendingScan>('pendingScans').doc(createdPendingScan.id).set(createdPendingScan as PendingScan);
+  }
+
+  getPendingScan(id: string): Observable<PendingScanId> {
+    return this.afs.collection<PendingScan>('pendingScans').doc<PendingScan>(id).valueChanges()
+      .pipe(map(ps => {
+        return {id: id, ...ps};
+      }));
   }
 }
 

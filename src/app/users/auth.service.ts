@@ -60,6 +60,9 @@ export class AuthService {
 
   loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
     const provider = new firebase.auth.OAuthProvider('microsoft.com');
+    provider.setCustomParameters({
+      tenant: 'f1502c4c-ee2e-411c-9715-c855f6753b84'
+    });
     return this.afAuth.auth.signInWithPopup(provider)
       .then((cred) => {
         if (!cred.user.email.endsWith('technion.ac.il')) {
@@ -79,12 +82,13 @@ export class AuthService {
   private createNewUser(cred: UserCredential): Promise<any> {
     const user = cred.user;
     const accessToken = (cred.credential as OAuthCredential).accessToken;
-    const getFacultyPromise: Promise<Object> =  this.msgraph.getFaculty(accessToken).toPromise();
+    const getFacultyPromise: Promise<any> =  this.msgraph.getFaculty(accessToken).toPromise().catch(() => null);
 
     const uploadProfilePicturePromise: Promise<string> = this.msgraph.selfProfilePicture(accessToken).toPromise()
       .then(blob => this.storage.ref(`users/${user.uid}/profile.jpg`).put(blob))
       .then(us => us.ref.getDownloadURL())
-      .then(url => Promise.all([user.updateProfile({photoURL: url}), Promise.resolve(url)])).then(res => res[1]);
+      .then(url => Promise.all([user.updateProfile({photoURL: url}), Promise.resolve(url)])).then(res => res[1])
+      .catch(() => null);
 
     return Promise.all([getFacultyPromise, uploadProfilePicturePromise]).then(results => {
       const ref = this.db.doc<UserData>(`users/${user.uid}`); // Endpoint on firebase
@@ -97,12 +101,12 @@ export class AuthService {
           user: true
         },
         points: 100,
-        faculty: (results[0] as any).department,
-        photoUrl: results[1]
+        faculty: results[0] ? (results[0] as any).department : null,
+        photoUrl: results[1] ? results[1] : `https://ui-avatars.com/api/?name=${user.displayName}`
       };
 
       return ref.set(data);
-    });
+    }).catch(console.log);
   }
 
   get isAdmin(): Observable<boolean> {

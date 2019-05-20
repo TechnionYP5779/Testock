@@ -7,6 +7,10 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import {AppModule} from '../app.module';
+import {AppRoutingModule} from '../app-routing.module';
+import {MatSortModule} from '@angular/material';
+import {NotificationsModule} from '../notifications/notifications.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,10 @@ import {AngularFontAwesomeModule} from 'angular-font-awesome';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    AppRoutingModule,
+    MatSortModule,
+    NotificationsModule
   ],
   exports: [
     UserProfileComponent

@@ -25,25 +25,25 @@
             Upload scan
           </button>
           <!-- User logged in -->
-          <div *ngIf="auth.currentUser">
+          <div *ngIf="auth.user$ | async as user">
             <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">
               <fa name="sign-out"></fa>
               Logout
             </button>
-            <img class="mr-2 rounded" [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+            <div class="profile-image mr-2" routerLink="/profile">
+              <span class="notification-badge badge badge-warning" routerLink="/profile" *ngIf="(notificationsCount$ | async) && (notificationsCount$ | async) > 0">{{ (notificationsCount$ | async) }}</span>
+              <img class="rounded" [src]="user.photoUrl" width="35px">
+            </div>
+            <button class="btn btn-warning mr-2" type="button" routerLink="/world">
+              <fa name="diamond"></fa>
+              {{ user.points }}
+            </button>
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">
             <button class="btn btn-outline-success mr-2" type="button" (click)="login()">
             <fa name="sign-in"></fa>
               Login
-            </button>
-          </div>
-
-          <div *ngIf="auth.currentUser">
-            <button class="btn btn-warning mr-2" type="button">
-              <fa name="diamond"></fa>
-              {{ (auth.user$ | async)?.points }}
             </button>
           </div>
 

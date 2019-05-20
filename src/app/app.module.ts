@@ -28,6 +28,9 @@ import {UsersModule} from './users/users.module';
 import {UploadModule} from './upload/upload.module';
 import {AdminModule} from './admin/admin.module';
 import {DiscussionsModule} from './discussions/discussions.module';
+import {GamificationModule} from './gamification/gamification.module';
+import {MatSortModule} from '@angular/material';
+import {PendingScansModule} from './pending-scans/pending-scans.module';
 
 @NgModule({
   imports: [
@@ -44,7 +47,10 @@ import {DiscussionsModule} from './discussions/discussions.module';
     BrowserAnimationsModule,
     MatInputModule,
     MatCheckboxModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    GamificationModule,
+    MatSortModule,
+    PendingScansModule
   ],
   declarations: [
     AppComponent,

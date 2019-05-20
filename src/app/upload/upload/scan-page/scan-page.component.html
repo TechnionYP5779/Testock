@@ -1,7 +1,7 @@
 <img class="scan-page-image" [attr.src]="blob | safeUrl" alt="exam scan image" data-toggle="modal"
      [attr.data-target]="'#scan-page-modal-' + index"/>
 <div #modal class="modal fade" [attr.id]="'scan-page-modal-' + index" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header" [hidden]="!croppable">
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="cancelImageSelection()">Cancel</button>
