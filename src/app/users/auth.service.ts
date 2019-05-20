@@ -60,6 +60,9 @@ export class AuthService {
 
   loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
     const provider = new firebase.auth.OAuthProvider('microsoft.com');
+    provider.setCustomParameters({
+      tenant: 'f1502c4c-ee2e-411c-9715-c855f6753b84'
+    });
     return this.afAuth.auth.signInWithPopup(provider)
       .then((cred) => {
         if (!cred.user.email.endsWith('technion.ac.il')) {
