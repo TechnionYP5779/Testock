@@ -8,7 +8,7 @@ import {AuthService} from '../../users/auth.service';
 import {Observable} from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Sort} from '@angular/material';
-import {map} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-course',
@@ -86,6 +86,10 @@ export class CourseComponent implements OnInit {
         default: return 0;
       }
     });
+  }
+
+  updateFavoriteCourse() {
+    this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id.toString(), !fav));
   }
 }
 

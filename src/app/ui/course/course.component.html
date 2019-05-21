@@ -1,7 +1,7 @@
 <div class="alert alert-info" *ngIf="adminAccess">You have admin access for this course</div>
 
 <div class="jumbotron jumbotron" *ngIf="course">
-  <div class="favorite-toggle">
+  <div class="favorite-toggle" (click)="updateFavoriteCourse()">
     <button>
       <fa name="star" *ngIf="(favorite$ | async)"></fa>
       <fa name="star-o" *ngIf="(favorite$ | async) == false"></fa>
