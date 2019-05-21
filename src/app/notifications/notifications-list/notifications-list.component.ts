@@ -13,7 +13,7 @@ import {UserData} from '../../entities/user';
 })
 export class NotificationsListComponent implements OnInit {
   @Input() user: Observable<UserData>;
-  notifications$: Observable<NotificationId[]>;
+  public notifications$: Observable<NotificationId[]>;
 
   constructor(private notifications: NotificationsService, private afs: AngularFirestore) { }
 
