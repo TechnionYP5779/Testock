@@ -15,7 +15,7 @@ export class NotificationsListComponent implements OnInit {
   @Input() user: Observable<UserData>;
   public notifications$: Observable<NotificationId[]>;
 
-  constructor(private notifications: NotificationsService, private afs: AngularFirestore) { }
+  constructor(private notifications: NotificationsService) { }
 
   ngOnInit() {
     this.notifications$ = this.user.pipe(
