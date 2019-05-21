@@ -13,4 +13,5 @@ export interface UserData {
   points: number;
   faculty: string;
   photoUrl: string;
+  favoriteCourses: string[];
 }

@@ -102,7 +102,8 @@ export class AuthService {
         },
         points: 100,
         faculty: results[0] ? (results[0] as any).department : null,
-        photoUrl: results[1] ? results[1] : `https://ui-avatars.com/api/?name=${user.displayName}`
+        photoUrl: results[1] ? results[1] : `https://ui-avatars.com/api/?name=${user.displayName}`,
+        favoriteCourses: []
       };
 
       return ref.set(data);
