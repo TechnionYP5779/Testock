@@ -5,3 +5,19 @@
 .clickable {
   cursor: pointer;
 }
+
+.favorite-toggle {
+  float: right;
+
+  button {
+    color: #FFC107;
+    font-size: 45px;
+    margin-right: 20px;
+    cursor: pointer;
+
+    background: 0;
+    outline: 0;
+    border: 0;
+    padding: 0;
+  }
+}
