@@ -59,6 +59,8 @@ export class UploadComponent implements OnInit {
   public questions: QuestionSolution[] = [];
   private activeQuestion = 0;
 
+  private removedFirstPage = false;
+  public allBlobs: Blob[];
   public blobs: Blob[];
   public isDragged: boolean;
 
@@ -191,6 +193,7 @@ export class UploadComponent implements OnInit {
         if (existingQuestions) {
           existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade)));
         }
+        this.allBlobs = blobs;
         this.blobs = blobs;
         this.year = details.year;
         this.moed = details.moed;
@@ -227,13 +230,19 @@ export class UploadComponent implements OnInit {
   }
 
   removeFirstPage() {
-    this.blobs = this.blobs.slice(1);
+    if (this.removedFirstPage === false){
+      this.blobs = this.blobs.slice(1);
+    }
+    this.removedFirstPage = true;
   }
 
   clearEvenPages() {
     const res = [];
-    for (let i = 0; i < this.blobs.length; i = i + 2) {
-      res.push(this.blobs[i]);
+    for (let i = 0; i < this.allBlobs.length; i = i + 2) {
+      if (i === 0 && this.removedFirstPage) {
+        continue;
+      }
+      res.push(this.allBlobs[i]);
     }
 
     this.blobs = res;
@@ -241,8 +250,8 @@ export class UploadComponent implements OnInit {
 
   clearOddPages() {
     const res = [];
-    for (let i = 1; i < this.blobs.length; i = i + 2) {
-      res.push(this.blobs[i]);
+    for (let i = 1; i < this.allBlobs.length; i = i + 2) {
+      res.push(this.allBlobs[i]);
     }
 
     this.blobs = res;
@@ -252,13 +261,13 @@ export class UploadComponent implements OnInit {
     this.spinner.show();
     const res = [];
     const promises = [];
-    for (let i = 0; i < this.blobs.length; i = i + 1) {
-      promises.push(this.ocr.isImageBlank(this.blobs[i]));
+    for (let i = 0; i < this.allBlobs.length; i = i + 1) {
+      promises.push(this.ocr.isImageBlank(this.allBlobs[i]));
     }
     Promise.all(promises).then(isPageBlank => {
-      for (let i = 0; i < this.blobs.length; i = i + 1) {
+      for (let i = 0; i < this.allBlobs.length; i = i + 1) {
         if (!isPageBlank[i].isBlank) {
-          res.push(this.blobs[i]);
+          res.push(this.allBlobs[i]);
         }
       }
       this.blobs = res;
@@ -274,5 +283,10 @@ export class UploadComponent implements OnInit {
     this.semester = null;
     this.moed = null;
     this.state = UploadState.Ready;
+  }
+
+  returnPages() {
+    this.removedFirstPage = false;
+    this.blobs = this.allBlobs;
   }
 }
