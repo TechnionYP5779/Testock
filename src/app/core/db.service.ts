@@ -41,6 +41,10 @@ export class DbService {
       }), leftJoinDocument(this.afs, 'faculty', 'faculties'), map(data => data[0]));
   }
 
+  getFavoriteCourses(user: UserData): Observable<Course[]> {
+    return combineLatest(user.favoriteCourses.map(courseId => this.getCourse(Number(courseId))));
+  }
+
   // Should be deprecated?
   getQuestionsOfCourse(id: number): Observable<QuestionId[]> {
     const order = r =>
