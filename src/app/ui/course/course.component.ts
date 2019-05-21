@@ -8,6 +8,7 @@ import {AuthService} from '../../users/auth.service';
 import {Observable} from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Sort} from '@angular/material';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-course',
@@ -22,10 +23,14 @@ export class CourseComponent implements OnInit {
   public exams: ExamId[];
   topics$: Observable<any[]>;
   adminAccess: boolean;
+  favorite$: Observable<boolean>;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForCourseWithCreators(this.id);
+    this.favorite$ = auth.user$.pipe(
+      map(user => user.favoriteCourses.includes(this.course.id.toString()))
+    );
   }
 
   ngOnInit() {
