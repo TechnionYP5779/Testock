@@ -4,6 +4,7 @@ import {QuestionId} from '../../entities/question';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-solution',
@@ -18,7 +19,7 @@ export class SolutionComponent implements OnInit {
   @Input()
   adminAccess: boolean;
 
-  constructor(private db: DbService, private snackBar: MatSnackBar, private router: Router,) {
+  constructor(private db: DbService, private snackBar: MatSnackBar, private router: Router, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -36,9 +37,15 @@ export class SolutionComponent implements OnInit {
     });
   }
 
-  solThumbClick() {
+  solThumbClick(content) {
     if (this.solution.pendingScanId) {
       this.router.navigateByUrl(`/pendingScan/${this.solution.pendingScanId}`);
+    } else {
+      this.modalService.open(content, {size: 'lg'}).result.then((result) => {
+        console.log(`Closed with: ${result}`);
+      }, (reason) => {
+        console.log('Dismissed');
+      });
     }
   }
 }

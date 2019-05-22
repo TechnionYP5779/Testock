@@ -2,7 +2,7 @@
   <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa name="edit"></fa></button>
   <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa name="times"></fa></button>
 </div>
-<div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal" (click)="solThumbClick()"
+<div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal" (click)="solThumbClick(content)"
      [attr.data-target]="solution.pendingScanId ? '' : '#solution-modal-' + solution.id">
   <img class="card-img" [src]="solution.photos[0]" alt="scan preview" *ngIf="solution.photos && solution.photos.length > 0"/>
   <div class="card-img text-center" *ngIf="solution.pendingScanId">
@@ -15,17 +15,23 @@
   </div>
 </div>
 
-<div class="modal fade scan-modal" [attr.id]="'solution-modal-' + solution.id" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div *ngFor="let photo of solution.photos">
-          <img [src]="photo" alt="solution photo" class="sol-image-modal"/>
-        </div>
-      </div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Solution Grade: {{solution.grade}} / {{question.total_grade}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngFor="let photo of solution.photos">
+      <img [src]="photo" alt="solution photo" class="sol-image-modal"/>
     </div>
   </div>
-</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+
+</ng-template>
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" [id]="'editSolution-' + solution.id">
   <div class="modal-dialog" role="document">
