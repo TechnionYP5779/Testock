@@ -29,7 +29,7 @@ export class CourseComponent implements OnInit {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForCourseWithCreators(this.id);
     this.favorite$ = auth.user$.pipe(
-      map(user => user.favoriteCourses.includes(this.course.id.toString()))
+      map(user => user.favoriteCourses.includes(this.course.id))
     );
   }
 
@@ -89,7 +89,7 @@ export class CourseComponent implements OnInit {
   }
 
   updateFavoriteCourse() {
-    this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id.toString(), !fav));
+    this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
   }
 }
 

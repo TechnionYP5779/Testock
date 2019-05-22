@@ -42,7 +42,7 @@ export class DbService {
   }
 
   getFavoriteCourses(user: UserData): Observable<Course[]> {
-    return combineLatest(user.favoriteCourses.map(courseId => this.getCourse(Number(courseId))));
+    return combineLatest(user.favoriteCourses.map(courseId => this.getCourse(courseId)));
   }
 
   // Should be deprecated?
