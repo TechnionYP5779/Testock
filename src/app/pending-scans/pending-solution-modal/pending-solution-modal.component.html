@@ -5,12 +5,76 @@
   </button>
 </div>
 <div class="modal-body">
-  <div *ngIf="pendingScan$ | async as pendingScan">
-    <div *ngFor="let photo of pendingScan.pages" >
-      <img [src]="photo" alt="solution photo" class="sol-image-modal"/>
+  <div *ngIf="pendingScan">
+    <div class="enter-crop-mode-btn" *ngIf="!cropMode else toolbar">
+      <button type="button" class="btn btn-primary" (click)="enableCropMode()">
+        <fa name="crop" class="mr-2"></fa>
+        Crop this solution, help others and earn some points!
+      </button>
+    </div>
+    <div>
+      <div *ngFor="let photo of pendingScan.pages; let i = index">
+        <img [src]="photo" alt="solution photo" class="sol-image-modal" (click)="imageClicked(i)" *ngIf="!isPageCropped[i]" />
+        <image-cropper
+          *ngIf="isPageCropped[i]"
+          (imageCropped)="updateCroppedPage(i, $event)"
+          [imageBase64]="pagesBase64[i]"
+          format="jpeg"
+          [maintainAspectRatio]="false"
+          [resizeToWidth]="1024"
+        ></image-cropper>
+      </div>
     </div>
   </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
 </div>
+
+<ng-template #toolbar>
+  <div class="edit-toolbar">
+    <div class="mb-4 text-center">
+      <button type="button" class="btn btn-danger" (click)="disableCropMode()">
+        <fa name="times" class="mr-2"></fa> Exit crop mode
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <button class="btn btn-link" type="button">
+            Question {{ question.number }}
+          </button>
+          <div class="grades-container float-right">
+            <input class="lhs" type="number" [value]="solution.grade" min="0"
+                   [max]="question.total_grade"> / <input class="rhs" type="number" [value]="question.total_grade" readonly>
+          </div>
+        </h5>
+      </div>
+      <div class="card-body">
+        <div *ngIf="!isPageCropped || !isPageCropped.includes(true)" class="text-center">
+          <small>No Images Selected</small>
+        </div>
+        <div class="question-images">
+          <div class="question-image" *ngFor="let page of isPageCropped; let i = index">
+            <div *ngIf="croppedPages[i] && page">
+              <img [src]="croppedPages[i]" alt="scan page crop" width="100%" *ngIf="croppedPages[i]">
+              <div class="image-popup">
+                <button class="btn image-remove-button" (click)="cancelPage(i)">
+                  <fa name="trash"></fa>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer text-center">
+        <button class="btn btn-lg btn-success"><fa name="check" class="mr-2"></fa>Done</button>
+      </div>
+    </div>
+
+    <div class="text-white text-center mt-4">
+      Hint: Click an image to crop it
+    </div>
+  </div>
+</ng-template>
