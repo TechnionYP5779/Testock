@@ -5,6 +5,7 @@ import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PendingSolutionModalComponent} from '../../pending-scans/pending-solution-modal/pending-solution-modal.component';
 
 @Component({
   selector: 'app-solution',
@@ -39,7 +40,9 @@ export class SolutionComponent implements OnInit {
 
   solThumbClick(content) {
     if (this.solution.pendingScanId) {
-      this.router.navigateByUrl(`/pendingScan/${this.solution.pendingScanId}`);
+      const modalRef = this.modalService.open(PendingSolutionModalComponent, {size: 'lg'});
+      modalRef.componentInstance.question = this.question;
+      modalRef.componentInstance.solution = this.solution;
     } else {
       this.modalService.open(content, {size: 'lg'}).result.then((result) => {
         console.log(`Closed with: ${result}`);

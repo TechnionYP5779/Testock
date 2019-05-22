@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h4 class="modal-title">Pending Solution Grade: {{solution.grade}} / {{question.total_grade}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="pendingScan$ | async as pendingScan">
+    <div *ngFor="let photo of pendingScan.pages" >
+      <img [src]="photo" alt="solution photo" class="sol-image-modal"/>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>
