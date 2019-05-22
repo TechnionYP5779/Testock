@@ -44,11 +44,7 @@ export class SolutionComponent implements OnInit {
       modalRef.componentInstance.question = this.question;
       modalRef.componentInstance.solution = this.solution;
     } else {
-      this.modalService.open(content, {size: 'lg'}).result.then((result) => {
-        console.log(`Closed with: ${result}`);
-      }, (reason) => {
-        console.log('Dismissed');
-      });
+      this.modalService.open(content, {size: 'lg'});
     }
   }
 }
