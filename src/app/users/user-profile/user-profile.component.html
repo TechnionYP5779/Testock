@@ -15,6 +15,11 @@
             {{ user.points }}
           </button>
         </div>
+        <ul class="favoriteCourses">
+          <li *ngFor="let course of (favoriteCourses$ | async)">
+            <button type="button" class="btn btn-outline-primary" [routerLink]="'/course/' + course.id">{{ course.name }}</button>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
