@@ -208,7 +208,7 @@ export const onSolutionDeleted = functions.firestore.document('questions/{questi
   const question: Question = await admin.firestore().doc(`questions/${qid}`).get().then(doc => doc.data() as Question);
   const sid = context.params.solID;
   const sol = snapshot.data();
-  const numOfPics = sol ? sol.photos.length : 0;
+  const numOfPics = sol && sol.photos ? sol.photos.length : 0;
   const promises = [];
   for (let i=0; i < numOfPics; ++i){
     const path = `${question.course}/${question.year}/${question.semester}/${question.moed}/${question.number}/${sid}/${i}.jpg`;
