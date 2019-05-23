@@ -4,6 +4,8 @@ import {QuestionId} from '../../entities/question';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PendingSolutionModalComponent} from '../../pending-scans/pending-solution-modal/pending-solution-modal.component';
 
 @Component({
   selector: 'app-solution',
@@ -18,7 +20,7 @@ export class SolutionComponent implements OnInit {
   @Input()
   adminAccess: boolean;
 
-  constructor(private db: DbService, private snackBar: MatSnackBar, private router: Router,) {
+  constructor(private db: DbService, private snackBar: MatSnackBar, private router: Router, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -36,9 +38,13 @@ export class SolutionComponent implements OnInit {
     });
   }
 
-  solThumbClick() {
+  solThumbClick(content) {
     if (this.solution.pendingScanId) {
-      this.router.navigateByUrl(`/pendingScan/${this.solution.pendingScanId}`);
+      const modalRef = this.modalService.open(PendingSolutionModalComponent, {size: 'lg'});
+      modalRef.componentInstance.question = this.question;
+      modalRef.componentInstance.solution = this.solution;
+    } else {
+      this.modalService.open(content, {size: 'lg'});
     }
   }
 }

@@ -31,6 +31,9 @@ import {DiscussionsModule} from './discussions/discussions.module';
 import {GamificationModule} from './gamification/gamification.module';
 import {MatSortModule} from '@angular/material';
 import {PendingScansModule} from './pending-scans/pending-scans.module';
+import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
+import {CommonModule} from '@angular/common';
+import {PendingSolutionModalComponent} from './pending-scans/pending-solution-modal/pending-solution-modal.component';
 
 @NgModule({
   imports: [
@@ -50,7 +53,9 @@ import {PendingScansModule} from './pending-scans/pending-scans.module';
     NgxSpinnerModule,
     GamificationModule,
     MatSortModule,
-    PendingScansModule
+    PendingScansModule,
+    NgbModalModule,
+    CommonModule
   ],
   declarations: [
     AppComponent,
@@ -64,7 +69,8 @@ import {PendingScansModule} from './pending-scans/pending-scans.module';
     FacultyComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [PendingSolutionModalComponent]
 })
 export class AppModule {
 }
