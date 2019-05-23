@@ -7,6 +7,10 @@ import * as corsMod from 'cors';
 import * as vision from '@google-cloud/vision';
 import {Topic} from '../../src/app/entities/topic';
 import {UserData} from '../../src/app/entities/user';
+import {PendingScan} from '../../src/app/entities/pending-scan';
+import {Question, QuestionId} from '../../src/app/entities/question';
+import {Solution} from '../../src/app/entities/solution';
+import {Course} from '../../src/app/entities/course';
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
@@ -88,32 +92,6 @@ export const getStickerInfoFromTitlePage = functions.https.onRequest((request, r
 
 const bucket = admin.storage().bucket();
 
-export interface Question {
-  course: number;
-  year: number;
-  moed: string;
-  semester: string;
-  photo: string;
-  number: number;
-  total_grade: number;
-}
-
-export interface QuestionId extends Question {
-  id: string;
-}
-
-export interface Solution {
-  photo: string;
-  grade: number;
-  photos: string[];
-}
-
-export interface Course {
-  id: number;
-  name: string;
-  faculty: string;
-}
-
 function capStr(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -145,7 +123,7 @@ async function getBestSolutionFor(q: QuestionId): Promise<Solution|null> {
   return query.get().then(res => res.docs.length > 0 ? res.docs[0].data() as Solution : null);
 }
 
-async function addQuestion(pdf: PDFKit.PDFDocument, q: QuestionId) {
+async function addQuestion(pdf: PDFKit.PDFDocument, q: QuestionId): Promise<void> {
   pdf.addPage();
   const sol = await getBestSolutionFor(q);
   if (sol === null) {
@@ -157,6 +135,7 @@ async function addQuestion(pdf: PDFKit.PDFDocument, q: QuestionId) {
   pdf.fontSize(25).text(`Question ${q.number} (${sol.grade}/${q.total_grade})`, 50, 50, { link: `https://testock.tk/questions/${q.id}` });
   pdf.moveDown();
   let first = true;
+  if (!sol || !sol.photos) return;
   for (const photo of sol.photos) {
     if (first) {
       first = false;
@@ -302,7 +281,7 @@ export const onCommentCreated = functions.firestore.document('topics/{topicId}/c
   const tid = context.params.topicId;
   const topic: Topic = await admin.firestore().doc(`topics/${tid}`).get().then(doc => doc.data() as Topic);
 
-  admin.firestore().collection('notifications').add({
+  return admin.firestore().collection('notifications').add({
     content: commentUser.name + ' has commented on your topic: ' + topic.subject,
     datetime: new Date(),
     recipientId: topic.creator,
