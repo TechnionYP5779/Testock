@@ -12,10 +12,11 @@ export class NotificationsService {
 
   constructor(private afs: AngularFirestore) { }
 
-  getNotificationsForUser(uid: string): Observable<NotificationId[]> {
+  getNotificationsForUser(uid: string, limit: number): Observable<NotificationId[]> {
     const queries = r =>
       r.where('recipientId', '==', uid)
-        .orderBy('datetime', 'desc');
+        .orderBy('datetime', 'desc')
+        .limit(limit);
 
     return this.afs.collection<Notification>('notifications', queries).snapshotChanges().pipe(
       map(actions => actions.map(a => {

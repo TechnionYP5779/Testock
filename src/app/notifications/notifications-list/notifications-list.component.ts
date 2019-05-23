@@ -19,7 +19,7 @@ export class NotificationsListComponent implements OnInit {
 
   ngOnInit() {
     this.notifications$ = this.user.pipe(
-      flatMap(user => this.notifications.getNotificationsForUser(user.uid))
+      flatMap(user => this.notifications.getNotificationsForUser(user.uid, 30))
     );
   }
 
