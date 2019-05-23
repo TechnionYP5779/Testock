@@ -7,4 +7,9 @@
     margin-right: 20px;
     color: inherit;
   }
+
+  .list-group {
+    max-height: 300px;
+    overflow-y: scroll;
+  }
 }

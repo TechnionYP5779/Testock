@@ -24,7 +24,7 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="isMyProfile">
+<div class="my-profile-details row" *ngIf="isMyProfile">
   <div class="col-6">
     <h3>Personal progress:</h3>
     <table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
