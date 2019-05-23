@@ -131,8 +131,8 @@ export class AuthService {
       .pipe(flatMap(q => this.isAdminForCourse(q.course)));
   }
 
-  updateFavoriteCourse(course: number, favorite: boolean) {
-    this.user$.pipe(take(1)).toPromise().then(user => {
+  updateFavoriteCourse(course: number, favorite: boolean): Promise<void> {
+    return this.user$.pipe(take(1)).toPromise().then(user => {
       let newFavorites = user.favoriteCourses;
       if (favorite) {
         if (newFavorites.includes(course) === false) {
