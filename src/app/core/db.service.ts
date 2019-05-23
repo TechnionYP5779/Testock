@@ -136,6 +136,24 @@ export class DbService {
       }));
   }
 
+  addTagToQuestion(id: string, tag: string) {
+    return this.afs.doc(`questions/${id}`).get().forEach(ds => {
+      let tags = ds.get('tags');
+      if (tags == null){
+        tags = [tag];
+      } else {
+        tags.push(tag);
+      }
+      return this.afs.doc(`questions/${id}`).update({tags: tags});
+    });
+  }
+
+  getTagsOfQuestion(id: string) {
+    return this.afs.doc(`questions/${id}`).get().toPromise().then(ds => {
+      return ds.get('tags');
+    });
+  }
+
   addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<void> {
     return this.afs.doc<SolvedQuestion>('users/' + uId + `/solvedQuestions/${q.linkedQuestionId}`).set(q);
   }

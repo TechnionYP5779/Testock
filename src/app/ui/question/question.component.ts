@@ -53,7 +53,11 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  addTag() {
+  addTag(tag) {
+    return this.db.addTagToQuestion(this.qId, tag);
+  }
 
+  getTags(): Promise<string[]> {
+    return this.db.getTagsOfQuestion(this.qId);
   }
 }

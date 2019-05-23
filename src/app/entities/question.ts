@@ -9,6 +9,7 @@ export interface Question {
   number: number;
   total_grade: number;
   created: Timestamp;
+  tags: string[];
 }
 
 export interface QuestionId extends Question {

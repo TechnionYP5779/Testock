@@ -13,7 +13,7 @@
       <div ngbDropdownMenu aria-labelledby="dropdownManual">
         <div *ngIf="course$ | async as course">
           <div *ngFor="let tag of course.tags">
-            <button ngbDropdownItem>{{tag}}</button>
+            <button ngbDropdownItem (click)="addTag(tag)">{{tag}}</button>
           </div>
         </div>
       </div>
