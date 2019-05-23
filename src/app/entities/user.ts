@@ -1,3 +1,5 @@
+import {Timestamp} from '@firebase/firestore-types';
+
 export interface Roles {
   admin?: boolean;
   faculty_admin?: string[];
@@ -13,5 +15,6 @@ export interface UserData {
   points: number;
   faculty: string;
   photoUrl: string;
+  created: Timestamp;
   favoriteCourses: number[];
 }

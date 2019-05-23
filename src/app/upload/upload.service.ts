@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {DbService} from '../core/db.service';
 import {Exam} from '../entities/exam';
-import {Question} from '../entities/question';
+import {Question, QuestionId} from '../entities/question';
 import {AngularFireStorage} from '@angular/fire/storage';
-import {Solution} from '../entities/solution';
+import {Solution, SolutionId} from '../entities/solution';
 import {first} from 'rxjs/operators';
 import {GamificationService, Rewards} from '../gamification/gamification.service';
 import {PendingScanId} from '../entities/pending-scan';
+import { firestore } from 'firebase/app';
+import Timestamp = firestore.Timestamp;
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +93,8 @@ export class UploadService {
       year: year,
       moed: moed,
       semester: semester,
-      pages: []
+      pages: [],
+      created: Timestamp.now()
     });
 
     for (let i = 0; i < pages.length; ++i) {
@@ -103,5 +106,22 @@ export class UploadService {
 
     await this.db.setPendingScan(createdPendingScan);
     return createdPendingScan;
+  }
+
+  public async updateSolutionFromPendingScan(q: QuestionId, sol: SolutionId, photos: string[]): Promise<void> {
+
+    sol.photos = [];
+
+    for (let i = 0; i < photos.length; ++i) {
+      const p = `${q.course}\/${q.year}\/${q.semester}\/${q.moed}\/${q.number}\/${sol.id}\/${i}.jpg`;
+      await this.storage.ref(p).putString(photos[i], 'data_url');
+      sol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
+    }
+
+    sol.pendingScanId = null;
+
+    await this.db.setSolutionForQuestion(q, sol);
+
+    await this.gamification.reward(Rewards.CROPPED_PENDING_SOLUTION);
   }
 }

@@ -13,5 +13,8 @@
         Question {{ q.number }} ({{q.total_grade}} Points)
       </a>
     </div>
+
+    <app-pending-scans-list [course]="courseId" [year]="exam.year" [moed]="exam.moed" [semester]="exam.semester"></app-pending-scans-list>
+
   </div>
 </div>
