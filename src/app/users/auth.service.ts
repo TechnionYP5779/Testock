@@ -13,6 +13,8 @@ import {MsGraphService} from './msgraph.service';
 import {AngularFireStorage} from '@angular/fire/storage';
 import UserCredential = firebase.auth.UserCredential;
 import OAuthCredential = firebase.auth.OAuthCredential;
+import { firestore } from 'firebase/app';
+import Timestamp = firestore.Timestamp;
 
 @Injectable({
   providedIn: 'root'
@@ -102,7 +104,8 @@ export class AuthService {
         },
         points: 100,
         faculty: results[0] ? (results[0] as any).department : null,
-        photoUrl: results[1] ? results[1] : `https://ui-avatars.com/api/?name=${user.displayName}`
+        photoUrl: results[1] ? results[1] : `https://ui-avatars.com/api/?name=${user.displayName}`,
+        created: Timestamp.now()
       };
 
       return ref.set(data);

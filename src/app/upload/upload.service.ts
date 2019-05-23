@@ -7,6 +7,8 @@ import {Solution} from '../entities/solution';
 import {first} from 'rxjs/operators';
 import {GamificationService, Rewards} from '../gamification/gamification.service';
 import {PendingScanId} from '../entities/pending-scan';
+import { firestore } from 'firebase/app';
+import Timestamp = firestore.Timestamp;
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +93,8 @@ export class UploadService {
       year: year,
       moed: moed,
       semester: semester,
-      pages: []
+      pages: [],
+      created: Timestamp.now()
     });
 
     for (let i = 0; i < pages.length; ++i) {

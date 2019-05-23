@@ -1,3 +1,5 @@
+import {Timestamp} from '@firebase/firestore-types';
+
 export interface Question {
   course: number;
   year: number;
@@ -6,6 +8,7 @@ export interface Question {
   photo: string;
   number: number;
   total_grade: number;
+  created: Timestamp;
 }
 
 export interface QuestionId extends Question {
