@@ -87,12 +87,12 @@ export class CourseComponent implements OnInit {
   }
 
   addNewTag() {
-    console.log('got here');
     if(this.course.tags == null){
       this.course.tags = [this.newTag];
-    }
-    else{
-      this.course.tags.push(this.newTag);
+    } else {
+      if (!this.course.tags.includes(this.newTag)){
+        this.course.tags.push(this.newTag);
+      }
     }
     this.spinner.show();
     this.db.createCourse(this.course).then(() => this.spinner.hide())

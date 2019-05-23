@@ -4,12 +4,13 @@ import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
 import {AuthService} from '../../users/auth.service';
-import {flatMap, map} from 'rxjs/operators';
+import {flatMap, map, takeLast} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
 import {MatSnackBar} from '@angular/material';
 import {SolvedQuestion} from '../../entities/solved-question';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-question',
@@ -26,8 +27,10 @@ export class QuestionComponent implements OnInit {
   isAdmin$: Observable<boolean>;
   userId: string;
   solvedQuestion$: Observable<SolvedQuestion>;
+  tags$: Promise<string[]>;
 
-  constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar) {
+  constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar,
+              private spinner: NgxSpinnerService) {
     this.qId = this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForQuestion(this.qId);
     this.question$ = this.db.getQuestion(this.qId);
@@ -36,6 +39,7 @@ export class QuestionComponent implements OnInit {
     this.course$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course)));
     this.userId = this.auth.currentUserId;
     this.solvedQuestion$ = this.db.getSolvedQuestion(this.userId, this.qId);
+    this.tags$ = this.db.getTagsOfQuestion(this.qId);
   }
 
   ngOnInit() {
@@ -54,10 +58,10 @@ export class QuestionComponent implements OnInit {
   }
 
   addTag(tag) {
-    return this.db.addTagToQuestion(this.qId, tag);
-  }
-
-  getTags(): Promise<string[]> {
-    return this.db.getTagsOfQuestion(this.qId);
+    this.spinner.show();
+    this.db.addTagToQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
+      this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000})}).catch(e => {
+        this.spinner.hide();
+        this.snackBar.open(`Tag Already Exists..`, 'close', {duration: 3000})});
   }
 }

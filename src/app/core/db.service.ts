@@ -139,10 +139,14 @@ export class DbService {
   addTagToQuestion(id: string, tag: string) {
     return this.afs.doc(`questions/${id}`).get().forEach(ds => {
       let tags = ds.get('tags');
-      if (tags == null){
+      if (tags == null) {
         tags = [tag];
       } else {
-        tags.push(tag);
+        if (!tags.includes(tag)) {
+          tags.push(tag);
+        } else {
+          throw new Error('tag already exits');
+        }
       }
       return this.afs.doc(`questions/${id}`).update({tags: tags});
     });
