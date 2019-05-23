@@ -45,7 +45,7 @@
             Question {{ question.number }}
           </button>
           <div class="grades-container float-right">
-            <input class="lhs" type="number" [value]="solution.grade" min="0"
+            <input class="lhs" type="number" [(ngModel)]="solution.grade" min="0"
                    [max]="question.total_grade"> / <input class="rhs" type="number" [value]="question.total_grade" readonly>
           </div>
         </h5>
@@ -69,7 +69,7 @@
       </div>
 
       <div class="card-footer text-center">
-        <button class="btn btn-lg btn-success"><fa name="check" class="mr-2"></fa>Done</button>
+        <button class="btn btn-lg btn-success" (click)="uploadSolution()"><fa name="check" class="mr-2"></fa>Done</button>
       </div>
     </div>
 

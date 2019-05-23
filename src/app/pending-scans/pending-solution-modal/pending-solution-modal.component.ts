@@ -6,6 +6,9 @@ import {DbService} from '../../core/db.service';
 import {PendingScanId} from '../../entities/pending-scan';
 import {take} from 'rxjs/operators';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
+import {UploadService} from '../../upload/upload.service';
+import {MatSnackBar} from '@angular/material';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-pending-solution-modal',
@@ -24,7 +27,8 @@ export class PendingSolutionModalComponent implements OnInit {
   public croppedPages: string[];
   public loaded = false;
 
-  constructor(public activeModal: NgbActiveModal, private db: DbService) {
+  constructor(public activeModal: NgbActiveModal, private db: DbService, private uploadService: UploadService,
+              private snackbar: MatSnackBar, private spinner: NgxSpinnerService) {
   }
 
   ngOnInit() {
@@ -67,5 +71,15 @@ export class PendingSolutionModalComponent implements OnInit {
   cancelPage(i: number) {
     this.croppedPages[i] = null;
     this.isPageCropped[i] = false;
+  }
+
+  uploadSolution() {
+    this.spinner.show();
+    const photosToUpload = this.croppedPages.filter(s => s);
+    this.uploadService.updateSolutionFromPendingScan(this.question, this.solution, photosToUpload).then(() => {
+      this.activeModal.close();
+    }).then(() => this.spinner.hide()).then(() => {
+      this.snackbar.open('Thanks for your contribution!', 'close', {duration: 6000});
+    });
   }
 }
