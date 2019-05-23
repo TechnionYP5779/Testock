@@ -22,6 +22,9 @@ export class GamificationService {
       case Rewards.SCAN_UPLOAD:
         pointsDelta = 15;
         break;
+      case Rewards.CROPPED_PENDING_SOLUTION:
+        pointsDelta = 5;
+        break;
       default:
         pointsDelta = 0;
     }
@@ -45,5 +48,6 @@ export class GamificationService {
 import {Observable} from 'rxjs';
 
 export enum Rewards {
+  CROPPED_PENDING_SOLUTION,
   SCAN_UPLOAD
 }

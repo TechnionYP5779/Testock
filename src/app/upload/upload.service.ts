@@ -118,5 +118,7 @@ export class UploadService {
     sol.pendingScanId = null;
 
     await this.db.setSolutionForQuestion(q, sol);
+
+    await this.gamification.reward(Rewards.CROPPED_PENDING_SOLUTION);
   }
 }
