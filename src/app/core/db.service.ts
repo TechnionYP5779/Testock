@@ -351,6 +351,23 @@ export class DbService {
         return {id: id, ...ps};
       }));
   }
+
+  getPendingScans(course: number, year?: number, semester?: string, moed?: string): Observable<PendingScanId[]> {
+    const ref = moed ?
+        r => r
+          .where('course', '==', course)
+          .where('year', '==', year)
+          .where('semester', '==', semester)
+          .where('moed', '==', moed)
+      : r => r
+          .where('course', '==', course);
+
+    return this.afs.collection<PendingScan>('pendingScans', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as PendingScan;
+      const id = action.payload.doc.id;
+      return {id: id, ...data};
+    })));
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
