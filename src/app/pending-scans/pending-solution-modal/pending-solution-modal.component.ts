@@ -22,6 +22,7 @@ export class PendingSolutionModalComponent implements OnInit {
   public isPageCropped: boolean[];
   public pagesBase64: string[];
   public croppedPages: string[];
+  public loaded = false;
 
   constructor(public activeModal: NgbActiveModal, private db: DbService) {
   }
@@ -31,8 +32,8 @@ export class PendingSolutionModalComponent implements OnInit {
       this.pendingScan = ps;
       this.isPageCropped = Array(ps.pages.length).map(() => false);
       this.croppedPages = Array(ps.pages.length).map(() => null);
-      Promise.all(ps.pages.map(pageUrl => this.getImageBase64(pageUrl))).then(res => this.pagesBase64 = res);
-    });
+      return Promise.all(ps.pages.map(pageUrl => this.getImageBase64(pageUrl))).then(res => this.pagesBase64 = res);
+    }).then(() => this.loaded = true);
   }
 
   enableCropMode() {
