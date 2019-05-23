@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NotificationsListComponent } from './notifications-list/notifications-list.component';
 import {NotificationsService} from './notifications.service';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
-import {AngularFirestoreModule} from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -17,8 +16,7 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
   ],
   imports: [
     CommonModule,
-    AngularFontAwesomeModule,
-    AngularFirestoreModule
+    AngularFontAwesomeModule
   ]
 })
 export class NotificationsModule { }
