@@ -141,7 +141,7 @@ export class AuthService {
       } else {
         newFavorites = newFavorites.filter(c => c !== course);
       }
-      this.db.doc<UserData>(`users/${user.uid}`).update({
+      return this.db.doc<UserData>(`users/${user.uid}`).update({
         favoriteCourses: newFavorites
       });
     });
