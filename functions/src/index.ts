@@ -289,3 +289,18 @@ export const onCommentCreated = functions.firestore.document('topics/{topicId}/c
     url: 'topic/' + tid
   });
 });
+
+export const onPendingScanDeleted = functions.firestore.document('pendingScans/{pid}').onDelete(async (snapshot, context) => {
+
+  const pid = context.params.pid;
+  const ps = snapshot.data() as PendingScan;
+  const numOfPics = ps ? ps.pages.length : 0;
+  const promises = [];
+  for (let i=0; i < numOfPics; ++i){
+    const path = `${ps.course}/${ps.year}/${ps.semester}/${ps.moed}/pending/${pid}/${i}.jpg`;
+    promises.push(bucket.file(path).delete());
+    console.log(`Deleting ${path}`);
+  }
+
+  return Promise.all(promises);
+});
