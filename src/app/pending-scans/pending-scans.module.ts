@@ -9,9 +9,11 @@ import {UploadModule} from '../upload/upload.module';
 import {FormsModule} from '@angular/forms';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {MatSnackBarModule} from '@angular/material';
+import { PendingScansListComponent } from './pending-scans-list/pending-scans-list.component';
+import {AppRoutingModule} from '../app-routing.module';
 
 @NgModule({
-  declarations: [PendingScanComponent, PendingSolutionModalComponent],
+  declarations: [PendingScanComponent, PendingSolutionModalComponent, PendingScansListComponent],
   imports: [
     CommonModule,
     CoreModule,
@@ -21,9 +23,10 @@ import {MatSnackBarModule} from '@angular/material';
     FormsModule,
     NgxSpinnerModule,
     MatSnackBarModule,
+    AppRoutingModule
   ],
   exports: [
-    PendingScanComponent,
+    PendingScansListComponent,
     PendingSolutionModalComponent
   ]
 })
