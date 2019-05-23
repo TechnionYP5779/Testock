@@ -5,6 +5,7 @@ import {NotificationsService} from './notifications.service';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AppRoutingModule} from '../app-routing.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {AppRoutingModule} from '../app-routing.module';
     CommonModule,
     AngularFontAwesomeModule,
     AngularFirestoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgbModule
   ]
 })
 export class NotificationsModule { }
