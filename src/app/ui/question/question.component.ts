@@ -52,4 +52,8 @@ export class QuestionComponent implements OnInit {
       this.snackBar.open(`This question was removed from your solved question list!`, 'close', {duration: 3000});
     });
   }
+
+  addTag() {
+
+  }
 }

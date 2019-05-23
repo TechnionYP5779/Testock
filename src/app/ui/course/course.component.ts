@@ -7,7 +7,8 @@ import {ExamId} from '../../entities/exam';
 import {AuthService} from '../../users/auth.service';
 import {Observable} from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {Sort} from '@angular/material';
+import {MatSnackBar, Sort} from '@angular/material';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-course',
@@ -22,8 +23,10 @@ export class CourseComponent implements OnInit {
   public exams: ExamId[];
   topics$: Observable<any[]>;
   adminAccess: boolean;
+  newTag: any;
 
-  constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
+  constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService,
+  private snackBar: MatSnackBar, private spinner: NgxSpinnerService) {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForCourseWithCreators(this.id);
   }
@@ -81,6 +84,21 @@ export class CourseComponent implements OnInit {
         default: return 0;
       }
     });
+  }
+
+  addNewTag() {
+    console.log('got here');
+    if(this.course.tags == null){
+      this.course.tags = [this.newTag];
+    }
+    else{
+      this.course.tags.push(this.newTag);
+    }
+    this.spinner.show();
+    this.db.createCourse(this.course).then(() => this.spinner.hide())
+      .then(() => {
+        this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
+      });
   }
 }
 

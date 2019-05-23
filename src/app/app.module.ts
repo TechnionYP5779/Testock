@@ -31,6 +31,8 @@ import {DiscussionsModule} from './discussions/discussions.module';
 import {GamificationModule} from './gamification/gamification.module';
 import {MatSortModule} from '@angular/material';
 import {PendingScansModule} from './pending-scans/pending-scans.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   imports: [
@@ -50,7 +52,8 @@ import {PendingScansModule} from './pending-scans/pending-scans.module';
     NgxSpinnerModule,
     GamificationModule,
     MatSortModule,
-    PendingScansModule
+    PendingScansModule,
+    NgbModule
   ],
   declarations: [
     AppComponent,
