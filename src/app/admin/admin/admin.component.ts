@@ -17,7 +17,7 @@ export class AdminComponent implements OnInit {
 
   users: UserData[];
   faculties: FacultyId[];
-  newCourse: Course = {id: null, faculty: null, name: null, created: null};
+  newCourse: Course = {id: null, faculty: null, name: null, created: null, tags: null};
   newFaculty: Faculty = {name: null, created: null};
   selectedUser: UserData = null;
 
@@ -52,7 +52,7 @@ export class AdminComponent implements OnInit {
     this.db.createCourse(this.newCourse).then(() => this.spinner.hide())
       .then(() => {
         this.snackBar.open(`Course ${this.newCourse.name} (${this.newCourse.id}) created successfully!`, 'close', {duration: 3000});
-        this.newCourse = {id: null, name: null, faculty: null, created: null};
+        this.newCourse = {id: null, name: null, faculty: null, created: null, tags: null};
       });
   }
 

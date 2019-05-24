@@ -6,8 +6,37 @@
   </h2>
 
   <div>
-    <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()" type="button"><fa name="check"></fa></button>
-    <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();" type="button"><fa name="check"></fa></button>
+    <div *ngIf="course$ | async as course">
+      <div *ngIf="tags$ | async as tags">
+        <div *ngFor="let tag of tags">
+          <a class="badge badge-primary" style="float: left;margin-right: 5px;" routerLink="/course/{{course.id}}/tag/{{tag}}">#{{tag}}</a>
+        </div>
+      </div>
+    </div>
+
+    <div ngbDropdown #myDrop="ngbDropdown" class="badge badge-secondary" style="vertical-align: top">
+      <button class="badge badge-secondary" style="vertical-align: top; border: 0px; margin: 0px; padding: 0px" id="dropdownManual" ngbDropdownAnchor
+              (focus)="myDrop.open()">Add Tag
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownManual">
+        <div *ngIf="course$ | async as course">
+          <div *ngIf="tags$ | async as tags">
+            <div *ngFor="let tag of arr_diff(course.tags, tags)">
+              <button ngbDropdownItem (click)="addTag(tag)">{{tag}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()"
+            type="button">
+      <fa name="check"></fa>
+    </button>
+    <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();"
+            type="button">
+      <fa name="check"></fa>
+    </button>
   </div>
 
   <div *ngFor="let isAdmin of [isAdmin$ | async]">
@@ -31,7 +60,7 @@
     <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
       {{ topic.subject }}
       <span class="float-right col-4">
-        <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic" />
+        <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic"/>
         <small class="mr-2">{{ topic.creator.name }}</small>
         <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
       </span>

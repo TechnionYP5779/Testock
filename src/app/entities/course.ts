@@ -6,10 +6,12 @@ export interface Course {
   name: string;
   faculty: string;
   created: Timestamp;
+  tags: string[];
 }
 
 export interface CourseWithFaculty {
   id: number;
   name: string;
   faculty: Faculty;
+  tags: string[];
 }

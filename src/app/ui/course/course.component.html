@@ -10,12 +10,48 @@
   <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
   <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
   <p class="lead">
-    <a class="btn btn-primary mr-2" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
-    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
-  </p>
+    <a class="btn btn-primary mr-2" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
+       target="_blank">
+      <fa name="facebook" class="mr-2"></fa>
+      Facebook Group</a>
+    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2"
+       [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">
+      <fa name="globe" class="mr-2"></fa>
+      Course Website</a>
+    <button *ngIf="adminAccess" role="button" class="btn btn-info" data-toggle="modal" data-target="#addTagModal">
+      <fa name="plus" class="mr-1"></fa>
+      Add New Tag
+    </button>
 </div>
 
-<table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams" >
+<div class="modal fade" id="addTagModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <input type="text" class="form-control" placeholder="New Tag" [(ngModel)]="newTag" name="courseName"/>
+        <button type="submit" data-dismiss="modal" class="btn btn-success" (click)="addNewTag();">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table matSort (matSortChange)="sortTags($event)" class="table table-hover" *ngIf="tags">
+  <thead>
+  <tr class="table-warning">
+    <th colspan="4" mat-sort-header="tag">
+      Tags
+      <span class="badge badge-warning">{{tags.length}}</span>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="clickable" routerLink="tag/{{ tag }}" *ngFor="let tag of tags">
+    <td>#{{ tag }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams">
   <thead>
   <tr class="table-primary">
     <th colspan="4">
@@ -40,7 +76,7 @@
   </tbody>
 </table>
 
-<table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
+<table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions">
   <thead>
   <tr class="table-danger">
     <th colspan="4">
@@ -49,7 +85,7 @@
     </th>
   </tr>
   <tr class="table-light">
-    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year" >Year</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year">Year</th>
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
     <th class="text-center" scope="col" style="width: 10%" mat-sort-header="number">Question No.</th>
