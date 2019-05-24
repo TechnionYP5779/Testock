@@ -92,6 +92,9 @@ export class CourseComponent implements OnInit {
     } else {
       if (!this.course.tags.includes(this.newTag)){
         this.course.tags.push(this.newTag);
+      } else {
+        this.snackBar.open(`Tag Already Exists..`, 'close', {duration: 3000});
+        return;
       }
     }
     this.spinner.show();

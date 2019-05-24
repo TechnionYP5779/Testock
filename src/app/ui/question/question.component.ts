@@ -65,4 +65,8 @@ export class QuestionComponent implements OnInit {
         this.spinner.hide();
         this.snackBar.open(`Tag Already Exists..`, 'close', {duration: 3000}); });
   }
+
+  arr_diff (a1, a2) {
+    return a1.filter(e => !a2.includes(e));
+  }
 }
