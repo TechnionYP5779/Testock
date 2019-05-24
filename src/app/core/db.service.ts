@@ -14,6 +14,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
 import {SolvedQuestion} from '../entities/solved-question';
 import {PendingScan, PendingScanId} from '../entities/pending-scan';
+import FieldValue = firebase.firestore.FieldValue;
 
 @Injectable({
   providedIn: 'root'
@@ -156,19 +157,7 @@ export class DbService {
   }
 
   addTagToQuestion(id: string, tag: string) {
-    return this.afs.doc(`questions/${id}`).get().forEach(ds => {
-      let tags = ds.get('tags');
-      if (tags == null) {
-        tags = [tag];
-      } else {
-        if (!tags.includes(tag)) {
-          tags.push(tag);
-        } else {
-          throw new Error('tag already exits');
-        }
-      }
-      return this.afs.doc(`questions/${id}`).update({tags: tags});
-    });
+    return this.afs.doc(`questions/${id}`).update({'tags': FieldValue.arrayUnion(tag)});
   }
 
   getTagsOfQuestion(id: string) {
@@ -408,6 +397,10 @@ export class DbService {
       const id = action.payload.doc.id;
       return {id: id, ...data};
     })));
+  }
+
+  addTagToCourse(id: number, newTag: any) {
+    return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayUnion(newTag)});
   }
 }
 

@@ -93,18 +93,8 @@ export class CourseComponent implements OnInit {
   }
 
   addNewTag() {
-    if(this.course.tags == null){
-      this.course.tags = [this.newTag];
-    } else {
-      if (!this.course.tags.includes(this.newTag)){
-        this.course.tags.push(this.newTag);
-      } else {
-        this.snackBar.open(`Tag Already Exists..`, 'close', {duration: 3000});
-        return;
-      }
-    }
     this.spinner.show();
-    this.db.createCourse(this.course).then(() => this.spinner.hide())
+    this.db.addTagToCourse(this.id, this.newTag).then(() => this.spinner.hide())
       .then(() => {
         this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
       });
