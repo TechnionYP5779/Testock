@@ -29,6 +29,22 @@
   </div>
 </div>
 
+<table matSort (matSortChange)="sortTags($event)" class="table table-hover" *ngIf="tags" >
+  <thead>
+  <tr class="table-warning">
+    <th colspan="4">
+      Tags
+      <span class="badge badge-warning">{{tags.length}}</span>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="clickable" routerLink="tag/{{ tag }}" *ngFor="let tag of tags">
+    <td>#{{ tag }}</td>
+  </tr>
+  </tbody>
+</table>
+
 <table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams" >
   <thead>
   <tr class="table-primary">

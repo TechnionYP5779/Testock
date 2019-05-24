@@ -400,6 +400,10 @@ export class DbService {
   addTagToCourse(id: number, newTag: any) {
     return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayUnion(newTag)});
   }
+
+  getTagsOfCourse(id: number) {
+    return this.afs.doc<Question>(`courses/${id}`).valueChanges().pipe(map(c => c.tags));
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {

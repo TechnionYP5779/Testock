@@ -27,6 +27,7 @@ export class CourseComponent implements OnInit {
   adminAccess: boolean;
   newTag: any;
   favorite$: Observable<boolean>;
+  tags: string[];
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService,
   private snackBar: MatSnackBar, private spinner: NgxSpinnerService) {
@@ -41,6 +42,7 @@ export class CourseComponent implements OnInit {
     this.getCourse();
     this.getQuestions();
     this.getExams();
+    this.getTags();
     this.auth.isAdminForCourse(this.id).subscribe(is => this.adminAccess = is);
   }
 
@@ -54,6 +56,10 @@ export class CourseComponent implements OnInit {
 
   getExams(): void {
     this.db.getExamsOfCourse(this.id).subscribe(exams => this.exams = exams);
+  }
+
+  getTags(): void {
+    this.db.getTagsOfCourse(this.id).subscribe(tags => this.tags = tags);
   }
 
   sortQuestions(sort: Sort) {
@@ -89,6 +95,17 @@ export class CourseComponent implements OnInit {
         // TODO: case 'grade': return compare(a.grade, b.grade, isAsc);
         default: return 0;
       }
+    });
+  }
+
+  sortTags(sort: Sort) {
+    const data = this.tags;
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+    this.tags = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      return compare(a, b, isAsc);
     });
   }
 
