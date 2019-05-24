@@ -9,7 +9,6 @@ import {Observable} from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {MatSnackBar, Sort} from '@angular/material';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {Sort} from '@angular/material';
 import {map, take} from 'rxjs/operators';
 
 @Component({
