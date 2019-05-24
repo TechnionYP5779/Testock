@@ -110,6 +110,8 @@ export class CourseComponent implements OnInit {
   }
 
   addNewTag() {
+    this.newTag = this.newTag.toUpperCase();
+    this.newTag = this.newTag.replace(/\s/g, '');
     this.spinner.show();
     this.db.addTagToCourse(this.id, this.newTag).then(() => this.spinner.hide())
       .then(() => {
