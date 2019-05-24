@@ -6,9 +6,11 @@
   </h2>
 
   <div>
-    <div *ngIf="tags$ | async as tags">
-      <div *ngFor="let tag of tags">
-        <a href="./" class="tag">#{{tag}}</a>
+    <div *ngIf="course$ | async as course">
+      <div *ngIf="tags$ | async as tags">
+        <div *ngFor="let tag of tags">
+            <a class ="tag" routerLink="/course/{{course.id}}/tag/{{tag}}" >#{{tag}}</a>
+        </div>
       </div>
     </div>
     <br/>

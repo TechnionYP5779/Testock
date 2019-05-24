@@ -60,6 +60,7 @@ export class UploadService {
       q.moed = moed;
       q.number = number;
       q.total_grade = points;
+      q.tags = [];
 
       question = await this.db.createQuestionForExam(course, q);
     }

@@ -136,6 +136,21 @@ export class DbService {
       }));
   }
 
+  getQuestionsOfCourseWithTag(cid: number, tag: string): Observable<QuestionId[]> {
+    const ref = r => r
+      .where('course', '==', cid)
+      .where('tags', 'array-contains', tag)
+      .orderBy('number');
+
+    return this.afs.collection('questions', ref).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Question;
+        const qid = a.payload.doc.id;
+        return {id: qid, ...data};
+      }))
+    );
+  }
+
   addTagToQuestion(id: string, tag: string) {
     return this.afs.doc(`questions/${id}`).get().forEach(ds => {
       let tags = ds.get('tags');

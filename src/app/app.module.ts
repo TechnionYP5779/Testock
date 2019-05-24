@@ -35,6 +35,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {CommonModule} from '@angular/common';
 import {PendingSolutionModalComponent} from './pending-scans/pending-solution-modal/pending-solution-modal.component';
+import { TagComponent } from './ui/tag/tag.component';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import {PendingSolutionModalComponent} from './pending-scans/pending-solution-mo
     ExamComponent,
     SolutionComponent,
     FacultiesComponent,
-    FacultyComponent
+    FacultyComponent,
+    TagComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
