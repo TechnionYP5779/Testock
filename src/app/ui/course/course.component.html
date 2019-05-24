@@ -32,7 +32,7 @@
 <table matSort (matSortChange)="sortTags($event)" class="table table-hover" *ngIf="tags" >
   <thead>
   <tr class="table-warning">
-    <th colspan="4">
+    <th colspan="4" mat-sort-header="tag">
       Tags
       <span class="badge badge-warning">{{tags.length}}</span>
     </th>
