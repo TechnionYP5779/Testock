@@ -9,12 +9,13 @@
     <div *ngIf="course$ | async as course">
       <div *ngIf="tags$ | async as tags">
         <div *ngFor="let tag of tags">
-          <button class="badge badge-primary" style="float: left;margin-right: 5px;" routerLink="/course/{{course.id}}/tag/{{tag}}">#{{tag}}</button>
+          <a class="badge badge-primary" style="float: left;margin-right: 5px;" routerLink="/course/{{course.id}}/tag/{{tag}}">#{{tag}}</a>
         </div>
       </div>
     </div>
-    <div ngbDropdown #myDrop="ngbDropdown">
-      <button class="badge badge-secondary" style="vertical-align: top" id="dropdownManual" ngbDropdownAnchor
+
+    <div ngbDropdown #myDrop="ngbDropdown" class="badge badge-secondary" style="vertical-align: top">
+      <button class="badge badge-secondary" style="vertical-align: top; border: 0px; margin: 0px; padding: 0px" id="dropdownManual" ngbDropdownAnchor
               (focus)="myDrop.open()">Add Tag
       </button>
       <div ngbDropdownMenu aria-labelledby="dropdownManual">
@@ -27,6 +28,7 @@
         </div>
       </div>
     </div>
+    <br/>
     <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()"
             type="button">
       <fa name="check"></fa>
