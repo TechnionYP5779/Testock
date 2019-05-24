@@ -16,4 +16,5 @@ export interface UserData {
   faculty: string;
   photoUrl: string;
   created: Timestamp;
+  favoriteCourses: number[];
 }

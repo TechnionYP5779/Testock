@@ -9,6 +9,8 @@ import {Observable} from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {MatSnackBar, Sort} from '@angular/material';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {Sort} from '@angular/material';
+import {map, take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-course',
@@ -24,11 +26,15 @@ export class CourseComponent implements OnInit {
   topics$: Observable<any[]>;
   adminAccess: boolean;
   newTag: any;
+  favorite$: Observable<boolean>;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService,
   private snackBar: MatSnackBar, private spinner: NgxSpinnerService) {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForCourseWithCreators(this.id);
+    this.favorite$ = auth.user$.pipe(
+      map(user => user.favoriteCourses.includes(this.course.id))
+    );
   }
 
   ngOnInit() {
@@ -102,6 +108,9 @@ export class CourseComponent implements OnInit {
       .then(() => {
         this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
       });
+  }
+  updateFavoriteCourse() {
+    this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
   }
 }
 

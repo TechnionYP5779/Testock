@@ -5,7 +5,7 @@ import {User} from 'firebase';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
-import {flatMap, map, switchMap} from 'rxjs/operators';
+import {flatMap, map, switchMap, take} from 'rxjs/operators';
 import {UserData} from '../entities/user';
 import {Course} from '../entities/course';
 import {Question} from '../entities/question';
@@ -105,7 +105,8 @@ export class AuthService {
         points: 100,
         faculty: results[0] ? (results[0] as any).department : null,
         photoUrl: results[1] ? results[1] : `https://ui-avatars.com/api/?name=${user.displayName}`,
-        created: Timestamp.now()
+        created: Timestamp.now(),
+        favoriteCourses: []
       };
 
       return ref.set(data);
@@ -128,5 +129,21 @@ export class AuthService {
   isAdminForQuestion(id: string): Observable<boolean> {
     return this.db.doc<Question>(`questions/${id}`).valueChanges()
       .pipe(flatMap(q => this.isAdminForCourse(q.course)));
+  }
+
+  updateFavoriteCourse(course: number, favorite: boolean): Promise<void> {
+    return this.user$.pipe(take(1)).toPromise().then(user => {
+      let newFavorites = user.favoriteCourses;
+      if (favorite) {
+        if (newFavorites.includes(course) === false) {
+          newFavorites.push(course);
+        }
+      } else {
+        newFavorites = newFavorites.filter(c => c !== course);
+      }
+      return this.db.doc<UserData>(`users/${user.uid}`).update({
+        favoriteCourses: newFavorites
+      });
+    });
   }
 }

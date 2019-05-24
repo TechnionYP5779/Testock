@@ -19,12 +19,15 @@ export class NotificationsListComponent implements OnInit {
 
   ngOnInit() {
     this.notifications$ = this.user.pipe(
-      flatMap(user => this.notifications.getNotificationsForUser(user.uid))
+      flatMap(user => this.notifications.getNotificationsForUser(user.uid, 30))
     );
   }
 
-  seen(event: MouseEvent, notification: NotificationId) {
-    event.preventDefault();
+  seen(event: MouseEvent, notification: NotificationId, redirect: boolean) {
+    if (redirect === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     this.notifications.updateNotificationState(notification.id, true);
   }
 }
