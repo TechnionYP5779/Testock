@@ -60,8 +60,9 @@ export class QuestionComponent implements OnInit {
   addTag(tag) {
     this.spinner.show();
     this.db.addTagToQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
-      this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000})}).catch(e => {
+      this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
+      this.tags$ = this.db.getTagsOfQuestion(this.qId); }).catch(e => {
         this.spinner.hide();
-        this.snackBar.open(`Tag Already Exists..`, 'close', {duration: 3000})});
+        this.snackBar.open(`Tag Already Exists..`, 'close', {duration: 3000}); });
   }
 }

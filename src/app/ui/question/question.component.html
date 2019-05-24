@@ -14,10 +14,8 @@
       </div>
     </div>
     <br/>
-    <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()" type="button"><fa name="check"></fa></button>
-    <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();" type="button"><fa name="check"></fa></button>
     <div ngbDropdown #myDrop="ngbDropdown">
-      <button class="mt-2 btn btn-outline-success btn-lg" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Add Tag</button>
+      <button class="btn btn-outline-primary btn-sm dropdown-toggle" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">Add Tag</button>
       <div ngbDropdownMenu aria-labelledby="dropdownManual">
         <div *ngIf="course$ | async as course">
           <div *ngFor="let tag of course.tags">
@@ -26,6 +24,8 @@
         </div>
       </div>
     </div>
+    <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()" type="button"><fa name="check"></fa></button>
+    <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();" type="button"><fa name="check"></fa></button>
   </div>
 
   <div *ngFor="let isAdmin of [isAdmin$ | async]">

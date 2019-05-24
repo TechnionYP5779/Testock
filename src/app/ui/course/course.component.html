@@ -6,7 +6,7 @@
   <p class="lead">
     <a class="btn btn-primary mr-2" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
     <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
-    <button *ngIf="adminAccess" role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#addTagModal">
+    <button *ngIf="adminAccess" role="button" class="btn btn-info" data-toggle="modal" data-target="#addTagModal">
       <fa name="plus" class="mr-1"></fa>
       Add New Tag
     </button>
@@ -17,7 +17,7 @@
     <div class="modal-content">
       <div class="modal-header">
   <input type="text" class="form-control" placeholder="New Tag" [(ngModel)]="newTag" name="courseName" />
-  <button type="submit" class="btn btn-success" (click)="addNewTag();">Add Tag</button>
+  <button type="submit" class="btn btn-success" (click)="addNewTag();">Add</button>
       </div>
     </div>
   </div>

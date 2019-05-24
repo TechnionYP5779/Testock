@@ -1,5 +1,5 @@
 <h1 style="color:DodgerBlue"> {{ (course$ | async)?.name}}  ({{courseID}}): #{{tag}}</h1>
-
+<br>
 <table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions$ | async as questions" >
   <thead>
   <tr class="table-danger">
