@@ -4,7 +4,7 @@ import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
 import {AuthService} from '../../users/auth.service';
-import {flatMap, map, takeLast} from 'rxjs/operators';
+import {flatMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
@@ -61,10 +61,11 @@ export class QuestionComponent implements OnInit {
     this.spinner.show();
     this.db.addTagToQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
       this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
-      this.tags$ = this.db.getTagsOfQuestion(this.qId); });
+      this.tags$ = this.db.getTagsOfQuestion(this.qId);
+    });
   }
 
-  arr_diff (a1, a2) {
+  arr_diff(a1, a2) {
     return a1.filter(e => !a2.includes(e));
   }
 }

@@ -30,7 +30,7 @@ export class CourseComponent implements OnInit {
   tags: string[];
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService,
-  private snackBar: MatSnackBar, private spinner: NgxSpinnerService) {
+              private snackBar: MatSnackBar, private spinner: NgxSpinnerService) {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForCourseWithCreators(this.id);
     this.favorite$ = auth.user$.pipe(
@@ -70,13 +70,18 @@ export class CourseComponent implements OnInit {
     this.questions = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'year': return compare(a.year, b.year, isAsc);
-        case 'semester': return compare(a.semester, b.semester, isAsc);
-        case 'moed': return compare(a.moed, b.moed, isAsc);
-        case 'number': return compare(a.number, b.number, isAsc);
+        case 'year':
+          return compare(a.year, b.year, isAsc);
+        case 'semester':
+          return compare(a.semester, b.semester, isAsc);
+        case 'moed':
+          return compare(a.moed, b.moed, isAsc);
+        case 'number':
+          return compare(a.number, b.number, isAsc);
         // TODO: case 'difficulty': return compare(a.difficulty, b.difficulty, isAsc);
         // TODO: case 'is_solved': return compare(a.is_solved, b.is_solved, isAsc);
-        default: return 0;
+        default:
+          return 0;
       }
     });
   }
@@ -89,11 +94,15 @@ export class CourseComponent implements OnInit {
     this.exams = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'year': return compare(a.year, b.year, isAsc);
-        case 'semester': return compare(a.semester, b.semester, isAsc);
-        case 'moed': return compare(a.moed, b.moed, isAsc);
+        case 'year':
+          return compare(a.year, b.year, isAsc);
+        case 'semester':
+          return compare(a.semester, b.semester, isAsc);
+        case 'moed':
+          return compare(a.moed, b.moed, isAsc);
         // TODO: case 'grade': return compare(a.grade, b.grade, isAsc);
-        default: return 0;
+        default:
+          return 0;
       }
     });
   }
@@ -118,6 +127,7 @@ export class CourseComponent implements OnInit {
         this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
       });
   }
+
   updateFavoriteCourse() {
     this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
   }
