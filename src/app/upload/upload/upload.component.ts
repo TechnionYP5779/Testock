@@ -289,4 +289,8 @@ export class UploadComponent implements OnInit {
     this.removedFirstPage = false;
     this.blobs = this.allBlobs;
   }
+
+  removePageByIndex(i: number) {
+    this.blobs = this.blobs.filter((v,j) => j !== i);
+  }
 }

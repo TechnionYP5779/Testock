@@ -44,11 +44,14 @@
               <button type="button" class="btn btn-danger" (click)="clearEvenPages()">Remove Even Pages</button>
               <button type="button" class="btn btn-danger" (click)="clearOddPages()">Remove Odd Pages</button>
               <button type="button" class="btn btn-danger" (click)="clearBlankPages()">Remove Blank Pages</button>
-              <button type="button" class="btn btn-danger" (click)="returnPages()()">Return All Pages</button>
+              <button type="button" class="btn btn-danger" (click)="returnPages()">Return All Pages</button>
             </div>
           </div>
           <div class="row">
             <div class="col-3" *ngFor="let blob of blobs; let i = index">
+              <button type="button" class="close" aria-label="Close" style="color: red" (click)="removePageByIndex(i)">
+                <span aria-hidden="true">&times;</span>
+              </button>
               <app-scan-page [blob]="blob" [index]="i" [croppable]="activeQuestion"
                              (imageSelected)="addImage($event)"></app-scan-page>
             </div>
