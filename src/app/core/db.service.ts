@@ -160,10 +160,8 @@ export class DbService {
     return this.afs.doc(`questions/${id}`).update({'tags': FieldValue.arrayUnion(tag)});
   }
 
-  getTagsOfQuestion(id: string) {
-    return this.afs.doc(`questions/${id}`).get().toPromise().then(ds => {
-      return ds.get('tags');
-    });
+  getTagsOfQuestion(id: string): Observable<string[]> {
+    return this.afs.doc<Question>(`questions/${id}`).valueChanges().pipe(map(q => q.tags));
   }
 
   addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<void> {

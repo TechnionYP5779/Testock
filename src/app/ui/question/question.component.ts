@@ -27,7 +27,7 @@ export class QuestionComponent implements OnInit {
   isAdmin$: Observable<boolean>;
   userId: string;
   solvedQuestion$: Observable<SolvedQuestion>;
-  tags$: Promise<string[]>;
+  tags$: Observable<string[]>;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar,
               private spinner: NgxSpinnerService) {
