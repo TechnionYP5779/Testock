@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Roles, UserData} from '../../entities/user';
+import {UserData} from '../../entities/user';
 import {DbService} from '../../core/db.service';
 import {MatSnackBar} from '@angular/material';
 import {Faculty, FacultyId} from '../../entities/faculty';
@@ -27,23 +27,6 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  userPermissionChanged(user: UserData, $event: any) {
-    this.spinner.show();
-    $event.target.disabled = true;
-    const roles: Roles = {user: $event.target.checked};
-    this.db.setUserRoles(user.uid, roles).then(() => this.spinner.hide()).then(() => {
-      this.snackBar.open(`Permissions for ${user.name} set successfully!`, 'close', {duration: 3000});
-    });
-  }
-
-  adminPermissionChanged(user: UserData, $event: any) {
-    this.spinner.show();
-    const roles = {admin: $event.target.checked};
-    this.db.setUserRoles(user.uid, roles).then(() => this.spinner.hide()).then(() => {
-      this.snackBar.open(`Permissions for ${user.name} set successfully!`, 'close', {duration: 3000});
-    });
   }
 
   createNewCourse() {

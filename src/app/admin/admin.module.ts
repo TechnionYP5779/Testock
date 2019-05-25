@@ -7,11 +7,21 @@ import {UsersModule} from '../users/users.module';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {NgxSpinnerModule} from 'ngx-spinner';
+import { UsersTableComponent } from './users-table/users-table.component';
+import {
+  MatFormFieldModule, MatIconModule,
+  MatInputModule,
+  MatPaginatorModule,
+  MatSlideToggleModule,
+  MatSortModule,
+  MatTableModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [
     AdminComponent,
-    FacultyControlPanelComponent
+    FacultyControlPanelComponent,
+    UsersTableComponent
   ],
   imports: [
     FormsModule,
@@ -19,7 +29,14 @@ import {NgxSpinnerModule} from 'ngx-spinner';
     CoreModule,
     UsersModule,
     RouterModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatSortModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatIconModule
   ],
   exports: [
     AdminComponent
