@@ -41,6 +41,9 @@ export class BatchUploadComponent implements OnInit {
       this.files = files;
       this.uploadActive = true;
       this.uploadTasks = files.map((file) => this.upload.uploadPDFFile(file));
+      return Promise.all(this.uploadTasks);
+    }).then(() => {
+      // this.uploadActive = false;
     });
   }
 }

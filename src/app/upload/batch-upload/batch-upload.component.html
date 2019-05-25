@@ -6,6 +6,8 @@
   <tr *ngFor="let file of files; let i = index">
     <th scope="row">{{file.name}}</th>
     <td style="width: 20%" *ngIf="uploadTasks[i] | async as result; else loading">
+      <fa name="check" class="text-success mr-2" *ngIf="result === 'Success'"></fa>
+      <fa name="times" class="text-danger mr-2" *ngIf="result !== 'Success'"></fa>
       <strong>{{result}}</strong>
     </td>
     <ng-template #loading>

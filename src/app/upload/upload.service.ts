@@ -18,6 +18,13 @@ export enum PDFUploadResult {
   COURSE_DOESNT_EXIST
 }
 
+class ScanDetails {
+  course: number;
+  year: number;
+  semester: string;
+  moed: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -136,12 +143,63 @@ export class UploadService {
   }
 
   /* Batch Upload Method */
+  private getDetailsByFileName(fileName: String): ScanDetails {
+    if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
+      const split = fileName.split('-');
+      const courseId = parseInt(split[2], 10);
+      const year = parseInt(split[1].substr(0, 4), 10);
+      const semNum = parseInt(split[1].substr(5, 2), 10);
+      const semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
+      const moedId = parseInt(split[3], 10);
+      const moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
+      return {course: courseId, year: year, semester: semester, moed: moed};
+    } else {
+      return null;
+    }
+  }
+
+  private getDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
+    return this.ocr.getInfoFromSticker(firstPage).then(details => {
+      const semNum = parseInt(details.semester, 10);
+      details.semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
+      const moedId = parseInt(details.moed, 10);
+      details.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
+      details.course = parseInt(details.course, 10);
+      details.year = parseInt(details.year, 10);
+      return details;
+    });
+  }
+
   public async uploadPDFFile(scan: File): Promise<string> {
-    const images = await this.pdf.getImagesOfFile(scan);
+    const images: Blob[] = await this.pdf.getImagesOfFile(scan);
     if (images.length === 0) {
-      console.log(`No images for scan ${scan.name}`);
       return 'No images';
     }
+
+    let details = this.getDetailsByFileName(scan.name);
+    if (!details) {
+      details = await this.getDetailsBySticker(images[0]);
+      if (!details) {
+        return 'Error getting scan details';
+      }
+    }
+
+    const course = await this.db.getCourse(details.course).pipe(first()).toPromise();
+    if (!course) {
+      return 'Course does not exist';
+    }
+
+    const exam = await this.db.getExamByDetails(details.course, details.year, details.semester, details.moed).pipe(first()).toPromise();
+
+    if (!exam) {
+      const e = {} as Exam;
+      e.moed = details.moed;
+      e.year = details.year;
+      e.semester = details.semester;
+      await this.db.createExamForCourse(details.course, e);
+    }
+
+    await this.uploadPendingScan(details.course, details.year, details.semester, details.moed, images);
 
     return 'Success';
   }
