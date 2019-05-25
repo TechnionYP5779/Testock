@@ -9,13 +9,22 @@ import {GamificationService, Rewards} from '../gamification/gamification.service
 import {PendingScanId} from '../entities/pending-scan';
 import { firestore } from 'firebase/app';
 import Timestamp = firestore.Timestamp;
+import {OCRService} from '../core/ocr.service';
+import {PdfService} from './pdf.service';
+
+export enum PDFUploadResult {
+  SUCCESS,
+  NO_IMAGES,
+  COURSE_DOESNT_EXIST
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
 
-  constructor(private db: DbService, private storage: AngularFireStorage, private gamification: GamificationService) {
+  constructor(private db: DbService, private storage: AngularFireStorage,
+              private gamification: GamificationService, private ocr: OCRService, private pdf: PdfService) {
   }
 
   async uploadScan(quickMode: boolean, pages: Blob[], course: number, year: number, semester: string, moed: string,
@@ -124,5 +133,16 @@ export class UploadService {
     await this.db.setSolutionForQuestion(q, sol);
 
     await this.gamification.reward(Rewards.CROPPED_PENDING_SOLUTION);
+  }
+
+  /* Batch Upload Method */
+  public async uploadPDFFile(scan: File): Promise<string> {
+    const images = await this.pdf.getImagesOfFile(scan);
+    if (images.length === 0) {
+      console.log(`No images for scan ${scan.name}`);
+      return 'No images';
+    }
+
+    return 'Success';
   }
 }
