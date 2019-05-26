@@ -20,16 +20,8 @@
           <form class="form-inline my-2 my-lrg-0">
             <input class="form-control mr-sm-2" type="text" (keyup)="onSearchChange($event.target.value)" placeholder="Search course..." aria-label="Search">
           </form>
-          <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">
-            <fa name="upload"></fa>
-            Upload scan
-          </button>
           <!-- User logged in -->
           <div *ngIf="auth.user$ | async as user">
-            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">
-              <fa name="sign-out"></fa>
-              Logout
-            </button>
             <div class="profile-image mr-2" routerLink="/profile">
               <span class="notification-badge badge badge-warning" routerLink="/profile" *ngIf="(notificationsCount$ | async) && (notificationsCount$ | async) > 0">{{ (notificationsCount$ | async) }}</span>
               <img class="rounded" [src]="user.photoUrl" width="35px">
@@ -43,16 +35,35 @@
           <div *ngIf="!auth.currentUser">
             <button class="btn btn-outline-success mr-2" type="button" (click)="login()">
             <fa name="sign-in"></fa>
-              Login
+              Sign In
             </button>
           </div>
 
-          <div *ngIf="isAdmin">
-            <button class="btn btn-outline-danger mr-2" type="button" routerLink="/admin">
-              <fa name="cog"></fa>
-              Admin CP
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item *ngIf="auth.currentUser" routerLink="/upload">
+              <mat-icon>cloud_upload</mat-icon>
+              <span>Upload Scan</span>
             </button>
-          </div>
+            <button mat-menu-item *ngIf="auth.currentUser" routerLink="/batch-upload">
+              <mat-icon>cloud_upload</mat-icon>
+              <span>Batch Upload</span>
+            </button>
+            <button mat-menu-item *ngIf="isAdmin" routerLink="/admin">
+              <mat-icon>settings</mat-icon>
+              <span>Admin CP</span>
+            </button>
+            <button mat-menu-item *ngIf="auth.currentUser" (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Sign Out</span>
+            </button>
+            <button mat-menu-item *ngIf="!auth.currentUser" (click)="login()">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Sign In</span>
+            </button>
+          </mat-menu>
         </div>
       </nav>
     </div>
