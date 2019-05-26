@@ -189,17 +189,24 @@ export class UploadService {
       return 'Course does not exist';
     }
 
-    const exam = await this.db.getExamByDetails(details.course, details.year, details.semester, details.moed).pipe(first()).toPromise();
+    let exam = await this.db.getExamByDetails(details.course, details.year, details.semester, details.moed).pipe(first()).toPromise();
 
     if (!exam) {
-      const e = {} as Exam;
+      let e = {} as Exam;
       e.moed = details.moed;
       e.year = details.year;
       e.semester = details.semester;
-      await this.db.createExamForCourse(details.course, e);
+      exam = await this.db.createExamForCourse(details.course, e);
     }
 
-    await this.uploadPendingScan(details.course, details.year, details.semester, details.moed, images);
+    const pendingScan = await this.uploadPendingScan(details.course, details.year, details.semester, details.moed, images);
+
+    const questions = await this.db.getQuestionsOfExam(details.course, exam.id).pipe(first()).toPromise();
+
+    for (let i = 0; i < questions.length; ++i) {
+      const q = questions[i];
+      await this.uploadQuestion(q.course, q.year, q.semester, q.moed, q.number, -1, q.total_grade, [], pendingScan);
+    }
 
     return 'Success';
   }
