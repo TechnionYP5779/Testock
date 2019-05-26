@@ -28,6 +28,8 @@ export class QuestionComponent implements OnInit {
   userId: string;
   solvedQuestion$: Observable<SolvedQuestion>;
   tags$: Observable<string[]>;
+  selected = 0;
+  average$: number;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar,
               private spinner: NgxSpinnerService) {
@@ -46,8 +48,8 @@ export class QuestionComponent implements OnInit {
   }
 
   markAsSolved() {
-    this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId}).then(() => {
-      this.snackBar.open(`This question was added to your solved question list!`, 'close', {duration: 3000});
+    this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId, difficulty: -1}).then(() => {
+      document.getElementById('openModal').click();
     });
   }
 
@@ -67,5 +69,9 @@ export class QuestionComponent implements OnInit {
 
   arr_diff(a1, a2) {
     return a1.filter(e => !a2.includes(e));
+  }
+
+  sendRate() {
+    this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId, difficulty: this.selected}).then(() => {});
   }
 }
