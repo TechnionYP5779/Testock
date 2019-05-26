@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile} from 'ngx-file-drop';
 import {UploadService} from '../upload.service';
 
@@ -10,7 +10,6 @@ import {UploadService} from '../upload.service';
 export class BatchUploadComponent implements OnInit {
 
   uploadActive = false;
-  isDragged: boolean;
   private files: File[];
   private uploadTasks: Promise<string>[];
 
@@ -43,8 +42,15 @@ export class BatchUploadComponent implements OnInit {
       this.uploadTasks = files.map((file) => this.upload.uploadPDFFile(file));
       return Promise.all(this.uploadTasks);
     }).then(() => {
-      // this.uploadActive = false;
+      this.uploadActive = false;
     });
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.uploadActive) {
+      $event.returnValue = true;
+    }
   }
 }
 
