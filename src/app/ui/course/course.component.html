@@ -43,11 +43,11 @@
           <div class="form-group">
             <label for="courseName">Name:</label>
             <input type="text" class="form-control" id="courseName" placeholder="Enter name" name="subject"
-                   [(ngModel)]="course.name">
+                   [(ngModel)]="newCourseName">
           </div>
           <div class="form-group">
             <label for="desc-editor">Description:</label>
-            <ck-editor name="editor1" id="desc-editor" [(ngModel)]="course.description" skin="moono-lisa"></ck-editor>
+            <ck-editor name="editor1" id="desc-editor" [(ngModel)]="newCourseDescription" skin="moono-lisa"></ck-editor>
           </div>
           <button type="submit" class="btn btn-primary mb-2" (click)="editCourseDetails()" data-dismiss="modal">Post</button>
         </form>
