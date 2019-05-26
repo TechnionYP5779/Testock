@@ -220,9 +220,10 @@ export class DbService {
   }
 
   createQuestionForExam(course: number, q: Question): Promise<QuestionId> {
-    return this.questionsCollection.add(q)
-      .then(docRef => {
-        return {id: docRef.id, ...q};
+    const docId = `${course}-${q.year}-${q.semester}-${q.moed}-${q.number}`;
+    return this.questionsCollection.doc<Question>(docId).set(q)
+      .then(() => {
+        return {id: docId, ...q};
       });
   }
 
