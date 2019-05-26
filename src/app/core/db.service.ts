@@ -86,9 +86,10 @@ export class DbService {
   }
 
   createExamForCourse(course: number, exam: Exam): Promise<ExamId> {
-    return this.coursesCollection.doc<Course>(course.toString()).collection('exams').add(exam)
-      .then(docRef => {
-        return {id: docRef.id, course: course, ...exam};
+    const docId = `${exam.year}-${exam.semester}-${exam.moed}`;
+    return this.coursesCollection.doc<Course>(course.toString()).collection('exams').doc<Exam>(docId).set(exam)
+      .then(() => {
+        return {id: docId, course: course, ...exam};
       });
   }
 
