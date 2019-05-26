@@ -192,7 +192,7 @@ export class UploadService {
     let exam = await this.db.getExamByDetails(details.course, details.year, details.semester, details.moed).pipe(first()).toPromise();
 
     if (!exam) {
-      let e = {} as Exam;
+      const e = {} as Exam;
       e.moed = details.moed;
       e.year = details.year;
       e.semester = details.semester;
