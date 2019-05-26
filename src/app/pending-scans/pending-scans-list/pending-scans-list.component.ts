@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {PendingScanId} from '../../entities/pending-scan';
 import {DbService} from '../../core/db.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-pending-scans-list',
@@ -14,6 +15,7 @@ export class PendingScansListComponent implements OnInit {
   private _year: number;
   private _semester: string;
   private _moed: string;
+  @Input() adminAccess: boolean;
 
   pendingScans$: Observable<PendingScanId[]>;
 
@@ -41,9 +43,13 @@ export class PendingScansListComponent implements OnInit {
     this.pendingScans$ = this.db.getPendingScans(this._course, this._year, this._semester, this._moed);
   }
 
-  constructor(private db: DbService) { }
+  constructor(private db: DbService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
   }
 
+  removePendingScan(p: PendingScanId) {
+    this.spinner.show();
+    this.db.deletePendingScan(p.id).then(() => this.spinner.hide());
+  }
 }
