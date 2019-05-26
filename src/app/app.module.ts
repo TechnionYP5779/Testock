@@ -15,7 +15,7 @@ import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatInputModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatInputModule, MatMenuModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {CoreModule} from './core/core.module';
 import {FormsModule} from '@angular/forms';
@@ -58,7 +58,10 @@ import { TagComponent } from './ui/tag/tag.component';
     PendingScansModule,
     NgbModule,
     NgbModalModule,
-    CommonModule
+    CommonModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule
   ],
   declarations: [
     AppComponent,
