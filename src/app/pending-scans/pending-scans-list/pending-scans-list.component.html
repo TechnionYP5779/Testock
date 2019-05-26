@@ -5,7 +5,7 @@
   </li>
   <a *ngFor="let p of pendingScans" routerLink="/pendingScan/{{ p.id }}" class="list-group-item list-group-item-action">
     Pending Scan Uploaded at {{ p.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}
-    <button class="btn btn-sm btn-danger float-right" (click)="removePendingScan(p)" *ngIf="adminAccess">
+    <button class="btn btn-sm btn-danger float-right" (click)="removePendingScan($event, p)" *ngIf="adminAccess">
       <fa name="times"></fa>
     </button>
   </a>

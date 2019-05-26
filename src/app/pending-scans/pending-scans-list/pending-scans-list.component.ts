@@ -48,7 +48,9 @@ export class PendingScansListComponent implements OnInit {
   ngOnInit() {
   }
 
-  removePendingScan(p: PendingScanId) {
+  removePendingScan($event: MouseEvent, p: PendingScanId) {
+    $event.preventDefault();
+    $event.stopPropagation();
     this.spinner.show();
     this.db.deletePendingScan(p.id).then(() => this.spinner.hide());
   }
