@@ -15,6 +15,7 @@ import {GamificationModule} from '../gamification/gamification.module';
 import {FormsModule} from '@angular/forms';
 import { BatchUploadComponent } from './batch-upload/batch-upload.component';
 import {FileDropModule} from 'ngx-file-drop';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {FileDropModule} from 'ngx-file-drop';
     GamificationModule,
     MatSlideToggleModule,
     FormsModule,
-    FileDropModule
+    FileDropModule,
+    RouterModule
   ],
   providers: [
     UploadService,

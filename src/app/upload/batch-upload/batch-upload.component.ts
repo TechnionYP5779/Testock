@@ -1,6 +1,7 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile} from 'ngx-file-drop';
 import {UploadService} from '../upload.service';
+import {PendingScanId} from '../../entities/pending-scan';
 
 @Component({
   selector: 'app-batch-upload',
@@ -11,7 +12,7 @@ export class BatchUploadComponent implements OnInit {
 
   uploadActive = false;
   private files: File[];
-  private uploadTasks: Promise<string>[];
+  private uploadTasks: Promise<PendingScanId|Error>[];
 
   constructor(private upload: UploadService) { }
 
@@ -19,7 +20,7 @@ export class BatchUploadComponent implements OnInit {
   }
 
   public dropped(event: UploadEvent) {
-    const fileEntries = [];
+    let fileEntries: FileSystemFileEntry[] = [];
     for (const droppedFile of event.files) {
       // Is it a file?
       if (droppedFile.fileEntry.isFile) {
@@ -32,6 +33,8 @@ export class BatchUploadComponent implements OnInit {
       }
     }
 
+    fileEntries = fileEntries.filter(fe => fe.name.endsWith('.pdf'));
+
     if (fileEntries.length === 0) {
       return;
     }
@@ -39,7 +42,7 @@ export class BatchUploadComponent implements OnInit {
     Promise.all(fileEntries.map(fe => getFile(fe))).then(files => {
       this.files = files;
       this.uploadActive = true;
-      this.uploadTasks = files.map((file) => this.upload.uploadPDFFile(file));
+      this.uploadTasks = files.map((file) => this.upload.uploadPDFFile(file).catch(reason => reason));
       return Promise.all(this.uploadTasks);
     }).then(() => {
       this.uploadActive = false;
