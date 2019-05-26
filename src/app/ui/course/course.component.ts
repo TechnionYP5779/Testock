@@ -133,8 +133,10 @@ export class CourseComponent implements OnInit {
   }
 
   editCourseDetails() {
-    this.db.updateCourseName(this.course.id, this.course.name);
-    this.db.updateCourseDescription(this.course.id, this.course.description);
+    this.spinner.show();
+    this.db.updateCourseName(this.course.id, this.course.name).then(() =>
+      this.db.updateCourseDescription(this.course.id, this.course.description)).then(() => this.spinner.hide())
+      .then(() => this.snackBar.open(`Course Details Changed Successfully!`, 'close', {duration: 3000}));
   }
 
 }
