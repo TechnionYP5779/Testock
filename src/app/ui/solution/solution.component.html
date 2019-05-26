@@ -9,15 +9,19 @@
     <h6 class="mt-5">Available from pending scan</h6>
   </div>
   <div class="card-img-overlay align-items-center d-flex justify-content-center">
-    <h2 class="card-title text-center">
+    <h2 class="card-title text-center" *ngIf="solution.grade >= 0">
       {{solution.grade}} / {{question.total_grade}}
     </h2>
+    <h4 class="card-title text-center" *ngIf="solution.grade === -1">
+      Unknown Grade
+    </h4>
   </div>
 </div>
 
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Solution Grade: {{solution.grade}} / {{question.total_grade}}</h4>
+    <h4 class="modal-title" *ngIf="solution.grade >= 0">Solution Grade: {{solution.grade}} / {{question.total_grade}}</h4>
+    <h4 class="modal-title" *ngIf="solution.grade === -1">Unknown Grade</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
