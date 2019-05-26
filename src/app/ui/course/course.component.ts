@@ -131,6 +131,12 @@ export class CourseComponent implements OnInit {
   updateFavoriteCourse() {
     this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
   }
+
+  editCourseDetails() {
+    this.db.updateCourseName(this.course.id, this.course.name);
+    this.db.updateCourseDescription(this.course.id, this.course.description);
+  }
+
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {

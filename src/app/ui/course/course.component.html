@@ -8,7 +8,7 @@
     </button>
   </div>
   <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
-  <p class="lead">Welcome to the "{{ course.name }}" ({{ course.id }}) course page. Good luck in your exams!</p>
+  <div class="lead" [innerHTML]="course.description"></div>
   <p class="lead">
     <a class="btn btn-primary mr-2" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
        target="_blank">
@@ -18,10 +18,42 @@
        [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">
       <fa name="globe" class="mr-2"></fa>
       Course Website</a>
-    <button *ngIf="adminAccess" role="button" class="btn btn-info" data-toggle="modal" data-target="#addTagModal">
+    <button *ngIf="adminAccess" role="button" class="btn btn-info mr-2" data-toggle="modal" data-target="#addTagModal">
       <fa name="plus" class="mr-1"></fa>
       Add New Tag
     </button>
+    <button *ngIf="adminAccess" role="button" class="btn btn-danger mr-2" data-toggle="modal"
+            data-target="#editCourseModal">
+      <fa name="edit" class="mr-1"></fa>
+      Edit Course Details
+    </button>
+</div>
+
+<div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Course Details</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="courseName">Name:</label>
+            <input type="text" class="form-control" id="courseName" placeholder="Enter name" name="subject"
+                   [(ngModel)]="course.name">
+          </div>
+          <div class="form-group">
+            <label for="desc-editor">Description:</label>
+            <ck-editor name="editor1" id="desc-editor" [(ngModel)]="course.description" skin="moono-lisa"></ck-editor>
+          </div>
+          <button type="submit" class="btn btn-primary mb-2" (click)="editCourseDetails()" data-dismiss="modal">Post</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="modal fade" id="addTagModal" tabindex="-1" role="dialog" aria-hidden="true">
