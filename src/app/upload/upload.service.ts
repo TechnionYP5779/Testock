@@ -12,12 +12,6 @@ import Timestamp = firestore.Timestamp;
 import {OCRService} from '../core/ocr.service';
 import {PdfService} from './pdf.service';
 
-export enum PDFUploadResult {
-  SUCCESS,
-  NO_IMAGES,
-  COURSE_DOESNT_EXIST
-}
-
 class ScanDetails {
   course: number;
   year: number;
@@ -170,23 +164,29 @@ export class UploadService {
     });
   }
 
-  public async uploadPDFFile(scan: File): Promise<string> {
-    const images: Blob[] = await this.pdf.getImagesOfFile(scan);
+  public async uploadPDFFile(scan: File): Promise<PendingScanId> {
+    let images: Blob[];
+    try {
+       images = await this.pdf.getImagesOfFile(scan);
+    } catch (e) {
+      throw new Error('Couldn\'t read PDF file');
+    }
+
     if (images.length === 0) {
-      return 'No images';
+      throw new Error('No Images Found');
     }
 
     let details = this.getDetailsByFileName(scan.name);
     if (!details) {
       details = await this.getDetailsBySticker(images[0]);
       if (!details) {
-        return 'Error getting scan details';
+        throw new Error('Couldn\'t get course details');
       }
     }
 
     const course = await this.db.getCourse(details.course).pipe(first()).toPromise();
     if (!course) {
-      return 'Course does not exist';
+      throw new Error('Course doesn\'t exist');
     }
 
     let exam = await this.db.getExamByDetails(details.course, details.year, details.semester, details.moed).pipe(first()).toPromise();
@@ -208,6 +208,6 @@ export class UploadService {
       await this.uploadQuestion(q.course, q.year, q.semester, q.moed, q.number, -1, q.total_grade, [], pendingScan);
     }
 
-    return 'Success';
+    return pendingScan;
   }
 }
