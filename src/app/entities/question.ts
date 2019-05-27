@@ -10,6 +10,8 @@ export interface Question {
   total_grade: number;
   created: Timestamp;
   tags: string[];
+  sum_difficulty_ratings: number;
+  count_difficulty_ratings: number;
 }
 
 export interface QuestionId extends Question {
