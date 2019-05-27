@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row justify-content-center">
+  <div class="row">
     <div class="col-9">
       <div class="jumbotron" *ngIf="(user$ | async) as user">
         <div class="media">
@@ -23,40 +23,46 @@
         </ul>
       </div>
     </div>
+    <div class="col-3" *ngIf="facultyAdmin$ | async as facultiesAdmin">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-primary">Admin for Faculties:</li>
+        <a class="list-group-item list-group-item-action" *ngFor="let faculty of facultiesAdmin" [routerLink]="'/faculty/' + faculty.id">{{faculty.name}}</a>
+      </ul>
+    </div>
   </div>
-</div>
-<div class="my-profile-details row" *ngIf="isMyProfile">
-  <div class="col-6">
-    <h3>Personal progress:</h3>
-    <table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
-      <thead>
-      <tr class="table-success">
-        <th colspan="9">
-          Questions you solved:
-          <span class="badge badge-success">{{questions.length}}</span>
-        </th>
-      </tr>
-      <tr class="table-light text-center" >
-        <th scope="col" mat-sort-header="course">Course</th>
-        <th scope="col" mat-sort-header="year">Year</th>
-        <th scope="col" mat-sort-header="semester">Semester</th>
-        <th scope="col" mat-sort-header="moed">Moed</th>
-        <th scope="col" mat-sort-header="number">Question No.</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let q of questions">
-        <td>{{ q.course }}</td>
-        <td>{{ q.year }}</td>
-        <td>{{ q.semester | titlecase}}</td>
-        <td>{{ q.moed | titlecase}}</td>
-        <td>{{ q.number }}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="col-6">
-    <h3>Notifications</h3>
-    <app-notifications-list [user]="user$"></app-notifications-list>
+  <div class="my-profile-details row" *ngIf="isMyProfile">
+    <div class="col-6">
+      <h3>Personal progress:</h3>
+      <table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
+        <thead>
+        <tr class="table-success">
+          <th colspan="9">
+            Questions you solved:
+            <span class="badge badge-success">{{questions.length}}</span>
+          </th>
+        </tr>
+        <tr class="table-light text-center" >
+          <th scope="col" mat-sort-header="course">Course</th>
+          <th scope="col" mat-sort-header="year">Year</th>
+          <th scope="col" mat-sort-header="semester">Semester</th>
+          <th scope="col" mat-sort-header="moed">Moed</th>
+          <th scope="col" mat-sort-header="number">Question No.</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let q of questions">
+          <td>{{ q.course }}</td>
+          <td>{{ q.year }}</td>
+          <td>{{ q.semester | titlecase}}</td>
+          <td>{{ q.moed | titlecase}}</td>
+          <td>{{ q.number }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-6">
+      <h3>Notifications</h3>
+      <app-notifications-list [user]="user$"></app-notifications-list>
+    </div>
   </div>
 </div>
