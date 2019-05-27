@@ -9,13 +9,23 @@ import {GamificationService, Rewards} from '../gamification/gamification.service
 import {PendingScanId} from '../entities/pending-scan';
 import { firestore } from 'firebase/app';
 import Timestamp = firestore.Timestamp;
+import {OCRService} from '../core/ocr.service';
+import {PdfService} from './pdf.service';
+
+class ScanDetails {
+  course: number;
+  year: number;
+  semester: string;
+  moed: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
 
-  constructor(private db: DbService, private storage: AngularFireStorage, private gamification: GamificationService) {
+  constructor(private db: DbService, private storage: AngularFireStorage,
+              private gamification: GamificationService, private ocr: OCRService, private pdf: PdfService) {
   }
 
   async uploadScan(quickMode: boolean, pages: Blob[], course: number, year: number, semester: string, moed: string,
@@ -126,5 +136,80 @@ export class UploadService {
     await this.db.setSolutionForQuestion(q, sol);
 
     await this.gamification.reward(Rewards.CROPPED_PENDING_SOLUTION);
+  }
+
+  private getDetailsByFileName(fileName: String): ScanDetails {
+    if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
+      const split = fileName.split('-');
+      const courseId = parseInt(split[2], 10);
+      const year = parseInt(split[1].substr(0, 4), 10);
+      const semNum = parseInt(split[1].substr(5, 2), 10);
+      const semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
+      const moedId = parseInt(split[3], 10);
+      const moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
+      return {course: courseId, year: year, semester: semester, moed: moed};
+    } else {
+      return null;
+    }
+  }
+
+  private getDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
+    return this.ocr.getInfoFromSticker(firstPage).then(details => {
+      const semNum = parseInt(details.semester, 10);
+      details.semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
+      const moedId = parseInt(details.moed, 10);
+      details.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
+      details.course = parseInt(details.course, 10);
+      details.year = parseInt(details.year, 10);
+      return details;
+    });
+  }
+
+  /* Batch Upload Method */
+  public async uploadPDFFile(scan: File): Promise<PendingScanId> {
+    let images: Blob[];
+    try {
+       images = await this.pdf.getImagesOfFile(scan);
+    } catch (e) {
+      throw new Error('Couldn\'t read PDF file');
+    }
+
+    if (images.length === 0) {
+      throw new Error('No Images Found');
+    }
+
+    let details = this.getDetailsByFileName(scan.name);
+    if (!details) {
+      details = await this.getDetailsBySticker(images[0]);
+      if (!details) {
+        throw new Error('Couldn\'t get course details');
+      }
+    }
+
+    const course = await this.db.getCourse(details.course).pipe(first()).toPromise();
+    if (!course) {
+      throw new Error('Course doesn\'t exist');
+    }
+
+    let exam = await this.db.getExamByDetails(details.course, details.year, details.semester, details.moed).pipe(first()).toPromise();
+
+    if (!exam) {
+      const e = {} as Exam;
+      e.moed = details.moed;
+      e.year = details.year;
+      e.semester = details.semester;
+      exam = await this.db.createExamForCourse(details.course, e);
+    }
+
+    const pendingScan = await this.uploadPendingScan(details.course, details.year, details.semester, details.moed, images);
+
+    const questions = await this.db.getQuestionsOfExam(details.course, exam.id).pipe(first()).toPromise();
+
+    for (let i = 0; i < questions.length; ++i) {
+      const q = questions[i];
+      await this.uploadQuestion(q.course, q.year, q.semester, q.moed, q.number, -1, q.total_grade, [], pendingScan);
+    }
+
+    return pendingScan;
   }
 }

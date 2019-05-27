@@ -13,12 +13,16 @@ import {MatSlideToggleModule, MatSnackBarModule} from '@angular/material';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {GamificationModule} from '../gamification/gamification.module';
 import {FormsModule} from '@angular/forms';
+import { BatchUploadComponent } from './batch-upload/batch-upload.component';
+import {FileDropModule} from 'ngx-file-drop';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
     UploadComponent,
     ScanPageComponent,
-    UploadQuestionComponent
+    UploadQuestionComponent,
+    BatchUploadComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +34,9 @@ import {FormsModule} from '@angular/forms';
     NgxSpinnerModule,
     GamificationModule,
     MatSlideToggleModule,
-    FormsModule
+    FormsModule,
+    FileDropModule,
+    RouterModule
   ],
   providers: [
     UploadService,
