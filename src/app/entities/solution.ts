@@ -3,7 +3,7 @@ import {Timestamp} from '@firebase/firestore-types';
 export interface Solution {
   grade: number;
   photos?: string[];
-  pendingScanId?: string;
+  pendingScanId: string;
   created: Timestamp;
 }
 
