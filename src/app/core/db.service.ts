@@ -399,6 +399,10 @@ export class DbService {
     })));
   }
 
+  deletePendingScan(id: string): Promise<void> {
+    return this.afs.collection<PendingScan>('pendingScans').doc(id).delete();
+  }
+
   addTagToCourse(id: number, newTag: any) {
     return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayUnion(newTag)});
   }
