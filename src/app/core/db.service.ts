@@ -412,7 +412,7 @@ export class DbService {
   }
 
 
-  updateCourseDescription(id: number, newCourseDescription: string) :Promise<void>  {
+  updateCourseDescription(id: number, newCourseDescription: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'description': newCourseDescription});
   }
 }
