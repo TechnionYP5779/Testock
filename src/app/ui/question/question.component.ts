@@ -48,14 +48,20 @@ export class QuestionComponent implements OnInit {
   }
 
   markAsSolved() {
+    this.spinner.show();
     this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId, difficulty: -1}).then(() => {
-      document.getElementById('openModal').click();
+      this.spinner.hide().then(() => {
+        document.getElementById('openModal').click();
+      });
     });
   }
 
   unmarkAsSolved() {
+    this.spinner.show();
     this.db.deleteSolvedQuestion(this.userId, this.qId).then(() => {
-      this.snackBar.open(`This question was removed from your solved question list!`, 'close', {duration: 3000});
+      this.spinner.hide().then(() => {
+        this.snackBar.open(`This question was removed from your solved question list!`, 'close', {duration: 3000});
+      });
     });
   }
 
@@ -72,6 +78,10 @@ export class QuestionComponent implements OnInit {
   }
 
   sendRate() {
-    this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId, difficulty: this.selected}).then(() => {});
+    this.spinner.show();
+    this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId, difficulty: this.selected}).then(() =>
+      this.spinner.hide()).then(() => {
+      this.snackBar.open(`Difficulty rating sent Successfully!`, 'close', {duration: 3000});
+    });
   }
 }
