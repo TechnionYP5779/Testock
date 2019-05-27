@@ -11,8 +11,8 @@ import {PendingScanId} from '../../entities/pending-scan';
 export class BatchUploadComponent implements OnInit {
 
   uploadActive = false;
-  private files: File[];
-  private uploadTasks: Promise<PendingScanId|Error>[];
+  files: File[];
+  uploadTasks: Promise<PendingScanId|Error>[];
 
   constructor(private upload: UploadService) { }
 
