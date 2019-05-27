@@ -6,7 +6,6 @@
   <h2>
     Question {{ question.number }} ({{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }})
   </h2>
-
   <div *ngIf="question.count_difficulty_ratings > 0">
     <h3>
       Difficulty rating:
@@ -19,10 +18,6 @@
       <ngb-rating [starTemplate]="temp" [(rate)]="question.sum_difficulty_ratings / question.count_difficulty_ratings" [readonly]="true" max="5"></ngb-rating>
     </h3>
   </div>
-
-
-
-
   <div>
     <div *ngIf="course$ | async as course">
       <div *ngIf="tags$ | async as tags">
