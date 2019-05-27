@@ -422,7 +422,7 @@ export class DbService {
     return this.afs.doc(`courses/${id}`).update({'description': newCourseDescription});
   }
 
-  removeTagFromCourse(id: number, tag: string) {
+  removeTagFromCourse(id: number, tag: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayRemove(tag)});
   }
 }
