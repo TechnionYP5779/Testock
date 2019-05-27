@@ -421,6 +421,10 @@ export class DbService {
   updateCourseDescription(id: number, newCourseDescription: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'description': newCourseDescription});
   }
+
+  removeTagFromCourse(id: number, tag: string) {
+    return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayRemove(tag)});
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
