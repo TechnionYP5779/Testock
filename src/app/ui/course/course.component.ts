@@ -134,7 +134,7 @@ export class CourseComponent implements OnInit {
     return this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
   }
 
-  editCourseDetails() {
+  editCourseDetails(): void {
     this.spinner.show();
     const p1 =  this.db.updateCourseName(this.course.id, this.newCourseName);
     const p2 = this.db.updateCourseDescription(this.course.id, this.newCourseDescription);
@@ -145,9 +145,9 @@ export class CourseComponent implements OnInit {
     if (this.newCourseDescription) {
       promises.push(p2);
     }
-    return Promise.all(promises).then(() => this.spinner.hide())
+    Promise.all(promises).then(() => this.spinner.hide())
       .then(() => this.snackBar.open(`Course Details Changed Successfully!`, 'close', {duration: 3000}));
-      // .then(() => {this.newCourseDescription = null; this.newCourseName = null; });
+    return;
   }
 
 }

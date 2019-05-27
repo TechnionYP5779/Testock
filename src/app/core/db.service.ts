@@ -407,12 +407,12 @@ export class DbService {
     return this.afs.doc<Question>(`courses/${id}`).valueChanges().pipe(map(c => c.tags));
   }
 
-  updateCourseName(id: number, newCourseName: string) {
+  updateCourseName(id: number, newCourseName: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'name': newCourseName});
   }
 
 
-  updateCourseDescription(id: number, newCourseDescription: string) {
+  updateCourseDescription(id: number, newCourseDescription: string) :Promise<void>  {
     return this.afs.doc(`courses/${id}`).update({'description': newCourseDescription});
   }
 }
