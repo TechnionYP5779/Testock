@@ -28,6 +28,8 @@ export class CourseComponent implements OnInit {
   newTag: any;
   favorite$: Observable<boolean>;
   tags: string[];
+  newCourseName: string;
+  newCourseDescription: string;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService,
               private snackBar: MatSnackBar, private spinner: NgxSpinnerService) {
@@ -129,8 +131,25 @@ export class CourseComponent implements OnInit {
   }
 
   updateFavoriteCourse() {
-    this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
+    return this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
   }
+
+  editCourseDetails(): void {
+    this.spinner.show();
+    const p1 =  this.db.updateCourseName(this.course.id, this.newCourseName);
+    const p2 = this.db.updateCourseDescription(this.course.id, this.newCourseDescription);
+    const promises = [];
+    if (this.newCourseName) {
+      promises.push(p1);
+    }
+    if (this.newCourseDescription) {
+      promises.push(p2);
+    }
+    Promise.all(promises).then(() => this.spinner.hide())
+      .then(() => this.snackBar.open(`Course Details Changed Successfully!`, 'close', {duration: 3000}));
+    return;
+  }
+
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {
