@@ -1,13 +1,14 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-9">
       <div class="jumbotron" *ngIf="(user$ | async) as user">
         <div class="media">
           <img class="mr-4 rounded-circle" [src]="user.photoUrl" height=100 alt="">
           <div class="media-body">
-            <h1 class="display-4">
+            <h2>
               {{user.name}}
-            </h1>
+              <span class="badge badge-info" *ngIf="user.roles.admin">Admin</span>
+            </h2>
             <p class="lead">{{user.faculty}}</p>
           </div>
           <button class="btn btn-lg btn-warning ml-2" type="button" routerLink="/world">
