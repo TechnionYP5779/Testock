@@ -11,6 +11,7 @@ import {PendingScan} from '../../src/app/entities/pending-scan';
 import {Question, QuestionId} from '../../src/app/entities/question';
 import {Solution} from '../../src/app/entities/solution';
 import {Course} from '../../src/app/entities/course';
+import {SolvedQuestion} from '../../src/app/entities/solved-question';
 import FieldValue = admin.firestore.FieldValue;
 
 // Start writing Firebase Functions
@@ -326,3 +327,45 @@ export const onPendingScanDeleted = functions.firestore.document('pendingScans/{
 
   return Promise.all(promises);
 });
+
+export const onSolvedQuestionUpdate = functions.firestore
+  .document('users/{uid}/solvedQuestions/{qid}')
+  .onUpdate(async (change, context) => {
+    const oldValue = change.before.data() as SolvedQuestion;
+    const newValue = change.after.data() as SolvedQuestion;
+    if (!oldValue || !newValue) return;
+    const oldDifficulty = oldValue.difficulty;
+    const newDifficulty = newValue.difficulty;
+    if (newDifficulty < 0) {
+      return null;
+    }
+    else if (oldDifficulty < 0) {
+      return admin.firestore().collection('questions').doc(context.params.qid).update({
+        sum_difficulty_ratings: FieldValue.increment(newDifficulty),
+        count_difficulty_ratings: FieldValue.increment(1)
+      });
+    }
+    else {
+      return admin.firestore().collection('questions').doc(context.params.qid).update({
+        sum_difficulty_ratings: FieldValue.increment(newDifficulty - oldDifficulty)
+      });
+    }
+  });
+
+export const onSolvedQuestionDelete = functions.firestore
+  .document('users/{uid}/solvedQuestions/{qid}')
+  .onDelete(async (snap, context) => {
+    const data = snap.data();
+    if (!data) return;
+    const difficulty = data.difficulty;
+    if (difficulty < 0) {
+      return;
+    }
+    else {
+      return admin.firestore().collection('questions').doc(context.params.qid).update({
+        sum_difficulty_ratings: FieldValue.increment(-difficulty),
+        count_difficulty_ratings: FieldValue.increment(-1)
+      });
+    }
+  });
+
