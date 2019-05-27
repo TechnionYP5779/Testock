@@ -70,6 +70,8 @@ export class UploadService {
     if (images.length === 0) {
       // If we chose to upload this question and it has 0 photos then it is pending upload..
       sol.pendingScanId = pendingScan.id;
+    } else {
+      sol.pendingScanId = null;
     }
 
     const createdSol = await this.db.addSolutionForQuestion(question, sol);

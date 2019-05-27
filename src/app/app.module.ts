@@ -15,7 +15,7 @@ import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatInputModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatInputModule, MatMenuModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {CoreModule} from './core/core.module';
 import {FormsModule} from '@angular/forms';
@@ -31,12 +31,13 @@ import {DiscussionsModule} from './discussions/discussions.module';
 import {GamificationModule} from './gamification/gamification.module';
 import {MatSortModule} from '@angular/material';
 import {PendingScansModule} from './pending-scans/pending-scans.module';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbRatingModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {CommonModule} from '@angular/common';
 import {PendingSolutionModalComponent} from './pending-scans/pending-solution-modal/pending-solution-modal.component';
 import { TagComponent } from './ui/tag/tag.component';
 import {CKEditorModule} from 'ngx-ckeditor';
+
 
 
 @NgModule({
@@ -61,7 +62,11 @@ import {CKEditorModule} from 'ngx-ckeditor';
     NgbModule,
     NgbModalModule,
     CommonModule,
-    CKEditorModule
+    CKEditorModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    NgbRatingModule
   ],
   declarations: [
     AppComponent,

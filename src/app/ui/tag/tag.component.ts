@@ -17,7 +17,7 @@ export class TagComponent implements OnInit {
 
   public questions$: Observable<QuestionId[]>;
   public course$: Observable<Course>;
-  private courseID: number;
+  public courseID: number;
   public tag: string;
   constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.courseID = +this.route.snapshot.paramMap.get('cid');
