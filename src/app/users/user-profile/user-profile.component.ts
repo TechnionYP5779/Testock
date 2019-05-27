@@ -6,6 +6,8 @@ import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {Question} from '../../entities/question';
 import {Sort} from '@angular/material';
+import {Course} from '../../entities/course';
+import {flatMap, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-profile',
@@ -18,11 +20,16 @@ export class UserProfileComponent implements OnInit {
   userId: string;
   questions: Question[];
   isMyProfile: boolean;
+  favoriteCourses$: Observable<Course[]>;
 
   constructor(public auth: AuthService, private db: DbService, private route: ActivatedRoute) {
     this.userId = this.route.snapshot.paramMap.get('uid');
     this.user$ = this.userId ? this.db.getUser(this.userId) : this.auth.user$;
     this.isMyProfile = (this.userId === null);
+    this.favoriteCourses$ = this.user$.pipe(
+      flatMap(user => this.db.getFavoriteCourses(user)),
+      map(courses => courses.sort((c1, c2) => (c1.name < c2.name) ? -1 : 1))
+    );
   }
 
   ngOnInit() {

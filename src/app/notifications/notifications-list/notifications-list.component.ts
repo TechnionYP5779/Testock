@@ -13,18 +13,21 @@ import {UserData} from '../../entities/user';
 })
 export class NotificationsListComponent implements OnInit {
   @Input() user: Observable<UserData>;
-  notifications$: Observable<NotificationId[]>;
+  public notifications$: Observable<NotificationId[]>;
 
-  constructor(private notifications: NotificationsService, private afs: AngularFirestore) { }
+  constructor(private notifications: NotificationsService) { }
 
   ngOnInit() {
     this.notifications$ = this.user.pipe(
-      flatMap(user => this.notifications.getNotificationsForUser(user.uid))
+      flatMap(user => this.notifications.getNotificationsForUser(user.uid, 30))
     );
   }
 
-  seen(event: MouseEvent, notification: NotificationId) {
-    event.preventDefault();
+  seen(event: MouseEvent, notification: NotificationId, redirect: boolean) {
+    if (redirect === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     this.notifications.updateNotificationState(notification.id, true);
   }
 }

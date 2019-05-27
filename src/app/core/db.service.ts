@@ -14,6 +14,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
 import {SolvedQuestion} from '../entities/solved-question';
 import {PendingScan, PendingScanId} from '../entities/pending-scan';
+import FieldValue = firebase.firestore.FieldValue;
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class DbService {
 
   private coursesCollection: AngularFirestoreCollection<Course>;
   private questionsCollection: AngularFirestoreCollection<Question>;
+
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage) {
     this.coursesCollection = afs.collection<Course>('courses');
     this.questionsCollection = afs.collection<Question>('questions');
@@ -39,6 +41,10 @@ export class DbService {
         }
         return [course];
       }), leftJoinDocument(this.afs, 'faculty', 'faculties'), map(data => data[0]));
+  }
+
+  getFavoriteCourses(user: UserData): Observable<Course[]> {
+    return combineLatest(user.favoriteCourses.map(courseId => this.getCourse(courseId)));
   }
 
   // Should be deprecated?
@@ -108,10 +114,10 @@ export class DbService {
 
     return this.getExam(course, examId).pipe(
       flatMap(e => {
-          const year = e.year;
-          const semester = e.semester;
-          const moed = e.moed;
-          const ref = r => r
+        const year = e.year;
+        const semester = e.semester;
+        const moed = e.moed;
+        const ref = r => r
           .where('course', '==', course)
           .where('year', '==', year)
           .where('semester', '==', semester)
@@ -134,6 +140,29 @@ export class DbService {
       .pipe(map(q => {
         return {id: id, ...q};
       }));
+  }
+
+  getQuestionsOfCourseWithTag(cid: number, tag: string): Observable<QuestionId[]> {
+    const ref = r => r
+      .where('course', '==', cid)
+      .where('tags', 'array-contains', tag)
+      .orderBy('number');
+
+    return this.afs.collection('questions', ref).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Question;
+        const qid = a.payload.doc.id;
+        return {id: qid, ...data};
+      }))
+    );
+  }
+
+  addTagToQuestion(id: string, tag: string): Promise<void> {
+    return this.afs.doc(`questions/${id}`).update({'tags': FieldValue.arrayUnion(tag)});
+  }
+
+  getTagsOfQuestion(id: string): Observable<string[]> {
+    return this.afs.doc<Question>(`questions/${id}`).valueChanges().pipe(map(q => q.tags));
   }
 
   addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<void> {
@@ -228,7 +257,8 @@ export class DbService {
   }
 
   createFaculty(faculty: Faculty): Promise<void> {
-    return this.afs.collection<Faculty>('faculties').add(faculty).then((dr) => {});
+    return this.afs.collection<Faculty>('faculties').add(faculty).then((dr) => {
+    });
   }
 
   deleteSolution(sol: SolutionId, q: QuestionId): Promise<void> {
@@ -299,10 +329,10 @@ export class DbService {
     const ref = r => r.orderBy('created');
     return this.afs.collection<Comment>(`topics/${topicId}/comments`, ref).snapshotChanges()
       .pipe(map(actions => actions.map(action => {
-      const data = action.payload.doc.data() as Comment;
-      const qid = action.payload.doc.id;
-      return {id: qid, ...data};
-    }))).pipe(leftJoinDocument(this.afs, 'creator', 'users')) as Observable<CommentWithCreatorId[]>;
+        const data = action.payload.doc.data() as Comment;
+        const qid = action.payload.doc.id;
+        return {id: qid, ...data};
+      }))).pipe(leftJoinDocument(this.afs, 'creator', 'users')) as Observable<CommentWithCreatorId[]>;
   }
 
   getTopic(id: string): Observable<TopicWithCreatorId> {
@@ -351,6 +381,35 @@ export class DbService {
         return {id: id, ...ps};
       }));
   }
+
+  getPendingScans(course: number, year?: number, semester?: string, moed?: string): Observable<PendingScanId[]> {
+    const ref = moed ?
+      r => r
+        .where('course', '==', course)
+        .where('year', '==', year)
+        .where('semester', '==', semester)
+        .where('moed', '==', moed)
+      : r => r
+        .where('course', '==', course);
+
+    return this.afs.collection<PendingScan>('pendingScans', ref).snapshotChanges().pipe(map(actions => actions.map(action => {
+      const data = action.payload.doc.data() as PendingScan;
+      const id = action.payload.doc.id;
+      return {id: id, ...data};
+    })));
+  }
+
+  deletePendingScan(id: string): Promise<void> {
+    return this.afs.collection<PendingScan>('pendingScans').doc(id).delete();
+  }
+
+  addTagToCourse(id: number, newTag: any) {
+    return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayUnion(newTag)});
+  }
+
+  getTagsOfCourse(id: number) {
+    return this.afs.doc<Question>(`courses/${id}`).valueChanges().pipe(map(c => c.tags));
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
@@ -392,7 +451,7 @@ export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
         map(joins => {
           return collectionData.map((v, i) => {
             const joinIdx = cache.get(v[field]);
-            return { ...v, [field]: joins[joinIdx] || null };
+            return {...v, [field]: joins[joinIdx] || null};
           });
         })
       );

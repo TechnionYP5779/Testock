@@ -4,6 +4,8 @@ import { NotificationsListComponent } from './notifications-list/notifications-l
 import {NotificationsService} from './notifications.service';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AppRoutingModule} from '../app-routing.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
   imports: [
     CommonModule,
     AngularFontAwesomeModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AppRoutingModule,
+    NgbModule
   ]
 })
 export class NotificationsModule { }
