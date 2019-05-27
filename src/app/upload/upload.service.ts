@@ -136,7 +136,6 @@ export class UploadService {
     await this.gamification.reward(Rewards.CROPPED_PENDING_SOLUTION);
   }
 
-  /* Batch Upload Method */
   private getDetailsByFileName(fileName: String): ScanDetails {
     if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
       const split = fileName.split('-');
@@ -164,6 +163,7 @@ export class UploadService {
     });
   }
 
+  /* Batch Upload Method */
   public async uploadPDFFile(scan: File): Promise<PendingScanId> {
     let images: Blob[];
     try {
