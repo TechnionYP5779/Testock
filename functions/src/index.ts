@@ -11,6 +11,7 @@ import {PendingScan} from '../../src/app/entities/pending-scan';
 import {Question, QuestionId} from '../../src/app/entities/question';
 import {Solution} from '../../src/app/entities/solution';
 import {Course} from '../../src/app/entities/course';
+import FieldValue = admin.firestore.FieldValue;
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
@@ -34,6 +35,27 @@ function matchInArray(regex: RegExp, arrayOfString: string[]): string {
   }
   return '';
 }
+
+export const onTagDeleted = functions.firestore.document('courses/{courseID}').onUpdate(async (snapshot, context) => {
+  const prev_data = snapshot.before.data();
+  const new_data = snapshot.after.data();
+  const prev_tags = prev_data ? prev_data.tags : [];
+  const new_tags = new_data ? new_data.tags : [];
+  for (const tag of prev_tags){
+    if (!new_tags.includes(tag)){
+      admin.firestore().collection('questions').where('course', '==', parseInt(context.params.courseID)).get()
+        .then(snapsh => {
+          snapsh.forEach(doc => {
+            doc.ref.update({'tags': FieldValue.arrayRemove(tag)}).then(() => console.log('Deleted tag from question successfully'))
+              .catch(err => console.log('Error deleting tag from question', err))
+          });
+        })
+        .catch(err => {
+          console.log('Error deleting tags', err);
+        });
+    }
+  }
+});
 
 export const isImageBlank = functions.https.onRequest(async (request, response) => {
   return cors(request, response, async () => {
