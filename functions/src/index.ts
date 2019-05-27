@@ -119,7 +119,7 @@ async function addSolImage(pdf: PDFKit.PDFDocument, url: string){
 }
 
 async function getBestSolutionFor(q: QuestionId): Promise<Solution|null> {
-  const query = admin.firestore().collection(`questions/${q.id}/solutions`).orderBy('grade', 'desc').limit(1);
+  const query = admin.firestore().collection(`questions/${q.id}/solutions`).where('pendingScanId', '==', null).orderBy('grade', 'desc').limit(1);
   return query.get().then(res => res.docs.length > 0 ? res.docs[0].data() as Solution : null);
 }
 
