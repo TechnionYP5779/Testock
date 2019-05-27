@@ -17,6 +17,7 @@ import FieldValue = admin.firestore.FieldValue;
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
+
 admin.initializeApp(functions.config().firebase);
 const visionClient = new vision.ImageAnnotatorClient();
 const cors = corsMod({origin: true});
@@ -42,16 +43,12 @@ export const onTagDeleted = functions.firestore.document('courses/{courseID}').o
   const new_data = change.after.data();
   const prev_tags: string[] = prev_data ? prev_data.tags : [];
   const new_tags: string[] = new_data ? new_data.tags : [];
-  const promises: Promise<void>[] = [];
-  prev_tags.forEach(async tag => {
-    if (!new_tags.includes(tag)){
-      const snapshot = await admin.firestore().collection('questions').where('course', '==', parseInt(context.params.courseID)).get();
-      snapshot.forEach(doc => {
-        promises.push(doc.ref.update({'tags': FieldValue.arrayRemove(tag)}).then(() => console.log('Deleted tag from question successfully'))
-          .catch(err => console.log('Error deleting tag from question', err)));
-        });
-    }});
-    return Promise.all(promises);
+  return Promise.all(prev_tags.filter(tag => !new_tags.includes(tag)).map( async tag => {
+    const snapshot = await admin.firestore().collection('questions').where('course', '==', parseInt(context.params.courseID)).get();
+    return snapshot.docs.map(doc => {
+      return doc.ref.update({'tags': FieldValue.arrayRemove(tag)});
+      });
+    }));
 });
 
 export const isImageBlank = functions.https.onRequest(async (request, response) => {
