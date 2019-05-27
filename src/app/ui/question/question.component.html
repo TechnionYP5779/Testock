@@ -1,6 +1,8 @@
 <div *ngIf="question$ | async as question">
   <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
-  <h1 style="color:DodgerBlue"> {{ (course$ | async)?.name}} ({{question.course}})</h1>
+  <a [routerLink]="'/course/' + course.id" *ngIf="course$ | async as course">
+    <h1 style="color:DodgerBlue"> {{ course.name}} ({{question.course}})</h1>
+  </a>
   <h2>
     Question {{ question.number }} ({{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }})
   </h2>
