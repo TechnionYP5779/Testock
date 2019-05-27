@@ -47,7 +47,7 @@
               <mat-icon>cloud_upload</mat-icon>
               <span>Upload Scan</span>
             </button>
-            <button mat-menu-item *ngIf="auth.currentUser" routerLink="/batch-upload">
+            <button mat-menu-item *ngIf="isAdmin" routerLink="/batch-upload">
               <mat-icon>cloud_upload</mat-icon>
               <span>Batch Upload</span>
             </button>
