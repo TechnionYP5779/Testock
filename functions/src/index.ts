@@ -37,25 +37,21 @@ function matchInArray(regex: RegExp, arrayOfString: string[]): string {
   return '';
 }
 
-export const onTagDeleted = functions.firestore.document('courses/{courseID}').onUpdate(async (snapshot, context) => {
-  const prev_data = snapshot.before.data();
-  const new_data = snapshot.after.data();
-  const prev_tags = prev_data ? prev_data.tags : [];
-  const new_tags = new_data ? new_data.tags : [];
-  for (const tag of prev_tags){
+export const onTagDeleted = functions.firestore.document('courses/{courseID}').onUpdate(async (change, context) => {
+  const prev_data = change.before.data();
+  const new_data = change.after.data();
+  const prev_tags: string[] = prev_data ? prev_data.tags : [];
+  const new_tags: string[] = new_data ? new_data.tags : [];
+  const promises: Promise<void>[] = [];
+  prev_tags.forEach(async tag => {
     if (!new_tags.includes(tag)){
-      admin.firestore().collection('questions').where('course', '==', parseInt(context.params.courseID)).get()
-        .then(snapsh => {
-          snapsh.forEach(doc => {
-            doc.ref.update({'tags': FieldValue.arrayRemove(tag)}).then(() => console.log('Deleted tag from question successfully'))
-              .catch(err => console.log('Error deleting tag from question', err))
-          });
-        })
-        .catch(err => {
-          console.log('Error deleting tags', err);
+      const snapshot = await admin.firestore().collection('questions').where('course', '==', parseInt(context.params.courseID)).get();
+      snapshot.forEach(doc => {
+        promises.push(doc.ref.update({'tags': FieldValue.arrayRemove(tag)}).then(() => console.log('Deleted tag from question successfully'))
+          .catch(err => console.log('Error deleting tag from question', err)));
         });
-    }
-  }
+    }});
+    return Promise.all(promises);
 });
 
 export const isImageBlank = functions.https.onRequest(async (request, response) => {
