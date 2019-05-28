@@ -5,6 +5,7 @@ import {QuestionId} from '../../entities/question';
 import {Exam} from '../../entities/exam';
 import {AuthService} from '../../users/auth.service';
 import {Course} from '../../entities/course';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-exam',
@@ -20,6 +21,7 @@ export class ExamComponent implements OnInit {
   course: Course;
 
   adminAccess: boolean;
+  getPdfUrl = 'https://us-central1-' + environment.firebase.projectId + '.cloudfunctions.net/getPDFofExam';
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.courseId = +route.snapshot.paramMap.get('cid');

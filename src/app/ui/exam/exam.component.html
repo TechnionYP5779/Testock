@@ -2,7 +2,7 @@
 <div class="card" *ngIf="exam && course">
   <h5 class="card-header" *ngIf="this.exam">
     <a [routerLink]="'/course/' + course.id">{{course.name}} ({{course.id}})</a> - {{ exam.moed | fullMoed }}
-    <a target="_blank" href="https://us-central1-yp5779-testock.cloudfunctions.net/getPDFofExam?course={{ courseId }}&year={{exam.moed.semester.year}}&semester={{exam.moed.semester.num}}&moed={{exam.moed.num}}">
+    <a target="_blank" [href]="getPdfUrl + '?course=' + courseId + '&year=' + exam.moed.semester.year + '&semester=' + exam.moed.semester.num + '&moed=' + exam.moed.num">
       <button type="button" class="btn btn-danger float-right">Download full PDF solution!</button>
     </a>
   </h5>
