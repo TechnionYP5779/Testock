@@ -12,11 +12,7 @@ import Timestamp = firestore.Timestamp;
 import {OCRService} from '../core/ocr.service';
 import {PdfService} from './pdf.service';
 import {Moed} from '../entities/moed';
-
-export class ScanDetails {
-  course: number;
-  moed: Moed;
-}
+import {ScanDetails} from '../entities/scan-details';
 
 @Injectable({
   providedIn: 'root'
