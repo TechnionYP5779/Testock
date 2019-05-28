@@ -17,6 +17,7 @@ import FieldValue = admin.firestore.FieldValue;
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
+
 admin.initializeApp(functions.config().firebase);
 const visionClient = new vision.ImageAnnotatorClient();
 const cors = corsMod({origin: true});
@@ -36,6 +37,19 @@ function matchInArray(regex: RegExp, arrayOfString: string[]): string {
   }
   return '';
 }
+
+export const onTagDeleted = functions.firestore.document('courses/{courseID}').onUpdate(async (change, context) => {
+  const prev_data = change.before.data();
+  const new_data = change.after.data();
+  const prev_tags: string[] = prev_data ? prev_data.tags : [];
+  const new_tags: string[] = new_data ? new_data.tags : [];
+  return Promise.all(prev_tags.filter(tag => !new_tags.includes(tag)).map( async tag => {
+    const snapshot = await admin.firestore().collection('questions').where('course', '==', parseInt(context.params.courseID)).get();
+    return Promise.all(snapshot.docs.map(doc => {
+      return doc.ref.update({'tags': FieldValue.arrayRemove(tag)});
+      }));
+    }));
+});
 
 export const isImageBlank = functions.https.onRequest(async (request, response) => {
   return cors(request, response, async () => {
