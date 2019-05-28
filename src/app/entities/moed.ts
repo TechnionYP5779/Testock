@@ -1,6 +1,6 @@
 import {Semester} from './semester';
 
-export class Moed {
+export interface Moed {
   num: number;
   semester: Semester;
 }
