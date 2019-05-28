@@ -100,13 +100,7 @@ export class UploadComponent implements OnInit {
   }
 
   private getDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
-    return this.ocr.getInfoFromSticker(firstPage).then(details => {
-      const semNum = parseInt(details.semester, 10);
-      const moedId = parseInt(details.moed, 10);
-      const course = parseInt(details.course, 10);
-      const year = parseInt(details.year, 10);
-      return {course: course, moed: { semester: {year: year, num: semNum}, num: moedId}};
-    });
+    return this.ocr.getInfoFromSticker(firstPage);
   }
 
   private getCourseWithFaculty(details: ScanDetails): Promise<CourseWithFaculty> {
