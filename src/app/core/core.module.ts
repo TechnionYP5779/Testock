@@ -7,11 +7,17 @@ import {DbService} from './db.service';
 import {OCRService} from './ocr.service';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
+import { MoedPipe } from './moed.pipe';
+import { FullMoedPipe } from './full-moed.pipe';
+import { FullSemesterPipe } from './full-semester.pipe';
 
 @NgModule({
   declarations: [
     SemesterPipe,
-    SafeUrlPipe
+    SafeUrlPipe,
+    MoedPipe,
+    FullMoedPipe,
+    FullSemesterPipe
   ],
   imports: [
     CommonModule,
@@ -22,11 +28,18 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
   providers: [
     HttpClient,
     DbService,
-    OCRService
+    OCRService,
+    MoedPipe,
+    SemesterPipe,
+    FullSemesterPipe
   ],
   exports: [
     SemesterPipe,
-    SafeUrlPipe
+    SafeUrlPipe,
+    FullMoedPipe,
+    FullSemesterPipe,
+    SemesterPipe,
+    MoedPipe
   ]
 })
 export class CoreModule { }
