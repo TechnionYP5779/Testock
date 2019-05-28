@@ -150,6 +150,11 @@ export class CourseComponent implements OnInit {
     return;
   }
 
+  removeTag(tag: string) {
+    this.spinner.show();
+    this.db.removeTagFromCourse(this.course.id, tag).then(() => this.spinner.hide())
+      .then(() => this.snackBar.open(`Tag Deleted Successfully!`, 'close', {duration: 3000}));
+  }
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {

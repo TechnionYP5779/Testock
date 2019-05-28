@@ -77,8 +77,13 @@
   </tr>
   </thead>
   <tbody>
-  <tr class="clickable" routerLink="tag/{{ tag }}" *ngFor="let tag of tags">
-    <td>#{{ tag }}</td>
+  <tr *ngFor="let tag of tags">
+    <td class="clickable" routerLink="tag/{{ tag }}">#{{ tag }}</td>
+    <td>
+      <button mat-button *ngIf="adminAccess" role="button" style="float: right; color: orangered" (click)="removeTag(tag)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
   </tr>
   </tbody>
 </table>
