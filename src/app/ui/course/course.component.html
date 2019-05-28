@@ -100,9 +100,9 @@
   </thead>
   <tbody>
   <tr class="clickable" routerLink="exam/{{ e.id }}" *ngFor="let e of exams">
-    <td>{{ e.year }}</td>
-    <td>{{ e.semester | titlecase}}</td>
-    <td>{{ e.moed | titlecase}}</td>
+    <td>{{ e.moed.semester.year }}</td>
+    <td>{{ e.moed.semester.num }}</td>
+    <td>{{ e.moed.num }}</td>
     <td></td>
   </tr>
   </tbody>
@@ -125,9 +125,9 @@
   </thead>
   <tbody>
   <tr class="clickable" routerLink="/question/{{ q.id }}" *ngFor="let q of questions">
-    <td>{{ q.year }}</td>
-    <td>{{ q.semester | titlecase}}</td>
-    <td>{{ q.moed | titlecase}}</td>
+    <td>{{ q.moed.semester.year }}</td>
+    <td>{{ q.moed.semester.num }}</td>
+    <td>{{ q.moed.num }}</td>
     <td>{{ q.number }}</td>
   </tr>
   </tbody>

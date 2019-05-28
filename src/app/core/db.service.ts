@@ -15,6 +15,7 @@ import * as firebase from 'firebase';
 import {SolvedQuestion} from '../entities/solved-question';
 import {PendingScan, PendingScanId} from '../entities/pending-scan';
 import FieldValue = firebase.firestore.FieldValue;
+import {Moed} from '../entities/moed';
 
 @Injectable({
   providedIn: 'root'
@@ -51,9 +52,9 @@ export class DbService {
   getQuestionsOfCourse(id: number): Observable<QuestionId[]> {
     const order = r =>
       r.where('course', '==', id)
-        .orderBy('year', 'desc')
-        .orderBy('semester')
-        .orderBy('moed')
+        .orderBy('moed.semester.year', 'desc')
+        .orderBy('moed.semester.num')
+        .orderBy('moed.num')
         .orderBy('number');
 
     return this.afs.collection<Question>('questions', order).snapshotChanges().pipe(
@@ -68,9 +69,9 @@ export class DbService {
   getExamsOfCourse(id: number): Observable<ExamId[]> {
 
     const order = r =>
-      r.orderBy('year', 'desc')
-        .orderBy('semester')
-        .orderBy('moed');
+      r.orderBy('moed.semester.year', 'desc')
+        .orderBy('moed.semester.num')
+        .orderBy('moed.num');
 
     return this.coursesCollection.doc<Course>(id.toString()).collection<Exam>('exams', order).snapshotChanges().pipe(
       map(actions => actions.map(a => {
@@ -86,43 +87,32 @@ export class DbService {
   }
 
   createExamForCourse(course: number, exam: Exam): Promise<ExamId> {
-    const docId = `${exam.year}-${exam.semester}-${exam.moed}`;
+    const docId = `${exam.moed.semester.year}-${exam.moed.semester.num}-${exam.moed.num}`;
     return this.coursesCollection.doc<Course>(course.toString()).collection('exams').doc<Exam>(docId).set(exam)
       .then(() => {
         return {id: docId, course: course, ...exam};
       });
   }
 
-  getExamByDetails(course: number, year: number, semester: string, moed: string): Observable<ExamId> {
-
-    const ref = r =>
-      r.where('year', '==', year)
-        .where('semester', '==', semester)
-        .where('moed', '==', moed);
-
-    return this.coursesCollection.doc<Course>(course.toString()).collection<Exam>('exams', ref).snapshotChanges().pipe(
-      map(actions => {
-        if (actions.length !== 1) {
-          return null;
-        }
-        const e = actions[0].payload.doc.data() as Exam;
-        return {id: actions[0].payload.doc.id, course: course, ...e};
-      })
-    );
+  getExamByDetails(course: number, moed: Moed): Observable<ExamId> {
+    const docId = `${moed.semester.year}-${moed.semester.num}-${moed.num}`;
+    return this.afs.doc<Exam>(`courses/${course}/exams/${docId}`).valueChanges().pipe(map(exam => {
+      return exam ? {id: docId, course: course, ...exam} : null;
+    }));
   }
 
   getQuestionsOfExam(course: number, examId: string): Observable<QuestionId[]> {
 
     return this.getExam(course, examId).pipe(
       flatMap(e => {
-        const year = e.year;
-        const semester = e.semester;
-        const moed = e.moed;
+        const year = e.moed.semester.year;
+        const semester = e.moed.semester.num;
+        const moed = e.moed.num;
         const ref = r => r
           .where('course', '==', course)
-          .where('year', '==', year)
-          .where('semester', '==', semester)
-          .where('moed', '==', moed)
+          .where('moed.semester.year', '==', year)
+          .where('moed.semester.num', '==', semester)
+          .where('moed.num', '==', moed)
           .orderBy('number');
 
         return this.afs.collection('questions', ref).snapshotChanges().pipe(
@@ -200,12 +190,12 @@ export class DbService {
     return this.coursesCollection.valueChanges();
   }
 
-  getQuestionByDetails(course: number, year: number, semester: string, moed: string, number: number): Observable<QuestionId> {
+  getQuestionByDetails(course: number, moed: Moed, number: number): Observable<QuestionId> {
     const ref = r =>
       r.where('course', '==', course)
-        .where('year', '==', year)
-        .where('semester', '==', semester)
-        .where('moed', '==', moed)
+        .where('moed.semester.year', '==', moed.semester.year)
+        .where('moed.semester.num', '==', moed.semester.num)
+        .where('moed.num', '==', moed)
         .where('number', '==', number);
 
     return this.afs.collection<Question>('questions', ref).snapshotChanges().pipe(
@@ -220,7 +210,7 @@ export class DbService {
   }
 
   createQuestionForExam(course: number, q: Question): Promise<QuestionId> {
-    const docId = `${course}-${q.year}-${q.semester}-${q.moed}-${q.number}`;
+    const docId = `${course}-${q.moed.semester.year}-${q.moed.semester.num}-${q.moed.num}-${q.number}`;
     return this.questionsCollection.doc<Question>(docId).set(q)
       .then(() => {
         return {id: docId, ...q};
@@ -384,13 +374,13 @@ export class DbService {
       }));
   }
 
-  getPendingScans(course: number, year?: number, semester?: string, moed?: string): Observable<PendingScanId[]> {
+  getPendingScans(course: number, moed?: Moed): Observable<PendingScanId[]> {
     const ref = moed ?
       r => r
         .where('course', '==', course)
-        .where('year', '==', year)
-        .where('semester', '==', semester)
-        .where('moed', '==', moed)
+        .where('moed.semester.year', '==', moed.semester.year)
+        .where('moed.semester.num', '==', moed.semester.num)
+        .where('moed.num', '==', moed.num)
       : r => r
         .where('course', '==', course);
 

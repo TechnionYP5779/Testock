@@ -2,13 +2,14 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {CourseWithFaculty} from '../../entities/course';
-import {UploadService} from '../upload.service';
+import {ScanDetails, UploadService} from '../upload.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {OCRService} from '../../core/ocr.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {take} from 'rxjs/operators';
 import {QuestionId} from '../../entities/question';
+import {Moed} from '../../entities/moed';
 
 
 class QuestionSolution {
@@ -29,13 +30,6 @@ class QuestionSolution {
   addImage(image: string) {
     this.images.push(image);
   }
-}
-
-class ScanDetails {
-  course: number;
-  year: number;
-  semester: string;
-  moed: string;
 }
 
 enum UploadState {
@@ -71,9 +65,7 @@ export class UploadComponent implements OnInit {
 
   public uploadState = UploadState;
 
-  public year: number;
-  public semester: string;
-  public moed: string;
+  public moed: Moed;
   public state = UploadState.Ready;
   public course: CourseWithFaculty;
 
@@ -99,10 +91,8 @@ export class UploadComponent implements OnInit {
       const courseId = parseInt(split[2], 10);
       const year = parseInt(split[1].substr(0, 4), 10);
       const semNum = parseInt(split[1].substr(5, 2), 10);
-      const semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
       const moedId = parseInt(split[3], 10);
-      const moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
-      return {course: courseId, year: year, semester: semester, moed: moed};
+      return {course: courseId, moed: { semester: {year: year, num: semNum}, num: moedId}};
     } else {
       return null;
     }
@@ -111,12 +101,10 @@ export class UploadComponent implements OnInit {
   private getDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
     return this.ocr.getInfoFromSticker(firstPage).then(details => {
       const semNum = parseInt(details.semester, 10);
-      details.semester = semNum === 1 ? 'winter' : semNum === 2 ? 'spring' : 'summer';
       const moedId = parseInt(details.moed, 10);
-      details.moed = (moedId === 1) ? 'A' : (moedId === 2) ? 'B' : 'C';
-      details.course = parseInt(details.course, 10);
-      details.year = parseInt(details.year, 10);
-      return details;
+      const course = parseInt(details.course, 10);
+      const year = parseInt(details.year, 10);
+      return {course: course, moed: { semester: {year: year, num: semNum}, num: moedId}};
     });
   }
 
@@ -127,14 +115,13 @@ export class UploadComponent implements OnInit {
   uploadImages() {
     this.state = UploadState.Uploading;
 
-    const sem = this.semester;
     const moed = this.moed;
     const nums = this.questions.map(q => q.index);
     const grades = this.questions.map(q => q.grade);
     const points = this.questions.map(q => q.points);
     const images = this.questions.map(q => q.images);
 
-    this.uploadService.uploadScan(this.isQuickMode, this.blobs, this.course.id, this.year, sem, moed, nums, grades, points, images)
+    this.uploadService.uploadScan(this.isQuickMode, this.blobs, this.course.id, moed, nums, grades, points, images)
       .then(() => {
         this.state = UploadState.UploadSuccess;
         this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
@@ -179,7 +166,7 @@ export class UploadComponent implements OnInit {
 
     const courseDetailsPromise: Promise<CourseWithFaculty> = detailsPromise.then(details => this.getCourseWithFaculty(details));
     const existingQuestionsPromise: Promise<QuestionId[]> = detailsPromise
-      .then(details => this.db.getExamByDetails(details.course, details.year, details.semester, details.moed).pipe(take(1)).toPromise())
+      .then(details => this.db.getExamByDetails(details.course, details.moed).pipe(take(1)).toPromise())
       .then(exam => {
         if (exam) {
           return this.db.getQuestionsOfExam(exam.course, exam.id).pipe(take(1)).toPromise();
@@ -195,9 +182,7 @@ export class UploadComponent implements OnInit {
         }
         this.allBlobs = blobs;
         this.blobs = blobs;
-        this.year = details.year;
         this.moed = details.moed;
-        this.semester = details.semester;
         this.course = courseWithFaculty;
         this.imagesCollpaseTrigger.nativeElement.click();
       }, reason => {
@@ -230,7 +215,7 @@ export class UploadComponent implements OnInit {
   }
 
   removeFirstPage() {
-    if (this.removedFirstPage === false){
+    if (this.removedFirstPage === false) {
       this.blobs = this.blobs.slice(1);
     }
     this.removedFirstPage = true;
@@ -279,8 +264,6 @@ export class UploadComponent implements OnInit {
     this.questions = [];
     this.blobs = [];
     this.course = null;
-    this.year = null;
-    this.semester = null;
     this.moed = null;
     this.state = UploadState.Ready;
   }
