@@ -1,9 +1,8 @@
 import {Timestamp} from '@firebase/firestore-types';
+import {Moed} from './moed';
 
 export interface Exam {
-  moed: string;
-  semester: string;
-  year: number;
+  moed: Moed;
   created: Timestamp;
 }
 

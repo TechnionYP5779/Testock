@@ -28,6 +28,8 @@ export class CourseComponent implements OnInit {
   newTag: any;
   favorite$: Observable<boolean>;
   tags: string[];
+  newCourseName: string;
+  newCourseDescription: string;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService,
               private snackBar: MatSnackBar, private spinner: NgxSpinnerService) {
@@ -71,11 +73,11 @@ export class CourseComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'year':
-          return compare(a.year, b.year, isAsc);
+          return compare(a.moed.semester.year, b.moed.semester.year, isAsc);
         case 'semester':
-          return compare(a.semester, b.semester, isAsc);
+          return compare(a.moed.semester.num, b.moed.semester.num, isAsc);
         case 'moed':
-          return compare(a.moed, b.moed, isAsc);
+          return compare(a.moed.num, b.moed.num, isAsc);
         case 'number':
           return compare(a.number, b.number, isAsc);
         // TODO: case 'difficulty': return compare(a.difficulty, b.difficulty, isAsc);
@@ -95,11 +97,11 @@ export class CourseComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'year':
-          return compare(a.year, b.year, isAsc);
+          return compare(a.moed.semester.year, b.moed.semester.year, isAsc);
         case 'semester':
-          return compare(a.semester, b.semester, isAsc);
+          return compare(a.moed.semester.num, b.moed.semester.num, isAsc);
         case 'moed':
-          return compare(a.moed, b.moed, isAsc);
+          return compare(a.moed.num, b.moed.num, isAsc);
         // TODO: case 'grade': return compare(a.grade, b.grade, isAsc);
         default:
           return 0;
@@ -129,7 +131,29 @@ export class CourseComponent implements OnInit {
   }
 
   updateFavoriteCourse() {
-    this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
+    return this.favorite$.pipe(take(1)).toPromise().then(fav => this.auth.updateFavoriteCourse(this.id, !fav));
+  }
+
+  editCourseDetails(): void {
+    this.spinner.show();
+    const p1 =  this.db.updateCourseName(this.course.id, this.newCourseName);
+    const p2 = this.db.updateCourseDescription(this.course.id, this.newCourseDescription);
+    const promises = [];
+    if (this.newCourseName) {
+      promises.push(p1);
+    }
+    if (this.newCourseDescription) {
+      promises.push(p2);
+    }
+    Promise.all(promises).then(() => this.spinner.hide())
+      .then(() => this.snackBar.open(`Course Details Changed Successfully!`, 'close', {duration: 3000}));
+    return;
+  }
+
+  removeTag(tag: string) {
+    this.spinner.show();
+    this.db.removeTagFromCourse(this.course.id, tag).then(() => this.spinner.hide())
+      .then(() => this.snackBar.open(`Tag Deleted Successfully!`, 'close', {duration: 3000}));
   }
 }
 

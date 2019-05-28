@@ -36,6 +36,8 @@ import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {CommonModule} from '@angular/common';
 import {PendingSolutionModalComponent} from './pending-scans/pending-solution-modal/pending-solution-modal.component';
 import { TagComponent } from './ui/tag/tag.component';
+import {CKEditorModule} from 'ngx-ckeditor';
+
 
 
 @NgModule({
@@ -60,6 +62,7 @@ import { TagComponent } from './ui/tag/tag.component';
     NgbModule,
     NgbModalModule,
     CommonModule,
+    CKEditorModule,
     MatMenuModule,
     MatIconModule,
     MatButtonModule,

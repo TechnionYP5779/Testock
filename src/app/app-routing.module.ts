@@ -15,6 +15,7 @@ import {FacultyComponent} from './ui/faculty/faculty.component';
 import {GameWorldComponent} from './gamification/game-world/game-world.component';
 import {PendingScanComponent} from './pending-scans/pending-scan/pending-scan.component';
 import {TagComponent} from './ui/tag/tag.component';
+import {BatchUploadComponent} from './upload/batch-upload/batch-upload.component';
 
 const routes: Routes = [
   {path: '', component: FacultiesComponent},
@@ -33,7 +34,8 @@ const routes: Routes = [
   {path: 'faculty/:id', component: FacultyComponent, canActivate: [UsersOnlyGuard]},
   {path: 'world', component: GameWorldComponent, canActivate: [UsersOnlyGuard]},
   {path: 'pendingScan/:id', component: PendingScanComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'course/:cid/tag/:tag', component: TagComponent, canActivate: [UsersOnlyGuard]}
+  {path: 'course/:cid/tag/:tag', component: TagComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'batch-upload', component: BatchUploadComponent, canActivate: [AdminOnlyGuard]}
 ];
 
 @NgModule({

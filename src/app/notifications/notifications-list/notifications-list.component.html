@@ -1,5 +1,5 @@
-<div class="list-group" *ngIf="notifications">
-  <button [routerLink]="'/' + notification.url" (click)="seen($event, notification, true)" [class.list-group-item-primary]="!notification.seen" class="list-group-item list-group-item-action flex-column align-items-start" *ngFor="let notification of (notifications$ | async); let i = index">
+<div class="list-group" *ngIf="(notifications$ | async) as notifications">
+  <button [routerLink]="'/' + notification.url" (click)="seen($event, notification, true)" [class.list-group-item-primary]="!notification.seen" class="list-group-item list-group-item-action flex-column align-items-start" *ngFor="let notification of notifications; let i = index">
     <div class="d-flex w-100 align-items-center">
       <button class="seen-toggle-btn w-30 btn" placement="right" ngbTooltip="mark as seen" (click)="seen($event, notification, false)" *ngIf="notification.seen == false">
         <fa name="circle-o" *ngIf="notification.seen"></fa>
