@@ -394,3 +394,66 @@ export const onSolvedQuestionDelete = functions.firestore
     }
   });
 
+
+export const onPendingSolutionChanged = functions.firestore.document('questions/{questionId}/solutions/{solID}').onWrite((snapshot, context) => {
+
+  const qid = context.params.questionId;
+  const sid = context.params.solID;
+
+  // Handle solution creation
+  if (!snapshot.before.exists && snapshot.after.exists) {
+    const newSol = snapshot.after.data() as Solution;
+    if (newSol.pendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.pendingScanId);
+      console.log('Linking solution created for ' + qid + ' to ' + newSol.pendingScanId);
+
+      return ref.update({
+        linkedQuestions: FieldValue.arrayUnion({qid: qid, sid: sid})
+      });
+    }
+
+    return true;
+  }
+
+  // Handle solution change
+  if (snapshot.before.exists && snapshot.after.exists) {
+    const solBefore = snapshot.before.data() as Solution;
+    const newSol = snapshot.after.data() as Solution;
+
+    if (!solBefore.pendingScanId && newSol.pendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.pendingScanId);
+      console.log('Linking updated solution for ' + qid + ' to ' + newSol.pendingScanId);
+
+      return ref.update({
+        linkedQuestions: FieldValue.arrayUnion({qid: qid, sid: sid})
+      });
+    }
+
+    if (solBefore.pendingScanId && !newSol.pendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(solBefore.pendingScanId);
+      console.log('Unlinking updated solution for ' + qid + ' from ' + solBefore.pendingScanId);
+      return ref.update({
+        linkedQuestions: FieldValue.arrayRemove({qid: qid, sid: sid})
+      });
+    }
+
+    return true;
+  }
+
+  // Handle solution deletion
+  if (snapshot.before.exists && !snapshot.after.exists) {
+    const deletedSol = snapshot.before.data() as Solution;
+    if (deletedSol.pendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(deletedSol.pendingScanId);
+      console.log('Unlinking deleted solution for ' + qid + ' from ' + deletedSol.pendingScanId);
+      return ref.update({
+        linkedQuestions: FieldValue.arrayRemove({qid: qid, sid: sid})
+      });
+    }
+
+    return true;
+  }
+
+  return true;
+
+});
