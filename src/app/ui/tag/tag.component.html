@@ -17,9 +17,9 @@
   </thead>
   <tbody>
   <tr class="clickable" routerLink="/question/{{ q.id }}" *ngFor="let q of questions">
-    <td>{{ q.moed.semester.year }}</td>
-    <td>{{ q.moed.semester.num }}</td>
-    <td>{{ q.moed.num }}</td>
+    <td>{{ q.moed | year }}</td>
+    <td>{{ q.moed | semester }}</td>
+    <td>{{ q.moed | moed }}</td>
     <td>{{ q.number }}</td>
   </tr>
   </tbody>
