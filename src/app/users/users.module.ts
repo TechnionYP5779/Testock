@@ -11,6 +11,7 @@ import {AppModule} from '../app.module';
 import {AppRoutingModule} from '../app-routing.module';
 import {MatSortModule} from '@angular/material';
 import {NotificationsModule} from '../notifications/notifications.module';
+import {CoreModule} from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {NotificationsModule} from '../notifications/notifications.module';
     AngularFontAwesomeModule,
     AppRoutingModule,
     MatSortModule,
-    NotificationsModule
+    NotificationsModule,
+    CoreModule
   ],
   exports: [
     UserProfileComponent

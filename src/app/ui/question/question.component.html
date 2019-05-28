@@ -4,7 +4,7 @@
     <h1 style="color:DodgerBlue"> {{ course.name}} ({{question.course}})</h1>
   </a>
   <h2>
-    Question {{ question.number }} ({{ question.semester | titlecase }} {{ question.year }} - Moed {{ question.moed }})
+    Question {{ question.number }} ({{ question.moed | fullMoed }})
   </h2>
   <div *ngIf="question.count_difficulty_ratings > 0">
     <h3>

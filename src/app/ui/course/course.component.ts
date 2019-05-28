@@ -73,11 +73,11 @@ export class CourseComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'year':
-          return compare(a.year, b.year, isAsc);
+          return compare(a.moed.semester.year, b.moed.semester.year, isAsc);
         case 'semester':
-          return compare(a.semester, b.semester, isAsc);
+          return compare(a.moed.semester.num, b.moed.semester.num, isAsc);
         case 'moed':
-          return compare(a.moed, b.moed, isAsc);
+          return compare(a.moed.num, b.moed.num, isAsc);
         case 'number':
           return compare(a.number, b.number, isAsc);
         // TODO: case 'difficulty': return compare(a.difficulty, b.difficulty, isAsc);
@@ -97,11 +97,11 @@ export class CourseComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'year':
-          return compare(a.year, b.year, isAsc);
+          return compare(a.moed.semester.year, b.moed.semester.year, isAsc);
         case 'semester':
-          return compare(a.semester, b.semester, isAsc);
+          return compare(a.moed.semester.num, b.moed.semester.num, isAsc);
         case 'moed':
-          return compare(a.moed, b.moed, isAsc);
+          return compare(a.moed.num, b.moed.num, isAsc);
         // TODO: case 'grade': return compare(a.grade, b.grade, isAsc);
         default:
           return 0;

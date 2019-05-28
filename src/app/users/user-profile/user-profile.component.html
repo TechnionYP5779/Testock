@@ -52,9 +52,9 @@
         <tbody>
         <tr *ngFor="let q of questions">
           <td>{{ q.course }}</td>
-          <td>{{ q.year }}</td>
-          <td>{{ q.semester | titlecase}}</td>
-          <td>{{ q.moed | titlecase}}</td>
+          <td>{{ q.moed | year }}</td>
+          <td>{{ q.moed | semester}}</td>
+          <td>{{ q.moed | moed}}</td>
           <td>{{ q.number }}</td>
         </tr>
         </tbody>

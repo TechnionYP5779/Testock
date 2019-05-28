@@ -1,10 +1,9 @@
 import {Timestamp} from '@firebase/firestore-types';
+import {Moed} from './moed';
 
 export interface PendingScan {
   course: number;
-  year: number;
-  moed: string;
-  semester: string;
+  moed: Moed;
   pages: string[];
   created: Timestamp;
 }

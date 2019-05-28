@@ -55,9 +55,9 @@ export class UserProfileComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'course': return compare(a.course, b.course, isAsc);
-        case 'year': return compare(a.year, b.year, isAsc);
-        case 'semester': return compare(a.semester, b.semester, isAsc);
-        case 'moed': return compare(a.moed, b.moed, isAsc);
+        case 'year': return compare(a.moed.semester.year, b.moed.semester.year, isAsc);
+        case 'semester': return compare(a.moed.semester.num, b.moed.semester.num, isAsc);
+        case 'moed': return compare(a.moed.num, b.moed.num, isAsc);
         case 'number': return compare(a.number, b.number, isAsc);
         default: return 0;
       }
