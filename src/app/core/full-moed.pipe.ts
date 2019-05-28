@@ -11,7 +11,7 @@ export class FullMoedPipe implements PipeTransform {
   constructor (private fullSemesterPipe: FullSemesterPipe, private moedPipe: MoedPipe) {}
 
   transform(value: Moed, args?: any): any {
-    return this.fullSemesterPipe.transform(value.semester) + ' - Moed ' + this.moedPipe.transform(value);
+    return this.fullSemesterPipe.transform(value) + ' - Moed ' + this.moedPipe.transform(value);
   }
 
 }

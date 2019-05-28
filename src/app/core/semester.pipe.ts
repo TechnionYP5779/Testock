@@ -1,16 +1,16 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {Semester} from '../entities/semester';
+import {Moed} from '../entities/moed';
 
 @Pipe({
   name: 'semester'
 })
 export class SemesterPipe implements PipeTransform {
-  transform(value: Semester, args?: any): string {
-    if (value.num === 1) {
+  transform(value: Moed, args?: any): string {
+    if (value.semester.num === 1) {
       return `Winter`;
-    } else if (value.num === 2) {
+    } else if (value.semester.num === 2) {
       return `Spring`;
-    } else if (value.num === 3) {
+    } else if (value.semester.num === 3) {
       return `Summer`;
     } else {
       return '';

@@ -10,6 +10,7 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
 import { MoedPipe } from './moed.pipe';
 import { FullMoedPipe } from './full-moed.pipe';
 import { FullSemesterPipe } from './full-semester.pipe';
+import { YearPipe } from './year.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { FullSemesterPipe } from './full-semester.pipe';
     SafeUrlPipe,
     MoedPipe,
     FullMoedPipe,
-    FullSemesterPipe
+    FullSemesterPipe,
+    YearPipe
   ],
   imports: [
     CommonModule,
