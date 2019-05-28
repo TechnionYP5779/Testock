@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {CourseWithFaculty} from '../../entities/course';
-import {ScanDetails, UploadService} from '../upload.service';
+import {UploadService} from '../upload.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {OCRService} from '../../core/ocr.service';
@@ -10,6 +10,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {take} from 'rxjs/operators';
 import {QuestionId} from '../../entities/question';
 import {Moed} from '../../entities/moed';
+import {ScanDetails} from '../../entities/scan-details';
 
 
 class QuestionSolution {
