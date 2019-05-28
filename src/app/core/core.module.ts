@@ -41,7 +41,8 @@ import { YearPipe } from './year.pipe';
     FullMoedPipe,
     FullSemesterPipe,
     SemesterPipe,
-    MoedPipe
+    MoedPipe,
+    YearPipe
   ]
 })
 export class CoreModule { }
