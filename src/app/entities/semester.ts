@@ -1,4 +1,4 @@
-export class Semester {
+export interface Semester {
   year: number;
   num: number;
 }

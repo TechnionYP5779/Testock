@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {CourseWithFaculty} from '../../entities/course';
-import {ScanDetails, UploadService} from '../upload.service';
+import {UploadService} from '../upload.service';
 import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {OCRService} from '../../core/ocr.service';
@@ -10,6 +10,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {take} from 'rxjs/operators';
 import {QuestionId} from '../../entities/question';
 import {Moed} from '../../entities/moed';
+import {ScanDetails} from '../../entities/scan-details';
 
 
 class QuestionSolution {
@@ -99,13 +100,7 @@ export class UploadComponent implements OnInit {
   }
 
   private getDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
-    return this.ocr.getInfoFromSticker(firstPage).then(details => {
-      const semNum = parseInt(details.semester, 10);
-      const moedId = parseInt(details.moed, 10);
-      const course = parseInt(details.course, 10);
-      const year = parseInt(details.year, 10);
-      return {course: course, moed: { semester: {year: year, num: semNum}, num: moedId}};
-    });
+    return this.ocr.getInfoFromSticker(firstPage);
   }
 
   private getCourseWithFaculty(details: ScanDetails): Promise<CourseWithFaculty> {
@@ -274,6 +269,6 @@ export class UploadComponent implements OnInit {
   }
 
   removePageByIndex(i: number) {
-    this.blobs = this.blobs.filter((v,j) => j !== i);
+    this.blobs = this.blobs.filter((v, j) => j !== i);
   }
 }
