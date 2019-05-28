@@ -31,6 +31,7 @@ import { YearPipe } from './year.pipe';
     HttpClient,
     DbService,
     OCRService,
+    YearPipe,
     MoedPipe,
     SemesterPipe,
     FullSemesterPipe
