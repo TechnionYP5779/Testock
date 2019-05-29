@@ -6,6 +6,7 @@ export interface PendingScan {
   moed: Moed;
   pages: string[];
   created: Timestamp;
+  linkedQuestions: {qid: string, sid: string}[];
 }
 
 export interface PendingScanId extends PendingScan {
