@@ -350,7 +350,14 @@ export const onPendingScanDeleted = functions.firestore.document('pendingScans/{
     console.log(`Deleting ${path}`);
   }
 
-  return Promise.all(promises);
+  const morePromises = [];
+  for (let i = 0; i < ps.linkedQuestions.length; ++i) {
+    const ref = admin.firestore().doc(`questions/${ps.linkedQuestions[i].qid}/solutions/${ps.linkedQuestions[i].sid}`);
+    console.log('Deleting linked question: ' + ps.linkedQuestions[i].qid + ', solution: ' + ps.linkedQuestions[i].sid);
+    morePromises.push(ref.delete());
+  }
+
+  return Promise.all([Promise.all(promises), Promise.all(morePromises)]);
 });
 
 export const onSolvedQuestionUpdate = functions.firestore
