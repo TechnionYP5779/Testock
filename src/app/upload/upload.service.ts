@@ -96,7 +96,8 @@ export class UploadService {
       course: course,
       moed: moed,
       pages: [],
-      created: Timestamp.now()
+      created: Timestamp.now(),
+      linkedQuestions: []
     });
 
     for (let i = 0; i < pages.length; ++i) {
