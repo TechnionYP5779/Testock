@@ -9,24 +9,25 @@
   </div>
   <h1 class="display-4">
     {{ course.name }} ({{ course.id }})
-    <button data-toggle="modal" class="edit-button" data-target="#editCourseModal" *ngIf="adminAccess">
+    <button data-toggle="modal" class="edit-button mr-2" data-target="#editCourseModal" *ngIf="adminAccess">
       <fa name="edit"></fa>
     </button>
+    <a class="btn btn-primary mr-2" placement="top" ngbTooltip="Facebook Group" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
+       target="_blank">
+      <fa name="facebook"></fa>
+    </a>
+    <a *ngIf="course.id.toString().startsWith('23')" placement="top" ngbTooltip="Course Website" class="btn btn-info mr-2"
+       [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">
+      <fa name="globe"></fa>
+    </a>
   </h1>
   <div class="lead" [innerHTML]="course.description"></div>
-  <p class="lead">
-    <a class="btn btn-primary mr-2" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
-       target="_blank">
-      <fa name="facebook" class="mr-2"></fa>
-      Facebook Group</a>
-    <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2"
-       [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">
-      <fa name="globe" class="mr-2"></fa>
-      Course Website</a>
+  <p>
     <button *ngIf="adminAccess" role="button" class="btn btn-info mr-2" data-toggle="modal" data-target="#addTagModal">
       <fa name="plus" class="mr-1"></fa>
       Add New Tag
     </button>
+  </p>
 </div>
 
 <div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-hidden="true" *ngIf="course">
