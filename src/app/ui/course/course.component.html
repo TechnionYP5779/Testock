@@ -7,7 +7,12 @@
       <fa name="star-o" *ngIf="(favorite$ | async) == false"></fa>
     </button>
   </div>
-  <h1 class="display-4">{{ course.name }} ({{ course.id }})</h1>
+  <h1 class="display-4">
+    {{ course.name }} ({{ course.id }})
+    <button data-toggle="modal" class="edit-button" data-target="#editCourseModal" *ngIf="adminAccess">
+      <fa name="edit"></fa>
+    </button>
+  </h1>
   <div class="lead" [innerHTML]="course.description"></div>
   <p class="lead">
     <a class="btn btn-primary mr-2" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
@@ -21,11 +26,6 @@
     <button *ngIf="adminAccess" role="button" class="btn btn-info mr-2" data-toggle="modal" data-target="#addTagModal">
       <fa name="plus" class="mr-1"></fa>
       Add New Tag
-    </button>
-    <button *ngIf="adminAccess" role="button" class="btn btn-danger mr-2" data-toggle="modal"
-            data-target="#editCourseModal">
-      <fa name="edit" class="mr-1"></fa>
-      Edit Course Details
     </button>
 </div>
 
