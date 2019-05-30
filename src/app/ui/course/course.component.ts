@@ -154,7 +154,10 @@ export class CourseComponent implements OnInit {
     return;
   }
 
-  removeTag(tag: string) {
+  removeTag(event: MouseEvent, tag: string) {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.spinner.show();
     this.db.removeTagFromCourse(this.course.id, tag).then(() => this.spinner.hide())
       .then(() => this.snackBar.open(`Tag Deleted Successfully!`, 'close', {duration: 3000}));

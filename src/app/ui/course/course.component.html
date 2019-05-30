@@ -22,72 +22,18 @@
     </a>
   </h1>
   <div class="lead" [innerHTML]="course.description"></div>
-  <p>
-    <button *ngIf="adminAccess" role="button" class="btn btn-info mr-2" data-toggle="modal" data-target="#addTagModal">
-      <fa name="plus" class="mr-1"></fa>
-      Add New Tag
-    </button>
-  </p>
-</div>
-
-<div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-hidden="true" *ngIf="course">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Edit Course Details</h2>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="courseName">Name:</label>
-            <input type="text" class="form-control" id="courseName" placeholder="Enter name" name="subject"
-                   [(ngModel)]="newCourseName">
-          </div>
-          <div class="form-group">
-            <label for="desc-editor">Description:</label>
-            <ck-editor name="editor1" id="desc-editor" [(ngModel)]="newCourseDescription" skin="moono-lisa"></ck-editor>
-          </div>
-          <button type="submit" class="btn btn-primary mb-2" (click)="editCourseDetails()" data-dismiss="modal">Post</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="addTagModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <input type="text" class="form-control" placeholder="New Tag" [(ngModel)]="newTag" name="courseName"/>
-        <button type="submit" data-dismiss="modal" class="btn btn-success" (click)="addNewTag();">Add</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<table matSort (matSortChange)="sortTags($event)" class="table table-hover" *ngIf="tags">
-  <thead>
-  <tr class="table-warning">
-    <th colspan="4" mat-sort-header="tag">
-      Tags
-      <span class="badge badge-warning">{{tags.length}}</span>
-    </th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let tag of tags">
-    <td class="clickable" routerLink="tag/{{ tag }}">#{{ tag }}</td>
-    <td>
-      <button mat-button *ngIf="adminAccess" role="button" style="float: right; color: orangered" (click)="removeTag(tag)">
-        <mat-icon>delete</mat-icon>
+  <div class="course-tags">
+    <button class="tag btn btn-warning mr-2" *ngFor="let tag of tags" routerLink="tag/{{ tag }}">
+      # {{ tag }}
+      <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="adminAccess">
+        <fa name="times"></fa>
       </button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+    </button>
+    <button role="button" class="btn btn-warning mr-2" data-toggle="modal" data-target="#addTagModal" *ngIf="adminAccess">
+      <fa name="plus"></fa>
+    </button>
+  </div>
+</div>
 
 <table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams">
   <thead>
@@ -157,6 +103,8 @@
     </span>
   </a>
 </div>
+
+<!-- Modals -->
 <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -174,3 +122,41 @@
 </div>
 
 <app-pending-scans-list [course]="course.id" *ngIf="course" [adminAccess]="adminAccess"></app-pending-scans-list>
+
+<div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-hidden="true" *ngIf="course">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Course Details</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="courseName">Name:</label>
+            <input type="text" class="form-control" id="courseName" placeholder="Enter name" name="subject"
+                   [(ngModel)]="newCourseName">
+          </div>
+          <div class="form-group">
+            <label for="desc-editor">Description:</label>
+            <ck-editor name="editor1" id="desc-editor" [(ngModel)]="newCourseDescription" skin="moono-lisa"></ck-editor>
+          </div>
+          <button type="submit" class="btn btn-primary mb-2" (click)="editCourseDetails()" data-dismiss="modal">Post</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addTagModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <input type="text" class="form-control" placeholder="New Tag" [(ngModel)]="newTag" name="courseName"/>
+        <button type="submit" data-dismiss="modal" class="btn btn-success" (click)="addNewTag();">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
