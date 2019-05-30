@@ -16,13 +16,20 @@ import {FormsModule} from '@angular/forms';
 import { BatchUploadComponent } from './batch-upload/batch-upload.component';
 import {FileDropModule} from 'ngx-file-drop';
 import {RouterModule} from '@angular/router';
+import { CropPendingComponent } from './crop-pending/crop-pending.component';
+import { UploadQuestionNewComponent } from './upload-question-new/upload-question-new.component';
+import { UploadScanPageNewComponent } from './upload-scan-page-new/upload-scan-page-new.component';
+import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     UploadComponent,
     ScanPageComponent,
     UploadQuestionComponent,
-    BatchUploadComponent
+    BatchUploadComponent,
+    CropPendingComponent,
+    UploadQuestionNewComponent,
+    UploadScanPageNewComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +43,8 @@ import {RouterModule} from '@angular/router';
     MatSlideToggleModule,
     FormsModule,
     FileDropModule,
-    RouterModule
+    RouterModule,
+    NgbCollapseModule
   ],
   providers: [
     UploadService,

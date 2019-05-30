@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-8" id="accordionExample">
+    <div class="card">
+      <div class="card-header">
+          Available pages
+      </div>
+      <div class="card-body">
+        <div class="text-center">
+          <div class="btn-group" role="group" aria-label="Clean Pages">
+            <button type="button" class="btn btn-danger" (click)="removeFirstPage()">Remove First Page</button>
+            <button type="button" class="btn btn-danger" (click)="clearEvenPages()">Remove Even Pages</button>
+            <button type="button" class="btn btn-danger" (click)="clearOddPages()">Remove Odd Pages</button>
+            <button type="button" class="btn btn-danger" (click)="clearBlankPages()">Remove Blank Pages</button>
+            <button type="button" class="btn btn-danger" (click)="returnPages()">Return All Pages</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-3" *ngFor="let page of base64; let i = index">
+            <button type="button" class="text-danger" (click)="removePageByIndex(i)">
+              <fa name="times"></fa>
+            </button>
+            <app-upload-scan-page-new [imageBase64]="page" [addImageTo]="activeQuestion"></app-upload-scan-page-new>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-4">
+    <div *ngIf="course && pendingScan">
+      <div class="card">
+        <div class="upload-thumbnail-image-placeholder">
+          <img class="align-middle" src="/assets/images/testock-logo.png" alt="Card image cap">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ course?.name }}
+            <span style="display: block">
+              {{ pendingScan.moed | fullMoed }}
+            </span>
+          </h5>
+          <ul class="scan-properties row">
+            <li class="col-6">
+              <span class="scan-properties-icon">
+                <fa name="hashtag"></fa>
+              </span>
+              <span class="scan-properties-text">
+                {{ course?.id }}
+              </span>
+            </li>
+            <li class="col-6">
+              <span class="scan-properties-icon">
+                <fa name="home"></fa>
+              </span>
+              <span class="scan-properties-text">
+                {{ course?.faculty.name }}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="questions-wrapper">
+        <div class="accordion" id="questions">
+          <app-upload-question-new *ngFor="let q of questions" [sol]="q" [quickMode]="false" (imageAddRequested)="activeQuestion = q"></app-upload-question-new>
+        </div>
+
+        <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">
+          Add Question
+        </button>
+      </div>
+
+      <Button id="upload-scan-button" class="btn btn-success btn-block"
+              (click)="uploadImages()">
+        Upload Scan
+      </Button>
+    </div>
+  </div>
+</div>
