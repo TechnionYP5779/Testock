@@ -50,7 +50,7 @@ export class CourseComponent implements OnInit {
 
   getCourse(): void {
     this.db.getCourse(this.id).subscribe(course => {
-      this.course = course
+      this.course = course;
       this.newCourseName = this.course.name;
       this.newCourseDescription = this.course.description;
     });
@@ -66,30 +66,6 @@ export class CourseComponent implements OnInit {
 
   getTags(): void {
     this.db.getTagsOfCourse(this.id).subscribe(tags => this.tags = tags);
-  }
-
-  sortQuestions(sort: Sort) {
-    const data = this.questions;
-    if (!sort.active || sort.direction === '') {
-      return;
-    }
-    this.questions = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'year':
-          return compare(a.moed.semester.year, b.moed.semester.year, isAsc);
-        case 'semester':
-          return compare(a.moed.semester.num, b.moed.semester.num, isAsc);
-        case 'moed':
-          return compare(a.moed.num, b.moed.num, isAsc);
-        case 'number':
-          return compare(a.number, b.number, isAsc);
-        // TODO: case 'difficulty': return compare(a.difficulty, b.difficulty, isAsc);
-        // TODO: case 'is_solved': return compare(a.is_solved, b.is_solved, isAsc);
-        default:
-          return 0;
-      }
-    });
   }
 
   sortExams(sort: Sort) {
@@ -110,17 +86,6 @@ export class CourseComponent implements OnInit {
         default:
           return 0;
       }
-    });
-  }
-
-  sortTags(sort: Sort) {
-    const data = this.tags;
-    if (!sort.active || sort.direction === '') {
-      return;
-    }
-    this.tags = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      return compare(a, b, isAsc);
     });
   }
 

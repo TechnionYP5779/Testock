@@ -60,31 +60,6 @@
   </tbody>
 </table>
 
-<table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions">
-  <thead>
-  <tr class="table-danger">
-    <th colspan="4">
-      Questions
-      <span class="badge badge-danger">{{questions.length}}</span>
-    </th>
-  </tr>
-  <tr class="table-light">
-    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year">Year</th>
-    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
-    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
-    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="number">Question No.</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr class="clickable" routerLink="/question/{{ q.id }}" *ngFor="let q of questions">
-    <td>{{ q.moed | year }}</td>
-    <td>{{ q.moed | semester }}</td>
-    <td>{{ q.moed | moed }}</td>
-    <td>{{ q.number }}</td>
-  </tr>
-  </tbody>
-</table>
-
 <div class="list-group my-3" *ngIf="topics$ | async as topics">
   <div class="list-group-item list-group-item-info">
     <b>Forum </b>
