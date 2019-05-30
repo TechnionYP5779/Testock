@@ -464,3 +464,24 @@ export const onPendingSolutionChanged = functions.firestore.document('questions/
   return true;
 
 });
+
+export const onQuestionCreated = functions.firestore.document('questions/{qid}').onCreate(async (snap, context) => {
+  const qid = context.params.qid;
+  const question = snap.data() as Question;
+
+  const pendingScansIds: string[] = await admin.firestore().collection('pendingScans')
+    .where('course', '==', question.course)
+    .where('moed.semester.year', '==', question.moed.semester.year)
+    .where('moed.semester.num', '==', question.moed.semester.num)
+    .where('moed.num', '==', question.moed.num).get().then(snaps => snaps.docs.map(doc => doc.id));
+
+  console.log('Found the following pending scans: ' + pendingScansIds);
+
+  return Promise.all(pendingScansIds.map(psId => {
+    const pendingSol = {} as Solution;
+    pendingSol.pendingScanId = psId;
+    pendingSol.grade = -1;
+    pendingSol.created = admin.firestore.Timestamp.now();
+    return admin.firestore().collection(`questions/${qid}/solutions`).add(pendingSol);
+  }));
+});
