@@ -35,48 +35,53 @@
   </div>
 </div>
 
-<table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams">
-  <thead>
-  <tr class="table-primary">
-    <th colspan="4">
-      Available Exams
-      <span class="badge badge-primary">{{exams.length}}</span>
-    </th>
-  </tr>
-  <tr class="table-light">
-    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year">Year</th>
-    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
-    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
-    <th class="text-center" scope="col" style="width: 10%"></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr class="clickable" routerLink="exam/{{ e.id }}" *ngFor="let e of exams">
-    <td>{{ e.moed | year }}</td>
-    <td>{{ e.moed | semester }}</td>
-    <td>{{ e.moed | moed }}</td>
-    <td></td>
-  </tr>
-  </tbody>
-</table>
-
-<div class="list-group my-3" *ngIf="topics$ | async as topics">
-  <div class="list-group-item list-group-item-info">
-    <b>Forum </b>
-    <span class="badge badge-info">{{topics.length}}</span>
-    <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
-      <fa name="plus" class="mr-1"></fa>
-      Add Topic
-    </button>
+<div class="row">
+  <div class="col-6">
+    <table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams">
+      <thead>
+      <tr class="table-primary">
+        <th colspan="4">
+          Available Exams
+          <span class="badge badge-primary">{{exams.length}}</span>
+        </th>
+      </tr>
+      <tr class="table-light">
+        <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year">Year</th>
+        <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
+        <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
+        <th class="text-center" scope="col" style="width: 10%"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="clickable" routerLink="exam/{{ e.id }}" *ngFor="let e of exams">
+        <td>{{ e.moed | year }}</td>
+        <td>{{ e.moed | semester }}</td>
+        <td>{{ e.moed | moed }}</td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
   </div>
-  <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
-    {{ topic.subject }}
-    <span class="float-right col-4">
+  <div class="col-6">
+    <div class="list-group my-3" *ngIf="topics$ | async as topics">
+      <div class="list-group-item list-group-item-info">
+        <b>Forum </b>
+        <span class="badge badge-info">{{topics.length}}</span>
+        <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
+          <fa name="plus" class="mr-1"></fa>
+          Add Topic
+        </button>
+      </div>
+      <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
+        {{ topic.subject }}
+        <span class="float-right col-4">
       <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic" alt=""/>
       <small class="mr-2">{{ topic.creator.name }}</small>
       <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
     </span>
-  </a>
+      </a>
+    </div>
+  </div>
 </div>
 
 <!-- Modals -->
@@ -95,8 +100,6 @@
     </div>
   </div>
 </div>
-
-<app-pending-scans-list [course]="course.id" *ngIf="course" [adminAccess]="adminAccess"></app-pending-scans-list>
 
 <div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-hidden="true" *ngIf="course">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
