@@ -49,7 +49,11 @@ export class CourseComponent implements OnInit {
   }
 
   getCourse(): void {
-    this.db.getCourse(this.id).subscribe(course => this.course = course);
+    this.db.getCourse(this.id).subscribe(course => {
+      this.course = course
+      this.newCourseName = this.course.name;
+      this.newCourseDescription = this.course.description;
+    });
   }
 
   getQuestions(): void {
