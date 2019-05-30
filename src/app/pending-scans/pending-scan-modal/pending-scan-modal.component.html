@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h4 class="modal-title">Pending Scan for {{ pendingScan.moed | fullMoed }}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="display-inline">
+    <strong>Questions on this exam: </strong>
+    <a class="badge badge-primary ml-1"
+       *ngFor="let linkedQuestion of pendingScan.linkedQuestions"
+       (click)="activeModal.dismiss('Question click')"
+       [routerLink]="'/question/' + linkedQuestion.qid">
+      Question {{ linkedQuestion.qid.split('-')[4] }}
+    </a>
+  </div>
+  <div class="text-center mt-2" *ngFor="let img of pendingScan.pages; let i = index">
+    <img class="pending-scan-page" [src]="img" alt="pending scan page" />
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>
