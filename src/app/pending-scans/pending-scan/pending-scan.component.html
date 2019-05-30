@@ -4,6 +4,11 @@
   <h2>
     ({{ pendingScan.moed | fullMoed }})
   </h2>
+  <div class="display-inline">
+    <a class="badge badge-primary ml-1" *ngFor="let linkedQuestion of pendingScan.linkedQuestions" [routerLink]="'/question/' + linkedQuestion.qid">
+      Question {{ linkedQuestion.qid.split('-')[4] }}
+    </a>
+  </div>
   <div class="p-3 text-center" *ngFor="let img of pendingScan.pages; let i = index">
     <img class="ml-4" [src]="img" alt="" width="75%"/>
   </div>
