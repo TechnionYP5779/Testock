@@ -37,30 +37,7 @@
 
 <div class="row">
   <div class="col-6">
-    <table matSort (matSortChange)="sortExams($event)" class="table table-hover" *ngIf="exams">
-      <thead>
-      <tr class="table-primary">
-        <th colspan="4">
-          Available Exams
-          <span class="badge badge-primary">{{exams.length}}</span>
-        </th>
-      </tr>
-      <tr class="table-light">
-        <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year">Year</th>
-        <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
-        <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
-        <th class="text-center" scope="col" style="width: 10%"></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="clickable" routerLink="exam/{{ e.id }}" *ngFor="let e of exams">
-        <td>{{ e.moed | year }}</td>
-        <td>{{ e.moed | semester }}</td>
-        <td>{{ e.moed | moed }}</td>
-        <td></td>
-      </tr>
-      </tbody>
-    </table>
+    <app-exams-list [exams]="(exams$ | async)"></app-exams-list>
   </div>
   <div class="col-6">
     <div class="list-group my-3" *ngIf="topics$ | async as topics">

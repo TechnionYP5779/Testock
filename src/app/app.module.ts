@@ -15,7 +15,7 @@ import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonModule, MatIconModule, MatInputModule, MatMenuModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatInputModule, MatMenuModule, MatTableModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {CoreModule} from './core/core.module';
 import {FormsModule} from '@angular/forms';
@@ -37,6 +37,7 @@ import {CommonModule} from '@angular/common';
 import {PendingSolutionModalComponent} from './pending-scans/pending-solution-modal/pending-solution-modal.component';
 import { TagComponent } from './ui/tag/tag.component';
 import {CKEditorModule} from 'ngx-ckeditor';
+import { ExamsListComponent } from './ui/exams-list/exams-list.component';
 
 
 
@@ -66,7 +67,8 @@ import {CKEditorModule} from 'ngx-ckeditor';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    NgbRatingModule
+    NgbRatingModule,
+    MatTableModule
   ],
   declarations: [
     AppComponent,
@@ -78,7 +80,8 @@ import {CKEditorModule} from 'ngx-ckeditor';
     SolutionComponent,
     FacultiesComponent,
     FacultyComponent,
-    TagComponent
+    TagComponent,
+    ExamsListComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
