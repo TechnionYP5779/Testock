@@ -1,25 +1,10 @@
 <div class="row">
-  <div class="col-8" id="accordionExample">
+  <div class="col-8">
     <div class="card">
-      <div class="card-header">
-          Available pages
-      </div>
-      <div class="card-body">
-        <div class="text-center">
-          <div class="btn-group" role="group" aria-label="Clean Pages">
-            <button type="button" class="btn btn-danger" (click)="removeFirstPage()">Remove First Page</button>
-            <button type="button" class="btn btn-danger" (click)="clearEvenPages()">Remove Even Pages</button>
-            <button type="button" class="btn btn-danger" (click)="clearOddPages()">Remove Odd Pages</button>
-            <button type="button" class="btn btn-danger" (click)="clearBlankPages()">Remove Blank Pages</button>
-            <button type="button" class="btn btn-danger" (click)="returnPages()">Return All Pages</button>
-          </div>
-        </div>
+      <div class="card-body px-4 py-2">
         <div class="row">
-          <div class="col-3" *ngFor="let page of base64; let i = index">
-            <button type="button" class="text-danger" (click)="removePageByIndex(i)">
-              <fa name="times"></fa>
-            </button>
-            <app-upload-scan-page-new [imageBase64]="page" [addImageTo]="activeQuestion"></app-upload-scan-page-new>
+          <div class="col-3 p-2" *ngFor="let page of pages; let i = index" [hidden]="page.hidden">
+            <app-upload-scan-page-new [scanPage]="page" [addImageTo]="activeQuestion"></app-upload-scan-page-new>
           </div>
         </div>
       </div>
@@ -28,9 +13,6 @@
   <div class="col-4">
     <div *ngIf="course && pendingScan">
       <div class="card">
-        <div class="upload-thumbnail-image-placeholder">
-          <img class="align-middle" src="/assets/images/testock-logo.png" alt="Card image cap">
-        </div>
         <div class="card-body">
           <h5 class="card-title">
             {{ course?.name }}
@@ -59,12 +41,29 @@
         </div>
       </div>
 
+      <div class="card mt-2">
+        <div class="card-body">
+          <div class="btn-toolbar">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Clean Pages">
+              <button type="button" class="btn btn-danger"><fa name="eye-slash"></fa></button>
+              <button type="button" class="btn btn-danger" (click)="hideFirstPage()" ngbTooltip="Hide First Page">First</button>
+              <button type="button" class="btn btn-danger" (click)="hideEvenPages()" ngbTooltip="Hide Even Pages">Even</button>
+              <button type="button" class="btn btn-danger" (click)="hideOddPages()" ngbTooltip="Hide Odd Pages">Odd</button>
+              <button type="button" class="btn btn-danger" (click)="hideBlankPages()" ngbTooltip="Hide Blank Pages">Blank</button>
+            </div>
+            <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Restore Pages">
+              <button type="button" class="btn btn-success" (click)="restoreHiddenPages()" ngbTooltip="Restore Hidden Pages"><fa name="undo" class="mr-2"></fa>Restore</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="questions-wrapper">
         <div class="accordion" id="questions">
-          <app-upload-question-new *ngFor="let q of questions" [sol]="q" [quickMode]="false" (imageAddRequested)="activeQuestion = q"></app-upload-question-new>
+          <app-upload-question-new *ngFor="let q of questions" [sol]="q" [quickMode]="false" (imageAddRequested)="imageAddRequested(q)"></app-upload-question-new>
         </div>
 
-        <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">
+        <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion(newQuestionModal)">
           Add Question
         </button>
       </div>
@@ -76,3 +75,30 @@
     </div>
   </div>
 </div>
+
+<ng-template #newQuestionModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Question</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="dateOfBirth">Add Question</label>
+        <div class="input-group">
+          <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
+

@@ -19,7 +19,7 @@ import {RouterModule} from '@angular/router';
 import { CropPendingComponent } from './crop-pending/crop-pending.component';
 import { UploadQuestionNewComponent } from './upload-question-new/upload-question-new.component';
 import { UploadScanPageNewComponent } from './upload-scan-page-new/upload-scan-page-new.component';
-import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,8 @@ import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     FileDropModule,
     RouterModule,
-    NgbCollapseModule
+    NgbCollapseModule,
+    NgbTooltipModule
   ],
   providers: [
     UploadService,

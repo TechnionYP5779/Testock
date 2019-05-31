@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {CourseWithFaculty} from '../../entities/course';
@@ -9,6 +9,7 @@ import {OCRService} from '../../core/ocr.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {take} from 'rxjs/operators';
 import {PendingScanId} from '../../entities/pending-scan';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 
 export class QuestionSolution {
@@ -18,12 +19,12 @@ export class QuestionSolution {
   public points: number;
   public fetchedQuestion: boolean;
 
-  constructor(number: number = 0, points: number = 0) {
+  constructor(number: number, points: number, fetchedQuestion = false) {
     this.images = [];
     this.grade = 0;
     this.number = number;
     this.points = points;
-    this.fetchedQuestion = points > 0;
+    this.fetchedQuestion = fetchedQuestion;
   }
 
   addImage(image: string) {
@@ -35,6 +36,21 @@ export class QuestionSolution {
   }
 }
 
+export class ScanPage {
+  pageNum: number;
+  hidden: boolean;
+  blob: Blob;
+  imageBase64: string;
+  ocrBlankResult: boolean;
+
+
+  constructor(pageNum: number, image: Blob, imageBase64: string) {
+    this.pageNum = pageNum;
+    this.blob = image;
+    this.imageBase64 = imageBase64;
+  }
+}
+
 @Component({
   selector: 'app-crop-pending',
   templateUrl: './crop-pending.component.html',
@@ -42,38 +58,33 @@ export class QuestionSolution {
 })
 export class CropPendingComponent implements OnInit {
 
-  @ViewChild('file') file;
-  @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
-  @ViewChild('collapseOne') collapseOneTrigger;
+  questions: QuestionSolution[] = [];
+  activeQuestion: QuestionSolution = null;
 
-  public questions: QuestionSolution[] = [];
-  private activeQuestion = null;
+  pendingScan: PendingScanId;
+  pages: ScanPage[];
 
-  private removedFirstPage = false;
-  public allBlobs: Blob[];
-  public blobs: Blob[];
-  private pendingScanId: string;
-  public base64: string[];
-  public pendingScan: PendingScanId;
+  private _hasOcrBlankResults = false;
 
   constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
-              public snackBar: MatSnackBar, private route: ActivatedRoute, private spinner: NgxSpinnerService) {
-    this.pendingScanId = this.route.snapshot.paramMap.get('pid');
+              public snackBar: MatSnackBar, private route: ActivatedRoute, private spinner: NgxSpinnerService, private modal: NgbModal) {
+    const pendingScanId = this.route.snapshot.paramMap.get('pid');
+    this.loadPendingScan(pendingScanId);
   }
 
   public course: CourseWithFaculty;
 
   ngOnInit() {
-    this.loadPendingScan();
-    this.questions = [new QuestionSolution()];
+    this.questions = [new QuestionSolution(1, 5)];
   }
 
-  async loadPendingScan() {
+  async loadPendingScan(pendingScanId: string) {
     await this.spinner.show();
-    this.pendingScan = await this.db.getPendingScan(this.pendingScanId).pipe(take(1)).toPromise();
+    this.pendingScan = await this.db.getPendingScan(pendingScanId).pipe(take(1)).toPromise();
     this.course = await this.db.getCourseWithFaculty(this.pendingScan.course).pipe(take(1)).toPromise();
-    this.blobs = await Promise.all(this.pendingScan.pages.map(page => getBlob(page)));
-    this.base64 = await Promise.all(this.blobs.map(blob => getImageBase64(blob)));
+    const blobs = await Promise.all(this.pendingScan.pages.map(page => getBlobFromUrl(page)));
+    const base64 = await Promise.all(blobs.map(blob => getImageBase64FromBlob(blob)));
+    this.pages = blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
     await this.spinner.hide();
   }
 
@@ -81,96 +92,55 @@ export class CropPendingComponent implements OnInit {
 
   }
 
-  addQuestion() {
-    this.questions.push(new QuestionSolution(this.questions.length + 1));
+  addQuestion(newQuestionModal: TemplateRef<any>) {
+    this.modal.open(newQuestionModal);
   }
 
-  enableImageAdding(questionIndex: number) {
-    this.activeQuestion = questionIndex;
-    this.snackBar.open('Select a page to add', 'close', {duration: 3000});
+  hideFirstPage() {
+    if (this.pages && this.pages.length > 0) {
+      this.pages[0].hidden = true;
+    }
   }
 
-  addImage(image: string) {
-    if (image === null) {
+  hideEvenPages() {
+    this.pages.filter(page => page.pageNum % 2 === 0).map(page => page.hidden = true);
+  }
+
+  hideOddPages() {
+    this.pages.filter(page => page.pageNum % 2 === 1).map(page => page.hidden = true);
+  }
+
+  async hideBlankPages() {
+
+    if (this._hasOcrBlankResults) {
+      this.pages.filter(page => page.ocrBlankResult).map(page => page.hidden = true);
       return;
     }
 
-    this.questions[this.activeQuestion - 1].addImage(image);
-    this.activeQuestion = 0;
-  }
-
-  removeImage(questionImage: any[]) {
-    this.questions[questionImage[0] - 1].images.splice(questionImage[1], 1);
-    this.activeQuestion = 0;
-  }
-
-  removeFirstPage() {
-    if (this.removedFirstPage === false) {
-      this.blobs = this.blobs.slice(1);
-    }
-    this.removedFirstPage = true;
-  }
-
-  clearEvenPages() {
-    const res = [];
-    for (let i = 0; i < this.allBlobs.length; i = i + 2) {
-      if (i === 0 && this.removedFirstPage) {
-        continue;
-      }
-      res.push(this.allBlobs[i]);
-    }
-
-    this.blobs = res;
-  }
-
-  clearOddPages() {
-    const res = [];
-    for (let i = 1; i < this.allBlobs.length; i = i + 2) {
-      res.push(this.allBlobs[i]);
-    }
-
-    this.blobs = res;
-  }
-
-  async clearBlankPages() {
-    this.spinner.show();
-    const res = [];
-    const promises = [];
-    for (let i = 0; i < this.allBlobs.length; i = i + 1) {
-      promises.push(this.ocr.isImageBlank(this.allBlobs[i]));
-    }
-    Promise.all(promises).then(isPageBlank => {
-      for (let i = 0; i < this.allBlobs.length; i = i + 1) {
-        if (!isPageBlank[i].isBlank) {
-          res.push(this.allBlobs[i]);
-        }
-      }
-      this.blobs = res;
-      this.spinner.hide();
+    await this.spinner.show();
+    const promises = this.pages.map(page => this.ocr.isImageBlank(page.blob).then(is => page.ocrBlankResult = is));
+    return Promise.all(promises).then(() => {
+      this._hasOcrBlankResults = true;
+      this.pages.filter(page => page.ocrBlankResult).map(page => page.hidden = true);
+      return this.spinner.hide();
     });
   }
 
-  resetForm() {
-    this.questions = [];
-    this.blobs = [];
-    this.course = null;
+  restoreHiddenPages() {
+    this.pages.map(page => page.hidden = false);
   }
 
-  returnPages() {
-    this.removedFirstPage = false;
-    this.blobs = this.allBlobs;
-  }
-
-  removePageByIndex(i: number) {
-    this.blobs = this.blobs.filter((v, j) => j !== i);
+  imageAddRequested(q: QuestionSolution) {
+    this.activeQuestion = q;
+    this.snackBar.open('Select page to crop solution for question ' + q.number, 'close', {duration: 5000});
   }
 }
 
-function getBlob(url: string): Promise<Blob> {
+function getBlobFromUrl(url: string): Promise<Blob> {
   return fetch(url, {mode: 'cors'}).then(res => res.blob());
 }
 
-function getImageBase64(blob: Blob): Promise<string> {
+function getImageBase64FromBlob(blob: Blob): Promise<string> {
   return new Promise(async (resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as string);
