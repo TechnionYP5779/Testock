@@ -70,12 +70,14 @@ export class CropPendingComponent implements OnInit {
               public snackBar: MatSnackBar, private route: ActivatedRoute, private spinner: NgxSpinnerService, private modal: NgbModal) {
     const pendingScanId = this.route.snapshot.paramMap.get('pid');
     this.loadPendingScan(pendingScanId);
+    this.questions = [];
   }
 
   public course: CourseWithFaculty;
+  newQuestionGrade: number;
+  newQuestionNum: number;
 
   ngOnInit() {
-    this.questions = [new QuestionSolution(1, 5)];
   }
 
   async loadPendingScan(pendingScanId: string) {
@@ -93,7 +95,27 @@ export class CropPendingComponent implements OnInit {
   }
 
   addQuestion(newQuestionModal: TemplateRef<any>) {
-    this.modal.open(newQuestionModal);
+    this.newQuestionNum = minNotInArray(this.questions.map(q => q.number));
+    this.newQuestionGrade = 5;
+    this.modal.open(newQuestionModal, {size: 'sm', centered: true}).result.then(result => {
+      if (this.questions.map(q => q.number).includes(this.newQuestionNum)) {
+        this.snackBar.open('Question Already Exists', 'close', {duration: 3000});
+        return;
+      }
+
+      if (this.newQuestionNum <= 0) {
+        this.snackBar.open('Invalid question number', 'close', {duration: 3000});
+        return;
+      }
+
+      if (this.newQuestionGrade <= 0 || this.newQuestionGrade > 100) {
+        this.snackBar.open('Invalid question grade', 'close', {duration: 3000});
+        return;
+      }
+
+      this.questions.push(new QuestionSolution(this.newQuestionNum, this.newQuestionGrade));
+      this.questions = this.questions.sort((a, b) => a.number - b.number);
+    });
   }
 
   hideFirstPage() {
@@ -147,4 +169,20 @@ function getImageBase64FromBlob(blob: Blob): Promise<string> {
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(blob);
   });
+}
+
+function minNotInArray(numbers: number[]) {
+
+  if (numbers.length === 0) {
+    return 1;
+  }
+
+  for (let i = 1; i < Math.max(...numbers); ++i) {
+    console.log(i);
+    if (!numbers.includes(i)) {
+      return i;
+    }
+  }
+
+  return Math.max(...numbers) + 1;
 }

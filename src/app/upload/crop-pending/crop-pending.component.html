@@ -1,5 +1,8 @@
 <div class="row">
   <div class="col-8">
+    <div class="alert alert-success mt-2" *ngIf="activeQuestion">
+      <fa name="info" class="mr-2"></fa> Choose question {{ activeQuestion.number }} answers
+    </div>
     <div class="card">
       <div class="card-body px-4 py-2">
         <div class="row">
@@ -58,46 +61,53 @@
         </div>
       </div>
 
-      <div class="questions-wrapper">
-        <div class="accordion" id="questions">
+      <div class="mt-2">
+        <div class="accordion">
           <app-upload-question-new *ngFor="let q of questions" [sol]="q" [quickMode]="false" (imageAddRequested)="imageAddRequested(q)"></app-upload-question-new>
+          <div class="alert alert-info" *ngIf="questions.length == 0">
+            <fa name="info" class="mr-2"></fa>
+            Click below to insert a question
+          </div>
         </div>
 
-        <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion(newQuestionModal)">
+        <button class="btn btn-primary btn-block mt-2" type="button" (click)="addQuestion(newQuestionModal)">
           Add Question
         </button>
       </div>
 
-      <Button id="upload-scan-button" class="btn btn-success btn-block"
+      <button id="upload-scan-button" class="btn btn-success btn-block mt-2"
               (click)="uploadImages()">
         Upload Scan
-      </Button>
+      </button>
     </div>
   </div>
 </div>
 
 <ng-template #newQuestionModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Add Question</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <h4 class="modal-title" id="modal-basic-title">Insert Question</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <form>
-      <div class="form-group">
-        <label for="dateOfBirth">Add Question</label>
-        <div class="input-group">
-          <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
-          </div>
+      <div class="form-group form-inline">
+        <label for="questionNum">Question #:</label>
+        <div class="input-group ml-2">
+          <input name="questionNum" min="1" id="questionNum" class="form-control" type="number" style="width: 100px" [(ngModel)]="newQuestionNum">
+        </div>
+      </div>
+      <div class="form-group form-inline">
+        <label for="totalGrade">Total Grade:</label>
+        <div class="input-group ml-2">
+          <input name="totalGrade" min="1" max="100" id="totalGrade" class="form-control" type="number" style="width: 100px" [(ngModel)]="newQuestionGrade">
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-success" (click)="modal.close('Save click')" ngbAutofocus>Done</button>
   </div>
 </ng-template>
 
