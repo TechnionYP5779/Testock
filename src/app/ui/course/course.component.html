@@ -44,9 +44,8 @@
       <div class="list-group-item list-group-item-info">
         <b>Forum </b>
         <span class="badge badge-info">{{topics.length}}</span>
-        <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
-          <fa name="plus" class="mr-1"></fa>
-          Add Topic
+        <button role="button" class="btn btn-info float-right" placement="top" ngbTooltip="Add Topic" data-toggle="modal" data-target="#createTopicModal">
+          <fa name="plus"></fa>
         </button>
       </div>
       <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
