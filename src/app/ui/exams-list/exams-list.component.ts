@@ -4,6 +4,7 @@ import {Exam} from '../../entities/exam';
 import {SemesterPipe} from '../../core/semester.pipe';
 import {MoedPipe} from '../../core/moed.pipe';
 import {Sort} from '@angular/material';
+import {YearPipe} from '../../core/year.pipe';
 
 export interface ExamRow {
   year: number;
@@ -28,7 +29,7 @@ export class ExamsListComponent implements OnInit {
     if (!!exams) {
       this.examRows = exams.map(exam => {
         return {
-          year: exam.moed.semester.year,
+          year: this.yearPipe.transform(exam.moed),
           semester: this.semesterPipe.transform(exam.moed),
           moed: this.moedPipe.transform(exam.moed)
         } as ExamRow;
@@ -42,7 +43,7 @@ export class ExamsListComponent implements OnInit {
   public columnsToDisplay = ['year', 'semester', 'moed'];
   public expandedExam: ExamRow | null;
 
-  constructor(private semesterPipe: SemesterPipe, private moedPipe: MoedPipe) {
+  constructor(private yearPipe: YearPipe, private semesterPipe: SemesterPipe, private moedPipe: MoedPipe) {
   }
 
   ngOnInit() {
