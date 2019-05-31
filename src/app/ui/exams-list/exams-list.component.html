@@ -3,7 +3,7 @@
        [dataSource]="examRows" multiTemplateDataRows
        class="mat-elevation-z8">
   <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-    <th mat-header-cell [mat-sort-header]="column" *matHeaderCellDef> {{column}} </th>
+    <th mat-header-cell [mat-sort-header]="column" *matHeaderCellDef> {{column | titlecase }} </th>
     <td mat-cell *matCellDef="let exam"> {{exam[column]}} </td>
   </ng-container>
 
