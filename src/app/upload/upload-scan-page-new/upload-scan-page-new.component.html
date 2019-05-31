@@ -1,4 +1,13 @@
-<img class="scan-page-image" [src]="imageBase64" alt="exam scan image" (click)="openModal(content)"/>
+<!--<img class="scan-page-image" [src]="scanPage.imageBase64" alt="exam scan image" "/>-->
+
+<div class="scan-page-image" (click)="openModal(content)">
+  <img [src]="scanPage.imageBase64" alt="scan page crop">
+  <div class="image-popup" *ngIf="!addImageTo">
+    <button class="btn image-remove-button text-danger" (click)="scanPage.hidden = true; $event.stopPropagation()">
+      <fa name="eye-slash"></fa>
+    </button>
+  </div>
+</div>
 
 <ng-template #content let-modal>
   <div class="modal-header">
@@ -6,11 +15,11 @@
     <button type="button" class="btn btn-success" (click)="selectImage()">Done</button>
   </div>
   <div class="modal-body">
-    <img class="scan-page-image-modal" [src]="imageBase64" alt="exam scan image" *ngIf="!addImageTo; else imageCropper">
+    <img class="scan-page-image-modal" [src]="scanPage.imageBase64" alt="exam scan image" *ngIf="!addImageTo; else imageCropper">
 
     <ng-template #imageCropper>
       <image-cropper
-        [imageBase64]="imageBase64"
+        [imageBase64]="scanPage.imageBase64"
         format="jpeg"
         [maintainAspectRatio]="false"
         [resizeToWidth]="1024"

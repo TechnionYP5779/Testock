@@ -1,8 +1,49 @@
-.scan-page-image {
-  width: 100%;
-  cursor: pointer;
+@import "../../../assets/styles/mixins";
+
+:host {
+  margin-top: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  display: block;
 }
 
 .scan-page-image-modal {
   width: 100%;
+}
+
+.scan-page-image {
+  position: relative;
+  margin-bottom: 5px;
+
+  img {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .image-popup {
+    @include transition(opacity, .3s);
+
+    opacity: 0;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 100%;
+    background: rgba(0, 0, 0, .7);
+
+    .image-remove-button {
+      position: relative;
+      top: 0;
+      left: 5px;
+      background-color: transparent;
+      font-size: 1.6rem;
+      padding: 0;
+      line-height: 0;
+    }
+  }
+
+  &:hover .image-popup {
+    opacity: 1;
+  }
 }
