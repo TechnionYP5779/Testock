@@ -28,8 +28,7 @@ export class ScanEditorComponent implements OnInit {
   activeQuestion: QuestionSolution = null;
   private _hasOcrBlankResults = false;
 
-  constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
-              public snackBar: MatSnackBar, private route: ActivatedRoute, private spinner: NgxSpinnerService, private modal: NgbModal) {
+  constructor(private ocr: OCRService, public snackBar: MatSnackBar, private spinner: NgxSpinnerService, private modal: NgbModal) {
   }
 
   newQuestionGrade: number;
