@@ -33,5 +33,17 @@ tr.exam-row:not(.exam-expanded-row):active {
 }
 
 .exam-description {
-  padding: 16px;
+  padding: 16px 0;
+  width: 100%;
+
+  .questions-container {
+    &:after {
+      display: table;
+      clear: both;
+    }
+
+    .question-button {
+      float: left;
+    }
+  }
 }

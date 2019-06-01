@@ -1,15 +1,19 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Exam} from '../../entities/exam';
+import {ExamId} from '../../entities/exam';
 import {SemesterPipe} from '../../core/semester.pipe';
 import {MoedPipe} from '../../core/moed.pipe';
 import {Sort} from '@angular/material';
 import {YearPipe} from '../../core/year.pipe';
+import {QuestionId} from '../../entities/question';
+import {Observable} from 'rxjs';
+import {DbService} from '../../core/db.service';
 
 export interface ExamRow {
   year: number;
   semester: string;
   moed: string;
+  questions: Observable<QuestionId[]>;
 }
 
 @Component({
@@ -25,13 +29,14 @@ export interface ExamRow {
   ]
 })
 export class ExamsListComponent implements OnInit {
-  @Input() set exams(exams: Exam[]) {
+  @Input() set exams(exams: ExamId[]) {
     if (!!exams) {
       this.examRows = exams.map(exam => {
         return {
           year: this.yearPipe.transform(exam.moed),
           semester: this.semesterPipe.transform(exam.moed),
-          moed: this.moedPipe.transform(exam.moed)
+          moed: this.moedPipe.transform(exam.moed),
+          questions: this.db.getQuestionsOfExam(exam.course, exam.id)
         } as ExamRow;
       });
     } else {
@@ -43,7 +48,7 @@ export class ExamsListComponent implements OnInit {
   public columnsToDisplay = ['year', 'semester', 'moed'];
   public expandedExam: ExamRow | null;
 
-  constructor(private yearPipe: YearPipe, private semesterPipe: SemesterPipe, private moedPipe: MoedPipe) {
+  constructor(private yearPipe: YearPipe, private semesterPipe: SemesterPipe, private moedPipe: MoedPipe, private db: DbService) {
   }
 
   ngOnInit() {

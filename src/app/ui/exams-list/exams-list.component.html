@@ -13,7 +13,11 @@
       <div class="exam-detail"
            [@detailExpand]="exam == expandedExam ? 'expanded' : 'collapsed'">
         <div class="exam-description">
-          {{exam.year}}
+          <div class="questions-container" *ngFor="let question of (exam.questions | async)">
+            <button type="button" class="btn btn-primary question-button mr-2" placement="top" [ngbTooltip]="question.tags.toString()" [routerLink]="'/question/' + question.id">
+              Question {{ question.number }} ({{ question.total_grade }} points)
+            </button>
+          </div>
         </div>
       </div>
     </td>
