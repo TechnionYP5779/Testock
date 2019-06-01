@@ -9,6 +9,8 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {PendingScanId} from '../../entities/pending-scan';
 import {CourseWithFaculty} from '../../entities/course';
 import {ScanPage} from '../scan-editor/scan-page';
+import {ScanEditResult} from '../scan-editor/scan-editor.component';
+import {QuestionSolution} from '../scan-editor/question-solution';
 
 @Component({
   selector: 'app-crop-pending',
@@ -16,9 +18,10 @@ import {ScanPage} from '../scan-editor/scan-page';
   styleUrls: ['./crop-pending.component.scss']
 })
 export class CropPendingComponent implements OnInit {
-  private pendingScan: PendingScanId;
-  private course: CourseWithFaculty;
-  private pages: ScanPage[];
+  pendingScan: PendingScanId;
+  course: CourseWithFaculty;
+  pages: ScanPage[];
+  questions: QuestionSolution[];
 
   constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService,
               private uploadService: UploadService, private route: ActivatedRoute, private spinner: NgxSpinnerService) {
@@ -32,6 +35,9 @@ export class CropPendingComponent implements OnInit {
   async loadPendingScan(pendingScanId: string) {
     await this.spinner.show();
     this.pendingScan = await this.db.getPendingScan(pendingScanId).pipe(take(1)).toPromise();
+    const fetchedQuestions = await Promise.all(this.pendingScan.linkedQuestions
+      .map(linkedQuestion => this.db.getQuestion(linkedQuestion.qid).pipe(take(1)).toPromise()));
+    this.questions = fetchedQuestions.map(q => new QuestionSolution(q.number, q.total_grade, true));
     this.course = await this.db.getCourseWithFaculty(this.pendingScan.course).pipe(take(1)).toPromise();
     const blobs = await Promise.all(this.pendingScan.pages.map(page => getBlobFromUrl(page)));
     const base64 = await Promise.all(blobs.map(blob => getImageBase64FromBlob(blob)));
