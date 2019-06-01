@@ -21,6 +21,8 @@ export class ScanEditorComponent implements OnInit {
   @Input() pages: ScanPage[];
   @Input() moed: Moed;
 
+  @Output() upload = new EventEmitter<QuestionSolution[]>();
+
   activeQuestion: QuestionSolution = null;
   private _hasOcrBlankResults = false;
 
@@ -105,6 +107,10 @@ export class ScanEditorComponent implements OnInit {
     }
 
     this.questions = this.questions.filter(value => value !== q);
+  }
+
+  emitUpload() {
+    this.upload.emit(this.questions);
   }
 }
 
