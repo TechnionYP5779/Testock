@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {ExamId} from '../../entities/exam';
 import {SemesterPipe} from '../../core/semester.pipe';
 import {MoedPipe} from '../../core/moed.pipe';
-import {Sort} from '@angular/material';
+import {MatPaginator, MatTableDataSource, Sort} from '@angular/material';
 import {YearPipe} from '../../core/year.pipe';
 import {QuestionId} from '../../entities/question';
 import {Observable} from 'rxjs';
@@ -31,7 +31,7 @@ export interface ExamRow {
 export class ExamsListComponent implements OnInit {
   @Input() set exams(exams: ExamId[]) {
     if (!!exams) {
-      this.examRows = exams.map(exam => {
+      this._examRows = exams.map(exam => {
         return {
           year: this.yearPipe.transform(exam.moed),
           semester: this.semesterPipe.transform(exam.moed),
@@ -40,13 +40,16 @@ export class ExamsListComponent implements OnInit {
         } as ExamRow;
       });
     } else {
-      this.examRows = null;
+      this._examRows = null;
     }
+    this.dataSource.data = this._examRows;
   }
 
-  public examRows: ExamRow[];
+  private _examRows: ExamRow[];
+  public dataSource = new MatTableDataSource<ExamRow>();
   public columnsToDisplay = ['year', 'semester', 'moed'];
   public expandedExam: ExamRow | null;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private yearPipe: YearPipe, private semesterPipe: SemesterPipe, private moedPipe: MoedPipe, private db: DbService) {
   }
@@ -55,11 +58,11 @@ export class ExamsListComponent implements OnInit {
   }
 
   sortExams(sort: Sort) {
-    const data = this.examRows;
+    const data = this.dataSource.data;
     if (!sort.active || sort.direction === '') {
       return;
     }
-    this.examRows = data.sort((a, b) => {
+    this.dataSource.data = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       for (const col of this.columnsToDisplay) {
         if (sort.active === col) {
