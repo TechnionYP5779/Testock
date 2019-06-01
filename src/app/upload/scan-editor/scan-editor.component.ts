@@ -1,10 +1,6 @@
-import {Component, Input, OnInit, TemplateRef} from '@angular/core';
-import {DbService} from '../../core/db.service';
-import {PdfService} from '../pdf.service';
+import {Component, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
 import {CourseWithFaculty} from '../../entities/course';
-import {UploadService} from '../upload.service';
 import {MatSnackBar} from '@angular/material';
-import {ActivatedRoute} from '@angular/router';
 import {OCRService} from '../../core/ocr.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
