@@ -115,7 +115,7 @@ export class CropPendingComponent implements OnInit {
 
       this.questions.push(new QuestionSolution(this.newQuestionNum, this.newQuestionGrade));
       this.questions = this.questions.sort((a, b) => a.number - b.number);
-    });
+    }, reason => {});
   }
 
   hideFirstPage() {
