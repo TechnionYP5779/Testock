@@ -27,7 +27,6 @@ export class QuestionComponent implements OnInit {
   isAdmin$: Observable<boolean>;
   userId: string;
   solvedQuestion$: Observable<SolvedQuestion>;
-  tags$: Observable<string[]>;
   selected = 0;
   average$: number;
 
@@ -41,7 +40,6 @@ export class QuestionComponent implements OnInit {
     this.course$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course)));
     this.userId = this.auth.currentUserId;
     this.solvedQuestion$ = this.db.getSolvedQuestion(this.userId, this.qId);
-    this.tags$ = this.db.getTagsOfQuestion(this.qId);
   }
 
   ngOnInit() {
@@ -69,7 +67,6 @@ export class QuestionComponent implements OnInit {
     this.spinner.show();
     this.db.addTagToQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
       this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
-      this.tags$ = this.db.getTagsOfQuestion(this.qId);
     });
   }
 
@@ -89,7 +86,6 @@ export class QuestionComponent implements OnInit {
     this.spinner.show();
     this.db.removeTagFromQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
       this.snackBar.open(`Removed Tag Successfully!`, 'close', {duration: 3000});
-      this.tags$ = this.db.getTagsOfQuestion(this.qId);
     });
   }
 }

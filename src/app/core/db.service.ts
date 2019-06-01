@@ -152,10 +152,6 @@ export class DbService {
     return this.afs.doc(`questions/${id}`).update({'tags': FieldValue.arrayUnion(tag)});
   }
 
-  getTagsOfQuestion(id: string): Observable<string[]> {
-    return this.afs.doc<Question>(`questions/${id}`).valueChanges().pipe(map(q => q.tags));
-  }
-
   addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<void> {
     return this.afs.doc<SolvedQuestion>('users/' + uId + `/solvedQuestions/${q.linkedQuestionId}`).set(q);
   }

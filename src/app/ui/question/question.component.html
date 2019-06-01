@@ -22,14 +22,13 @@
     </div>
     <div>
       <div *ngIf="course$ | async as course">
-        <div *ngIf="tags$ | async as tags">
-          <div *ngFor="let tag of tags">
-            <div class="badge badge-primary" style="float: left;margin-right: 5px;">
-              <a style="color: white;" routerLink="/course/{{course.id}}/tag/{{tag}}">#{{tag}}</a>
-              <mat-icon role="button" *ngIf="isAdmin" (click)="removeTag(tag)"
-                        style="width:0px; height: 0px; font-size: 14px; margin-right: 12px; color: black; cursor:pointer;">close
-              </mat-icon>
-            </div>
+        <div *ngFor="let tag of question.tags">
+          <div class="badge badge-primary" style="float: left;margin-right: 5px;">
+            <a style="color: white;" routerLink="/course/{{course.id}}/tag/{{tag}}">#{{tag}}</a>
+            <mat-icon role="button" *ngIf="isAdmin" (click)="removeTag(tag)"
+                      style="width:0px; height: 0px; font-size: 14px; margin-right: 12px; color: black; cursor:pointer;">
+              close
+            </mat-icon>
           </div>
         </div>
       </div>
@@ -42,10 +41,8 @@
         </button>
         <div ngbDropdownMenu aria-labelledby="dropdownManual">
           <div *ngIf="course$ | async as course">
-            <div *ngIf="tags$ | async as tags">
-              <div *ngFor="let tag of arr_diff(course.tags, tags)">
-                <button ngbDropdownItem (click)="addTag(tag)">{{tag}}</button>
-              </div>
+            <div *ngFor="let tag of arr_diff(course.tags, question.tags)">
+              <button ngbDropdownItem (click)="addTag(tag)">{{tag}}</button>
             </div>
           </div>
         </div>
