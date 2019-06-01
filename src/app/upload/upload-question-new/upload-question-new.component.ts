@@ -13,8 +13,9 @@ export class UploadQuestionNewComponent implements OnInit {
   @Input() collapsed: boolean;
   @Input() active: boolean;
 
-  @Output() imageAddRequested = new EventEmitter<void>();
+  @Output() activateRequested = new EventEmitter<void>();
   @Output() deleteRequested = new EventEmitter<void>();
+  @Output() deactivateRequested = new EventEmitter<void>();
 
   constructor() {}
 
