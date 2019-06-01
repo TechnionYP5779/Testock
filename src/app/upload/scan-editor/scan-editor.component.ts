@@ -8,6 +8,15 @@ import {ScanPage} from './scan-page';
 import {QuestionSolution} from './question-solution';
 import {Moed} from '../../entities/moed';
 
+export class ScanEditResult {
+  solutions: QuestionSolution[];
+  pages: ScanPage[];
+
+  constructor(solutions: QuestionSolution[], pages: ScanPage[]) {
+    this.solutions = solutions;
+    this.pages = pages;
+  }
+}
 
 @Component({
   selector: 'app-scan-editor',
@@ -21,7 +30,7 @@ export class ScanEditorComponent implements OnInit {
   @Input() pages: ScanPage[];
   @Input() moed: Moed;
 
-  @Output() upload = new EventEmitter<QuestionSolution[]>();
+  @Output() upload = new EventEmitter<ScanEditResult>();
 
   activeQuestion: QuestionSolution = null;
   private _hasOcrBlankResults = false;
@@ -125,7 +134,8 @@ export class ScanEditorComponent implements OnInit {
   }
 
   emitUpload() {
-    this.upload.emit(this.questions);
+    const result = new ScanEditResult(this.questions, this.pages.filter(page => !page.hidden));
+    this.upload.emit(result);
   }
 }
 
