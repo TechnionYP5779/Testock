@@ -16,7 +16,7 @@ import {GameWorldComponent} from './gamification/game-world/game-world.component
 import {PendingScanComponent} from './pending-scans/pending-scan/pending-scan.component';
 import {TagComponent} from './ui/tag/tag.component';
 import {BatchUploadComponent} from './upload/batch-upload/batch-upload.component';
-import {ScanEditorComponent} from './upload/scan-editor/scan-editor.component';
+import {CropPendingComponent} from './upload/crop-pending/crop-pending.component';
 
 const routes: Routes = [
   {path: '', component: FacultiesComponent},
@@ -27,7 +27,7 @@ const routes: Routes = [
   {path: 'question/:id', component: QuestionComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:cid/exam/:eid', component: ExamComponent, canActivate: [UsersOnlyGuard]},
   {path: 'upload', component: UploadComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'crop-pending/:pid', component: ScanEditorComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'crop-pending/:pid', component: CropPendingComponent, canActivate: [UsersOnlyGuard]},
   {path: 'upload/:source', component: UploadComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses/:term', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AdminOnlyGuard]},

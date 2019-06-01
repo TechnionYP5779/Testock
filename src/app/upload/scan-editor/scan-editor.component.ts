@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {CourseWithFaculty} from '../../entities/course';
@@ -7,91 +7,35 @@ import {MatSnackBar} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
 import {OCRService} from '../../core/ocr.service';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {take} from 'rxjs/operators';
-import {PendingScanId} from '../../entities/pending-scan';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ScanPage} from './scan-page';
+import {QuestionSolution} from './question-solution';
+import {Moed} from '../../entities/moed';
 
-
-export class QuestionSolution {
-  public number: number;
-  public images: string[];
-  public grade: number;
-  public points: number;
-  public fetchedQuestion: boolean;
-
-  constructor(number: number, points: number, fetchedQuestion = false) {
-    this.images = [];
-    this.grade = 0;
-    this.number = number;
-    this.points = points;
-    this.fetchedQuestion = fetchedQuestion;
-  }
-
-  addImage(image: string) {
-    this.images.push(image);
-  }
-
-  removeImage(i: number) {
-    this.images = this.images.filter((_, index) => index !== i);
-  }
-}
-
-export class ScanPage {
-  pageNum: number;
-  hidden: boolean;
-  blob: Blob;
-  imageBase64: string;
-  ocrBlankResult: boolean;
-
-
-  constructor(pageNum: number, image: Blob, imageBase64: string) {
-    this.pageNum = pageNum;
-    this.blob = image;
-    this.imageBase64 = imageBase64;
-  }
-}
 
 @Component({
-  selector: 'app-crop-pending',
+  selector: 'app-scan-editor',
   templateUrl: './scan-editor.component.html',
   styleUrls: ['./scan-editor.component.scss']
 })
 export class ScanEditorComponent implements OnInit {
 
-  questions: QuestionSolution[] = [];
+  @Input() course: CourseWithFaculty;
+  @Input() questions: QuestionSolution[] = [];
+  @Input() pages: ScanPage[];
+  @Input() moed: Moed;
+
   activeQuestion: QuestionSolution = null;
-
-  pendingScan: PendingScanId;
-  pages: ScanPage[];
-
   private _hasOcrBlankResults = false;
 
   constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
               public snackBar: MatSnackBar, private route: ActivatedRoute, private spinner: NgxSpinnerService, private modal: NgbModal) {
-    const pendingScanId = this.route.snapshot.paramMap.get('pid');
-    this.loadPendingScan(pendingScanId);
-    this.questions = [];
   }
 
-  public course: CourseWithFaculty;
   newQuestionGrade: number;
   newQuestionNum: number;
 
   ngOnInit() {
-  }
-
-  async loadPendingScan(pendingScanId: string) {
-    await this.spinner.show();
-    this.pendingScan = await this.db.getPendingScan(pendingScanId).pipe(take(1)).toPromise();
-    this.course = await this.db.getCourseWithFaculty(this.pendingScan.course).pipe(take(1)).toPromise();
-    const blobs = await Promise.all(this.pendingScan.pages.map(page => getBlobFromUrl(page)));
-    const base64 = await Promise.all(blobs.map(blob => getImageBase64FromBlob(blob)));
-    this.pages = blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
-    await this.spinner.hide();
-  }
-
-  uploadImages() {
-
   }
 
   addQuestion(newQuestionModal: TemplateRef<any>) {
@@ -167,19 +111,6 @@ export class ScanEditorComponent implements OnInit {
 
     this.questions = this.questions.filter(value => value !== q);
   }
-}
-
-function getBlobFromUrl(url: string): Promise<Blob> {
-  return fetch(url, {mode: 'cors'}).then(res => res.blob());
-}
-
-function getImageBase64FromBlob(blob: Blob): Promise<string> {
-  return new Promise(async (resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(blob);
-  });
 }
 
 function minNotInArray(numbers: number[]) {

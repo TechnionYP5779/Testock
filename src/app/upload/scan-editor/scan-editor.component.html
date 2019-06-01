@@ -14,13 +14,13 @@
     </div>
   </div>
   <div class="col-4">
-    <div *ngIf="course && pendingScan">
+    <div *ngIf="course && moed">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">
             {{ course?.name }}
             <span style="display: block">
-              {{ pendingScan.moed | fullMoed }}
+              {{ moed | fullMoed }}
             </span>
           </h5>
           <ul class="scan-properties row">

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {QuestionSolution} from '../scan-editor.component';
+import {QuestionSolution} from '../question-solution';
 
 @Component({
   selector: 'app-question-solution',
