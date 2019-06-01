@@ -178,7 +178,6 @@ function minNotInArray(numbers: number[]) {
   }
 
   for (let i = 1; i < Math.max(...numbers); ++i) {
-    console.log(i);
     if (!numbers.includes(i)) {
       return i;
     }
