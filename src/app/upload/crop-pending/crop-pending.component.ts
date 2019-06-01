@@ -43,6 +43,13 @@ export class CropPendingComponent implements OnInit {
     this.pages = blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
     await this.spinner.hide();
   }
+
+  async doUpload(editResult: ScanEditResult) {
+    await this.spinner.show();
+    const solutions = editResult.solutions.filter(sol => sol.images.length > 0);
+    await this.uploadService.uploadFromPendingScan(solutions, this.pendingScan);
+    await this.spinner.hide();
+  }
 }
 
 function getBlobFromUrl(url: string): Promise<Blob> {

@@ -13,6 +13,7 @@ import {OCRService} from '../core/ocr.service';
 import {PdfService} from './pdf.service';
 import {Moed} from '../entities/moed';
 import {ScanDetails} from '../entities/scan-details';
+import {QuestionSolution} from './scan-editor/question-solution';
 
 @Injectable({
   providedIn: 'root'
@@ -50,10 +51,20 @@ export class UploadService {
     await this.gamification.reward(Rewards.SCAN_UPLOAD);
   }
 
+  async uploadFromPendingScan(solutions: QuestionSolution[], pendingScan: PendingScanId): Promise<void> {
+
+    for (let i = 0; i < solutions.length; ++i) {
+      const q = solutions[i];
+      await this.uploadQuestion(pendingScan.course, pendingScan.moed, q.number, q.grade, q.points, q.images, null);
+    }
+
+  }
+
   private async uploadQuestion(course: number, moed: Moed, number: number, grade: number, points: number,
                                images: string[], pendingScan: PendingScanId) {
 
     let question = await this.db.getQuestionByDetails(course, moed, number).pipe(first()).toPromise();
+    console.log(question);
 
     if (!question) {
       const q = {} as Question;
