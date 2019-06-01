@@ -6,7 +6,7 @@
       <button class="btn btn-link" (click)="collapsed = !collapsed">
         Question {{ sol.number }}
       </button>
-      <button class="btn btn-transparent" *ngIf="active" (click)="deleteRequested.emit()">
+      <button class="btn btn-transparent" *ngIf="active && !sol.fetchedQuestion" (click)="deleteRequested.emit()">
         <fa name="trash"></fa>
       </button>
       <div class="float-right">
