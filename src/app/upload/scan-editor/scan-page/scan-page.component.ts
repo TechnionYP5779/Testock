@@ -4,7 +4,7 @@ import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {QuestionSolution, ScanPage} from '../scan-editor.component';
 
 @Component({
-  selector: 'app-upload-scan-page-new',
+  selector: 'app-scan-page',
   templateUrl: './scan-page.component.html',
   styleUrls: ['./scan-page.component.scss']
 })

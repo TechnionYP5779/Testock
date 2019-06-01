@@ -7,7 +7,7 @@
       <div class="card-body px-4 py-2">
         <div class="row">
           <div class="col-3 p-2" *ngFor="let page of pages; let i = index" [hidden]="page.hidden">
-            <app-upload-scan-page-new [scanPage]="page" [addImageTo]="activeQuestion"></app-upload-scan-page-new>
+            <app-scan-page [scanPage]="page" [addImageTo]="activeQuestion"></app-scan-page>
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@
 
       <div class="mt-2">
         <div class="accordion">
-          <app-upload-question-new
+          <app-question-solution
             *ngFor="let q of questions"
             [sol]="q"
             [quickMode]="false"
@@ -72,7 +72,7 @@
             (deleteRequested)="deleteQuestion(q)"
             [collapsed]="activeQuestion !== q"
             [active]="activeQuestion === q"
-          ></app-upload-question-new>
+          ></app-question-solution>
           <div class="alert alert-primary" *ngIf="questions.length == 0">
             <fa name="info" class="mr-2"></fa>
             Click below to insert a question

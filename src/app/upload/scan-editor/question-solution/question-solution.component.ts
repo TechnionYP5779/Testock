@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuestionSolution} from '../scan-editor.component';
 
 @Component({
-  selector: 'app-upload-question-new',
+  selector: 'app-question-solution',
   templateUrl: './question-solution.component.html',
   styleUrls: ['./question-solution.component.scss']
 })

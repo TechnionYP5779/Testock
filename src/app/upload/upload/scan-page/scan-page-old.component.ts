@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
 
 @Component({
-  selector: 'app-scan-page',
+  selector: 'app-scan-page-old',
   templateUrl: './scan-page-old.component.html',
   styleUrls: ['./scan-page-old.component.scss']
 })
