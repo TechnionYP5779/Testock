@@ -134,7 +134,7 @@ export class ScanEditorComponent implements OnInit {
   }
 
   emitUpload() {
-    const result = new ScanEditResult(this.questions, this.pages.filter(page => !page.hidden));
+    const result = new ScanEditResult(this.questions, this.pages);
     this.upload.emit(result);
   }
 }
