@@ -8,10 +8,20 @@
 </div>
 
 <ng-template #content let-modal>
-  <div class="modal-header">
+  <div class="modal-header" *ngIf="addImageTo; else viewModeHeader">
     <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancel</button>
-    <button type="button" class="btn btn-success" (click)="selectImage()">Done</button>
+    <button type="button" class="btn btn-success" (click)="selectImage()"><fa name="check" class="mr-2"></fa>Add selection</button>
   </div>
+
+  <ng-template #viewModeHeader>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Page #{{ scanPage.pageNum }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </ng-template>
+
   <div class="modal-body">
     <img class="scan-page-image-modal" [src]="scanPage.imageBase64" alt="exam scan image" *ngIf="!addImageTo; else imageCropper">
 
