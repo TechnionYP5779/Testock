@@ -156,6 +156,15 @@ export class CropPendingComponent implements OnInit {
     this.activeQuestion = q;
     this.snackBar.open('Select page to crop solution for question ' + q.number, 'close', {duration: 5000});
   }
+
+  deleteQuestion(q: QuestionSolution) {
+
+    if (this.activeQuestion === q) {
+      this.activeQuestion = null;
+    }
+
+    this.questions = this.questions.filter(value => value !== q);
+  }
 }
 
 function getBlobFromUrl(url: string): Promise<Blob> {

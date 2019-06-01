@@ -63,7 +63,13 @@
 
       <div class="mt-2">
         <div class="accordion">
-          <app-upload-question-new *ngFor="let q of questions" [sol]="q" [quickMode]="false" (imageAddRequested)="imageAddRequested(q)"></app-upload-question-new>
+          <app-upload-question-new
+            *ngFor="let q of questions"
+            [sol]="q"
+            [quickMode]="false"
+            (imageAddRequested)="imageAddRequested(q)"
+            (deleteRequested)="deleteQuestion(q)"
+          ></app-upload-question-new>
           <div class="alert alert-primary" *ngIf="questions.length == 0">
             <fa name="info" class="mr-2"></fa>
             Click below to insert a question
