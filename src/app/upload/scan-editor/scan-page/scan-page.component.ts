@@ -13,6 +13,7 @@ export class ScanPageComponent implements OnInit {
 
   @Input() scanPage: ScanPage;
   @Input() addImageTo: QuestionSolution;
+  @Output() hide = new EventEmitter<void>();
   private croppedImage: string;
   private modal: NgbModalRef;
 

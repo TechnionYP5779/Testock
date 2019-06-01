@@ -1,7 +1,7 @@
 <div class="scan-page-image" (click)="openModal(content)">
   <img [src]="scanPage.imageBase64" alt="scan page crop">
   <div class="image-popup" *ngIf="!addImageTo">
-    <button class="btn image-remove-button text-danger" (click)="scanPage.hidden = true; $event.stopPropagation()">
+    <button class="btn image-remove-button text-danger" (click)="hide.emit(); $event.stopPropagation()">
       <fa name="eye-slash"></fa>
     </button>
   </div>
