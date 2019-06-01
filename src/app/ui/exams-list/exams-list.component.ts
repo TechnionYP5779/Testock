@@ -42,11 +42,11 @@ export class ExamsListComponent implements OnInit {
     } else {
       this._examRows = null;
     }
-    this.dataSource.data = this._examRows;
+    this.updateExams();
   }
 
   private _examRows: ExamRow[];
-  public dataSource = new MatTableDataSource<ExamRow>();
+  public dataSource = new MatTableDataSource<ExamRow>(this._examRows);
   public columnsToDisplay = ['year', 'semester', 'moed'];
   public expandedExam: ExamRow | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -55,6 +55,7 @@ export class ExamsListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   sortExams(sort: Sort) {
@@ -71,6 +72,16 @@ export class ExamsListComponent implements OnInit {
       }
       return 0;
     });
+  }
+
+  updateExams() {
+    if (this._examRows) {
+      this.dataSource.data = this._examRows;
+      this.dataSource.paginator = this.paginator;
+    } else {
+      this.dataSource.data = [];
+      this.dataSource.paginator = null;
+    }
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {
