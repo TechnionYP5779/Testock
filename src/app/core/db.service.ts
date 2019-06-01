@@ -191,20 +191,13 @@ export class DbService {
   }
 
   getQuestionByDetails(course: number, moed: Moed, number: number): Observable<QuestionId> {
-    const ref = r =>
-      r.where('course', '==', course)
-        .where('moed.semester.year', '==', moed.semester.year)
-        .where('moed.semester.num', '==', moed.semester.num)
-        .where('moed.num', '==', moed)
-        .where('number', '==', number);
-
-    return this.afs.collection<Question>('questions', ref).snapshotChanges().pipe(
-      map(actions => {
-        if (actions.length !== 1) {
+    const docId = `${course}-${moed.semester.year}-${moed.semester.num}-${moed.num}-${number}`;
+    return this.afs.collection<Question>('questions').doc<Question>(docId).valueChanges().pipe(
+      map(question => {
+        if (!question) {
           return null;
         }
-        const e = actions[0].payload.doc.data() as Question;
-        return {id: actions[0].payload.doc.id, ...e};
+        return {id: docId, ...question};
       })
     );
   }
