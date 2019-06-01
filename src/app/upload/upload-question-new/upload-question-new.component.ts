@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {QuestionSolution} from '../crop-pending/crop-pending.component';
+import {QuestionSolution} from '../scan-editor/scan-editor.component';
 
 @Component({
   selector: 'app-upload-question-new',

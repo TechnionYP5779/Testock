@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CropPendingComponent } from './crop-pending.component';
+import { ScanEditorComponent } from './scan-editor.component';
 
-describe('CropPendingComponent', () => {
-  let component: CropPendingComponent;
-  let fixture: ComponentFixture<CropPendingComponent>;
+describe('ScanEditorComponent', () => {
+  let component: ScanEditorComponent;
+  let fixture: ComponentFixture<ScanEditorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CropPendingComponent ]
+      declarations: [ ScanEditorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CropPendingComponent);
+    fixture = TestBed.createComponent(ScanEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

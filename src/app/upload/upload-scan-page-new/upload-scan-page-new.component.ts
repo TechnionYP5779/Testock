@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
-import {QuestionSolution, ScanPage} from '../crop-pending/crop-pending.component';
+import {QuestionSolution, ScanPage} from '../scan-editor/scan-editor.component';
 
 @Component({
   selector: 'app-upload-scan-page-new',

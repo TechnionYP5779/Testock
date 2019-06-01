@@ -16,7 +16,7 @@ import {FormsModule} from '@angular/forms';
 import { BatchUploadComponent } from './batch-upload/batch-upload.component';
 import {FileDropModule} from 'ngx-file-drop';
 import {RouterModule} from '@angular/router';
-import { CropPendingComponent } from './crop-pending/crop-pending.component';
+import { ScanEditorComponent } from './scan-editor/scan-editor.component';
 import { UploadQuestionNewComponent } from './upload-question-new/upload-question-new.component';
 import { UploadScanPageNewComponent } from './upload-scan-page-new/upload-scan-page-new.component';
 import {NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
@@ -27,7 +27,7 @@ import {NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
     ScanPageComponent,
     UploadQuestionComponent,
     BatchUploadComponent,
-    CropPendingComponent,
+    ScanEditorComponent,
     UploadQuestionNewComponent,
     UploadScanPageNewComponent
   ],

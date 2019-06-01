@@ -53,10 +53,10 @@ export class ScanPage {
 
 @Component({
   selector: 'app-crop-pending',
-  templateUrl: './crop-pending.component.html',
-  styleUrls: ['./crop-pending.component.scss']
+  templateUrl: './scan-editor.component.html',
+  styleUrls: ['./scan-editor.component.scss']
 })
-export class CropPendingComponent implements OnInit {
+export class ScanEditorComponent implements OnInit {
 
   questions: QuestionSolution[] = [];
   activeQuestion: QuestionSolution = null;
