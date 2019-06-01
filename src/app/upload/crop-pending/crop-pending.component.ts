@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {DbService} from '../../core/db.service';
-import {PdfService} from '../pdf.service';
 import {OCRService} from '../../core/ocr.service';
 import {UploadService} from '../upload.service';
 import {ActivatedRoute} from '@angular/router';
@@ -23,7 +22,7 @@ export class CropPendingComponent implements OnInit {
   pages: ScanPage[];
   questions: QuestionSolution[];
 
-  constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService,
+  constructor(private db: DbService, private ocr: OCRService,
               private uploadService: UploadService, private route: ActivatedRoute, private spinner: NgxSpinnerService) {
     const pendingScanId = this.route.snapshot.paramMap.get('pid');
     this.loadPendingScan(pendingScanId);
