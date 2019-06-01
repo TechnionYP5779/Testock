@@ -3,6 +3,7 @@ import {Moed} from './moed';
 
 export interface LinkedQuestion {
   qid: string;
+  num: number;
   sid: string;
 }
 
