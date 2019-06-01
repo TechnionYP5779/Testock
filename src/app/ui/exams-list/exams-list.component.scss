@@ -32,6 +32,13 @@ tr.exam-row:not(.exam-expanded-row):active {
   height: 104px;
 }
 
+.exam-row {
+  cursor: pointer;
+  &:hover {
+    background: rgba(0,0,0,0.2);
+  }
+}
+
 .exam-description {
   padding: 16px 0;
   width: 100%;
