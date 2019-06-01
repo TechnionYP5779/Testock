@@ -10,6 +10,8 @@ import {Observable} from 'rxjs';
 import {DbService} from '../../core/db.service';
 
 export interface ExamRow {
+  id: string;
+  course: number;
   year: number;
   semester: string;
   moed: string;
@@ -33,6 +35,8 @@ export class ExamsListComponent implements OnInit {
     if (!!exams) {
       this._examRows = exams.map(exam => {
         return {
+          id: exam.id,
+          course: exam.course,
           year: this.yearPipe.transform(exam.moed),
           semester: this.semesterPipe.transform(exam.moed),
           moed: this.moedPipe.transform(exam.moed),

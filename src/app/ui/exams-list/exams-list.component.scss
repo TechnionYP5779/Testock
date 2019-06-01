@@ -43,6 +43,11 @@ tr.exam-row:not(.exam-expanded-row):active {
   padding: 16px 0;
   width: 100%;
 
+  .exam-button {
+    font-size: 90%;
+    float: left;
+  }
+
   .questions-container {
     &:after {
       display: table;
