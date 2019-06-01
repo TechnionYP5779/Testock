@@ -7,7 +7,7 @@
       <div class="card-body px-4 py-2">
         <div class="row">
           <div class="col-3 p-2" *ngFor="let page of pages; let i = index" [hidden]="page.hidden">
-            <app-scan-page [scanPage]="page" [addImageTo]="activeQuestion"></app-scan-page>
+            <app-scan-page [scanPage]="page" [addImageTo]="activeQuestion" (hide)="hidePage(page)"></app-scan-page>
           </div>
         </div>
       </div>
@@ -54,8 +54,11 @@
               <button type="button" class="btn btn-danger" (click)="hideOddPages()" ngbTooltip="Hide Odd Pages">Odd</button>
               <button type="button" class="btn btn-danger" (click)="hideBlankPages()" ngbTooltip="Hide Blank Pages">Blank</button>
             </div>
-            <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Restore Pages">
-              <button type="button" class="btn btn-success" (click)="restoreHiddenPages()" ngbTooltip="Restore Hidden Pages"><fa name="undo" class="mr-2"></fa>Restore</button>
+            <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Restore Pages" *ngIf="hiddenPagesCount">
+              <button type="button" class="btn btn-success" (click)="restoreHiddenPages()" [ngbTooltip]="'Restore ' + hiddenPagesCount + ' Hidden Pages'">
+                <fa name="undo" class="mr-2"></fa>
+                <span class="badge badge-light">{{ hiddenPagesCount }}</span>
+              </button>
             </div>
           </div>
         </div>

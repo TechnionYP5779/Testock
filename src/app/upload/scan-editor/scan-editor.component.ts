@@ -31,6 +31,7 @@ export class ScanEditorComponent implements OnInit {
 
   newQuestionGrade: number;
   newQuestionNum: number;
+  hiddenPagesCount = 0;
 
   ngOnInit() {
   }
@@ -61,24 +62,38 @@ export class ScanEditorComponent implements OnInit {
     }, reason => {});
   }
 
+  private hidePage(page: ScanPage) {
+    if (!page.hidden) {
+      page.hidden = true;
+      this.hiddenPagesCount++;
+    }
+  }
+
+  private restorePage(page: ScanPage) {
+    if (page.hidden) {
+      page.hidden = false;
+      this.hiddenPagesCount--;
+    }
+  }
+
   hideFirstPage() {
     if (this.pages && this.pages.length > 0) {
-      this.pages[0].hidden = true;
+      this.hidePage(this.pages[0]);
     }
   }
 
   hideEvenPages() {
-    this.pages.filter(page => page.pageNum % 2 === 0).map(page => page.hidden = true);
+    this.pages.filter(page => page.pageNum % 2 === 0).map(page => this.hidePage(page));
   }
 
   hideOddPages() {
-    this.pages.filter(page => page.pageNum % 2 === 1).map(page => page.hidden = true);
+    this.pages.filter(page => page.pageNum % 2 === 1).map(page => this.hidePage(page));
   }
 
   async hideBlankPages() {
 
     if (this._hasOcrBlankResults) {
-      this.pages.filter(page => page.ocrBlankResult).map(page => page.hidden = true);
+      this.pages.filter(page => page.ocrBlankResult).map(page => this.hidePage(page));
       return;
     }
 
@@ -86,13 +101,13 @@ export class ScanEditorComponent implements OnInit {
     const promises = this.pages.map(page => this.ocr.isImageBlank(page.blob).then(is => page.ocrBlankResult = is));
     return Promise.all(promises).then(() => {
       this._hasOcrBlankResults = true;
-      this.pages.filter(page => page.ocrBlankResult).map(page => page.hidden = true);
+      this.pages.filter(page => page.ocrBlankResult).map(page => this.hidePage(page));
       return this.spinner.hide();
     });
   }
 
   restoreHiddenPages() {
-    this.pages.map(page => page.hidden = false);
+    this.pages.map(page => this.restorePage(page));
   }
 
   activateQuestion(q: QuestionSolution) {
