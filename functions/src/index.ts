@@ -405,6 +405,7 @@ export const onSolvedQuestionDelete = functions.firestore
 export const onPendingSolutionChanged = functions.firestore.document('questions/{questionId}/solutions/{solID}').onWrite((snapshot, context) => {
 
   const qid = context.params.questionId;
+  const qNum = parseInt(qid.toString().split('-')[4]);
   const sid = context.params.solID;
 
   // Handle solution creation
@@ -415,7 +416,7 @@ export const onPendingSolutionChanged = functions.firestore.document('questions/
       console.log('Linking solution created for ' + qid + ' to ' + newSol.pendingScanId);
 
       return ref.update({
-        linkedQuestions: FieldValue.arrayUnion({qid: qid, sid: sid})
+        linkedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
       });
     }
 
@@ -432,7 +433,7 @@ export const onPendingSolutionChanged = functions.firestore.document('questions/
       console.log('Linking updated solution for ' + qid + ' to ' + newSol.pendingScanId);
 
       return ref.update({
-        linkedQuestions: FieldValue.arrayUnion({qid: qid, sid: sid})
+        linkedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
       });
     }
 
@@ -440,7 +441,7 @@ export const onPendingSolutionChanged = functions.firestore.document('questions/
       const ref = admin.firestore().collection('pendingScans').doc(solBefore.pendingScanId);
       console.log('Unlinking updated solution for ' + qid + ' from ' + solBefore.pendingScanId);
       return ref.update({
-        linkedQuestions: FieldValue.arrayRemove({qid: qid, sid: sid})
+        linkedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
       });
     }
 
@@ -454,7 +455,7 @@ export const onPendingSolutionChanged = functions.firestore.document('questions/
       const ref = admin.firestore().collection('pendingScans').doc(deletedSol.pendingScanId);
       console.log('Unlinking deleted solution for ' + qid + ' from ' + deletedSol.pendingScanId);
       return ref.update({
-        linkedQuestions: FieldValue.arrayRemove({qid: qid, sid: sid})
+        linkedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
       });
     }
 
