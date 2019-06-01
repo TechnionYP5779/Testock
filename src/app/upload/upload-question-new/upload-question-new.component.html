@@ -31,7 +31,7 @@
       <div class="question-images">
         <div class="question-image" *ngFor="let image of sol.images; let i = index">
           <img [src]="image" alt="scan page crop">
-          <div class="image-popup">
+          <div class="image-popup" *ngIf="active">
             <button class="btn image-remove-button" (click)="sol.removeImage(i)">
               <fa name="trash"></fa>
             </button>
