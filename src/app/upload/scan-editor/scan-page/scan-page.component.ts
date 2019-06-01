@@ -1,14 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
-import {QuestionSolution, ScanPage} from '../scan-editor/scan-editor.component';
+import {QuestionSolution, ScanPage} from '../scan-editor.component';
 
 @Component({
   selector: 'app-upload-scan-page-new',
-  templateUrl: './upload-scan-page-new.component.html',
-  styleUrls: ['./upload-scan-page-new.component.scss']
+  templateUrl: './scan-page.component.html',
+  styleUrls: ['./scan-page.component.scss']
 })
-export class UploadScanPageNewComponent implements OnInit {
+export class ScanPageComponent implements OnInit {
 
   @Input() scanPage: ScanPage;
   @Input() addImageTo: QuestionSolution;

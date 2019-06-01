@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {QuestionSolution} from '../scan-editor/scan-editor.component';
+import {QuestionSolution} from '../scan-editor.component';
 
 @Component({
   selector: 'app-upload-question-new',
-  templateUrl: './upload-question-new.component.html',
-  styleUrls: ['./upload-question-new.component.scss']
+  templateUrl: './question-solution.component.html',
+  styleUrls: ['./question-solution.component.scss']
 })
-export class UploadQuestionNewComponent implements OnInit {
+export class QuestionSolutionComponent implements OnInit {
 
   @Input() sol: QuestionSolution;
   @Input() quickMode: boolean;

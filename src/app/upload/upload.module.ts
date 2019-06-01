@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {UploadComponent} from './upload/upload.component';
-import {ScanPageComponent} from './upload/scan-page/scan-page.component';
+import {ScanPageOldComponent} from './upload/scan-page/scan-page-old.component';
 import {UploadQuestionComponent} from './upload/upload-question/upload-question.component';
 import {CoreModule} from '../core/core.module';
 import {UsersModule} from '../users/users.module';
@@ -17,8 +17,8 @@ import { BatchUploadComponent } from './batch-upload/batch-upload.component';
 import {FileDropModule} from 'ngx-file-drop';
 import {RouterModule} from '@angular/router';
 import { ScanEditorComponent } from './scan-editor/scan-editor.component';
-import { UploadQuestionNewComponent } from './upload-question-new/upload-question-new.component';
-import { UploadScanPageNewComponent } from './upload-scan-page-new/upload-scan-page-new.component';
+import { QuestionSolutionComponent } from './scan-editor/question-solution/question-solution.component';
+import { ScanPageComponent } from './scan-editor/scan-page/scan-page.component';
 import {NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
@@ -28,8 +28,9 @@ import {NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
     UploadQuestionComponent,
     BatchUploadComponent,
     ScanEditorComponent,
-    UploadQuestionNewComponent,
-    UploadScanPageNewComponent
+    QuestionSolutionComponent,
+    ScanPageComponent,
+    ScanPageOldComponent
   ],
   imports: [
     CommonModule,
