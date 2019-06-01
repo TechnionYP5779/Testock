@@ -21,4 +21,14 @@ export class QuestionSolutionComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  verifyGrade() {
+    if (this.sol.grade < 0) {
+      this.sol.grade = 0;
+    }
+
+    if (this.sol.grade > this.sol.points) {
+      this.sol.grade = this.sol.points;
+    }
+  }
 }

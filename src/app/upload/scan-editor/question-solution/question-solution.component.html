@@ -19,7 +19,7 @@
         </button>
       </div>
       <div class="grades-container float-right">
-        <input class="lhs" type="number" [(ngModel)]="sol.grade" min="0" [max]="sol.points"> / <input class="rhs" type="number" [(ngModel)]="sol.points" [readOnly]="sol.fetchedQuestion">
+        <input class="lhs" type="number" [(ngModel)]="sol.grade" min="0" [max]="sol.points" (change)="verifyGrade()"> / <input class="rhs" type="number" [(ngModel)]="sol.points" [readOnly]="sol.fetchedQuestion">
       </div>
     </h5>
   </div>
