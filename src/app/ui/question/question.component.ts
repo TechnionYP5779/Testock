@@ -84,4 +84,12 @@ export class QuestionComponent implements OnInit {
       this.snackBar.open(`Difficulty rating sent Successfully!`, 'close', {duration: 3000});
     });
   }
+
+  removeTag(tag: string) {
+    this.spinner.show();
+    this.db.removeTagFromQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
+      this.snackBar.open(`Removed Tag Successfully!`, 'close', {duration: 3000});
+      this.tags$ = this.db.getTagsOfQuestion(this.qId);
+    });
+  }
 }

@@ -415,6 +415,10 @@ export class DbService {
   removeTagFromCourse(id: number, tag: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayRemove(tag)});
   }
+
+  removeTagFromQuestion(qId: string, tag: string) {
+    return this.afs.doc(`questions/${qId}`).update({'tags': FieldValue.arrayRemove(tag)});
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
