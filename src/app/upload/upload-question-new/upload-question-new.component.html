@@ -7,7 +7,7 @@
         Question {{ sol.number }}
         <span class="badge badge-success ml-1" *ngIf="sol.fetchedQuestion">Auto Fetch</span>
       </button>
-      <button class="btn add-images-button float-right" (click)="imageAddRequested.emit(sol.images)" *ngIf="!quickMode">
+      <button class="btn add-images-button float-right" (click)="imageAddRequested.emit()" *ngIf="!quickMode">
         <fa name="plus"></fa>
       </button>
       <div class="grades-container float-right">
