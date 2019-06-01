@@ -10,7 +10,8 @@ export class UploadQuestionNewComponent implements OnInit {
 
   @Input() sol: QuestionSolution;
   @Input() quickMode: boolean;
-  collapsed: boolean;
+  @Input() collapsed: boolean;
+  @Input() active: boolean;
 
   @Output() imageAddRequested = new EventEmitter<void>();
   @Output() deleteRequested = new EventEmitter<void>();
