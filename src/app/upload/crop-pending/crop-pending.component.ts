@@ -152,7 +152,7 @@ export class CropPendingComponent implements OnInit {
     this.pages.map(page => page.hidden = false);
   }
 
-  imageAddRequested(q: QuestionSolution) {
+  activateQuestion(q: QuestionSolution) {
     this.activeQuestion = q;
     this.snackBar.open('Select page to crop solution for question ' + q.number, 'close', {duration: 5000});
   }

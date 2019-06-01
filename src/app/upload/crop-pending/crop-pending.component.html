@@ -67,9 +67,11 @@
             *ngFor="let q of questions"
             [sol]="q"
             [quickMode]="false"
-            (imageAddRequested)="imageAddRequested(q)"
+            (activateRequested)="activateQuestion(q)"
+            (deactivateRequested)="activeQuestion = null"
             (deleteRequested)="deleteQuestion(q)"
             [collapsed]="activeQuestion !== q"
+            [active]="activeQuestion === q"
           ></app-upload-question-new>
           <div class="alert alert-primary" *ngIf="questions.length == 0">
             <fa name="info" class="mr-2"></fa>
