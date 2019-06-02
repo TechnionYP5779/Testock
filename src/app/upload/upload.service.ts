@@ -55,13 +55,25 @@ export class UploadService {
 
     for (let i = 0; i < solutions.length; ++i) {
       const q = solutions[i];
-      await this.uploadQuestion(pendingScan.course, pendingScan.moed, q.number, q.grade, q.points, q.images, null);
+      const linked = pendingScan.linkedQuestions.find(linkedQuestion => linkedQuestion.num === q.number);
+      if (linked) {
+        const question = await this.db.getQuestion(linked.qid).pipe(first()).toPromise();
+        const sol: SolutionId = {
+          id: linked.sid,
+          grade: q.grade,
+          pendingScanId: null,
+          created: Timestamp.now()
+        };
+        await this.updateSolutionFromPendingScan(question, sol, q.images);
+      } else {
+        await this.uploadQuestion(pendingScan.course, pendingScan.moed, q.number, q.grade, q.points, q.images, null, pendingScan.id);
+      }
     }
 
   }
 
   private async uploadQuestion(course: number, moed: Moed, number: number, grade: number, points: number,
-                               images: string[], pendingScan: PendingScanId) {
+                               images: string[], pendingScan: PendingScanId, preventPendingLink: string = null) {
 
     let question = await this.db.getQuestionByDetails(course, moed, number).pipe(first()).toPromise();
 
@@ -72,6 +84,9 @@ export class UploadService {
       q.number = number;
       q.total_grade = points;
       q.tags = [];
+      if (preventPendingLink) {
+        q.preventPendingCreationFor = preventPendingLink;
+      }
 
       question = await this.db.createQuestion(q);
     }
