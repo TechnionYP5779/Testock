@@ -6,7 +6,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import {Solution, SolutionId} from '../entities/solution';
 import {first} from 'rxjs/operators';
 import {GamificationService, Rewards} from '../gamification/gamification.service';
-import {PendingScanId} from '../entities/pending-scan';
+import {LinkedQuestion, PendingScanId} from '../entities/pending-scan';
 import { firestore } from 'firebase/app';
 import Timestamp = firestore.Timestamp;
 import {OCRService} from '../core/ocr.service';
@@ -66,14 +66,21 @@ export class UploadService {
         };
         await this.updateSolutionFromPendingScan(question, sol, q.images);
       } else {
-        await this.uploadQuestion(pendingScan.course, pendingScan.moed, q.number, q.grade, q.points, q.images, null, pendingScan.id);
+        const sol = await this.uploadQuestion(pendingScan.course, pendingScan.moed, q.number,
+          q.grade, q.points, q.images, null, pendingScan.id);
+        const extracted: LinkedQuestion = {
+          num: q.number,
+          sid: sol.id,
+          qid: `${pendingScan.moed.semester.year}-${pendingScan.moed.semester.num}-${pendingScan.moed.num}-${q.number}`
+        };
+        await this.db.pendingScanAddExtracted(pendingScan.id, extracted);
       }
     }
 
   }
 
   private async uploadQuestion(course: number, moed: Moed, number: number, grade: number, points: number,
-                               images: string[], pendingScan: PendingScanId, preventPendingLink: string = null) {
+                               images: string[], pendingScan: PendingScanId, preventPendingLink: string = null): Promise<SolutionId> {
 
     let question = await this.db.getQuestionByDetails(course, moed, number).pipe(first()).toPromise();
 
@@ -113,6 +120,8 @@ export class UploadService {
 
       await this.db.setSolutionForQuestion(question, createdSol);
     }
+
+    return createdSol;
   }
 
   private async uploadPendingScan(course: number, moed: Moed, pages: Blob[]): Promise<PendingScanId> {
@@ -122,7 +131,8 @@ export class UploadService {
       moed: moed,
       pages: [],
       created: Timestamp.now(),
-      linkedQuestions: []
+      linkedQuestions: [],
+      extractedQuestions: []
     });
 
     for (let i = 0; i < pages.length; ++i) {
@@ -146,9 +156,12 @@ export class UploadService {
       sol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
     }
 
+    const pendingScanId = sol.pendingScanId;
     sol.pendingScanId = null;
 
     await this.db.setSolutionForQuestion(q, sol);
+
+    await this.db.pendingScanAddExtracted(pendingScanId, {qid: q.id, sid: sol.id, num: q.number});
 
     await this.gamification.reward(Rewards.CROPPED_PENDING_SOLUTION);
   }
