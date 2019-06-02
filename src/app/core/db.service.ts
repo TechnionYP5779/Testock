@@ -13,7 +13,7 @@ import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
 import {SolvedQuestion} from '../entities/solved-question';
-import {PendingScan, PendingScanId} from '../entities/pending-scan';
+import {LinkedQuestion, PendingScan, PendingScanId} from '../entities/pending-scan';
 import FieldValue = firebase.firestore.FieldValue;
 import {Moed} from '../entities/moed';
 
@@ -407,6 +407,12 @@ export class DbService {
 
   removeTagFromCourse(id: number, tag: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayRemove(tag)});
+  }
+
+  pendingScanAddExtracted(pendingScanId: string, extracted: LinkedQuestion): Promise<void> {
+    return this.afs.doc(`pendingScans/${pendingScanId}`).update({
+      extractedQuestions: FieldValue.arrayUnion(extracted)
+    });
   }
 }
 
