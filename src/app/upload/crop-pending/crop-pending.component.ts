@@ -52,7 +52,7 @@ export class CropPendingComponent implements OnInit {
     await this.uploadService.uploadFromPendingScan(solutions, this.pendingScan);
     await this.spinner.hide();
     const examId = `${this.pendingScan.moed.semester.year}-${this.pendingScan.moed.semester.num}-${this.pendingScan.moed.num}`;
-    await this.router.navigate(['/course', this.pendingScan.course, '/exam', examId]);
+    await this.router.navigate(['/course', this.pendingScan.course, 'exam', examId]);
     this.snackBar.open('Thanks for your contribution!', 'close', {duration: 3000});
   }
 }
