@@ -21,6 +21,7 @@ import { QuestionSolutionComponent } from './scan-editor/question-solution/quest
 import { ScanPageComponent } from './scan-editor/scan-page/scan-page.component';
 import {NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import { CropPendingComponent } from './crop-pending/crop-pending.component';
+import { ScanEditorPreviewComponent } from './scan-editor/scan-editor-preview/scan-editor-preview.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { CropPendingComponent } from './crop-pending/crop-pending.component';
     QuestionSolutionComponent,
     ScanPageComponent,
     ScanPageOldComponent,
-    CropPendingComponent
+    CropPendingComponent,
+    ScanEditorPreviewComponent
   ],
   imports: [
     CommonModule,
