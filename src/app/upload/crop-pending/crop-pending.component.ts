@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {OCRService} from '../../core/ocr.service';
 import {UploadService} from '../upload.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {take} from 'rxjs/operators';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {PendingScanId} from '../../entities/pending-scan';
@@ -10,6 +10,8 @@ import {CourseWithFaculty} from '../../entities/course';
 import {ScanPage} from '../scan-editor/scan-page';
 import {ScanEditResult} from '../scan-editor/scan-editor.component';
 import {QuestionSolution} from '../scan-editor/question-solution';
+import {MatSnackBar} from '@angular/material';
+import {AppRoutingModule} from '../../app-routing.module';
 
 @Component({
   selector: 'app-crop-pending',
@@ -22,7 +24,7 @@ export class CropPendingComponent implements OnInit {
   pages: ScanPage[];
   questions: QuestionSolution[];
 
-  constructor(private db: DbService, private ocr: OCRService,
+  constructor(private db: DbService, private ocr: OCRService, private snackBar: MatSnackBar, private router: Router,
               private uploadService: UploadService, private route: ActivatedRoute, private spinner: NgxSpinnerService) {
     const pendingScanId = this.route.snapshot.paramMap.get('pid');
     this.loadPendingScan(pendingScanId);
@@ -49,6 +51,9 @@ export class CropPendingComponent implements OnInit {
     const solutions = editResult.solutions.filter(sol => sol.images.length > 0);
     await this.uploadService.uploadFromPendingScan(solutions, this.pendingScan);
     await this.spinner.hide();
+    const examId = `${this.pendingScan.moed.semester.year}-${this.pendingScan.moed.semester.num}-${this.pendingScan.moed.num}`;
+    await this.router.navigate(['/course', this.pendingScan.course, '/exam', examId]);
+    this.snackBar.open('Thanks for your contribution!', 'close', {duration: 3000});
   }
 }
 
