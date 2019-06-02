@@ -7,18 +7,25 @@
   }
 }
 
-.scan-properties {
-  list-style: none;
-  padding: 0;
-  text-align: center;
+.secondary-title {
+  font-size: 70%;
+  opacity: 0.6;
+}
 
-  .scan-properties-icon {
-    font-size: 200%;
-    display: block;
+.top-toolbar {
+  height: 69px;
+
+  .card-header {
+    padding: 0.75rem 1.25rem;
   }
 }
 
-.card-title span {
-  font-size: 70%;
-  opacity: 0.6;
+.right-toolbar {
+  top: 69px;
+  height: 95vh
+}
+
+.questions-container {
+  overflow-y: auto;
+  height: 85vh;
 }
