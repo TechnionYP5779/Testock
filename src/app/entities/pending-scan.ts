@@ -13,6 +13,7 @@ export interface PendingScan {
   pages: string[];
   created: Timestamp;
   linkedQuestions: LinkedQuestion[];
+  extractedQuestions: LinkedQuestion[];
 }
 
 export interface PendingScanId extends PendingScan {
