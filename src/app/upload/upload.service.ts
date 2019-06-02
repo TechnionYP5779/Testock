@@ -64,7 +64,6 @@ export class UploadService {
                                images: string[], pendingScan: PendingScanId) {
 
     let question = await this.db.getQuestionByDetails(course, moed, number).pipe(first()).toPromise();
-    console.log(question);
 
     if (!question) {
       const q = {} as Question;
