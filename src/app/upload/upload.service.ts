@@ -61,7 +61,7 @@ export class UploadService {
         const sol: SolutionId = {
           id: linked.sid,
           grade: q.grade,
-          pendingScanId: null,
+          pendingScanId: pendingScan.id,
           created: Timestamp.now()
         };
         await this.updateSolutionFromPendingScan(question, sol, q.images);
