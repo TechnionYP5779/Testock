@@ -9,10 +9,9 @@
           </span>
         </h5>
       </div>
-      <div class="col-4">
-        <div class="btn-toolbar">
-
-          <button type="button" class="btn btn-success ml-2" (click)="restoreHiddenPages()" [ngbTooltip]="'Restore ' + hiddenPagesCount + ' Hidden Pages'" *ngIf="hiddenPagesCount">
+      <div class="col-8">
+        <div class="btn-toolbar float-right">
+          <button type="button" class="btn btn-success" (click)="restoreHiddenPages()" [ngbTooltip]="'Restore ' + hiddenPagesCount + ' Hidden Pages'" *ngIf="hiddenPagesCount">
             <fa name="undo" class="mr-2"></fa>
             <span class="badge badge-light">{{ hiddenPagesCount }}</span>
           </button>
@@ -24,11 +23,7 @@
             <button type="button" class="btn btn-danger" (click)="hideOddPages()" ngbTooltip="Hide Odd Pages">Odd</button>
             <button type="button" class="btn btn-danger" (click)="hideBlankPages()" ngbTooltip="Hide Blank Pages">Blank</button>
           </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="btn-toolbar float-right">
-          <button class="btn btn-secondary ml-2"
+          <button class="btn btn-secondary ml-3"
                   (click)="preview()">
             <fa name="eye" class="mr-2"></fa>Preview Solutions
           </button>
