@@ -44,8 +44,11 @@
 </div>
 <div class="row">
   <div class="col-8">
-    <div class="alert alert-primary mt-2 position-fixed" style="left: 20px; bottom: 10px;" *ngIf="activeQuestion">
+    <div class="alert alert-warning mt-2" *ngIf="activeQuestion">
       <fa name="info" class="mr-2"></fa> Choose question {{ activeQuestion.number }} answers
+    </div>
+    <div class="alert alert-primary mt-2" *ngIf="!activeQuestion">
+      <fa name="info" class="mr-2"></fa> Choose a question to edit from the right toolbar
     </div>
     <div class="card">
       <div class="card-body px-4 py-2">
