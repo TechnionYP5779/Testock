@@ -38,6 +38,7 @@ import {PendingSolutionModalComponent} from './pending-scans/pending-solution-mo
 import { TagComponent } from './ui/tag/tag.component';
 import {CKEditorModule} from 'ngx-ckeditor';
 import {PendingScanModalComponent} from './pending-scans/pending-scan-modal/pending-scan-modal.component';
+import {ScanEditorPreviewComponent} from './upload/scan-editor/scan-editor-preview/scan-editor-preview.component';
 
 
 
@@ -83,7 +84,7 @@ import {PendingScanModalComponent} from './pending-scans/pending-scan-modal/pend
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
-  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent]
+  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent]
 })
 export class AppModule {
 }

@@ -7,6 +7,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ScanPage} from './scan-page';
 import {QuestionSolution} from './question-solution';
 import {Moed} from '../../entities/moed';
+import {ScanEditorPreviewComponent} from './scan-editor-preview/scan-editor-preview.component';
 
 export class ScanEditResult {
   solutions: QuestionSolution[];
@@ -136,6 +137,12 @@ export class ScanEditorComponent implements OnInit {
   emitUpload() {
     const result = new ScanEditResult(this.questions, this.pages);
     this.upload.emit(result);
+  }
+
+  preview() {
+    const ref = this.modal.open(ScanEditorPreviewComponent, {size: 'lg'});
+    ref.componentInstance.solutions = this.questions;
+    ref.componentInstance.collapsed = this.questions.map(q => false);
   }
 }
 
