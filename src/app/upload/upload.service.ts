@@ -73,7 +73,7 @@ export class UploadService {
       q.total_grade = points;
       q.tags = [];
 
-      question = await this.db.createQuestionForExam(course, q);
+      question = await this.db.createQuestion(q);
     }
     const sol = {} as Solution;
     sol.grade = grade;
