@@ -2,6 +2,7 @@ import {Timestamp} from '@firebase/firestore-types';
 import {Moed} from './moed';
 
 export interface Question {
+  preventPendingCreationFor: string;
   course: number;
   moed: Moed;
   photo: string;
