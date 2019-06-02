@@ -470,13 +470,22 @@ export const onQuestionCreated = functions.firestore.document('questions/{qid}')
   const qid = context.params.qid;
   const question = snap.data() as Question;
 
-  const pendingScansIds: string[] = await admin.firestore().collection('pendingScans')
+  let pendingScansIds: string[] = await admin.firestore().collection('pendingScans')
     .where('course', '==', question.course)
     .where('moed.semester.year', '==', question.moed.semester.year)
     .where('moed.semester.num', '==', question.moed.semester.num)
     .where('moed.num', '==', question.moed.num).get().then(snaps => snaps.docs.map(doc => doc.id));
 
   console.log('Found the following pending scans: ' + pendingScansIds);
+
+  if (question.preventPendingCreationFor) {
+    console.log('Preventing pending creation to: ' + question.preventPendingCreationFor);
+    pendingScansIds = pendingScansIds.filter(psId => psId !== question.preventPendingCreationFor);
+
+    await snap.ref.update({
+      preventPendingCreationFor: FieldValue.delete()
+    });
+  }
 
   return Promise.all(pendingScansIds.map(psId => {
     const pendingSol = {} as Solution;
