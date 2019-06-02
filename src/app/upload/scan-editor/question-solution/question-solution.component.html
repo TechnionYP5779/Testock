@@ -9,6 +9,12 @@
       <button class="btn btn-transparent" *ngIf="active && !sol.fetchedQuestion" (click)="deleteRequested.emit()">
         <fa name="trash"></fa>
       </button>
+      <button class="btn btn-transparent"  *ngIf="sol.fetchedQuestion">
+        <ng-template #fetchedQuestionHelp>
+          This question already exists in the system for this exam.<br>If the current scan does not include a solution for it, just leave it empty.
+        </ng-template>
+        <fa name="info" [ngbTooltip]="fetchedQuestionHelp"></fa>
+      </button>
       <div class="float-right">
         <button class="btn btn-transparent" (click)="activateRequested.emit()" *ngIf="!quickMode && !active">
           <fa name="edit"></fa>
