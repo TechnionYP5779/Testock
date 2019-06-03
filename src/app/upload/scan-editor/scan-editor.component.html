@@ -52,10 +52,10 @@
 </div>
 <div class="row">
   <div class="col-8">
-    <div class="alert alert-warning mt-2" *ngIf="activeQuestion">
+    <div class="alert alert-warning mt-2 sticky-top sticky-alert" *ngIf="activeQuestion">
       <fa name="info" class="mr-2"></fa> Choose question {{ activeQuestion.number }} answers
     </div>
-    <div class="alert alert-primary mt-2" *ngIf="!activeQuestion">
+    <div class="alert alert-primary mt-2 sticky-top sticky-alert" *ngIf="!activeQuestion">
       <fa name="info" class="mr-2"></fa> Choose a question to edit from the right toolbar
     </div>
     <div class="card" *ngIf="pages">
