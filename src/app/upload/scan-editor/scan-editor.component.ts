@@ -68,7 +68,7 @@ export class ScanEditorComponent implements OnInit {
       const newQuestion = new QuestionSolution(this.newQuestionNum, this.newQuestionGrade);
       this.questions.push(newQuestion);
       this.questions = this.questions.sort((a, b) => a.number - b.number);
-      this.activeQuestion = newQuestion;
+      this.activateQuestion(newQuestion);
     }, reason => {});
   }
 
