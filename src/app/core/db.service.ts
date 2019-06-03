@@ -152,10 +152,6 @@ export class DbService {
     return this.afs.doc(`questions/${id}`).update({'tags': FieldValue.arrayUnion(tag)});
   }
 
-  getTagsOfQuestion(id: string): Observable<string[]> {
-    return this.afs.doc<Question>(`questions/${id}`).valueChanges().pipe(map(q => q.tags));
-  }
-
   addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<void> {
     return this.afs.doc<SolvedQuestion>('users/' + uId + `/solvedQuestions/${q.linkedQuestionId}`).set(q);
   }
@@ -407,6 +403,10 @@ export class DbService {
 
   removeTagFromCourse(id: number, tag: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayRemove(tag)});
+  }
+
+  removeTagFromQuestion(qId: string, tag: string) {
+    return this.afs.doc(`questions/${qId}`).update({'tags': FieldValue.arrayRemove(tag)});
   }
 
   pendingScanAddExtracted(pendingScanId: string, extracted: LinkedQuestion): Promise<void> {
