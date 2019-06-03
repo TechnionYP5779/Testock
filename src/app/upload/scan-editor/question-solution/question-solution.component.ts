@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuestionSolution} from '../question-solution';
+import {SolutionImage} from '../solution-image';
 
 @Component({
   selector: 'app-question-solution',
@@ -30,5 +31,13 @@ export class QuestionSolutionComponent implements OnInit {
     if (this.sol.grade > this.sol.points) {
       this.sol.grade = this.sol.points;
     }
+  }
+
+  highlightPages() {
+    this.sol.images.map(solImg => solImg.source).map(page => page.highlight = true);
+  }
+
+  unhighlightPages() {
+    this.sol.images.map(solImg => solImg.source).map(page => page.highlight = false);
   }
 }
