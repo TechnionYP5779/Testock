@@ -4,7 +4,7 @@ export class ScanPage {
   blob: Blob;
   imageBase64: string;
   ocrBlankResult: boolean;
-
+  highlight = false;
 
   constructor(pageNum: number, image: Blob, imageBase64: string) {
     this.pageNum = pageNum;
