@@ -39,7 +39,7 @@
         <div class="question-image" *ngFor="let image of sol.images; let i = index" (mouseover)="!active ? image.source.highlight = true : true" (mouseleave)="!active ? image.source.highlight = false : true">
           <img [src]="image.base64" alt="scan page crop">
           <div class="image-popup" *ngIf="active">
-            <button class="btn image-remove-button" (click)="sol.removeImage(i); image.source.highlight = false;">
+            <button class="btn image-remove-button" (click)="sol.removeImage(i); image.source.highlight = false; highlightPages();">
               <fa name="trash"></fa>
             </button>
           </div>
