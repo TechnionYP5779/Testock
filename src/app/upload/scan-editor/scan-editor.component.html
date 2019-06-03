@@ -71,7 +71,7 @@
             [sol]="q"
             [quickMode]="false"
             (activateRequested)="activateQuestion(q)"
-            (deactivateRequested)="activeQuestion = null"
+            (deactivateRequested)="deactivateQuestion(q)"
             (deleteRequested)="deleteQuestion(q)"
             [collapsed]="activeQuestion !== q"
             [active]="activeQuestion === q"

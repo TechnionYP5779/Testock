@@ -16,11 +16,11 @@ export class QuestionSolution {
   }
 
   addImage(image: SolutionImage) {
-    image.source.highlight = true;
+    image.source.highlightInc();
     this.images.push(image);
   }
 
-  removeImage(i: number) {
-    this.images = this.images.filter((_, index) => index !== i);
+  removeImage(image: SolutionImage) {
+    this.images = this.images.filter(sol => sol !== image);
   }
 }
