@@ -1,8 +1,7 @@
 @import "../../../../assets/styles/mixins";
 
-:host {
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  display: block;
+.scan-page-number {
+
 }
 
 .scan-page-image-modal {
@@ -11,6 +10,8 @@
 
 .scan-page-image {
   position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  display: block;
 
   img {
     width: 100%;

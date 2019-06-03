@@ -1,3 +1,6 @@
+<h6 class="mb-1 text-center">
+  {{ scanPage.pageNum }}
+</h6>
 <div class="scan-page-image" (click)="this.addImageTo ? this.addImageTo.addImage(scanPage.imageBase64) : true" ngbTooltip="Select full page" [disableTooltip]="!addImageTo">
   <img [src]="scanPage.imageBase64" alt="scan page crop">
   <div class="image-popup p-2">
