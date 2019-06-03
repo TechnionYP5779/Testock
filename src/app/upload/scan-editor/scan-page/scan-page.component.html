@@ -1,5 +1,5 @@
-<div class="scan-page-image" (click)="this.addImageTo ? this.addImageTo.addImage(scanPage.imageBase64) : true">
-  <img [src]="scanPage.imageBase64" alt="scan page crop" ngbTooltip="Select full page" [disableTooltip]="!addImageTo">
+<div class="scan-page-image" (click)="this.addImageTo ? this.addImageTo.addImage(scanPage.imageBase64) : true" ngbTooltip="Select full page" [disableTooltip]="!addImageTo">
+  <img [src]="scanPage.imageBase64" alt="scan page crop">
   <div class="image-popup p-2">
     <div class="image-remove-button">
       <button class="btn btn-danger" (click)="hide.emit(); $event.stopPropagation()" ngbTooltip="Hide Page">
