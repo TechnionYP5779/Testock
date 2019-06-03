@@ -1,0 +1,26 @@
+<div class="display-2">Hope you enjoy Testock</div>
+<div class="display-4 mb-4">We created it for you.</div>
+<p class="lead mb-4">
+  <strong>Testock</strong> was developed during Winter 2018-2019 and Spring 2019 semesters, as part of the <strong>Yearly Project in Software Engineering</strong>, in the <strong>Computer Science Department, Technion</strong>.
+</p>
+<h1 class="mb-4">The Team</h1>
+<div class="row">
+  <div class="col mb-4" *ngFor="let teammate of team">
+    <div class="card border-0 shadow">
+      <img [src]="'assets/images/about/team/' + teammate.photo" class="card-img-top" alt="...">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-0">{{ teammate.name }}</h5>
+        <div class="card-text text-black-50">{{ teammate.position }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h1 class="mb-4">Credits</h1>
+s
+
+<div class="row mt-4 mb-4">
+  <div class="col text-center">
+    <img src="assets/images/about/cs-technion.jpg" alt="..." />
+  </div>
+</div>
