@@ -16,6 +16,7 @@ export class QuestionSolution {
   }
 
   addImage(image: SolutionImage) {
+    image.source.highlight = true;
     this.images.push(image);
   }
 
