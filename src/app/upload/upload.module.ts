@@ -19,7 +19,7 @@ import {RouterModule} from '@angular/router';
 import { ScanEditorComponent } from './scan-editor/scan-editor.component';
 import { QuestionSolutionComponent } from './scan-editor/question-solution/question-solution.component';
 import { ScanPageComponent } from './scan-editor/scan-page/scan-page.component';
-import {NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbButtonsModule, NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import { CropPendingComponent } from './crop-pending/crop-pending.component';
 import { ScanEditorPreviewComponent } from './scan-editor/scan-editor-preview/scan-editor-preview.component';
 
@@ -50,7 +50,8 @@ import { ScanEditorPreviewComponent } from './scan-editor/scan-editor-preview/sc
     FileDropModule,
     RouterModule,
     NgbCollapseModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    NgbButtonsModule
   ],
   providers: [
     UploadService,

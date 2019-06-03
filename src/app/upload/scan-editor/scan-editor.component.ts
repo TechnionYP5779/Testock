@@ -42,6 +42,7 @@ export class ScanEditorComponent implements OnInit {
   newQuestionGrade: number;
   newQuestionNum: number;
   hiddenPagesCount = 0;
+  pagesPerRow = 2;
 
   ngOnInit() {
   }
