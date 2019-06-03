@@ -29,6 +29,7 @@ export class ScanPageComponent implements OnInit {
 
   selectImage() {
     if (this.croppedImage) {
+      this.scanPage.highlightInc();
       this.addImageTo.addImage(new SolutionImage(this.croppedImage, this.scanPage));
     }
 
@@ -41,6 +42,7 @@ export class ScanPageComponent implements OnInit {
 
   addFullPage() {
     if (this.addImageTo) {
+      this.scanPage.highlightInc();
       this.addImageTo.addImage(new SolutionImage(this.scanPage.imageBase64, this.scanPage));
     }
   }
