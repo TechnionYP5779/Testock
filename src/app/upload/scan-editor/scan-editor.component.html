@@ -58,7 +58,7 @@
     <div class="alert alert-primary mt-2" *ngIf="!activeQuestion">
       <fa name="info" class="mr-2"></fa> Choose a question to edit from the right toolbar
     </div>
-    <div class="card">
+    <div class="card" *ngIf="pages">
       <div class="card-body px-4 py-2">
         <div class="row">
           <div class="p-2" [ngClass]="{'col-3': pagesPerRow === 4, 'col-4': pagesPerRow === 3, 'col-6': pagesPerRow === 2}" *ngFor="let page of pages; let i = index" [hidden]="page.hidden">
@@ -67,6 +67,17 @@
               [addImageTo]="activeQuestion"
               (hide)="hidePage(page)"
             ></app-scan-page>
+          </div>
+          <div class="col-12 text-center" *ngIf=" pages.length === 0">
+            There are no pages available.
+          </div>
+          <div class="col-12 text-center" *ngIf="hiddenPagesCount === pages.length">
+            <div>
+              You have hidden all scan pages.
+            </div>
+            <button class="btn btn btn-success mt-2" (click)="restoreHiddenPages()">
+              <fa name="undo" class="mr-2"></fa> Restore hidden pages
+            </button>
           </div>
         </div>
       </div>
