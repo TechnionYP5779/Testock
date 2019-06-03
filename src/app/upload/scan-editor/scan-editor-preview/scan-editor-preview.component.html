@@ -23,7 +23,7 @@
           <small>This solution will be ignored since no images selected for it</small>
         </div>
         <div *ngFor="let image of sol.images; let i = index">
-          <img [src]="image" alt="scan page crop" style="width: 100%"/>
+          <img [src]="image.base64" alt="scan page crop" style="width: 100%"/>
         </div>
       </div>
     </div>
