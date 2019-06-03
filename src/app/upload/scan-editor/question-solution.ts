@@ -1,6 +1,8 @@
+import {SolutionImage} from './solution-image';
+
 export class QuestionSolution {
   public number: number;
-  public images: string[];
+  public images: SolutionImage[];
   public grade: number;
   public points: number;
   public fetchedQuestion: boolean;
@@ -13,7 +15,7 @@ export class QuestionSolution {
     this.fetchedQuestion = fetchedQuestion;
   }
 
-  addImage(image: string) {
+  addImage(image: SolutionImage) {
     this.images.push(image);
   }
 

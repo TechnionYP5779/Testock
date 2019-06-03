@@ -3,6 +3,7 @@ import {ImageCroppedEvent} from 'ngx-image-cropper';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ScanPage} from '../scan-page';
 import {QuestionSolution} from '../question-solution';
+import {SolutionImage} from '../solution-image';
 
 @Component({
   selector: 'app-scan-page',
@@ -28,7 +29,7 @@ export class ScanPageComponent implements OnInit {
 
   selectImage() {
     if (this.croppedImage) {
-      this.addImageTo.addImage(this.croppedImage);
+      this.addImageTo.addImage(new SolutionImage(this.croppedImage, this.scanPage));
     }
 
     this.modal.close();
@@ -36,5 +37,11 @@ export class ScanPageComponent implements OnInit {
 
   openModal(content: any) {
     this.modal = this.ngbModal.open(content, {size: 'lg'});
+  }
+
+  addFullPage() {
+    if (this.addImageTo) {
+      this.addImageTo.addImage(new SolutionImage(this.scanPage.imageBase64, this.scanPage));
+    }
   }
 }

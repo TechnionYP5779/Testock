@@ -64,10 +64,10 @@ export class UploadService {
           pendingScanId: pendingScan.id,
           created: Timestamp.now()
         };
-        await this.updateSolutionFromPendingScan(question, sol, q.images);
+        await this.updateSolutionFromPendingScan(question, sol, q.images.map(solImg => solImg.bsae64));
       } else {
         const sol = await this.uploadQuestion(pendingScan.course, pendingScan.moed, q.number,
-          q.grade, q.points, q.images, null, pendingScan.id);
+          q.grade, q.points, q.images.map(solImg => solImg.bsae64), null, pendingScan.id);
         const extracted: LinkedQuestion = {
           num: q.number,
           sid: sol.id,
