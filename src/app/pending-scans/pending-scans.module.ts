@@ -8,7 +8,7 @@ import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {UploadModule} from '../upload/upload.module';
 import {FormsModule} from '@angular/forms';
 import {NgxSpinnerModule} from 'ngx-spinner';
-import {MatSnackBarModule} from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PendingScansListComponent } from './pending-scans-list/pending-scans-list.component';
 import {AppRoutingModule} from '../app-routing.module';
 import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';

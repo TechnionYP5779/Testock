@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {AuthService} from '../../users/auth.service';
 import {Topic} from '../../entities/topic';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-topic',

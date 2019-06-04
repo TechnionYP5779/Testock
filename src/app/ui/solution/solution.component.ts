@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {SolutionId} from '../../entities/solution';
 import {QuestionId} from '../../entities/question';
 import {DbService} from '../../core/db.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PendingSolutionModalComponent} from '../../pending-scans/pending-solution-modal/pending-solution-modal.component';

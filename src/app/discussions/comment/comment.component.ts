@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {CommentWithCreatorId} from '../../entities/comment';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {DbService} from '../../core/db.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-comment',

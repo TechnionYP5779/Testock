@@ -9,7 +9,7 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {AppModule} from '../app.module';
 import {AppRoutingModule} from '../app-routing.module';
-import {MatSortModule} from '@angular/material';
+import { MatSortModule } from '@angular/material/sort';
 import {NotificationsModule} from '../notifications/notifications.module';
 import {CoreModule} from '../core/core.module';
 
