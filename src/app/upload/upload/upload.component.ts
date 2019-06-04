@@ -47,9 +47,9 @@ enum UploadState {
 })
 export class UploadComponent implements OnInit {
 
-  @ViewChild('file') file;
-  @ViewChild('imagesCollpaseTrigger') imagesCollpaseTrigger;
-  @ViewChild('collapseOne') collapseOneTrigger;
+  @ViewChild('file', {static: true}) file;
+  @ViewChild('imagesCollpaseTrigger', {static: true}) imagesCollpaseTrigger;
+  @ViewChild('collapseOne', {static: true}) collapseOneTrigger;
 
   public questions: QuestionSolution[] = [];
   private activeQuestion = 0;

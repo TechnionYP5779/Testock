@@ -14,8 +14,8 @@ export class UsersTableComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'faculty', 'email', 'admin'];
   dataSource: MatTableDataSource<UserData>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private db: DbService, private spinner: NgxSpinnerService, private snackBar: MatSnackBar) {}
 
