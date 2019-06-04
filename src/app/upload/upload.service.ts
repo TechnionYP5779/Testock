@@ -103,7 +103,7 @@ export class UploadService {
     }
     const sol: Solution = {
       grade: grade,
-      uploadInProgress: true,
+      uploadInProgress: images.length > 0,
       pendingScanId: images.length === 0 ? pendingScan.id : null,
       created: Timestamp.now()
     };
@@ -152,6 +152,11 @@ export class UploadService {
 
   public async updateSolutionFromPendingScan(q: QuestionId, sol: SolutionId, photos: string[]): Promise<void> {
 
+    const pendingScanId = sol.pendingScanId;
+    sol.pendingScanId = null;
+    sol.uploadInProgress = true;
+    await this.db.setSolutionForQuestion(q, sol);
+
     sol.photos = [];
 
     for (let i = 0; i < photos.length; ++i) {
@@ -160,9 +165,7 @@ export class UploadService {
       sol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
     }
 
-    const pendingScanId = sol.pendingScanId;
-    sol.pendingScanId = null;
-
+    sol.uploadInProgress = false;
     await this.db.setSolutionForQuestion(q, sol);
 
     await this.db.pendingScanAddExtracted(pendingScanId, {qid: q.id, sid: sol.id, num: q.number});
