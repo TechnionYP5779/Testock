@@ -139,7 +139,7 @@ export class ScanEditorComponent implements OnInit {
   deleteQuestion(q: QuestionSolution) {
 
     if (this.activeQuestion === q) {
-      this.activeQuestion = null;
+      this.deactivateQuestion(q);
     }
 
     this.questions = this.questions.filter(value => value !== q);
