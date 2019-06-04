@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
-import {CourseWithFaculty} from '../../entities/course';
+import {Course} from '../../entities/course';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {OCRService} from '../../core/ocr.service';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -26,7 +26,7 @@ export class ScanEditResult {
 })
 export class ScanEditorComponent implements OnInit {
 
-  @Input() course: CourseWithFaculty;
+  @Input() course: Course;
   @Input() questions: QuestionSolution[] = [];
   @Input() pages: ScanPage[];
   @Input() moed: Moed;
