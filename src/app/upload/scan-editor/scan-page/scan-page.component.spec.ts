@@ -1,8 +1,8 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {ScanPageComponent} from './scan-page.component';
+import { ScanPageComponent } from './scan-page.component';
 
-describe('ScanPageComponent', () => {
+describe('ScanPageOldComponent', () => {
   let component: ScanPageComponent;
   let fixture: ComponentFixture<ScanPageComponent>;
 

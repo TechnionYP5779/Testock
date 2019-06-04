@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
-  selector: 'app-upload-question',
+  selector: 'app-upload-question-old',
   templateUrl: './upload-question.component.html',
   styleUrls: ['./upload-question.component.scss']
 })

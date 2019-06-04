@@ -4,6 +4,8 @@ import {PendingScanId} from '../../entities/pending-scan';
 import {DbService} from '../../core/db.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Moed} from '../../entities/moed';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PendingScanModalComponent} from '../pending-scan-modal/pending-scan-modal.component';
 
 @Component({
   selector: 'app-pending-scans-list',
@@ -33,7 +35,7 @@ export class PendingScansListComponent implements OnInit {
     this.pendingScans$ = this.db.getPendingScans(this._course, this._moed);
   }
 
-  constructor(private db: DbService, private spinner: NgxSpinnerService) { }
+  constructor(private db: DbService, private spinner: NgxSpinnerService, private modal: NgbModal) { }
 
   ngOnInit() {
   }
@@ -43,5 +45,10 @@ export class PendingScansListComponent implements OnInit {
     $event.stopPropagation();
     this.spinner.show();
     this.db.deletePendingScan(p.id).then(() => this.spinner.hide());
+  }
+
+  openPendingScanModal(p: PendingScanId) {
+    const modalRef = this.modal.open(PendingScanModalComponent, {size: 'lg'});
+    modalRef.componentInstance.pendingScan = p;
   }
 }
