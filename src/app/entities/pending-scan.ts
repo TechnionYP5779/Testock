@@ -14,6 +14,7 @@ export interface PendingScan {
   created: Timestamp;
   linkedQuestions: LinkedQuestion[];
   extractedQuestions: LinkedQuestion[];
+  uploadInProgress: boolean;
 }
 
 export interface PendingScanId extends PendingScan {

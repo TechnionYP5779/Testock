@@ -62,7 +62,8 @@ export class UploadService {
           id: linked.sid,
           grade: q.grade,
           pendingScanId: pendingScan.id,
-          created: Timestamp.now()
+          created: Timestamp.now(),
+          uploadInProgress: true
         };
         await this.updateSolutionFromPendingScan(question, sol, q.images.map(solImg => solImg.base64));
       } else {
@@ -85,27 +86,27 @@ export class UploadService {
     let question = await this.db.getQuestionByDetails(course, moed, number).pipe(first()).toPromise();
 
     if (!question) {
-      const q = {} as Question;
-      q.course = course;
-      q.moed = moed;
-      q.number = number;
-      q.total_grade = points;
-      q.tags = [];
-      if (preventPendingLink) {
-        q.preventPendingCreationFor = preventPendingLink;
-      }
+      const q: Question = {
+        course: course,
+        moed: moed,
+        number: number,
+        total_grade: points,
+        photo: null,
+        created: Timestamp.now(),
+        tags: [],
+        preventPendingCreationFor: preventPendingLink ? preventPendingLink : null,
+        sum_difficulty_ratings: 0,
+        count_difficulty_ratings: 0
+      };
 
       question = await this.db.createQuestion(q);
     }
-    const sol = {} as Solution;
-    sol.grade = grade;
-
-    if (images.length === 0) {
-      // If we chose to upload this question and it has 0 photos then it is pending upload..
-      sol.pendingScanId = pendingScan.id;
-    } else {
-      sol.pendingScanId = null;
-    }
+    const sol: Solution = {
+      grade: grade,
+      uploadInProgress: true,
+      pendingScanId: images.length === 0 ? pendingScan.id : null,
+      created: Timestamp.now()
+    };
 
     const createdSol = await this.db.addSolutionForQuestion(question, sol);
 
@@ -118,6 +119,7 @@ export class UploadService {
         createdSol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
       }
 
+      createdSol.uploadInProgress = false;
       await this.db.setSolutionForQuestion(question, createdSol);
     }
 
@@ -132,7 +134,8 @@ export class UploadService {
       pages: [],
       created: Timestamp.now(),
       linkedQuestions: [],
-      extractedQuestions: []
+      extractedQuestions: [],
+      uploadInProgress: true
     });
 
     for (let i = 0; i < pages.length; ++i) {
@@ -142,6 +145,7 @@ export class UploadService {
       createdPendingScan.pages.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
     }
 
+    createdPendingScan.uploadInProgress = false;
     await this.db.setPendingScan(createdPendingScan);
     return createdPendingScan;
   }
