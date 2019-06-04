@@ -8,7 +8,7 @@ import {flatMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {SolvedQuestion} from '../../entities/solved-question';
 import {NgxSpinnerService} from 'ngx-spinner';
 

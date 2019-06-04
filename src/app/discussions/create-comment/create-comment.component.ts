@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DbService} from '../../core/db.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {AuthService} from '../../users/auth.service';
 import {Comment} from '../../entities/comment';
 
