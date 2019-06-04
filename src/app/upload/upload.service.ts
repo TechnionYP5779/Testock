@@ -6,13 +6,14 @@ import {AngularFireStorage} from '@angular/fire/storage';
 import {Solution, SolutionId} from '../entities/solution';
 import {first} from 'rxjs/operators';
 import {GamificationService, Rewards} from '../gamification/gamification.service';
-import {PendingScanId} from '../entities/pending-scan';
+import {LinkedQuestion, PendingScanId} from '../entities/pending-scan';
 import { firestore } from 'firebase/app';
 import Timestamp = firestore.Timestamp;
 import {OCRService} from '../core/ocr.service';
 import {PdfService} from './pdf.service';
 import {Moed} from '../entities/moed';
 import {ScanDetails} from '../entities/scan-details';
+import {QuestionSolution} from './scan-editor/question-solution';
 
 @Injectable({
   providedIn: 'root'
@@ -50,30 +51,62 @@ export class UploadService {
     await this.gamification.reward(Rewards.SCAN_UPLOAD);
   }
 
+  async uploadFromPendingScan(solutions: QuestionSolution[], pendingScan: PendingScanId): Promise<void> {
+
+    for (let i = 0; i < solutions.length; ++i) {
+      const q = solutions[i];
+      const linked = pendingScan.linkedQuestions.find(linkedQuestion => linkedQuestion.num === q.number);
+      if (linked) {
+        const question = await this.db.getQuestion(linked.qid).pipe(first()).toPromise();
+        const sol: SolutionId = {
+          id: linked.sid,
+          grade: q.grade,
+          pendingScanId: pendingScan.id,
+          created: Timestamp.now(),
+          uploadInProgress: true
+        };
+        await this.updateSolutionFromPendingScan(question, sol, q.images.map(solImg => solImg.base64));
+      } else {
+        const sol = await this.uploadQuestion(pendingScan.course, pendingScan.moed, q.number,
+          q.grade, q.points, q.images.map(solImg => solImg.base64), null, pendingScan.id);
+        const extracted: LinkedQuestion = {
+          num: q.number,
+          sid: sol.id,
+          qid: `${pendingScan.moed.semester.year}-${pendingScan.moed.semester.num}-${pendingScan.moed.num}-${q.number}`
+        };
+        await this.db.pendingScanAddExtracted(pendingScan.id, extracted);
+      }
+    }
+
+  }
+
   private async uploadQuestion(course: number, moed: Moed, number: number, grade: number, points: number,
-                               images: string[], pendingScan: PendingScanId) {
+                               images: string[], pendingScan: PendingScanId, preventPendingLink: string = null): Promise<SolutionId> {
 
     let question = await this.db.getQuestionByDetails(course, moed, number).pipe(first()).toPromise();
 
     if (!question) {
-      const q = {} as Question;
-      q.course = course;
-      q.moed = moed;
-      q.number = number;
-      q.total_grade = points;
-      q.tags = [];
+      const q: Question = {
+        course: course,
+        moed: moed,
+        number: number,
+        total_grade: points,
+        photo: null,
+        created: Timestamp.now(),
+        tags: [],
+        preventPendingCreationFor: preventPendingLink ? preventPendingLink : null,
+        sum_difficulty_ratings: 0,
+        count_difficulty_ratings: 0
+      };
 
-      question = await this.db.createQuestionForExam(course, q);
+      question = await this.db.createQuestion(q);
     }
-    const sol = {} as Solution;
-    sol.grade = grade;
-
-    if (images.length === 0) {
-      // If we chose to upload this question and it has 0 photos then it is pending upload..
-      sol.pendingScanId = pendingScan.id;
-    } else {
-      sol.pendingScanId = null;
-    }
+    const sol: Solution = {
+      grade: grade,
+      uploadInProgress: images.length > 0,
+      pendingScanId: images.length === 0 ? pendingScan.id : null,
+      created: Timestamp.now()
+    };
 
     const createdSol = await this.db.addSolutionForQuestion(question, sol);
 
@@ -86,8 +119,11 @@ export class UploadService {
         createdSol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
       }
 
+      createdSol.uploadInProgress = false;
       await this.db.setSolutionForQuestion(question, createdSol);
     }
+
+    return createdSol;
   }
 
   private async uploadPendingScan(course: number, moed: Moed, pages: Blob[]): Promise<PendingScanId> {
@@ -97,7 +133,9 @@ export class UploadService {
       moed: moed,
       pages: [],
       created: Timestamp.now(),
-      linkedQuestions: []
+      linkedQuestions: [],
+      extractedQuestions: [],
+      uploadInProgress: true
     });
 
     for (let i = 0; i < pages.length; ++i) {
@@ -107,11 +145,17 @@ export class UploadService {
       createdPendingScan.pages.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
     }
 
+    createdPendingScan.uploadInProgress = false;
     await this.db.setPendingScan(createdPendingScan);
     return createdPendingScan;
   }
 
   public async updateSolutionFromPendingScan(q: QuestionId, sol: SolutionId, photos: string[]): Promise<void> {
+
+    const pendingScanId = sol.pendingScanId;
+    sol.pendingScanId = null;
+    sol.uploadInProgress = true;
+    await this.db.setSolutionForQuestion(q, sol);
 
     sol.photos = [];
 
@@ -121,9 +165,10 @@ export class UploadService {
       sol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
     }
 
-    sol.pendingScanId = null;
-
+    sol.uploadInProgress = false;
     await this.db.setSolutionForQuestion(q, sol);
+
+    await this.db.pendingScanAddExtracted(pendingScanId, {qid: q.id, sid: sol.id, num: q.number});
 
     await this.gamification.reward(Rewards.CROPPED_PENDING_SOLUTION);
   }

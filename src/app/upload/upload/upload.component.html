@@ -52,8 +52,8 @@
               <button type="button" class="close" aria-label="Close" style="color: red" (click)="removePageByIndex(i)">
                 <span aria-hidden="true">&times;</span>
               </button>
-              <app-scan-page [blob]="blob" [index]="i" [croppable]="activeQuestion"
-                             (imageSelected)="addImage($event)"></app-scan-page>
+              <app-scan-page-old [blob]="blob" [index]="i" [croppable]="activeQuestion"
+                             (imageSelected)="addImage($event)"></app-scan-page-old>
             </div>
           </div>
         </div>
@@ -103,12 +103,12 @@
 
       <div class="questions-wrapper">
         <div class="accordion" id="questions">
-          <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images" [(grade)]="q.grade"
+          <app-upload-question-old *ngFor="let q of questions" [index]="q.index" [images]="q.images" [(grade)]="q.grade"
                                [(points)]="q.points"
                                [quickMode]="isQuickMode"
                                [pointsReadOnly]="q.pointsReadOnly"
                                (imageAddRequested)="enableImageAdding($event)"
-                               (imageRemoveRequested)="removeImage($event)"></app-upload-question>
+                               (imageRemoveRequested)="removeImage($event)"></app-upload-question-old>
         </div>
 
         <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">

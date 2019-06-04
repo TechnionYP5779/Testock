@@ -5,6 +5,7 @@ export interface Solution {
   photos?: string[];
   pendingScanId: string;
   created: Timestamp;
+  uploadInProgress: boolean;
 }
 
 export interface SolutionId extends Solution {
