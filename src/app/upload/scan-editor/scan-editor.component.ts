@@ -123,23 +123,23 @@ export class ScanEditorComponent implements OnInit {
 
   activateQuestion(q: QuestionSolution) {
     if (this.activeQuestion) {
-      this.activeQuestion.images.map(solImg => solImg.source.highlightDec());
+      this.activeQuestion.unhighlightRelatedPages();
     }
 
     this.activeQuestion = q;
-    q.images.map(solImg => solImg.source.highlightInc());
+    this.activeQuestion.highlightRelatedPages();
     this.snackBar.open('Select page to crop solution for question ' + q.number, 'close', {duration: 5000});
   }
 
-  deactivateQuestion(q: QuestionSolution) {
+  deactivateQuestion() {
+    this.activeQuestion.unhighlightRelatedPages();
     this.activeQuestion = null;
-    q.images.map(solImg => solImg.source.highlightDec());
   }
 
   deleteQuestion(q: QuestionSolution) {
 
     if (this.activeQuestion === q) {
-      this.deactivateQuestion(q);
+      this.deactivateQuestion();
     }
 
     this.questions = this.questions.filter(value => value !== q);

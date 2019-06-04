@@ -31,13 +31,4 @@ export class QuestionSolutionComponent implements OnInit {
       this.sol.grade = this.sol.points;
     }
   }
-
-  highlightPages() {
-    this.sol.images.map(solImg => solImg.source).map(page => page.highlightInc());
-  }
-
-  unhighlightPages() {
-    this.sol.images.map(solImg => solImg.source).map(page => page.highlightDec());
-
-  }
 }

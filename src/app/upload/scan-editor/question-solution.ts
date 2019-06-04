@@ -22,4 +22,13 @@ export class QuestionSolution {
   removeImage(image: SolutionImage) {
     this.images = this.images.filter(sol => sol !== image);
   }
+
+  highlightRelatedPages() {
+    this.images.map(solImg => solImg.source).map(page => page.highlightInc());
+  }
+
+  unhighlightRelatedPages() {
+    this.images.map(solImg => solImg.source).map(page => page.highlightDec());
+
+  }
 }
