@@ -52,6 +52,7 @@ export class UploadComponent implements OnInit {
   isDragged = false;
 
   loadProgress: LoadScanProgress;
+  error: string;
 
   constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
               public snackBar: MatSnackBar, private route: ActivatedRoute, private modal: NgbModal) {
@@ -90,10 +91,13 @@ export class UploadComponent implements OnInit {
 
     if (fileEntries.length > 1) {
       this.snackBar.open('Please select a single PDF file with your scan', 'close', {duration: 3000});
+      this.error = 'Please choose a single PDF file containing your scan';
+      return;
     }
 
     const selectedFileEntry = fileEntries[0];
 
+    this.error = null;
     this.state = UploadState.LoadingFile;
 
     this.file = await getFile(selectedFileEntry);
@@ -168,6 +172,7 @@ export class UploadComponent implements OnInit {
         setTimeout(() => this.state = UploadState.Editing, 1000);
       }, reason => {
         this.snackBar.open(reason, 'close', {duration: 5000});
+        this.error = reason;
         this.state = UploadState.Ready;
       });
   }
