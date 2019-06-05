@@ -26,12 +26,39 @@
   </div>
   <div class="col-2"></div>
 </div>
-<div class="text-center mt-5" *ngIf="state === uploadState.LoadingFile">
-  <fa name="spinner" animation="spin" size="5x"></fa>
-  <h2 class="mt-4">Loading Scan...</h2>
+<div class="row mt-5" *ngIf="state === uploadState.LoadingFile">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <div class="text-center">
+      <h2 class="mt-4">Loading Scan...</h2>
+    </div>
+    <ul class="list-group mt-4">
+      <li class="list-group-item">
+        <fa name="check" *ngIf="loadProgress?.doneScanDetails" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.doneScanDetails" class="mr-2"></fa>
+        Exam Details
+      </li>
+      <li class="list-group-item">
+        <fa name="check" *ngIf="loadProgress?.doneCourseDetails" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.doneCourseDetails" class="mr-2"></fa>
+        Course Details
+      </li>
+      <li class="list-group-item">
+        <fa name="check" *ngIf="loadProgress?.doneExistingQuestions" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.doneExistingQuestions" class="mr-2"></fa>
+        Existing Questions
+      </li>
+      <li class="list-group-item">
+        <fa name="check" *ngIf="loadProgress?.doneScanPages" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.doneScanPages" class="mr-2"></fa>
+        Scan Pages
+      </li>
+    </ul>
+  </div>
+  <div class="col-4"></div>
 </div>
 <div class="row" *ngIf="state === uploadState.Editing">
   <div class="col-12">
-    <app-scan-editor [pages]="pages" [moed]="moed" [course]="course"></app-scan-editor>
+    <app-scan-editor [pages]="pages" [moed]="moed" [course]="course" [questions]="questions"></app-scan-editor>
   </div>
 </div>

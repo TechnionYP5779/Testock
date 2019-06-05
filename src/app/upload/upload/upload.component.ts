@@ -6,7 +6,6 @@ import {UploadService} from '../upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
 import {OCRService} from '../../core/ocr.service';
-import {NgxSpinnerService} from 'ngx-spinner';
 import {take} from 'rxjs/operators';
 import {QuestionId} from '../../entities/question';
 import {Moed} from '../../entities/moed';
@@ -99,43 +98,27 @@ export class UploadComponent implements OnInit {
     this.loadFile();
   }
 
-  private getDetailsByFileName(fileName: String): ScanDetails {
-    if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
-      const split = fileName.split('-');
-      const courseId = parseInt(split[2], 10);
-      const year = parseInt(split[1].substr(0, 4), 10);
-      const semNum = parseInt(split[1].substr(5, 2), 10);
-      const moedId = parseInt(split[3], 10);
-      return {course: courseId, moed: { semester: {year: year, num: semNum}, num: moedId}};
-    } else {
-      return null;
-    }
-  }
-
-  private getDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
-    return this.ocr.getInfoFromSticker(firstPage);
-  }
-
-  private getCourseWithFaculty(details: ScanDetails): Promise<Course> {
+  private getCourse(details: ScanDetails): Promise<Course> {
     return this.db.getCourse(details.course).pipe(take(1)).toPromise();
   }
 
   loadFile(): Promise<void> {
 
     this.loadProgress = new LoadScanProgress();
-    const filenameDetails: ScanDetails = this.getDetailsByFileName(this.file.name);
+    const filenameDetails: ScanDetails = this.uploadService.getScanDetailsByFileName(this.file.name);
     const pdfImagesExtraction: Promise<Blob[]> = this.pdf.getImagesOfFile(this.file);
 
     let detailsPromise: Promise<ScanDetails>;
     if (filenameDetails) {
       detailsPromise = Promise.resolve(filenameDetails);
     } else {
-      detailsPromise = pdfImagesExtraction.then(blobs => this.getDetailsBySticker(blobs[0]));
+      detailsPromise = pdfImagesExtraction.then(blobs => this.uploadService.getScanDetailsBySticker(blobs[0]));
     }
 
     detailsPromise.then(() => this.loadProgress.doneScanDetails = true);
 
-    const courseDetailsPromise: Promise<Course> = detailsPromise.then(details => this.getCourseWithFaculty(details));
+    const courseDetailsPromise: Promise<Course> = detailsPromise.then(details => this.getCourse(details));
+    courseDetailsPromise.then(() => this.loadProgress.doneCourseDetails = true);
     const existingQuestionsPromise: Promise<QuestionId[]> = detailsPromise
       .then(details => this.db.getExamByDetails(details.course, details.moed).pipe(take(1)).toPromise())
       .then(exam => {
@@ -146,17 +129,20 @@ export class UploadComponent implements OnInit {
         }
       });
 
+    existingQuestionsPromise.then(() => this.loadProgress.doneExistingQuestions = true);
+
     const base64Promise = pdfImagesExtraction.then(blobs => Promise.all(blobs.map(blob => getImageBase64FromBlob(blob))));
+    base64Promise.then(() => this.loadProgress.doneScanPages = true);
 
     return Promise.all([detailsPromise, courseDetailsPromise, pdfImagesExtraction, existingQuestionsPromise, base64Promise])
       .then(([details, course, blobs, existingQuestions, base64]) => {
         if (existingQuestions) {
-          existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade)));
+          existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade, true)));
         }
         this.moed = details.moed;
         this.course = course;
         this.pages = blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
-        this.state = UploadState.Editing;
+        setTimeout(() => this.state = UploadState.Editing, 500);
       }, reason => {
         this.snackBar.open(reason, 'close', {duration: 5000});
         this.state = UploadState.Ready;
