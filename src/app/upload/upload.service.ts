@@ -173,7 +173,7 @@ export class UploadService {
     await this.gamification.reward(Rewards.CROPPED_PENDING_SOLUTION);
   }
 
-  private getDetailsByFileName(fileName: String): ScanDetails {
+  getScanDetailsByFileName(fileName: String): ScanDetails {
     if (/^([0-9]{9}-20[0-9]{2}0([123])-[0-9]{6}-([123]))/.test(fileName.toString())) {
       const split = fileName.split('-');
       const courseId = parseInt(split[2], 10);
@@ -186,7 +186,7 @@ export class UploadService {
     }
   }
 
-  private getDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
+  getScanDetailsBySticker(firstPage: Blob): Promise<ScanDetails> {
     return this.ocr.getInfoFromSticker(firstPage);
   }
 
@@ -203,9 +203,9 @@ export class UploadService {
       throw new Error('No Images Found');
     }
 
-    let details = this.getDetailsByFileName(scan.name);
+    let details = this.getScanDetailsByFileName(scan.name);
     if (!details) {
-      details = await this.getDetailsBySticker(images[0]);
+      details = await this.getScanDetailsBySticker(images[0]);
       if (!details) {
         throw new Error('Couldn\'t get course details');
       }
