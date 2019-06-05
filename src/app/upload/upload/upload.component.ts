@@ -24,10 +24,10 @@ enum UploadState {
 }
 
 class LoadScanProgress {
-  doneScanDetails = false;
-  doneCourseDetails = false;
-  doneExistingQuestions = false;
-  doneScanPages = false;
+  resultScanDetails: ScanDetails = null;
+  resultCourse: Course = null;
+  existingQuestions: QuestionId[] = null;
+  pages: string[] = null;
 }
 
 @Component({
@@ -115,10 +115,10 @@ export class UploadComponent implements OnInit {
       detailsPromise = pdfImagesExtraction.then(blobs => this.uploadService.getScanDetailsBySticker(blobs[0]));
     }
 
-    detailsPromise.then(() => this.loadProgress.doneScanDetails = true);
+    detailsPromise.then(res => this.loadProgress.resultScanDetails = res);
 
     const courseDetailsPromise: Promise<Course> = detailsPromise.then(details => this.getCourse(details));
-    courseDetailsPromise.then(() => this.loadProgress.doneCourseDetails = true);
+    courseDetailsPromise.then(res => this.loadProgress.resultCourse = res);
     const existingQuestionsPromise: Promise<QuestionId[]> = detailsPromise
       .then(details => this.db.getExamByDetails(details.course, details.moed).pipe(take(1)).toPromise())
       .then(exam => {
@@ -129,10 +129,10 @@ export class UploadComponent implements OnInit {
         }
       });
 
-    existingQuestionsPromise.then(() => this.loadProgress.doneExistingQuestions = true);
+    existingQuestionsPromise.then(res => this.loadProgress.existingQuestions = res);
 
     const base64Promise = pdfImagesExtraction.then(blobs => Promise.all(blobs.map(blob => getImageBase64FromBlob(blob))));
-    base64Promise.then(() => this.loadProgress.doneScanPages = true);
+    base64Promise.then(res => this.loadProgress.pages = res);
 
     return Promise.all([detailsPromise, courseDetailsPromise, pdfImagesExtraction, existingQuestionsPromise, base64Promise])
       .then(([details, course, blobs, existingQuestions, base64]) => {
@@ -142,7 +142,7 @@ export class UploadComponent implements OnInit {
         this.moed = details.moed;
         this.course = course;
         this.pages = blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
-        setTimeout(() => this.state = UploadState.Editing, 500);
+        setTimeout(() => this.state = UploadState.Editing, 1000);
       }, reason => {
         this.snackBar.open(reason, 'close', {duration: 5000});
         this.state = UploadState.Ready;
@@ -158,10 +158,10 @@ export class UploadComponent implements OnInit {
     // const points = this.questions.map(q => q.points);
     // const images = this.questions.map(q => q.images);
     //
-    // this.uploadService.uploadScan(this.isQuickMode, this.blobs, this.course.id, moed, nums, grades, points, images)
+    // this.uploadService.uploadScan(this.isQuickMode, this.blobs, this.resultCourse.id, moed, nums, grades, points, images)
     //   .then(() => {
     //     this.state = UploadState.UploadSuccess;
-    //     this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
+    //     this.snackBar.open('Scan for ' + this.resultCourse.name + ' uploaded successfully.', 'close', {duration: 3000});
     //   });
   }
 }

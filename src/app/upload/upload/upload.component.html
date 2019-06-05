@@ -34,24 +34,28 @@
     </div>
     <ul class="list-group mt-4">
       <li class="list-group-item">
-        <fa name="check" *ngIf="loadProgress?.doneScanDetails" class="text-success mr-2"></fa>
-        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.doneScanDetails" class="mr-2"></fa>
-        Exam Details
+        <fa name="check" *ngIf="loadProgress?.pages" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.pages" class="mr-2"></fa>
+        <span *ngIf="loadProgress?.pages"><strong>Scan Pages:</strong> Found {{loadProgress?.pages.length}} Pages</span>
+        <span *ngIf="!loadProgress?.pages"><strong>Scan Pages</strong></span>
       </li>
       <li class="list-group-item">
-        <fa name="check" *ngIf="loadProgress?.doneCourseDetails" class="text-success mr-2"></fa>
-        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.doneCourseDetails" class="mr-2"></fa>
-        Course Details
+        <fa name="check" *ngIf="loadProgress?.resultScanDetails" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.resultScanDetails" class="mr-2"></fa>
+        <span *ngIf="loadProgress?.resultScanDetails"><strong>Exam Details:</strong> {{ loadProgress.resultScanDetails.moed | fullMoed }}</span>
+        <span *ngIf="!loadProgress?.resultScanDetails"><strong>Exam Details</strong></span>
       </li>
       <li class="list-group-item">
-        <fa name="check" *ngIf="loadProgress?.doneExistingQuestions" class="text-success mr-2"></fa>
-        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.doneExistingQuestions" class="mr-2"></fa>
-        Existing Questions
+        <fa name="check" *ngIf="loadProgress?.resultCourse" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.resultCourse" class="mr-2"></fa>
+        <span *ngIf="loadProgress?.resultCourse"><strong>Course:</strong> {{ loadProgress.resultCourse.name }} ({{loadProgress.resultCourse.id}})</span>
+        <span *ngIf="!loadProgress?.resultCourse"><strong>Course</strong></span>
       </li>
       <li class="list-group-item">
-        <fa name="check" *ngIf="loadProgress?.doneScanPages" class="text-success mr-2"></fa>
-        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.doneScanPages" class="mr-2"></fa>
-        Scan Pages
+        <fa name="check" *ngIf="loadProgress?.existingQuestions" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.existingQuestions" class="mr-2"></fa>
+        <span *ngIf="loadProgress?.existingQuestions"><strong>Existing Questions:</strong> {{loadProgress.existingQuestions.length}} found</span>
+        <span *ngIf="!loadProgress?.existingQuestions"><strong>Existing Questions</strong></span>
       </li>
     </ul>
   </div>
