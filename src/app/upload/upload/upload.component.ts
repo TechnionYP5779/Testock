@@ -118,7 +118,13 @@ export class UploadComponent implements OnInit {
     if (filenameDetails) {
       detailsPromise = Promise.resolve(filenameDetails);
     } else {
-      detailsPromise = pdfImagesExtraction.then(blobs => this.uploadService.getScanDetailsBySticker(blobs[0]));
+      detailsPromise = pdfImagesExtraction.then(blobs => {
+        if (blobs.length > 0) {
+          return this.uploadService.getScanDetailsBySticker(blobs[0]);
+        } else {
+          return null;
+        }
+      });
     }
 
     detailsPromise = detailsPromise.then(details => {
