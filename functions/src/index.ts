@@ -98,6 +98,10 @@ export const getStickerInfoFromTitlePage = functions.https.onRequest((request, r
     const number = parseInt(infoStr.substr(8, 6));
     const moed = parseInt(infoStr.substr(15, 1));
 
+    if (!number || !year || !semester || !moed) {
+      return response.status(200).send();
+    }
+
     const details: ScanDetails = {
       course: number,
       moed: {
@@ -109,7 +113,7 @@ export const getStickerInfoFromTitlePage = functions.https.onRequest((request, r
       }
     };
 
-    response.status(200).send(details);
+    return response.status(200).send(details);
   });
 });
 
