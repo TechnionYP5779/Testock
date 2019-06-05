@@ -13,6 +13,8 @@ import {ScanDetails} from '../../entities/scan-details';
 import {QuestionSolution} from '../scan-editor/question-solution';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
 import {ScanPage} from '../scan-editor/scan-page';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ScanDetailsPickerComponent} from '../scan-details-picker/scan-details-picker.component';
 
 enum UploadState {
   Ready,
@@ -52,7 +54,7 @@ export class UploadComponent implements OnInit {
   loadProgress: LoadScanProgress;
 
   constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
-              public snackBar: MatSnackBar, private route: ActivatedRoute) {
+              public snackBar: MatSnackBar, private route: ActivatedRoute, private modal: NgbModal) {
     this.route = route;
   }
 
@@ -115,12 +117,33 @@ export class UploadComponent implements OnInit {
       detailsPromise = pdfImagesExtraction.then(blobs => this.uploadService.getScanDetailsBySticker(blobs[0]));
     }
 
+    detailsPromise = detailsPromise.then(details => {
+      if (details) {
+        return Promise.resolve(details);
+      }
+
+      return this.modal.open(ScanDetailsPickerComponent).result.then(result => {
+        if (result instanceof ScanDetails) {
+          return result;
+        } else {
+          throw new Error(result.error);
+        }
+      });
+    });
+
     detailsPromise.then(res => this.loadProgress.resultScanDetails = res);
 
     const courseDetailsPromise: Promise<Course> = detailsPromise.then(details => this.getCourse(details));
+
     courseDetailsPromise.then(res => this.loadProgress.resultCourse = res);
     const existingQuestionsPromise: Promise<QuestionId[]> = detailsPromise
-      .then(details => this.db.getExamByDetails(details.course, details.moed).pipe(take(1)).toPromise())
+      .then(details => {
+        if (details) {
+          return this.db.getExamByDetails(details.course, details.moed).pipe(take(1)).toPromise();
+        } else {
+          return Promise.resolve(null);
+        }
+      })
       .then(exam => {
         if (exam) {
           return this.db.getQuestionsOfExam(exam.course, exam.id).pipe(take(1)).toPromise();

@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Select Scan Details</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form class="form-inline">
+    <label class="sr-only" for="courseNumber">Course Number</label>
+    <input type="number" class="form-control mb-2 mr-sm-2 w-25" id="courseNumber" placeholder="Course" name="course" [(ngModel)]="details.course">
+
+    <label class="sr-only" for="semester">Semester</label>
+    <select class="form-control mb-2 mr-sm-2" id="semester" name="semester" [(ngModel)]="details.moed.semester">
+      <option *ngFor="let semester of semesters" [ngValue]="semester">{{{semester: semester, num: 0} | fullSemester}}</option>
+    </select>
+
+    <label class="sr-only" for="moed">Moed</label>
+    <select class="form-control mb-2 mr-sm-2" id="moed" name="moed" [(ngModel)]="details.moed.num">
+      <option [ngValue]="1" selected>Moed A</option>
+      <option [ngValue]="2">Moed B</option>
+      <option [ngValue]="3">Moed C</option>
+    </select>
+
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-success" (click)="done()">Confirm Details</button>
+</div>

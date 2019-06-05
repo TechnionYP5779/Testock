@@ -23,6 +23,7 @@ import { ScanPageComponent } from './scan-editor/scan-page/scan-page.component';
 import {NgbButtonsModule, NgbCollapseModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import { CropPendingComponent } from './crop-pending/crop-pending.component';
 import { ScanEditorPreviewComponent } from './scan-editor/scan-editor-preview/scan-editor-preview.component';
+import { ScanDetailsPickerComponent } from './scan-details-picker/scan-details-picker.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ScanEditorPreviewComponent } from './scan-editor/scan-editor-preview/sc
     ScanPageComponent,
     ScanPageOldComponent,
     CropPendingComponent,
-    ScanEditorPreviewComponent
+    ScanEditorPreviewComponent,
+    ScanDetailsPickerComponent
   ],
   imports: [
     CommonModule,
