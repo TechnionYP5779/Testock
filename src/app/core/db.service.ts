@@ -31,7 +31,13 @@ export class DbService {
   }
 
   getCourse(id: number): Observable<Course> {
-    return this.coursesCollection.doc<Course>(id.toString()).valueChanges();
+    return this.coursesCollection.doc<Course>(id.toString()).valueChanges().pipe(map(course => {
+      if (!course) {
+        throw new Error('Course doesn\'t exist');
+      } else {
+        return course;
+      }
+    }));
   }
 
   getCourseWithFaculty(id: number): Observable<CourseWithFaculty> {
