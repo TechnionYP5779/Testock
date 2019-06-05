@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
-import {CourseWithFaculty} from '../../entities/course';
+import {Course} from '../../entities/course';
 import {UploadService} from '../upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
@@ -11,33 +11,24 @@ import {take} from 'rxjs/operators';
 import {QuestionId} from '../../entities/question';
 import {Moed} from '../../entities/moed';
 import {ScanDetails} from '../../entities/scan-details';
-
-
-class QuestionSolution {
-  public index: number;
-  public images: string[];
-  public grade: number;
-  public points: number;
-  public pointsReadOnly: boolean;
-
-  constructor(index: number, points: number = 0) {
-    this.index = index;
-    this.images = [];
-    this.grade = 0;
-    this.points = points;
-    this.pointsReadOnly = points > 0;
-  }
-
-  addImage(image: string) {
-    this.images.push(image);
-  }
-}
+import {QuestionSolution} from '../scan-editor/question-solution';
+import {FileSystemDirectoryEntry, FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
+import {ScanPage} from '../scan-editor/scan-page';
 
 enum UploadState {
   Ready,
+  LoadingFile,
+  Editing,
   Uploading,
   UploadSuccess,
   UploadFailure
+}
+
+class LoadScanProgress {
+  doneScanDetails = false;
+  doneCourseDetails = false;
+  doneExistingQuestions = false;
+  doneScanPages = false;
 }
 
 @Component({
@@ -47,30 +38,24 @@ enum UploadState {
 })
 export class UploadComponent implements OnInit {
 
-  @ViewChild('file', {static: true}) file;
-  @ViewChild('imagesCollpaseTrigger', {static: true}) imagesCollpaseTrigger;
-  @ViewChild('collapseOne', {static: true}) collapseOneTrigger;
+  questions: QuestionSolution[] = [];
+  private file: File;
 
-  public questions: QuestionSolution[] = [];
-  private activeQuestion = 0;
+  uploadState = UploadState;
+  state = UploadState.Ready;
 
-  private removedFirstPage = false;
-  public allBlobs: Blob[];
-  public blobs: Blob[];
-  public isDragged: boolean;
+  moed: Moed;
+  course: Course;
+  pages: ScanPage[];
+
+  isDragged = false;
+
+  loadProgress: LoadScanProgress;
 
   constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
-              public snackBar: MatSnackBar, private route: ActivatedRoute, private spinner: NgxSpinnerService) {
+              public snackBar: MatSnackBar, private route: ActivatedRoute) {
     this.route = route;
   }
-
-  public uploadState = UploadState;
-
-  public moed: Moed;
-  public state = UploadState.Ready;
-  public course: CourseWithFaculty;
-
-  public isQuickMode: boolean;
 
   ngOnInit() {
     const source = this.route.snapshot.paramMap.get('source');
@@ -81,9 +66,37 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  onFileSelected(event) {
-    const file = this.file.nativeElement.files[0];
-    this.loadFile(file);
+  async dropped(files: NgxFileDropEntry[]) {
+    this.isDragged = false;
+    let fileEntries: FileSystemFileEntry[] = [];
+    for (const droppedFile of files) {
+      // Is it a file?
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntries.push(fileEntry);
+      } else {
+        // It was a directory (empty directories are added, otherwise only files)
+        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+        console.log(droppedFile.relativePath, fileEntry);
+      }
+    }
+
+    fileEntries = fileEntries.filter(fe => fe.name.endsWith('.pdf'));
+
+    if (fileEntries.length === 0) {
+      return;
+    }
+
+    if (fileEntries.length > 1) {
+      this.snackBar.open('Please select a single PDF file with your scan', 'close', {duration: 3000});
+    }
+
+    const selectedFileEntry = fileEntries[0];
+
+    this.state = UploadState.LoadingFile;
+
+    this.file = await getFile(selectedFileEntry);
+    this.loadFile();
   }
 
   private getDetailsByFileName(fileName: String): ScanDetails {
@@ -103,54 +116,15 @@ export class UploadComponent implements OnInit {
     return this.ocr.getInfoFromSticker(firstPage);
   }
 
-  private getCourseWithFaculty(details: ScanDetails): Promise<CourseWithFaculty> {
-    return this.db.getCourseWithFaculty(details.course).pipe(take(1)).toPromise();
+  private getCourseWithFaculty(details: ScanDetails): Promise<Course> {
+    return this.db.getCourse(details.course).pipe(take(1)).toPromise();
   }
 
-  uploadImages() {
-    this.state = UploadState.Uploading;
+  loadFile(): Promise<void> {
 
-    const moed = this.moed;
-    const nums = this.questions.map(q => q.index);
-    const grades = this.questions.map(q => q.grade);
-    const points = this.questions.map(q => q.points);
-    const images = this.questions.map(q => q.images);
-
-    this.uploadService.uploadScan(this.isQuickMode, this.blobs, this.course.id, moed, nums, grades, points, images)
-      .then(() => {
-        this.state = UploadState.UploadSuccess;
-        this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
-        this.collapseOneTrigger.nativeElement.click();
-        this.resetForm();
-      });
-  }
-
-  onDragOver(event): void {
-    event.preventDefault();
-    this.isDragged = true;
-  }
-
-  onDragLeave(event): void {
-    this.isDragged = false;
-  }
-
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    this.isDragged = false;
-    const file = event.dataTransfer.items[0].getAsFile();
-    this.loadFile(file);
-  }
-
-  loadFile(file): void {
-    if (!file) {
-      this.resetForm();
-      return;
-    }
-    this.spinner.show();
-    this.resetForm();
-
-    const filenameDetails: ScanDetails = this.getDetailsByFileName(file.name);
-    const pdfImagesExtraction: Promise<Blob[]> = this.pdf.getImagesOfFile(file);
+    this.loadProgress = new LoadScanProgress();
+    const filenameDetails: ScanDetails = this.getDetailsByFileName(this.file.name);
+    const pdfImagesExtraction: Promise<Blob[]> = this.pdf.getImagesOfFile(this.file);
 
     let detailsPromise: Promise<ScanDetails>;
     if (filenameDetails) {
@@ -159,7 +133,9 @@ export class UploadComponent implements OnInit {
       detailsPromise = pdfImagesExtraction.then(blobs => this.getDetailsBySticker(blobs[0]));
     }
 
-    const courseDetailsPromise: Promise<CourseWithFaculty> = detailsPromise.then(details => this.getCourseWithFaculty(details));
+    detailsPromise.then(() => this.loadProgress.doneScanDetails = true);
+
+    const courseDetailsPromise: Promise<Course> = detailsPromise.then(details => this.getCourseWithFaculty(details));
     const existingQuestionsPromise: Promise<QuestionId[]> = detailsPromise
       .then(details => this.db.getExamByDetails(details.course, details.moed).pipe(take(1)).toPromise())
       .then(exam => {
@@ -170,105 +146,51 @@ export class UploadComponent implements OnInit {
         }
       });
 
-    Promise.all([detailsPromise, courseDetailsPromise, pdfImagesExtraction, existingQuestionsPromise])
-      .then(([details, courseWithFaculty, blobs, existingQuestions]) => {
+    const base64Promise = pdfImagesExtraction.then(blobs => Promise.all(blobs.map(blob => getImageBase64FromBlob(blob))));
+
+    return Promise.all([detailsPromise, courseDetailsPromise, pdfImagesExtraction, existingQuestionsPromise, base64Promise])
+      .then(([details, course, blobs, existingQuestions, base64]) => {
         if (existingQuestions) {
           existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade)));
         }
-        this.allBlobs = blobs;
-        this.blobs = blobs;
         this.moed = details.moed;
-        this.course = courseWithFaculty;
-        this.imagesCollpaseTrigger.nativeElement.click();
+        this.course = course;
+        this.pages = blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
+        this.state = UploadState.Editing;
       }, reason => {
         this.snackBar.open(reason, 'close', {duration: 5000});
-      })
-      .finally(() => this.spinner.hide());
+        this.state = UploadState.Ready;
+      });
   }
 
-  addQuestion() {
-    this.questions.push(new QuestionSolution(this.questions.length + 1));
+  uploadImages() {
+    this.state = UploadState.Uploading;
+
+    // const moed = this.moed;
+    // const nums = this.questions.map(q => q.index);
+    // const grades = this.questions.map(q => q.grade);
+    // const points = this.questions.map(q => q.points);
+    // const images = this.questions.map(q => q.images);
+    //
+    // this.uploadService.uploadScan(this.isQuickMode, this.blobs, this.course.id, moed, nums, grades, points, images)
+    //   .then(() => {
+    //     this.state = UploadState.UploadSuccess;
+    //     this.snackBar.open('Scan for ' + this.course.name + ' uploaded successfully.', 'close', {duration: 3000});
+    //   });
   }
+}
 
-  enableImageAdding(questionIndex: number) {
-    this.activeQuestion = questionIndex;
-    this.snackBar.open('Select a page to add', 'close', {duration: 3000});
-  }
+function getFile(fileEntry: FileSystemFileEntry): Promise<File> {
+  return new Promise<File>((resolve => {
+    fileEntry.file((file) => resolve(file));
+  }));
+}
 
-  addImage(image: string) {
-    if (image === null) {
-      return;
-    }
-
-    this.questions[this.activeQuestion - 1].addImage(image);
-    this.activeQuestion = 0;
-  }
-
-  removeImage(questionImage: any[]) {
-    this.questions[questionImage[0] - 1].images.splice(questionImage[1], 1);
-    this.activeQuestion = 0;
-  }
-
-  removeFirstPage() {
-    if (this.removedFirstPage === false) {
-      this.blobs = this.blobs.slice(1);
-    }
-    this.removedFirstPage = true;
-  }
-
-  clearEvenPages() {
-    const res = [];
-    for (let i = 0; i < this.allBlobs.length; i = i + 2) {
-      if (i === 0 && this.removedFirstPage) {
-        continue;
-      }
-      res.push(this.allBlobs[i]);
-    }
-
-    this.blobs = res;
-  }
-
-  clearOddPages() {
-    const res = [];
-    for (let i = 1; i < this.allBlobs.length; i = i + 2) {
-      res.push(this.allBlobs[i]);
-    }
-
-    this.blobs = res;
-  }
-
-  async clearBlankPages() {
-    this.spinner.show();
-    const res = [];
-    const promises = [];
-    for (let i = 0; i < this.allBlobs.length; i = i + 1) {
-      promises.push(this.ocr.isImageBlank(this.allBlobs[i]));
-    }
-    Promise.all(promises).then(isPageBlank => {
-      for (let i = 0; i < this.allBlobs.length; i = i + 1) {
-        if (!isPageBlank[i].isBlank) {
-          res.push(this.allBlobs[i]);
-        }
-      }
-      this.blobs = res;
-      this.spinner.hide();
-    });
-  }
-
-  resetForm() {
-    this.questions = [];
-    this.blobs = [];
-    this.course = null;
-    this.moed = null;
-    this.state = UploadState.Ready;
-  }
-
-  returnPages() {
-    this.removedFirstPage = false;
-    this.blobs = this.allBlobs;
-  }
-
-  removePageByIndex(i: number) {
-    this.blobs = this.blobs.filter((v, j) => j !== i);
-  }
+function getImageBase64FromBlob(blob: Blob): Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
 }
