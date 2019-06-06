@@ -25,7 +25,7 @@
 
           <div class="btn-group btn-group-toggle ml-1">
             <label class="btn-outline-info" ngbButtonLabel>
-              <input type="checkbox" ngbButton [(ngModel)]="quickMode"> Quick Mode
+              <input type="checkbox" ngbButton [(ngModel)]="quickMode" (ngModelChange)="$event ? deactivateQuestion() : true"> Quick Mode
             </label>
           </div>
 

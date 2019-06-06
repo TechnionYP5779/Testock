@@ -72,7 +72,9 @@ export class ScanEditorComponent implements OnInit {
       const newQuestion = new QuestionSolution(this.newQuestionNum, this.newQuestionGrade);
       this.questions.push(newQuestion);
       this.questions = this.questions.sort((a, b) => a.number - b.number);
-      this.activateQuestion(newQuestion);
+      if (!this.quickMode) {
+        this.activateQuestion(newQuestion);
+      }
     }, reason => {});
   }
 
@@ -135,8 +137,10 @@ export class ScanEditorComponent implements OnInit {
   }
 
   deactivateQuestion() {
-    this.activeQuestion.unhighlightRelatedPages();
-    this.activeQuestion = null;
+    if (this.activeQuestion) {
+      this.activeQuestion.unhighlightRelatedPages();
+      this.activeQuestion = null;
+    }
   }
 
   deleteQuestion(q: QuestionSolution) {
