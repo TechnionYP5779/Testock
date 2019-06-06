@@ -188,7 +188,7 @@ export class UploadComponent implements OnInit {
   uploadScan(editResult: ScanEditResult) {
     this.state = UploadState.Uploading;
 
-    this.uploadService.uploadScan(false, editResult.solutions, editResult.pages, this.scanDetails)
+    this.uploadService.uploadScan(editResult.quickMode, editResult.solutions, editResult.pages, this.scanDetails)
       .subscribe(progress => {
         this.uploadProgress = progress;
       }, error => {
