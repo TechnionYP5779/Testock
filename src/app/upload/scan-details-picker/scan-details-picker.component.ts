@@ -13,7 +13,7 @@ import {Course} from '../../entities/course';
 })
 export class ScanDetailsPickerComponent implements OnInit {
 
-  details: ScanDetails = new ScanDetails(null, {semester: {num: null, year: null}, num: null});
+  details: ScanDetails = new ScanDetails(null, {semester: null, num: null});
   semesters: Semester[];
   courses$: Observable<Course[]>;
 

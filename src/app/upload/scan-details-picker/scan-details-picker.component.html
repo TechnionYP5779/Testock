@@ -35,5 +35,5 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-outline-primary" (click)="done()">Confirm Details</button>
+  <button type="button" class="btn btn-outline-primary" (click)="done()" [disabled]="!details.course || !details.moed.semester || !details.moed.num">Confirm Details</button>
 </div>
