@@ -132,12 +132,8 @@ export class UploadComponent implements OnInit {
         return Promise.resolve(details);
       }
 
-      return this.modal.open(ScanDetailsPickerComponent).result.then(result => {
-        if (result instanceof ScanDetails) {
-          return result;
-        } else {
-          throw new Error(result.error);
-        }
+      return this.modal.open(ScanDetailsPickerComponent).result.catch(reason => {
+        throw new Error('Please provide your scan details');
       });
     });
 
