@@ -32,6 +32,7 @@ export class ScanEditorComponent implements OnInit {
   @Input() questions: QuestionSolution[] = [];
   @Input() pages: ScanPage[];
   @Input() moed: Moed;
+  @Input() allowQuickMode = false;
 
   @Output() upload = new EventEmitter<ScanEditResult>();
 

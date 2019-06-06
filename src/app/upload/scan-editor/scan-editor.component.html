@@ -23,7 +23,7 @@
             <button type="button" class="btn btn-danger" (click)="hideBlankPages()" ngbTooltip="Hide Blank Pages">Blank</button>
           </div>
 
-          <div class="btn-group btn-group-toggle ml-1">
+          <div class="btn-group btn-group-toggle ml-1" *ngIf="allowQuickMode">
             <label class="btn-outline-info" ngbButtonLabel>
               <input type="checkbox" ngbButton [(ngModel)]="quickMode" (ngModelChange)="$event ? deactivateQuestion() : true"> Quick Mode
             </label>

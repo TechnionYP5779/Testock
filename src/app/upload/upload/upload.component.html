@@ -64,7 +64,7 @@
 </div>
 <div class="row" *ngIf="state === uploadState.Editing">
   <div class="col-md-12">
-    <app-scan-editor [pages]="pages" [moed]="scanDetails.moed" [course]="course" [questions]="questions" (upload)="uploadScan($event)"></app-scan-editor>
+    <app-scan-editor [pages]="pages" [moed]="scanDetails.moed" [course]="course" [questions]="questions" (upload)="uploadScan($event)" [allowQuickMode]="true"></app-scan-editor>
   </div>
 </div>
 <div class="row mt-4" *ngIf="state === uploadState.Uploading">
