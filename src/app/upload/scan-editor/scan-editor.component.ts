@@ -12,10 +12,12 @@ import {ScanEditorPreviewComponent} from './scan-editor-preview/scan-editor-prev
 export class ScanEditResult {
   solutions: QuestionSolution[];
   pages: ScanPage[];
+  quickMode: boolean;
 
-  constructor(solutions: QuestionSolution[], pages: ScanPage[]) {
+  constructor(quickMode: boolean, solutions: QuestionSolution[], pages: ScanPage[]) {
     this.solutions = solutions;
     this.pages = pages;
+    this.quickMode = quickMode;
   }
 }
 
@@ -43,6 +45,7 @@ export class ScanEditorComponent implements OnInit {
   newQuestionNum: number;
   hiddenPagesCount = 0;
   pagesPerRow = 2;
+  quickMode = false;
 
   ngOnInit() {
   }
@@ -146,7 +149,7 @@ export class ScanEditorComponent implements OnInit {
   }
 
   emitUpload() {
-    const result = new ScanEditResult(this.questions, this.pages);
+    const result = new ScanEditResult(this.quickMode, this.questions, this.pages);
     this.upload.emit(result);
   }
 

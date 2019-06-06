@@ -1,27 +1,32 @@
 <div class="card sticky-top top-toolbar">
   <div class="card-header">
     <div class="row">
-      <div class="col-4">
-        <h5 *ngIf="course && moed" class="mb-1">
+      <div class="col-md-4">
+        <h6 *ngIf="course && moed" class="mb-1">
           {{ course?.name }} ({{course?.id}})
           <span style="display: block" class="secondary-title">
             {{ moed | fullMoed }}
           </span>
-        </h5>
+        </h6>
       </div>
-      <div class="col-8">
+      <div class="col-md-8">
         <div class="btn-toolbar float-right">
-          <button type="button" class="btn btn-success" (click)="restoreHiddenPages()" [ngbTooltip]="'Restore ' + hiddenPagesCount + ' Hidden Pages'" *ngIf="hiddenPagesCount">
+          <button type="button" class="btn btn-sm btn-success" (click)="restoreHiddenPages()" [ngbTooltip]="'Restore ' + hiddenPagesCount + ' Hidden Pages'" *ngIf="hiddenPagesCount">
             <fa name="undo" class="mr-2"></fa>
             <span class="badge badge-light">{{ hiddenPagesCount }}</span>
           </button>
 
-          <div class="btn-group ml-1" role="group" aria-label="Clean Pages">
-            <button type="button" class="btn btn-danger"><fa name="eye-slash"></fa></button>
+          <div class="btn-group btn-group-sm ml-1" role="group" aria-label="Clean Pages">
             <button type="button" class="btn btn-danger" (click)="hideFirstPage()" ngbTooltip="Hide First Page">First</button>
             <button type="button" class="btn btn-danger" (click)="hideEvenPages()" ngbTooltip="Hide Even Pages">Even</button>
             <button type="button" class="btn btn-danger" (click)="hideOddPages()" ngbTooltip="Hide Odd Pages">Odd</button>
             <button type="button" class="btn btn-danger" (click)="hideBlankPages()" ngbTooltip="Hide Blank Pages">Blank</button>
+          </div>
+
+          <div class="btn-group btn-group-toggle ml-1">
+            <label class="btn-outline-info" ngbButtonLabel>
+              <input type="checkbox" ngbButton [(ngModel)]="quickMode"> Quick Mode
+            </label>
           </div>
 
           <div class="btn-group btn-group-toggle ml-1" ngbRadioGroup [(ngModel)]="pagesPerRow" role="group" aria-label="Pages per row">
