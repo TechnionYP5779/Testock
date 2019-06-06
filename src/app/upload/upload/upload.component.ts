@@ -55,7 +55,7 @@ export class UploadComponent implements OnInit {
   error: string;
   uploadProgress: UploadScanProgress;
 
-  constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
+  constructor(private db: DbService, private pdf: PdfService, private uploadService: UploadService,
               public snackBar: MatSnackBar, private route: ActivatedRoute, private modal: NgbModal) {
     this.route = route;
   }
