@@ -174,7 +174,7 @@ export class UploadComponent implements OnInit {
         setTimeout(() => this.state = UploadState.Editing, 1000);
       }, reason => {
         this.snackBar.open(reason, 'close', {duration: 5000});
-        this.error = reason;
+        this.error = reason.message;
         this.state = UploadState.Ready;
       });
   }
