@@ -2,13 +2,12 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {Course} from '../../entities/course';
-import {UploadService} from '../upload.service';
+import {UploadScanProgress, UploadService} from '../upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
 import {OCRService} from '../../core/ocr.service';
 import {take} from 'rxjs/operators';
 import {QuestionId} from '../../entities/question';
-import {Moed} from '../../entities/moed';
 import {ScanDetails} from '../../entities/scan-details';
 import {QuestionSolution} from '../scan-editor/question-solution';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
@@ -54,6 +53,7 @@ export class UploadComponent implements OnInit {
 
   loadProgress: LoadScanProgress;
   error: string;
+  uploadProgress: UploadScanProgress;
 
   constructor(private db: DbService, private pdf: PdfService, private ocr: OCRService, private uploadService: UploadService,
               public snackBar: MatSnackBar, private route: ActivatedRoute, private modal: NgbModal) {
@@ -189,9 +189,11 @@ export class UploadComponent implements OnInit {
     this.state = UploadState.Uploading;
 
     this.uploadService.uploadScan(false, editResult.solutions, editResult.pages, this.scanDetails)
-      .then(() => {
-        this.state = UploadState.UploadSuccess;
-      });
+      .subscribe(progress => {
+        this.uploadProgress = progress;
+      }, console.error, () => {
+      this.state = UploadState.UploadSuccess;
+    });
   }
 
   @HostListener('window:beforeunload', ['$event'])

@@ -73,7 +73,15 @@
   <div class="col-md-3"></div>
   <div class="col-md-6 text-center">
     <fa name="spinner" animation="spin" size="5x"></fa>
-    <h2 class="mt-4">Uploading Solutions...</h2>
+    <h2 class="mt-4">Uploading Solutions</h2>
+    <div class="mt-4" *ngIf="uploadProgress?.currentQuestionProgress?.question">Uploading Question {{uploadProgress.currentQuestionProgress.question.number}}...</div>
+    <div class="mt-2" *ngIf="uploadProgress?.currentQuestionProgress?.question">
+      <ngb-progressbar animated="true" striped="true" [max]="100" showValue="true" [value]="uploadProgress.bytes.getPercentage()"></ngb-progressbar>
+    </div>
+    <div class="mt-4" *ngIf="uploadProgress?.currentQuestionProgress">Image {{uploadProgress.currentQuestionProgress.question_images.current}} out of {{uploadProgress.currentQuestionProgress.question_images.total}}</div>
+    <div class="mt-2" *ngIf="uploadProgress?.currentQuestionProgress">
+      <ngb-progressbar animated="true" striped="true" [max]="100" showValue="true" [value]="uploadProgress?.currentQuestionProgress?.question_bytes.getPercentage()"></ngb-progressbar>
+    </div>
   </div>
   <div class="col-md-3"></div>
 </div>
