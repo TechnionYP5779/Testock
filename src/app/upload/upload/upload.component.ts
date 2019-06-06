@@ -101,7 +101,7 @@ export class UploadComponent implements OnInit {
     this.state = UploadState.LoadingFile;
 
     this.file = await getFile(selectedFileEntry);
-    this.loadFile();
+    await this.loadFile();
   }
 
   private getCourse(details: ScanDetails): Promise<Course> {
