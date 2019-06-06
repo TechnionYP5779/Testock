@@ -177,7 +177,7 @@ export class UploadComponent implements OnInit {
         this.scanDetails = details;
         this.course = course;
         this.pages = pages;
-        setTimeout(() => this.state = UploadState.Editing, 1000);
+        setTimeout(() => this.state = UploadState.Editing, 800);
       }, reason => {
         this.snackBar.open(reason, 'close', {duration: 5000});
         this.error = reason.message;
