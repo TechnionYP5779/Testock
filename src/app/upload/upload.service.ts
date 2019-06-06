@@ -72,7 +72,7 @@ export class UploadService {
             exam = await this.db.createExamForCourse(details.course, e);
           }
 
-          let pendingScan = null;
+          let pendingScan: PendingScanId = null;
           if (quickMode) {
             pendingScan = await this.uploadPendingScan(details.course, details.moed, pages);
           }
@@ -86,7 +86,7 @@ export class UploadService {
                   questions: new Progress(i + 1, solutions.length),
                   currentQuestionProgress: questionProgress
                 });
-              }, details.course, details.moed, solutions[i], pendingScan);
+              }, details.course, details.moed, solutions[i], pendingScan, pendingScan ? pendingScan.id : null);
               transferredBytes += solutions[i].getTotalBytes();
             }
           }
