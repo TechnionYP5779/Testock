@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {UploadComponent} from './upload/upload.component';
-import {ScanPageOldComponent} from './upload/scan-page/scan-page-old.component';
-import {UploadQuestionComponent} from './upload/upload-question/upload-question.component';
 import {CoreModule} from '../core/core.module';
 import {UsersModule} from '../users/users.module';
 import {PdfService} from './pdf.service';
@@ -29,12 +27,10 @@ import { ScanDetailsPickerComponent } from './scan-details-picker/scan-details-p
   declarations: [
     UploadComponent,
     ScanPageComponent,
-    UploadQuestionComponent,
     BatchUploadComponent,
     ScanEditorComponent,
     QuestionSolutionComponent,
     ScanPageComponent,
-    ScanPageOldComponent,
     CropPendingComponent,
     ScanEditorPreviewComponent,
     ScanDetailsPickerComponent
