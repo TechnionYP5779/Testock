@@ -2,8 +2,7 @@
   <fa name="exclamation-circle" class="mr-2"></fa> {{error}}
 </div>
 <div class="row" *ngIf="state === uploadState.Ready">
-  <div class="col-md-2"></div>
-  <div class="col-md-8">
+  <div class="col-md-12">
     <ngx-file-drop
       (onFileDrop)="dropped($event)"
       accept=".pdf"
@@ -27,7 +26,6 @@
       </ng-template>
     </ngx-file-drop>
   </div>
-  <div class="col-md-2"></div>
 </div>
 <div class="row mt-5" *ngIf="state === uploadState.LoadingFile">
   <div class="col-md-3"></div>
