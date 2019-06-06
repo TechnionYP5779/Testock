@@ -2,8 +2,8 @@
   <fa name="exclamation-circle" class="mr-2"></fa> {{error}}
 </div>
 <div class="row" *ngIf="state === uploadState.Ready">
-  <div class="col-2"></div>
-  <div class="col-8">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
     <ngx-file-drop
       (onFileDrop)="dropped($event)"
       accept=".pdf"
@@ -27,11 +27,11 @@
       </ng-template>
     </ngx-file-drop>
   </div>
-  <div class="col-2"></div>
+  <div class="col-md-2"></div>
 </div>
 <div class="row mt-5" *ngIf="state === uploadState.LoadingFile">
-  <div class="col-3"></div>
-  <div class="col-6">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
     <div class="text-center">
       <h2 class="mt-4">Loading Scan...</h2>
     </div>
@@ -62,10 +62,10 @@
       </li>
     </ul>
   </div>
-  <div class="col-3"></div>
+  <div class="col-md-3"></div>
 </div>
 <div class="row" *ngIf="state === uploadState.Editing">
-  <div class="col-12">
+  <div class="col-md-12">
     <app-scan-editor [pages]="pages" [moed]="moed" [course]="course" [questions]="questions"></app-scan-editor>
   </div>
 </div>
