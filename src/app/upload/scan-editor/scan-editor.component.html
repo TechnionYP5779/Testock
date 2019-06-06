@@ -104,7 +104,7 @@
           <app-question-solution
             *ngFor="let q of questions"
             [sol]="q"
-            [quickMode]="false"
+            [quickMode]="quickMode"
             (activateRequested)="activateQuestion(q)"
             (deactivateRequested)="deactivateQuestion()"
             (deleteRequested)="deleteQuestion(q)"
