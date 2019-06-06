@@ -14,6 +14,7 @@ import {PdfService} from './pdf.service';
 import {Moed} from '../entities/moed';
 import {ScanDetails} from '../entities/scan-details';
 import {QuestionSolution} from './scan-editor/question-solution';
+import {ScanPage} from './scan-editor/scan-page';
 
 @Injectable({
   providedIn: 'root'
@@ -24,25 +25,24 @@ export class UploadService {
               private gamification: GamificationService, private ocr: OCRService, private pdf: PdfService) {
   }
 
-  async uploadScan(quickMode: boolean, pages: Blob[], course: number, moed: Moed,
-                   nums: number[], grades: number[], points: number[], images: string[][]): Promise<void> {
-    let exam = await this.db.getExamByDetails(course, moed).pipe(first()).toPromise();
+  async uploadScan(quickMode: boolean, solutions: QuestionSolution[], pages: ScanPage[], details: ScanDetails): Promise<void> {
+    let exam = await this.db.getExamByDetails(details.course, details.moed).pipe(first()).toPromise();
 
     if (!exam) {
       const e = {} as Exam;
-      e.moed = moed;
-      exam = await this.db.createExamForCourse(course, e);
+      e.moed = details.moed;
+      exam = await this.db.createExamForCourse(details.course, e);
     }
 
     let pendingScan = null;
     if (quickMode) {
-      pendingScan = await this.uploadPendingScan(course, moed, pages);
+      pendingScan = await this.uploadPendingScan(details.course, details.moed, pages);
     }
 
     const promises = [];
-    for (let i = 0; i < nums.length; ++i) {
-      if (images[i].length > 0 || quickMode) {
-        promises.push(this.uploadQuestion(course, moed, nums[i], grades[i], points[i], images[i], pendingScan));
+    for (let i = 0; i < solutions.length; ++i) {
+      if (solutions[i].images.length > 0 || quickMode) {
+        promises.push(this.uploadQuestion(details.course, details.moed, solutions[i], pendingScan));
       }
     }
 
@@ -67,8 +67,7 @@ export class UploadService {
         };
         await this.updateSolutionFromPendingScan(question, sol, q.images.map(solImg => solImg.base64));
       } else {
-        const sol = await this.uploadQuestion(pendingScan.course, pendingScan.moed, q.number,
-          q.grade, q.points, q.images.map(solImg => solImg.base64), null, pendingScan.id);
+        const sol = await this.uploadQuestion(pendingScan.course, pendingScan.moed, q, null, pendingScan.id);
         const extracted: LinkedQuestion = {
           num: q.number,
           sid: sol.id,
@@ -80,17 +79,17 @@ export class UploadService {
 
   }
 
-  private async uploadQuestion(course: number, moed: Moed, number: number, grade: number, points: number,
-                               images: string[], pendingScan: PendingScanId, preventPendingLink: string = null): Promise<SolutionId> {
+  private async uploadQuestion(course: number, moed: Moed, solution: QuestionSolution,
+                               pendingScan: PendingScanId, preventPendingLink: string = null): Promise<SolutionId> {
 
-    let question = await this.db.getQuestionByDetails(course, moed, number).pipe(first()).toPromise();
+    let question = await this.db.getQuestionByDetails(course, moed, solution.number).pipe(first()).toPromise();
 
     if (!question) {
       const q: Question = {
         course: course,
         moed: moed,
-        number: number,
-        total_grade: points,
+        number: solution.number,
+        total_grade: solution.points,
         photo: null,
         created: Timestamp.now(),
         tags: [],
@@ -102,19 +101,19 @@ export class UploadService {
       question = await this.db.createQuestion(q);
     }
     const sol: Solution = {
-      grade: grade,
-      uploadInProgress: images.length > 0,
-      pendingScanId: images.length === 0 ? pendingScan.id : null,
+      grade: solution.grade,
+      uploadInProgress: solution.images.length > 0,
+      pendingScanId: solution.images.length === 0 ? pendingScan.id : null,
       created: Timestamp.now()
     };
 
     const createdSol = await this.db.addSolutionForQuestion(question, sol);
 
-    if (images.length > 0) {
+    if (solution.images.length > 0) {
       createdSol.photos = [];
-      for (let i = 0; i < images.length; ++i) {
-        const p = `${course}\/${moed.semester.year}\/${moed.semester.num}\/${moed.num}\/${number}\/${createdSol.id}\/${i}.jpg`;
-        await this.storage.ref(p).putString(images[i], 'data_url');
+      for (let i = 0; i < solution.images.length; ++i) {
+        const p = `${course}\/${moed.semester.year}\/${moed.semester.num}\/${moed.num}\/${solution.number}\/${createdSol.id}\/${i}.jpg`;
+        await this.storage.ref(p).putString(solution.images[i].base64, 'data_url');
 
         createdSol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
       }
@@ -126,7 +125,7 @@ export class UploadService {
     return createdSol;
   }
 
-  private async uploadPendingScan(course: number, moed: Moed, pages: Blob[]): Promise<PendingScanId> {
+  private async uploadPendingScan(course: number, moed: Moed, pages: ScanPage[]): Promise<PendingScanId> {
 
     const createdPendingScan = await this.db.createPendingScan({
       course: course,
@@ -140,7 +139,7 @@ export class UploadService {
 
     for (let i = 0; i < pages.length; ++i) {
       const p = `${course}\/${moed.semester.year}\/${moed.semester.num}\/${moed.num}\/pending\/${createdPendingScan.id}\/${i}.jpg`;
-      await this.storage.ref(p).put(pages[i]);
+      await this.storage.ref(p).putString(pages[i].imageBase64, 'data_url');
 
       createdPendingScan.pages.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
     }
@@ -192,20 +191,20 @@ export class UploadService {
 
   /* Batch Upload Method */
   public async uploadPDFFile(scan: File): Promise<PendingScanId> {
-    let images: Blob[];
+    let scanPages: ScanPage[];
     try {
-       images = await this.pdf.getImagesOfFile(scan);
+       scanPages = await this.pdf.getScanPagesOfPDF(scan);
     } catch (e) {
       throw new Error('Couldn\'t read PDF file');
     }
 
-    if (images.length === 0) {
+    if (scanPages.length === 0) {
       throw new Error('No Images Found');
     }
 
     let details = this.getScanDetailsByFileName(scan.name);
     if (!details) {
-      details = await this.getScanDetailsBySticker(images[0]);
+      details = await this.getScanDetailsBySticker(scanPages[0].blob);
       if (!details) {
         throw new Error('Couldn\'t get course details');
       }
@@ -224,13 +223,13 @@ export class UploadService {
       exam = await this.db.createExamForCourse(details.course, e);
     }
 
-    const pendingScan = await this.uploadPendingScan(details.course, details.moed, images);
+    const pendingScan = await this.uploadPendingScan(details.course, details.moed, scanPages);
 
     const questions = await this.db.getQuestionsOfExam(details.course, exam.id).pipe(first()).toPromise();
 
     for (let i = 0; i < questions.length; ++i) {
       const q = questions[i];
-      await this.uploadQuestion(q.course, q.moed, q.number, -1, q.total_grade, [], pendingScan);
+      await this.uploadQuestion(details.course, details.moed, new QuestionSolution(q.number, q.total_grade, true), pendingScan);
     }
 
     return pendingScan;

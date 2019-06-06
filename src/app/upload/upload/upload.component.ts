@@ -29,7 +29,7 @@ class LoadScanProgress {
   resultScanDetails: ScanDetails = null;
   resultCourse: Course = null;
   existingQuestions: QuestionId[] = null;
-  pages: string[] = null;
+  pages: ScanPage[] = null;
 }
 
 @Component({
@@ -112,15 +112,23 @@ export class UploadComponent implements OnInit {
 
     this.loadProgress = new LoadScanProgress();
     const filenameDetails: ScanDetails = this.uploadService.getScanDetailsByFileName(this.file.name);
-    const pdfImagesExtraction: Promise<Blob[]> = this.pdf.getImagesOfFile(this.file);
+    const pdfPagesExtraction: Promise<ScanPage[]> = this.pdf.getScanPagesOfPDF(this.file).then(pages => {
+      if (pages.length === 0) {
+        throw new Error('There are no pages in your scan');
+      } else {
+        return pages;
+      }
+    });
+
+    pdfPagesExtraction.then(res => this.loadProgress.pages = res);
 
     let detailsPromise: Promise<ScanDetails>;
     if (filenameDetails) {
       detailsPromise = Promise.resolve(filenameDetails);
     } else {
-      detailsPromise = pdfImagesExtraction.then(blobs => {
-        if (blobs.length > 0) {
-          return this.uploadService.getScanDetailsBySticker(blobs[0]);
+      detailsPromise = pdfPagesExtraction.then(pages => {
+        if (pages.length > 0) {
+          return this.uploadService.getScanDetailsBySticker(pages[0].blob);
         } else {
           return null;
         }
@@ -129,7 +137,7 @@ export class UploadComponent implements OnInit {
 
     detailsPromise = detailsPromise.then(details => {
       if (details) {
-        return Promise.resolve(details);
+        return details;
       }
 
       return this.modal.open(ScanDetailsPickerComponent).result.catch(reason => {
@@ -160,17 +168,14 @@ export class UploadComponent implements OnInit {
 
     existingQuestionsPromise.then(res => this.loadProgress.existingQuestions = res);
 
-    const base64Promise = pdfImagesExtraction.then(blobs => Promise.all(blobs.map(blob => getImageBase64FromBlob(blob))));
-    base64Promise.then(res => this.loadProgress.pages = res);
-
-    return Promise.all([detailsPromise, courseDetailsPromise, pdfImagesExtraction, existingQuestionsPromise, base64Promise])
-      .then(([details, course, blobs, existingQuestions, base64]) => {
+    return Promise.all([detailsPromise, courseDetailsPromise, pdfPagesExtraction, existingQuestionsPromise])
+      .then(([details, course, pages, existingQuestions]) => {
         if (existingQuestions) {
           existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade, true)));
         }
         this.moed = details.moed;
         this.course = course;
-        this.pages = blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
+        this.pages = pages;
         setTimeout(() => this.state = UploadState.Editing, 1000);
       }, reason => {
         this.snackBar.open(reason, 'close', {duration: 5000});
@@ -200,13 +205,4 @@ function getFile(fileEntry: FileSystemFileEntry): Promise<File> {
   return new Promise<File>((resolve => {
     fileEntry.file((file) => resolve(file));
   }));
-}
-
-function getImageBase64FromBlob(blob: Blob): Promise<string> {
-  return new Promise(async (resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(blob);
-  });
 }
