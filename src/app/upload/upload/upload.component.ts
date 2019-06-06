@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {Course} from '../../entities/course';
@@ -198,6 +198,13 @@ export class UploadComponent implements OnInit {
     //     this.state = UploadState.UploadSuccess;
     //     this.snackBar.open('Scan for ' + this.resultCourse.name + ' uploaded successfully.', 'close', {duration: 3000});
     //   });
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.state === UploadState.Uploading || this.state === UploadState.Editing) {
+      $event.returnValue = true;
+    }
   }
 }
 
