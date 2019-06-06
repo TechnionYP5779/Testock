@@ -66,6 +66,33 @@
 </div>
 <div class="row" *ngIf="state === uploadState.Editing">
   <div class="col-md-12">
-    <app-scan-editor [pages]="pages" [moed]="moed" [course]="course" [questions]="questions"></app-scan-editor>
+    <app-scan-editor [pages]="pages" [moed]="scanDetails.moed" [course]="course" [questions]="questions" (upload)="uploadScan($event)"></app-scan-editor>
   </div>
+</div>
+<div class="row mt-4" *ngIf="state === uploadState.Uploading">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 text-center">
+    <fa name="spinner" animation="spin" size="5x"></fa>
+    <h2 class="mt-4">Uploading Solutions...</h2>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row mt-4" *ngIf="state === uploadState.UploadSuccess">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 text-center">
+    <div class="text-success">
+      <fa name="check" size="5x"></fa>
+    </div>
+    <h2 class="mt-4">Solutions Uploaded Successfully</h2>
+    <h4 class="mt-2">Thanks for your contribution!</h4>
+    <div class="mt-4">
+      <button class="btn btn-primary mr-2" (click)="reset()">
+        Upload another scan
+      </button>
+      <button class="btn btn-success" [routerLink]="'/course/' + course.id + '/exam/' + scanDetails.moed.semester.year + '-' + scanDetails.moed.semester.num + '-' + scanDetails.moed.num">
+        Go to exam page
+      </button>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
 </div>

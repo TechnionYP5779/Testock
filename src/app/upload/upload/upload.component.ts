@@ -15,6 +15,7 @@ import {FileSystemDirectoryEntry, FileSystemFileEntry, NgxFileDropEntry} from 'n
 import {ScanPage} from '../scan-editor/scan-page';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ScanDetailsPickerComponent} from '../scan-details-picker/scan-details-picker.component';
+import {ScanEditResult} from '../scan-editor/scan-editor.component';
 
 enum UploadState {
   Ready,
@@ -45,7 +46,7 @@ export class UploadComponent implements OnInit {
   uploadState = UploadState;
   state = UploadState.Ready;
 
-  moed: Moed;
+  scanDetails: ScanDetails;
   course: Course;
   pages: ScanPage[];
 
@@ -173,7 +174,7 @@ export class UploadComponent implements OnInit {
         if (existingQuestions) {
           existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade, true)));
         }
-        this.moed = details.moed;
+        this.scanDetails = details;
         this.course = course;
         this.pages = pages;
         setTimeout(() => this.state = UploadState.Editing, 1000);
@@ -184,20 +185,13 @@ export class UploadComponent implements OnInit {
       });
   }
 
-  uploadImages() {
+  uploadScan(editResult: ScanEditResult) {
     this.state = UploadState.Uploading;
 
-    // const moed = this.moed;
-    // const nums = this.questions.map(q => q.index);
-    // const grades = this.questions.map(q => q.grade);
-    // const points = this.questions.map(q => q.points);
-    // const images = this.questions.map(q => q.images);
-    //
-    // this.uploadService.uploadScan(this.isQuickMode, this.blobs, this.resultCourse.id, moed, nums, grades, points, images)
-    //   .then(() => {
-    //     this.state = UploadState.UploadSuccess;
-    //     this.snackBar.open('Scan for ' + this.resultCourse.name + ' uploaded successfully.', 'close', {duration: 3000});
-    //   });
+    this.uploadService.uploadScan(false, editResult.solutions, editResult.pages, this.scanDetails)
+      .then(() => {
+        this.state = UploadState.UploadSuccess;
+      });
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -205,6 +199,13 @@ export class UploadComponent implements OnInit {
     if (this.state === UploadState.Uploading || this.state === UploadState.Editing) {
       $event.returnValue = true;
     }
+  }
+
+  reset() {
+    this.state = UploadState.Ready;
+    this.scanDetails = null;
+    this.course = null;
+    this.questions = [];
   }
 }
 
