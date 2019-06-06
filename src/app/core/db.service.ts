@@ -420,6 +420,10 @@ export class DbService {
       extractedQuestions: FieldValue.arrayUnion(extracted)
     });
   }
+
+  getCourses(): Observable<Course[]> {
+    return this.afs.collection<Course>('courses').valueChanges();
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {

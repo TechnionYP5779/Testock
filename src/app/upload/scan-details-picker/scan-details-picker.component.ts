@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {ScanDetails} from '../../entities/scan-details';
 import {Semester} from '../../entities/semester';
+import {DbService} from '../../core/db.service';
+import {Observable} from 'rxjs';
+import {Course} from '../../entities/course';
 
 @Component({
   selector: 'app-scan-details-picker',
@@ -12,8 +15,10 @@ export class ScanDetailsPickerComponent implements OnInit {
 
   details: ScanDetails = new ScanDetails(null, {semester: {num: null, year: null}, num: null});
   semesters: Semester[];
+  courses$: Observable<Course[]>;
 
-  constructor(public modal: NgbActiveModal) {
+  constructor(public modal: NgbActiveModal, private db: DbService) {
+    this.courses$ = this.db.getCourses();
     this.semesters = [];
     this.loadSemesters();
   }
