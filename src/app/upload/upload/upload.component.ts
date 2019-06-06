@@ -191,7 +191,11 @@ export class UploadComponent implements OnInit {
     this.uploadService.uploadScan(false, editResult.solutions, editResult.pages, this.scanDetails)
       .subscribe(progress => {
         this.uploadProgress = progress;
-      }, console.error, () => {
+      }, error => {
+        this.snackBar.open(error, 'close', {duration: 5000});
+        this.error = error.message;
+        this.state = UploadState.Ready;
+      }, () => {
       this.state = UploadState.UploadSuccess;
     });
   }
