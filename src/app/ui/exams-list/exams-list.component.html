@@ -1,3 +1,7 @@
+<h5 class="table-header-title">
+  {{ title }}
+  <span class="badge badge-primary">{{dataSource.data.length}}</span>
+</h5>
 <div class="mat-elevation-z8">
   <table mat-table
          matSort (matSortChange)="sortExams($event)"

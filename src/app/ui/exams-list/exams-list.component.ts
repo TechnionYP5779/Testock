@@ -48,6 +48,7 @@ export class ExamsListComponent implements OnInit {
     }
     this.updateExams();
   }
+  @Input() title = 'Exams';
 
   private _examRows: ExamRow[];
   public dataSource = new MatTableDataSource<ExamRow>(this._examRows);
