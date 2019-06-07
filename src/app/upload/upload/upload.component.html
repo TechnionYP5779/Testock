@@ -127,7 +127,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modal.close(false)" ngbAutofocus>No</button>
-    <button type="button" class="btn btn-success" (click)="modal.close(true)" ngbAutofocus>Yes</button>
+    <button type="button" class="btn btn-success" (click)="modal.close(true)">Yes</button>
   </div>
 </ng-template>
 
@@ -140,8 +140,8 @@
     <div class="alert alert-warning"><fa name="exclamation-triangle" class="mr-2"></fa>All pages you did not hide will be uploaded, including the first page with your details. so if</div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.close(pendingScanConfirmResult.BACK_TO_EDIT)" ngbAutofocus>Back to edit</button>
-    <button type="button" class="btn btn-secondary" (click)="modal.close(pendingScanConfirmResult.DONT_UPLOAD_PENDING)" ngbAutofocus>Do not upload as Pending Scan</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close(pendingScanConfirmResult.BACK_TO_EDIT)">Back to edit</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.close(pendingScanConfirmResult.DONT_UPLOAD_PENDING)">Do not upload as Pending Scan</button>
     <button type="button" class="btn btn-success" (click)="modal.close(pendingScanConfirmResult.UPLOAD_PENDING)" ngbAutofocus>Upload as Pending Scan</button>
   </div>
 </ng-template>
