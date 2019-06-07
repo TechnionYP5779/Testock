@@ -31,6 +31,13 @@ export class Progress {
   }
 }
 
+export interface UploadPendingScanProgress {
+  image_bytes: Progress;
+  total_bytes: Progress;
+  pages: Progress;
+  current_page: ScanPage;
+}
+
 export interface UploadQuestionProgress {
   image_bytes: Progress;
   question_bytes: Progress;
@@ -40,8 +47,9 @@ export interface UploadQuestionProgress {
 
 export interface UploadScanProgress {
   currentQuestionProgress?: UploadQuestionProgress;
-  bytes: Progress;
-  questions: Progress;
+  pendingScanProgress?: UploadPendingScanProgress;
+  bytes?: Progress;
+  questions?: Progress;
 }
 
 @Injectable({
@@ -74,7 +82,9 @@ export class UploadService {
 
           let pendingScan: PendingScanId = null;
           if (quickMode) {
-            pendingScan = await this.uploadPendingScan(details.course, details.moed, pages);
+            pendingScan = await this.uploadPendingScan(pendingProgress => subscriber.next({
+              pendingScanProgress: pendingProgress
+            }), details.course, details.moed, pages);
           }
 
           let transferredBytes = 0;
@@ -184,7 +194,16 @@ export class UploadService {
     return createdSol;
   }
 
-  private async uploadPendingScan(course: number, moed: Moed, pages: ScanPage[]): Promise<PendingScanId> {
+  private async uploadPendingScan(updateProgress: (UploadPendingScanProgress) => void,
+                                  course: number, moed: Moed, pages: ScanPage[]): Promise<PendingScanId> {
+
+    const totalBytes = pages.reduce((sum, page) => sum + page.blob.size, 0);
+    updateProgress({
+      image_bytes: null,
+      total_bytes: new Progress(0, totalBytes),
+      pages: new Progress(0, pages.length),
+      current_page: null
+    });
 
     const createdPendingScan = await this.db.createPendingScan({
       course: course,
@@ -196,10 +215,21 @@ export class UploadService {
       uploadInProgress: true
     });
 
+    let transferredBytes = 0;
+
     for (let i = 0; i < pages.length; ++i) {
       const p = `${course}\/${moed.semester.year}\/${moed.semester.num}\/${moed.num}\/pending\/${createdPendingScan.id}\/${i}.jpg`;
-      await this.storage.ref(p).putString(pages[i].imageBase64, 'data_url');
+      const uploadTask = this.storage.ref(p).putString(pages[i].imageBase64, 'data_url');
+      uploadTask.snapshotChanges().subscribe(snap => updateProgress({
+        image_bytes: new Progress(snap.bytesTransferred, snap.totalBytes),
+        total_bytes: new Progress(transferredBytes + snap.bytesTransferred, totalBytes),
+        pages: new Progress(i + 1, pages.length),
+        current_page: pages[i]
+      }));
 
+      await uploadTask;
+
+      transferredBytes += pages[i].blob.size;
       createdPendingScan.pages.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
     }
 
@@ -282,7 +312,7 @@ export class UploadService {
       exam = await this.db.createExamForCourse(details.course, e);
     }
 
-    const pendingScan = await this.uploadPendingScan(details.course, details.moed, scanPages);
+    const pendingScan = await this.uploadPendingScan(console.log, details.course, details.moed, scanPages);
 
     const questions = await this.db.getQuestionsOfExam(details.course, exam.id).pipe(first()).toPromise();
 
