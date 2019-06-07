@@ -9,12 +9,13 @@ import {PdfService} from './pdf.service';
 import {UploadService} from './upload.service';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {ImageCropperModule} from 'ngx-image-cropper';
-import {MatSlideToggleModule, MatSnackBarModule} from '@angular/material';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {GamificationModule} from '../gamification/gamification.module';
 import {FormsModule} from '@angular/forms';
 import { BatchUploadComponent } from './batch-upload/batch-upload.component';
-import {FileDropModule} from 'ngx-file-drop';
+import {NgxFileDropModule} from 'ngx-file-drop';
 import {RouterModule} from '@angular/router';
 import { ScanEditorComponent } from './scan-editor/scan-editor.component';
 import { QuestionSolutionComponent } from './scan-editor/question-solution/question-solution.component';
@@ -47,11 +48,11 @@ import { ScanEditorPreviewComponent } from './scan-editor/scan-editor-preview/sc
     GamificationModule,
     MatSlideToggleModule,
     FormsModule,
-    FileDropModule,
     RouterModule,
     NgbCollapseModule,
     NgbTooltipModule,
-    NgbButtonsModule
+    NgbButtonsModule,
+    NgxFileDropModule
   ],
   providers: [
     UploadService,

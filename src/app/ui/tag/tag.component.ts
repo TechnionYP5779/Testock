@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Sort} from '@angular/material';
+import { Sort } from '@angular/material/sort';
 import {QuestionId} from '../../entities/question';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {ActivatedRoute} from '@angular/router';

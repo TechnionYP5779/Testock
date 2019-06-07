@@ -10,7 +10,7 @@ import {CourseWithFaculty} from '../../entities/course';
 import {ScanPage} from '../scan-editor/scan-page';
 import {ScanEditResult} from '../scan-editor/scan-editor.component';
 import {QuestionSolution} from '../scan-editor/question-solution';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {AppRoutingModule} from '../../app-routing.module';
 
 @Component({

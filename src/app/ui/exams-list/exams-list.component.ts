@@ -54,7 +54,7 @@ export class ExamsListComponent implements OnInit {
   public dataSource = new MatTableDataSource<ExamRow>(this._examRows);
   public columnsToDisplay = ['year', 'semester', 'moed'];
   public expandedExam: ExamRow | null;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(private yearPipe: YearPipe, private semesterPipe: SemesterPipe, private moedPipe: MoedPipe, private db: DbService) {
   }

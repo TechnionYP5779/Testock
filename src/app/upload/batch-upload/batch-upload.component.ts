@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile} from 'ngx-file-drop';
+import {FileSystemDirectoryEntry, FileSystemFileEntry, NgxFileDropEntry,} from 'ngx-file-drop';
 import {UploadService} from '../upload.service';
 import {PendingScanId} from '../../entities/pending-scan';
 
@@ -19,9 +19,9 @@ export class BatchUploadComponent implements OnInit {
   ngOnInit() {
   }
 
-  public dropped(event: UploadEvent) {
+  public dropped($event: NgxFileDropEntry[]) {
     let fileEntries: FileSystemFileEntry[] = [];
-    for (const droppedFile of event.files) {
+    for (const droppedFile of $event) {
       // Is it a file?
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;

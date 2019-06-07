@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserData} from '../../entities/user';
 import {DbService} from '../../core/db.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {Faculty, FacultyId} from '../../entities/faculty';
 import {Course} from '../../entities/course';
 import {NgxSpinnerService} from 'ngx-spinner';
