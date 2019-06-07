@@ -227,16 +227,15 @@ export class UploadComponent implements OnInit {
 
     const pages = editResult.pages.filter(page => !page.hidden);
 
-    this.uploadService.uploadScan(quickMode, editResult.solutions, pages, this.scanDetails)
-      .subscribe(progress => {
-        this.uploadProgress = progress;
-      }, error => {
+    this.uploadService.uploadScan(progress => this.uploadProgress = progress,
+      quickMode, editResult.solutions, pages, this.scanDetails)
+      .then(() => {
+        this.state = UploadState.UploadSuccess;
+      }).catch(error => {
         this.snackBar.open(error, 'close', {duration: 5000});
         this.error = error.message;
         this.state = UploadState.Ready;
-      }, () => {
-      this.state = UploadState.UploadSuccess;
-    });
+      });
   }
 
   @HostListener('window:beforeunload', ['$event'])

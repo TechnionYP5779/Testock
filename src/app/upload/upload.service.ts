@@ -61,50 +61,45 @@ export class UploadService {
               private gamification: GamificationService, private ocr: OCRService, private pdf: PdfService) {
   }
 
-  uploadScan(quickMode: boolean, solutions: QuestionSolution[], pages: ScanPage[], details: ScanDetails): Observable<UploadScanProgress> {
+  async uploadScan(progressUpdate: (UploadScanProgress) => void,
+             quickMode: boolean, solutions: QuestionSolution[], pages: ScanPage[], details: ScanDetails): Promise<void> {
 
     const totalBytes = solutions.reduce((s, v) => s + v.getTotalBytes(), 0);
 
-    return new Observable<UploadScanProgress>(subscriber => {
-
-      subscriber.next({
+    progressUpdate({
         questions: new Progress(0, solutions.length),
         bytes: new Progress(0, totalBytes)
       });
-      this.db.getExamByDetails(details.course, details.moed).pipe(first()).toPromise()
-        .then(async exam => {
 
-          if (!exam) {
-            const e = {} as Exam;
-            e.moed = details.moed;
-            exam = await this.db.createExamForCourse(details.course, e);
-          }
+    let exam = await this.db.getExamByDetails(details.course, details.moed).pipe(first()).toPromise();
 
-          let pendingScan: PendingScanId = null;
-          if (quickMode) {
-            pendingScan = await this.uploadPendingScan(pendingProgress => subscriber.next({
-              pendingScanProgress: pendingProgress
-            }), details.course, details.moed, pages);
-          }
+    if (!exam) {
+      const e = {} as Exam;
+      e.moed = details.moed;
+      exam = await this.db.createExamForCourse(details.course, e);
+    }
 
-          let transferredBytes = 0;
-          for (let i = 0; i < solutions.length; ++i) {
-            if (solutions[i].images.length > 0 || quickMode) {
-              await this.uploadQuestion(questionProgress => {
-                subscriber.next({
-                  bytes: new Progress(transferredBytes + questionProgress.question_bytes.current, totalBytes),
-                  questions: new Progress(i + 1, solutions.length),
-                  currentQuestionProgress: questionProgress
-                });
-              }, details.course, details.moed, solutions[i], pendingScan, pendingScan ? pendingScan.id : null);
-              transferredBytes += solutions[i].getTotalBytes();
-            }
-          }
-          await this.gamification.reward(Rewards.SCAN_UPLOAD);
+    let pendingScan: PendingScanId = null;
+    if (quickMode) {
+      pendingScan = await this.uploadPendingScan(pendingProgress => progressUpdate({
+        pendingScanProgress: pendingProgress
+      }), details.course, details.moed, pages);
+    }
 
-          subscriber.complete();
-        });
-    });
+    let transferredBytes = 0;
+    for (let i = 0; i < solutions.length; ++i) {
+      if (solutions[i].images.length > 0 || quickMode) {
+        await this.uploadQuestion(questionProgress => {
+          progressUpdate({
+            bytes: new Progress(transferredBytes + questionProgress.question_bytes.current, totalBytes),
+            questions: new Progress(i + 1, solutions.length),
+            currentQuestionProgress: questionProgress
+          });
+        }, details.course, details.moed, solutions[i], pendingScan, pendingScan ? pendingScan.id : null);
+        transferredBytes += solutions[i].getTotalBytes();
+      }
+    }
+    await this.gamification.reward(Rewards.SCAN_UPLOAD);
   }
 
   async uploadFromPendingScan(solutions: QuestionSolution[], pendingScan: PendingScanId): Promise<void> {
