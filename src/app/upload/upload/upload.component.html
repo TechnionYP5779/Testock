@@ -73,7 +73,7 @@
     <fa name="spinner" animation="spin" size="5x"></fa>
     <h2 class="mt-4">Uploading Solutions</h2>
     <div class="mt-4" *ngIf="uploadProgress?.currentQuestionProgress">
-      <div>Uploading Question {{uploadProgress.currentQuestionProgress.question.number}}...</div>
+      <div>Uploading question {{uploadProgress.currentQuestionProgress.question.number}}...</div>
       <div class="mt-2">
         <ngb-progressbar animated="true" striped="true" [max]="100" showValue="true" [value]="uploadProgress.bytes.getPercentage()"></ngb-progressbar>
       </div>
