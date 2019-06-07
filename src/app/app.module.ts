@@ -39,6 +39,7 @@ import { TagComponent } from './ui/tag/tag.component';
 import {CKEditorModule} from 'ngx-ckeditor';
 import {PendingScanModalComponent} from './pending-scans/pending-scan-modal/pending-scan-modal.component';
 import {ScanEditorPreviewComponent} from './upload/scan-editor/scan-editor-preview/scan-editor-preview.component';
+import {ExamsListComponent} from './ui/exams-list/exams-list.component';
 
 
 
