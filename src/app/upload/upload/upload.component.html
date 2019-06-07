@@ -64,7 +64,13 @@
 </div>
 <div class="row" *ngIf="state === uploadState.Editing">
   <div class="col-md-12">
-    <app-scan-editor [pages]="pages" [moed]="scanDetails.moed" [course]="course" [questions]="questions" (upload)="uploadScan($event)" [allowQuickMode]="true"></app-scan-editor>
+    <app-scan-editor
+      [pages]="pages"
+      [moed]="scanDetails.moed"
+      [course]="course"
+      [questions]="questions"
+      (upload)="uploadScan($event, confirmReadyForUpload, confirmQuickMode)"
+    ></app-scan-editor>
   </div>
 </div>
 <div class="row mt-4" *ngIf="state === uploadState.Uploading">
@@ -111,3 +117,31 @@
   </div>
   <div class="col-md-3"></div>
 </div>
+
+<ng-template #confirmReadyForUpload let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Did you select all the questions in your scan?</h5>
+  </div>
+  <div class="modal-body">
+    <p>It is just fine if you skipped some, your contribution is already very helpful 😃</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.close(false)" ngbAutofocus>No</button>
+    <button type="button" class="btn btn-success" (click)="modal.close(true)" ngbAutofocus>Yes</button>
+  </div>
+</ng-template>
+
+<ng-template #confirmQuickMode let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Upload as pending scan?</h5>
+  </div>
+  <div class="modal-body">
+    <p>We can upload your scan as a pending scan and let others crop the solutions you skipped.</p>
+    <div class="alert alert-warning"><fa name="exclamation-triangle" class="mr-2"></fa>All pages you did not hide will be uploaded, including the first page with your details. so if</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close(pendingScanConfirmResult.BACK_TO_EDIT)" ngbAutofocus>Back to edit</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.close(pendingScanConfirmResult.DONT_UPLOAD_PENDING)" ngbAutofocus>Do not upload as Pending Scan</button>
+    <button type="button" class="btn btn-success" (click)="modal.close(pendingScanConfirmResult.UPLOAD_PENDING)" ngbAutofocus>Upload as Pending Scan</button>
+  </div>
+</ng-template>

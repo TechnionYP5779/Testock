@@ -1,11 +1,10 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {Course} from '../../entities/course';
 import {UploadScanProgress, UploadService} from '../upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
-import {OCRService} from '../../core/ocr.service';
 import {take} from 'rxjs/operators';
 import {QuestionId} from '../../entities/question';
 import {ScanDetails} from '../../entities/scan-details';
@@ -32,12 +31,20 @@ class LoadScanProgress {
   pages: ScanPage[] = null;
 }
 
+export enum PendingScanConfirmResult {
+  BACK_TO_EDIT,
+  DONT_UPLOAD_PENDING,
+  UPLOAD_PENDING
+}
+
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss']
 })
 export class UploadComponent implements OnInit {
+
+  pendingScanConfirmResult = PendingScanConfirmResult;
 
   questions: QuestionSolution[] = [];
   private file: File;
@@ -185,10 +192,40 @@ export class UploadComponent implements OnInit {
       });
   }
 
-  uploadScan(editResult: ScanEditResult) {
+  async uploadScan(editResult: ScanEditResult, confirmUpload: TemplateRef<any>, confirmQuickMode: TemplateRef<any>) {
+
+    const hasEmptySolutions = editResult.solutions.find(q => q.images.length === 0);
+
+    let quickMode = true;
+    let selectedAllSolutions = false;
+
+    // If there are empty solutions, we don't need to ask this
+    if (!hasEmptySolutions) {
+      selectedAllSolutions = await this.modal.open(confirmUpload, {backdrop: 'static', keyboard: false}).result;
+
+      if (selectedAllSolutions) {
+        // User says he selected all the questions, so quick mode is not needed
+        quickMode = false;
+      }
+    }
+
+    // Ask the user if he wishes to upload his scan as a pending scan
+    if (hasEmptySolutions || !selectedAllSolutions) {
+      const pendingScanResult = await this.modal.open(confirmQuickMode, {backdrop: 'static', keyboard: false, size: 'lg'}).result;
+      switch (pendingScanResult) {
+        case PendingScanConfirmResult.BACK_TO_EDIT:
+          // Asked to go back to edit
+          return;
+        case PendingScanConfirmResult.UPLOAD_PENDING:
+          // User accepted
+          quickMode = true;
+      }
+    }
+
+
     this.state = UploadState.Uploading;
 
-    this.uploadService.uploadScan(editResult.quickMode, editResult.solutions, editResult.pages, this.scanDetails)
+    this.uploadService.uploadScan(quickMode, editResult.solutions, editResult.pages, this.scanDetails)
       .subscribe(progress => {
         this.uploadProgress = progress;
       }, error => {
