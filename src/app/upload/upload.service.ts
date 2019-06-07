@@ -124,12 +124,6 @@ export class UploadService {
         await this.updateSolutionFromPendingScan(question, sol, q.images.map(solImg => solImg.base64));
       } else {
         const sol = await this.uploadQuestion(console.log, pendingScan.course, pendingScan.moed, q, null, pendingScan.id);
-        const extracted: LinkedQuestion = {
-          num: q.number,
-          sid: sol.id,
-          qid: `${pendingScan.moed.semester.year}-${pendingScan.moed.semester.num}-${pendingScan.moed.num}-${q.number}`
-        };
-        await this.db.pendingScanAddExtracted(pendingScan.id, extracted);
       }
     }
 
@@ -185,6 +179,16 @@ export class UploadService {
         await uploadTask;
         bytesTransferred += solution.images[i].size;
         createdSol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
+      }
+
+      if (preventPendingLink) {
+        const extracted: LinkedQuestion = {
+          num: question.number,
+          sid: createdSol.id,
+          qid: question.id
+        };
+
+        await this.db.pendingScanAddExtracted(preventPendingLink, extracted);
       }
 
       createdSol.uploadInProgress = false;
