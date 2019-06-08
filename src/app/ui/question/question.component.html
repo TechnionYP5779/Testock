@@ -49,11 +49,11 @@
     <br/>
     <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()"
             type="button">
-      <fa name="check"></fa>
+      <fa-icon icon="check"></fa-icon>
     </button>
     <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();"
             type="button">
-      <fa name="check"></fa>
+      <fa-icon icon="check"></fa-icon>
     </button>
   </div>
 
@@ -67,11 +67,11 @@
 
   <div class="list-group my-3" *ngIf="topics$ | async as topics">
     <div class="list-group-item list-group-item-info">
-      <fa name="comment" class="mr-2"></fa>
+      <fa-icon icon="comment" class="mr-2"></fa-icon>
       Forum
       <span class="badge badge-info">{{topics.length}}</span>
       <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
-        <fa name="plus" class="mr-1"></fa>
+        <fa-icon icon="plus" class="mr-1"></fa-icon>
         Add Topic
       </button>
     </div>

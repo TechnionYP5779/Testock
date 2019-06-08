@@ -21,7 +21,7 @@
     <img class="pending-scan-page" [src]="img" alt="pending scan page" />
   </div>
   <h1 class="text-center mt-2" *ngIf="pendingScan.uploadInProgress">
-    <fa name="spinner" animation="spin" size="lg">></fa>
+    <fa-icon icon="spinner" [spin]="true" size="lg">></fa-icon>
   </h1>
   <div class="text-center mt-2">This scan is currently being uploaded</div>
 </div>

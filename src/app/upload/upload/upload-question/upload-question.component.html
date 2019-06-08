@@ -6,7 +6,7 @@
         <span class="badge badge-success ml-1" *ngIf="pointsReadOnly">Auto Fetch</span>
       </button>
       <button class="btn add-images-button float-right" aria-expanded="true" [attr.aria-controls]="'question' + index" (click)="requestImageAdd()" *ngIf="!quickMode">
-        <fa name="plus"></fa>
+        <fa-icon icon="plus"></fa-icon>
       </button>
       <div class="grades-container float-right">
         <input class="lhs" type="number" [value]="grade" (input)="updateGrade($event.target.value)" min="0" [max]="points"> / <input class="rhs" type="number" [value]="points" [readOnly]="pointsReadOnly" (input)="updatePoints($event.target.value)">
@@ -24,7 +24,7 @@
           <img [src]="image" alt="scan page crop">
           <div class="image-popup">
             <button class="btn image-remove-button" (click)="removeImage(i)">
-              <fa name="trash"></fa>
+              <fa-icon icon="trash"></fa-icon>
             </button>
           </div>
         </div>

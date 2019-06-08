@@ -3,22 +3,22 @@
 <div class="jumbotron jumbotron" *ngIf="course">
   <div class="favorite-toggle" (click)="updateFavoriteCourse()">
     <button>
-      <fa name="star" *ngIf="(favorite$ | async)"></fa>
-      <fa name="star-o" *ngIf="(favorite$ | async) == false"></fa>
+      <fa-icon icon="star" *ngIf="(favorite$ | async)"></fa-icon>
+      <fa-icon icon="star-o" *ngIf="(favorite$ | async) == false"></fa-icon>
     </button>
   </div>
   <h1 class="display-4">
     {{ course.name }} ({{ course.id }})
     <button data-toggle="modal" class="edit-button mr-2" data-target="#editCourseModal" *ngIf="adminAccess">
-      <fa name="edit"></fa>
+      <fa-icon icon="edit"></fa-icon>
     </button>
     <a class="btn btn-primary mr-2" placement="top" ngbTooltip="Facebook Group" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
        target="_blank">
-      <fa name="facebook"></fa>
+      <fa-icon icon="facebook"></fa-icon>
     </a>
     <a *ngIf="course.id.toString().startsWith('23')" placement="top" ngbTooltip="Course Website" class="btn btn-info mr-2"
        [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">
-      <fa name="globe"></fa>
+      <fa-icon icon="globe"></fa-icon>
     </a>
   </h1>
   <div class="lead" [innerHTML]="course.description"></div>
@@ -26,11 +26,11 @@
     <button class="tag btn btn-warning mr-2" *ngFor="let tag of tags" routerLink="tag/{{ tag }}">
       # {{ tag }}
       <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="adminAccess">
-        <fa name="times"></fa>
+        <fa-icon icon="times"></fa-icon>
       </button>
     </button>
     <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Add new tag" data-toggle="modal" data-target="#addTagModal" *ngIf="adminAccess">
-      <fa name="plus"></fa>
+      <fa-icon icon="plus"></fa-icon>
     </button>
   </div>
 </div>
@@ -45,7 +45,7 @@
         <b>Forum </b>
         <span class="badge badge-info">{{topics.length}}</span>
         <button role="button" class="btn btn-info float-right" placement="top" ngbTooltip="Add Topic" data-toggle="modal" data-target="#createTopicModal">
-          <fa name="plus"></fa>
+          <fa-icon icon="plus"></fa-icon>
         </button>
       </div>
       <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">

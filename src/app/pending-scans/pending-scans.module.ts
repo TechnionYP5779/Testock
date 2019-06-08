@@ -4,7 +4,7 @@ import { PendingScanComponent } from './pending-scan/pending-scan.component';
 import {CoreModule} from '../core/core.module';
 import { PendingSolutionModalComponent } from './pending-solution-modal/pending-solution-modal.component';
 import {ImageCropperModule} from 'ngx-image-cropper';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {UploadModule} from '../upload/upload.module';
 import {FormsModule} from '@angular/forms';
 import {NgxSpinnerModule} from 'ngx-spinner';
@@ -20,7 +20,7 @@ import { PendingScanModalComponent } from './pending-scan-modal/pending-scan-mod
     CommonModule,
     CoreModule,
     ImageCropperModule,
-    AngularFontAwesomeModule,
+    FontAwesomeModule,
     UploadModule,
     FormsModule,
     NgxSpinnerModule,

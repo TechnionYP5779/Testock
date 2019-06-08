@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { GameWorldComponent } from './game-world/game-world.component';
 import { GamePlanetComponent } from './game-planet/game-planet.component';
 import {Planet} from './entities/planet';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {UsersModule} from '../users/users.module';
 import {GamificationService} from './gamification.service';
 import {AngularFireFunctions, AngularFireFunctionsModule} from '@angular/fire/functions';
@@ -80,7 +80,7 @@ const planets: Planet[] = [
   imports: [
     CommonModule,
     UsersModule,
-    AngularFontAwesomeModule,
+    FontAwesomeModule,
     AngularFireFunctionsModule,
     AppRoutingModule
   ]

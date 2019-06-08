@@ -7,7 +7,7 @@ import {CoreModule} from '../core/core.module';
 import {UsersModule} from '../users/users.module';
 import {PdfService} from './pdf.service';
 import {UploadService} from './upload.service';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {ImageCropperModule} from 'ngx-image-cropper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -41,7 +41,7 @@ import { ScanEditorPreviewComponent } from './scan-editor/scan-editor-preview/sc
     CommonModule,
     CoreModule,
     UsersModule,
-    AngularFontAwesomeModule,
+    FontAwesomeModule,
     ImageCropperModule,
     MatSnackBarModule,
     NgxSpinnerModule,
