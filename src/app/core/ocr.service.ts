@@ -20,8 +20,8 @@ export class OCRService {
       .toPromise();
   }
 
-  public async isImageBlank(image: Blob): Promise<any> {
-    return this.http.post<string>(this.baseUrl + 'isImageBlank',
-      image).toPromise();
+  public async isImageBlank(image: Blob): Promise<boolean> {
+    return this.http.post<{isBlank: boolean}>(this.baseUrl + 'isImageBlank',
+      image).toPromise().then(res => res.isBlank);
   }
 }

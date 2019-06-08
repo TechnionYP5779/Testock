@@ -2,11 +2,11 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
 
 @Component({
-  selector: 'app-scan-page',
-  templateUrl: './scan-page.component.html',
-  styleUrls: ['./scan-page.component.scss']
+  selector: 'app-scan-page-old',
+  templateUrl: './scan-page-old.component.html',
+  styleUrls: ['./scan-page-old.component.scss']
 })
-export class ScanPageComponent implements OnInit {
+export class ScanPageOldComponent implements OnInit {
   @Input() index: number;
   @Input() blob: Blob;
   @Input() croppable = false;

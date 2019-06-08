@@ -7,7 +7,7 @@ import {PendingScanId} from '../../entities/pending-scan';
 import {take} from 'rxjs/operators';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
 import {UploadService} from '../../upload/upload.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({

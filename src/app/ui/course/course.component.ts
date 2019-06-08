@@ -7,9 +7,9 @@ import {ExamId} from '../../entities/exam';
 import {AuthService} from '../../users/auth.service';
 import {Observable} from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {Sort} from '@angular/material';
+import { Sort } from '@angular/material/sort';
 import {map, take} from 'rxjs/operators';
 
 @Component({

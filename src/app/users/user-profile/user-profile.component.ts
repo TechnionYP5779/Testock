@@ -5,7 +5,7 @@ import {UserData} from '../../entities/user';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {Question} from '../../entities/question';
-import {Sort} from '@angular/material';
+import { Sort } from '@angular/material/sort';
 import {Course} from '../../entities/course';
 import {flatMap, map} from 'rxjs/operators';
 import {FacultyId} from '../../entities/faculty';
