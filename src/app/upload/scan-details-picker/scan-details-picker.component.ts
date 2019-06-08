@@ -27,10 +27,10 @@ export class ScanDetailsPickerComponent implements OnInit {
     const currentMonth = new Date().getMonth() + 1;
 
     let startYear = new Date().getFullYear();
-    if (currentMonth < 7) {
+    if (currentMonth < 3) {
       this.semesters.push({year: startYear - 1, num: 1});
       startYear -= 2;
-    } else if (currentMonth < 9) {
+    } else if (currentMonth < 8) {
       this.semesters.push({year: startYear - 1, num: 2});
       this.semesters.push({year: startYear - 1, num: 1});
       startYear -= 2;
