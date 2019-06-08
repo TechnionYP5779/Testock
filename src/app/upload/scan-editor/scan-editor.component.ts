@@ -155,7 +155,7 @@ export class ScanEditorComponent implements OnInit {
   preview() {
     const ref = this.modal.open(ScanEditorPreviewComponent, {size: 'lg'});
     ref.componentInstance.solutions = this.questions;
-    ref.componentInstance.collapsed = this.questions.map(q => false);
+    ref.componentInstance.collapsed = this.questions.map(() => true);
   }
 }
 
