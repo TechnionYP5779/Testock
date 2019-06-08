@@ -14,7 +14,7 @@
     </button>
     <a class="btn btn-primary mr-2" placement="top" ngbTooltip="Facebook Group" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
        target="_blank">
-      <fa-icon icon="facebook"></fa-icon>
+      <fa-icon [icon]="['fab', 'facebook-square']"></fa-icon>
     </a>
     <a *ngIf="course.id.toString().startsWith('23')" placement="top" ngbTooltip="Course Website" class="btn btn-info mr-2"
        [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">

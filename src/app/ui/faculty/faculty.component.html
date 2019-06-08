@@ -11,7 +11,7 @@
           {{ course.id }}: {{ course.name }}
         </a>
       </h6>
-      <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa-icon icon="facebook" class="mr-2"></fa-icon>Facebook Group</a>
+      <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa-icon [icon]="['fab', 'facebook-square']" class="mr-2"></fa-icon>Facebook Group</a>
       <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa-icon icon="globe" class="mr-2"></fa-icon>Course Website</a>
     </li>
   </ul>

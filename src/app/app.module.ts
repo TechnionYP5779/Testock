@@ -11,6 +11,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
+import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 import {PdfService} from './upload/pdf.service';
 import {CoursesComponent} from './ui/courses/courses.component';
 import {CourseComponent} from './ui/course/course.component';
@@ -99,6 +100,6 @@ import {ExamsListComponent} from './ui/exams-list/exams-list.component';
 })
 export class AppModule {
   constructor() {
-    library.add(fas, far);
+    library.add(fas, far, faFacebookSquare);
   }
 }
