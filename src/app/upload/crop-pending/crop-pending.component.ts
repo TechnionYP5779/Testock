@@ -38,7 +38,7 @@ export class CropPendingComponent implements OnInit {
     this.pendingScan = await this.db.getPendingScan(pendingScanId).pipe(take(1)).toPromise();
     const fetchedQuestions = await Promise.all(this.pendingScan.linkedQuestions
       .map(linkedQuestion => this.db.getQuestion(linkedQuestion.qid).pipe(take(1)).toPromise()));
-    this.questions = fetchedQuestions.map(q => new QuestionSolution(q.number, q.total_grade, true));
+    this.questions = fetchedQuestions.map(q => new QuestionSolution(q.number, 0, q.total_grade, true));
     this.course = await this.db.getCourseWithFaculty(this.pendingScan.course).pipe(take(1)).toPromise();
     const blobs = await Promise.all(this.pendingScan.pages.map(page => getBlobFromUrl(page)));
     const base64 = await Promise.all(blobs.map(blob => getImageBase64FromBlob(blob)));

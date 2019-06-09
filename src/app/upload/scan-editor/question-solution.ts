@@ -7,9 +7,9 @@ export class QuestionSolution {
   public points: number;
   public fetchedQuestion: boolean;
 
-  constructor(number: number, points: number, fetchedQuestion = false) {
+  constructor(number: number, grade: number, points: number, fetchedQuestion = false) {
     this.images = [];
-    this.grade = 0;
+    this.grade = grade;
     this.number = number;
     this.points = points;
     this.fetchedQuestion = fetchedQuestion;
