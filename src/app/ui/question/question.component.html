@@ -43,7 +43,7 @@
       </button>
     </div>
   </div>
-  
+
   <div *ngFor="let isAdmin of [isAdmin$ | async]">
     <div class="row p-3" *ngIf="solutions$ | async as solutions">
       <div class="col-3 p-3" *ngFor="let sol of solutions">
@@ -59,7 +59,6 @@
       <span class="badge badge-info">{{topics.length}}</span>
       <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
         <fa-icon icon="plus" class="mr-1"></fa-icon>
-        Add Topic
       </button>
     </div>
     <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action"
