@@ -10,7 +10,7 @@ import {environment} from '../../../environments/environment';
 @Component({
   selector: 'app-exam',
   templateUrl: './exam.component.html',
-  styleUrls: ['./exam.component.css']
+  styleUrls: ['./exam.component.scss']
 })
 export class ExamComponent implements OnInit {
 
@@ -19,6 +19,8 @@ export class ExamComponent implements OnInit {
   public questions: QuestionId[];
   public exam: Exam;
   course: Course;
+  public difficulty: number;
+  public tags: string[];
 
   adminAccess: boolean;
   getPdfUrl = 'https://us-central1-' + environment.firebase.projectId + '.cloudfunctions.net/getPDFofExam';
@@ -36,7 +38,22 @@ export class ExamComponent implements OnInit {
   }
 
   private getQuestions() {
-    this.db.getQuestionsOfExam(this.courseId, this.examId).subscribe(ques => this.questions = ques);
+    this.db.getQuestionsOfExam(this.courseId, this.examId).subscribe(ques => {
+      this.questions = ques;
+
+      if (this.questions.length > 0 ) {
+        let sumAverages = 0;
+        let tags: string[] = [];
+        for (const question of this.questions) {
+          sumAverages += question.sum_difficulty_ratings / question.count_difficulty_ratings;
+          tags = tags.concat(question.tags);
+        }
+        if (sumAverages > 0) {
+          this.difficulty = sumAverages / this.questions.length;
+        }
+        this.tags = Array.from(new Set(tags));
+      }
+    });
   }
 
   private getExam() {
