@@ -31,8 +31,7 @@ export class AdminComponent implements OnInit {
 
   createNewCourse() {
     this.spinner.show();
-    this.newCourse.created = Timestamp.now();
-    this.newCourse.description = 'Welcome to the"' +  this.newCourse.name + '"('  + this.newCourse.id +
+    this.newCourse.description = 'Welcome to the "' +  this.newCourse.name + '"('  + this.newCourse.id +
       ') course page. Good luck in your exams!';
     this.db.createCourse(this.newCourse).then(() => this.spinner.hide())
       .then(() => {
