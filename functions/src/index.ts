@@ -12,9 +12,9 @@ import {Question, QuestionId} from '../../src/app/entities/question';
 import {Solution} from '../../src/app/entities/solution';
 import {Course} from '../../src/app/entities/course';
 import {SolvedQuestion} from '../../src/app/entities/solved-question';
-import FieldValue = admin.firestore.FieldValue;
 import {Moed} from '../../src/app/entities/moed';
 import {ScanDetails} from '../../src/app/entities/scan-details';
+import FieldValue = admin.firestore.FieldValue;
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
@@ -335,11 +335,49 @@ export const onCommentCreated = functions.firestore.document('topics/{topicId}/c
 
   return admin.firestore().collection('notifications').add({
     content: commentUser.name + ' has commented on your topic: ' + topic.subject,
-    datetime: new Date(),
+    datetime: admin.firestore.Timestamp.now(),
     recipientId: topic.creator,
     seen: false,
     url: 'topic/' + tid
   });
+});
+
+export const onSolutionCreated = functions.firestore.document('questions/{questionId}/solutions/{solID}').onCreate(async (snap, context) => {
+  const qid = context.params.questionId;
+  const solution = snap.data() as Solution;
+  if (!solution) {
+    return
+  }
+
+  const question = await admin.firestore().doc(`questions/${qid}`).get().then(doc => doc.data() as Question);
+  const courseId = question.course;
+  const course = await getCourse(courseId);
+  let notificationContent = `New solution for ${course.name}, ${getSemesterStr(question.moed)} ${getMoedStr(question.moed)} - Question ${question.number}`;
+
+  if (solution.grade >= 0) {
+    notificationContent += ` (${solution.grade}/${question.total_grade})`;
+  } else {
+    notificationContent += ' (Unknown Grade)';
+  }
+
+  if (solution.pendingScanId) {
+    notificationContent = `New pending solution for ${course.name}, ${getSemesterStr(question.moed)} ${getMoedStr(question.moed)} - Question ${question.number}. `;
+    notificationContent += 'Crop it now to earn some points!'
+  }
+
+  const uidToSend = await admin.firestore().collection('users').where('favoriteCourses', 'array-contains', courseId)
+    .get().then(snaps => snaps.docs.map(doc => doc.id));
+
+  return Promise.all(uidToSend.map(uid => {
+    return admin.firestore().collection('notifications').add({
+      content: notificationContent,
+      datetime: admin.firestore.Timestamp.now(),
+      recipientId: uid,
+      seen: false,
+      url: `question/${qid}`
+    });
+  }));
+
 });
 
 export const onPendingScanDeleted = functions.firestore.document('pendingScans/{pid}').onDelete(async (snapshot, context) => {
