@@ -11,11 +11,13 @@ import {Course} from '../../entities/course';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {SolvedQuestion} from '../../entities/solved-question';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {MatBottomSheet} from '@angular/material';
+import {ChooseQuestionTagComponent} from '../to-bottom-sheet/choose-question-tag/choose-question-tag.component';
 
 @Component({
   selector: 'app-question',
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.css']
+  styleUrls: ['./question.component.scss']
 })
 export class QuestionComponent implements OnInit {
 
@@ -31,7 +33,7 @@ export class QuestionComponent implements OnInit {
   average$: number;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar,
-              private spinner: NgxSpinnerService) {
+              private spinner: NgxSpinnerService, private _bottomSheet: MatBottomSheet) {
     this.qId = this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForQuestion(this.qId);
     this.question$ = this.db.getQuestion(this.qId);
@@ -82,10 +84,17 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  removeTag(tag: string) {
+  removeTag(event: MouseEvent, tag: string) {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.spinner.show();
     this.db.removeTagFromQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
       this.snackBar.open(`Removed Tag Successfully!`, 'close', {duration: 3000});
     });
+  }
+
+  openBottomSheet(): void {
+    this._bottomSheet.open(ChooseQuestionTagComponent);
   }
 }

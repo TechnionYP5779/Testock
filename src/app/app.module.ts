@@ -19,7 +19,7 @@ import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatPaginatorModule, MatTableModule} from '@angular/material';
+import {MatBottomSheetModule, MatPaginatorModule, MatTableModule} from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -48,7 +48,7 @@ import {CKEditorModule} from 'ngx-ckeditor';
 import {PendingScanModalComponent} from './pending-scans/pending-scan-modal/pending-scan-modal.component';
 import {ScanEditorPreviewComponent} from './upload/scan-editor/scan-editor-preview/scan-editor-preview.component';
 import {ExamsListComponent} from './ui/exams-list/exams-list.component';
-
+import { ChooseQuestionTagComponent } from './ui/to-bottom-sheet/choose-question-tag/choose-question-tag.component';
 
 
 @NgModule({
@@ -79,7 +79,8 @@ import {ExamsListComponent} from './ui/exams-list/exams-list.component';
     MatButtonModule,
     NgbRatingModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatBottomSheetModule
   ],
   declarations: [
     AppComponent,
@@ -92,11 +93,12 @@ import {ExamsListComponent} from './ui/exams-list/exams-list.component';
     FacultiesComponent,
     FacultyComponent,
     TagComponent,
-    ExamsListComponent
+    ExamsListComponent,
+    ChooseQuestionTagComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
-  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent]
+  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent, ChooseQuestionTagComponent]
 })
 export class AppModule {
   constructor() {

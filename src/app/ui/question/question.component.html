@@ -1,5 +1,26 @@
 <div *ngIf="question$ | async as question">
   <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
+  <div class="jumbotron jumbotron" *ngIf="course$ | async as course">
+    <h3 class="title display-4">
+      <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + course.id">{{ course.id }}</a>
+      <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
+      <a [routerLink]="'/course/' + course.id + '/exam/' + question.moed.semester.year + '-' + question.moed.semester.num + '-' + question.moed.num">{{ question.moed | fullMoed }}</a>
+      <fa-icon icon="chevron-right" size="sm" class="ml-3"></fa-icon>
+      Question {{ question.number }}
+    </h3>
+
+    <div class="tags">
+      <button class="tag btn btn-warning mr-2" *ngFor="let tag of question.tags" routerLink="tag/{{ tag }}">
+        # {{ tag }}
+        <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="isAdmin$ | async">
+          <fa-icon icon="times"></fa-icon>
+        </button>
+      </button>
+      <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Choose tag" (click)="openBottomSheet()">
+        <fa-icon icon="plus"></fa-icon>
+      </button>
+    </div>
+  </div>
   <a [routerLink]="'/course/' + course.id" *ngIf="course$ | async as course">
     <h1 style="color:DodgerBlue"> {{ course.name}} ({{question.course}})</h1>
   </a>
@@ -24,7 +45,7 @@
       <div *ngFor="let tag of question.tags">
         <div class="badge badge-primary" style="float: left;margin-right: 5px;">
           <a style="color: white;" routerLink="/course/{{course.id}}/tag/{{tag}}">#{{tag}}</a>
-          <mat-icon role="button" *ngIf="isAdmin$ | async" (click)="removeTag(tag)"
+          <mat-icon role="button" *ngIf="isAdmin$ | async">
                     style="width:0px; height: 0px; font-size: 14px; margin-right: 12px; color: black; cursor:pointer;">
             close
           </mat-icon>
