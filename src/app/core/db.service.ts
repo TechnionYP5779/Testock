@@ -240,6 +240,7 @@ export class DbService {
   }
 
   createCourse(course: Course): Promise<void> {
+    course.created = firebase.firestore.Timestamp.now();
     return this.afs.doc(`courses/${course.id}`).set(course);
   }
 
