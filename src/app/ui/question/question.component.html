@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  <div *ngFor="let isAdmin of [isAdmin$ | async]">
+  <div *ngIf="isAdmin$ | async as isAdmin">
     <div class="row p-3" *ngIf="solutions$ | async as solutions">
       <div class="col-3 p-3" *ngFor="let sol of solutions">
         <app-solution [solution]="sol" [question]="question" [adminAccess]="isAdmin"></app-solution>
