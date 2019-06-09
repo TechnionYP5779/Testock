@@ -13,6 +13,7 @@ export class BatchUploadComponent implements OnInit {
   uploadActive = false;
   files: File[];
   uploadTasks: Promise<PendingScanId|Error>[];
+  isDragged: boolean;
 
   constructor(private upload: UploadService) { }
 
@@ -20,6 +21,7 @@ export class BatchUploadComponent implements OnInit {
   }
 
   public dropped($event: NgxFileDropEntry[]) {
+    this.isDragged = false;
     let fileEntries: FileSystemFileEntry[] = [];
     for (const droppedFile of $event) {
       // Is it a file?

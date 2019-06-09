@@ -1,7 +1,7 @@
 <div class="card sticky-top top-toolbar">
   <div class="card-header">
     <div class="row">
-      <div class="col-4">
+      <div class="col-md-5">
         <h5 *ngIf="course && moed" class="mb-1">
           {{ course?.name }} ({{course?.id}})
           <span style="display: block" class="secondary-title">
@@ -9,14 +9,14 @@
           </span>
         </h5>
       </div>
-      <div class="col-8">
+      <div class="col-md-7">
         <div class="btn-toolbar float-right">
-          <button type="button" class="btn btn-success" (click)="restoreHiddenPages()" [ngbTooltip]="'Restore ' + hiddenPagesCount + ' Hidden Pages'" *ngIf="hiddenPagesCount">
+          <button type="button" class="btn btn-sm btn-success" (click)="restoreHiddenPages()" [ngbTooltip]="'Restore ' + hiddenPagesCount + ' Hidden Pages'" *ngIf="hiddenPagesCount">
             <fa name="undo" class="mr-2"></fa>
             <span class="badge badge-light">{{ hiddenPagesCount }}</span>
           </button>
 
-          <div class="btn-group ml-1" role="group" aria-label="Clean Pages">
+          <div class="btn-group btn-group-sm ml-1" role="group" aria-label="Clean Pages">
             <button type="button" class="btn btn-danger"><fa name="eye-slash"></fa></button>
             <button type="button" class="btn btn-danger" (click)="hideFirstPage()" ngbTooltip="Hide First Page">First</button>
             <button type="button" class="btn btn-danger" (click)="hideEvenPages()" ngbTooltip="Hide Even Pages">Even</button>
@@ -99,7 +99,6 @@
           <app-question-solution
             *ngFor="let q of questions"
             [sol]="q"
-            [quickMode]="false"
             (activateRequested)="activateQuestion(q)"
             (deactivateRequested)="deactivateQuestion()"
             (deleteRequested)="deleteQuestion(q)"

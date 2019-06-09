@@ -5,31 +5,33 @@
   </button>
 </div>
 <div class="modal-body">
-
-  <div class="card" *ngFor="let sol of solutions; let i = index">
-    <div class="card-header">
-      <h2 class="mb-0">
-        <button class="btn btn-link" (click)="collapsed[i] = !collapsed[i]">
-          Question {{sol.number}}
-        </button>
-        <button class="btn btn-link float-right" disabled>
-           {{sol.grade}} / {{sol.points}}
-        </button>
-      </h2>
-    </div>
-    <div [ngbCollapse]="collapsed[i]">
-      <div class="card-body">
-        <div *ngIf="!sol.images || sol.images.length == 0" class="text-center">
-          <small>This solution will be ignored since no images selected for it</small>
-        </div>
-        <div *ngFor="let image of sol.images; let i = index">
-          <img [src]="image.base64" alt="scan page crop" style="width: 100%"/>
-        </div>
+  <div *ngIf="solutions.length !== 0; else noQuestions">Please take a minute to review the solutions you selected before you upload them</div>
+  <ng-template #noQuestions>
+    <div class="text-center">There are no questions in your upload</div>
+  </ng-template>
+</div>
+<div class="card mb-0" *ngFor="let sol of solutions; let i = index">
+  <div class="card-header">
+    <h4 class="mb-0">
+      <button class="btn btn-link" (click)="collapsed[i] = !collapsed[i]">
+        <fa [name]="collapsed[i] ? 'plus' : 'minus'" class="mr-2"></fa>
+        Question {{sol.number}}
+      </button>
+      <button class="btn btn-link float-right" disabled>
+         {{sol.grade}} / {{sol.points}}
+      </button>
+    </h4>
+  </div>
+  <div [ngbCollapse]="collapsed[i]">
+    <div class="card-body">
+      <div *ngIf="!sol.images || sol.images.length == 0" class="text-center">
+        <small>There is no solution selected for this question</small>
+      </div>
+      <div *ngFor="let image of sol.images; let i = index">
+        <img [src]="image.base64" alt="scan page crop" style="width: 100%"/>
       </div>
     </div>
   </div>
-
-
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>

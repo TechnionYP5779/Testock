@@ -43,6 +43,7 @@ import {CKEditorModule} from 'ngx-ckeditor';
 import {PendingScanModalComponent} from './pending-scans/pending-scan-modal/pending-scan-modal.component';
 import {ScanEditorPreviewComponent} from './upload/scan-editor/scan-editor-preview/scan-editor-preview.component';
 import { AboutComponent } from './ui/about/about.component';
+import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-details-picker.component';
 
 
 
@@ -89,7 +90,7 @@ import { AboutComponent } from './ui/about/about.component';
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
-  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent]
+  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent, ScanDetailsPickerComponent]
 })
 export class AppModule {
 }

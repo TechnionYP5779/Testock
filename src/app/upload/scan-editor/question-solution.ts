@@ -31,4 +31,8 @@ export class QuestionSolution {
     this.images.map(solImg => solImg.source).map(page => page.highlightDec());
 
   }
+
+  getTotalBytes(): number {
+    return this.images.reduce((sum, i) => sum + i.size, 0);
+  }
 }
