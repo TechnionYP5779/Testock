@@ -42,6 +42,7 @@ import { TagComponent } from './ui/tag/tag.component';
 import {CKEditorModule} from 'ngx-ckeditor';
 import {PendingScanModalComponent} from './pending-scans/pending-scan-modal/pending-scan-modal.component';
 import {ScanEditorPreviewComponent} from './upload/scan-editor/scan-editor-preview/scan-editor-preview.component';
+import { AboutComponent } from './ui/about/about.component';
 import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-details-picker.component';
 
 
@@ -84,7 +85,8 @@ import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-deta
     SolutionComponent,
     FacultiesComponent,
     FacultyComponent,
-    TagComponent
+    TagComponent,
+    AboutComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
