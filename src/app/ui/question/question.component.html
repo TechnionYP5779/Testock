@@ -32,7 +32,7 @@
     </h3>
 
     <div class="tags">
-      <button class="tag btn btn-warning mr-2" *ngFor="let tag of question.tags" routerLink="tag/{{ tag }}">
+      <button class="tag btn btn-warning mr-2" *ngFor="let tag of question.tags" [routerLink]="'/course/' + course.id + '/tag/' + tag">
         # {{ tag }}
         <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="isAdmin$ | async">
           <fa-icon icon="times"></fa-icon>
