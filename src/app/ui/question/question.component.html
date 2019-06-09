@@ -1,6 +1,16 @@
 <div *ngIf="question$ | async as question">
   <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
   <div class="jumbotron jumbotron" *ngIf="course$ | async as course">
+    <div class="solved-toggle">
+      <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()"
+              type="button">
+        <fa-icon icon="check"></fa-icon>
+      </button>
+      <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();"
+              type="button">
+        <fa-icon icon="check"></fa-icon>
+      </button>
+    </div>
     <div *ngIf="question.count_difficulty_ratings > 0">
       <p class="difficulty-stars">
         <ng-template #temp let-fill="fill">
@@ -9,7 +19,7 @@
               &#9733;
             </span>
         </ng-template>
-        <ngb-rating placement="top" ngbTooltip="Difficulty rating" [starTemplate]="temp" [(rate)]="question.sum_difficulty_ratings / question.count_difficulty_ratings"
+        <ngb-rating placement="top" [ngbTooltip]="'Difficulty: ' + (question.sum_difficulty_ratings / question.count_difficulty_ratings | number:'1.1-2')" [starTemplate]="temp" [(rate)]="question.sum_difficulty_ratings / question.count_difficulty_ratings"
                     [readonly]="true" max="5"></ngb-rating>
       </p>
     </div>
@@ -33,50 +43,7 @@
       </button>
     </div>
   </div>
-  <a [routerLink]="'/course/' + course.id" *ngIf="course$ | async as course">
-    <h1 style="color:DodgerBlue"> {{ course.name}} ({{question.course}})</h1>
-  </a>
-  <h2>
-    Question {{ question.number }} ({{ question.moed | fullMoed }})
-  </h2>
-  <div>
-    <div *ngIf="course$ | async as course">
-      <div *ngFor="let tag of question.tags">
-        <div class="badge badge-primary" style="float: left;margin-right: 5px;">
-          <a style="color: white;" routerLink="/course/{{course.id}}/tag/{{tag}}">#{{tag}}</a>
-          <mat-icon role="button" *ngIf="isAdmin$ | async">
-                    style="width:0px; height: 0px; font-size: 14px; margin-right: 12px; color: black; cursor:pointer;">
-            close
-          </mat-icon>
-        </div>
-      </div>
-    </div>
-
-    <div ngbDropdown #myDrop="ngbDropdown" class="badge badge-secondary" style="vertical-align: top">
-      <button class="badge badge-secondary"
-              style="vertical-align: top; border: 0px; margin: 0px; padding: 0px; height: 16px; font-size: 11px"
-              id="dropdownManual" ngbDropdownAnchor
-              (focus)="myDrop.open()">Add Tag
-      </button>
-      <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <div *ngIf="course$ | async as course">
-          <div *ngFor="let tag of arr_diff(course.tags, question.tags)">
-            <button ngbDropdownItem (click)="addTag(tag)">{{tag}}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <br/>
-    <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()"
-            type="button">
-      <fa-icon icon="check"></fa-icon>
-    </button>
-    <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();"
-            type="button">
-      <fa-icon icon="check"></fa-icon>
-    </button>
-  </div>
-
+  
   <div *ngFor="let isAdmin of [isAdmin$ | async]">
     <div class="row p-3" *ngIf="solutions$ | async as solutions">
       <div class="col-3 p-3" *ngFor="let sol of solutions">

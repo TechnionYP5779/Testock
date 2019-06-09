@@ -51,26 +51,36 @@
   color: orange;
 }
 
+.solved-toggle {
+  float: right;
+
+  button {
+    font-size: 45px;
+    margin-right: 20px;
+    cursor: pointer;
+  }
+}
+
 .difficulty-stars {
   margin-bottom: 0;
+}
 
-  .star {
-    position: relative;
-    display: inline-block;
-    font-size: 2rem;
-    color: #d3d3d3;
-  }
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 2rem;
+  color: #d3d3d3;
+}
 
-  .full {
-    color: #007bff;
-  }
+.full {
+  color: #007bff;
+}
 
-  .half {
-    position: absolute;
-    display: inline-block;
-    overflow: hidden;
-    color: #007bff;
-  }
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #007bff;
 }
 
 
