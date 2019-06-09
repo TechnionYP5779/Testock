@@ -78,6 +78,7 @@ export class QuestionComponent implements OnInit {
     }
   }
 
+
   sendRate() {
     this.spinner.show();
     this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId, difficulty: this.selected}).then(() =>
