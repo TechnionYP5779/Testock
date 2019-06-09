@@ -2,8 +2,8 @@
   <button [routerLink]="'/' + notification.url" (click)="seen($event, notification, true)" [class.list-group-item-primary]="!notification.seen" class="list-group-item list-group-item-action flex-column align-items-start" *ngFor="let notification of notifications; let i = index">
     <div class="d-flex w-100 align-items-center">
       <button class="seen-toggle-btn w-30 btn" placement="right" ngbTooltip="mark as seen" (click)="seen($event, notification, false)" *ngIf="notification.seen == false">
-        <fa-icon name="circle-o" *ngIf="notification.seen"></fa-icon>
-        <fa-icon name="circle" *ngIf="!notification.seen"></fa-icon>
+        <fa-icon icon="circle-o" *ngIf="notification.seen"></fa-icon>
+        <fa-icon icon="circle" *ngIf="!notification.seen"></fa-icon>
       </button>
       <p class="mb-1">{{ notification.content }}</p>
       <small class="ml-auto">{{ notification.datetime.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
