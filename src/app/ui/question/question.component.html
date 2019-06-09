@@ -46,11 +46,23 @@
   </div>
 
   <div *ngIf="isAdmin$ | async as isAdmin">
-    <div class="row p-3" *ngIf="solutions$ | async as solutions">
-      <div class="col-3 p-3" *ngFor="let sol of solutions">
-        <app-solution [solution]="sol" [question]="question" [adminAccess]="isAdmin"></app-solution>
+    <div *ngIf="solutions$ | async as solutions; else noSolutions">
+      <div class="row p-3" *ngIf="solutions.length > 0; else noSolutions">
+        <div class="col-3 p-3" *ngFor="let sol of solutions">
+          <app-solution [solution]="sol" [question]="question" [adminAccess]="isAdmin"></app-solution>
+        </div>
       </div>
     </div>
+    <ng-template #noSolutions>
+      <div class="no-solutions">
+        <fa-icon class="broken-heart" icon="heart-broken" size="6x"></fa-icon>
+        <h3>Sorry, There are currently no solutions for this question.</h3>
+        <button type="button" class="btn btn-success" routerLink="/upload">
+          <fa-icon icon="upload"></fa-icon>
+          Upload one yourself
+        </button>
+      </div>
+    </ng-template>
   </div>
 
   <div class="list-group my-3" *ngIf="topics$ | async as topics">
