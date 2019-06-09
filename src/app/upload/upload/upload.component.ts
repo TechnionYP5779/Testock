@@ -219,6 +219,9 @@ export class UploadComponent implements OnInit {
         case PendingScanConfirmResult.UPLOAD_PENDING:
           // User accepted
           quickMode = true;
+          break;
+        case PendingScanConfirmResult.DONT_UPLOAD_PENDING:
+          quickMode = false;
       }
     }
 
