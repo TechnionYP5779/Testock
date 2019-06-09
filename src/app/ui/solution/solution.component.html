@@ -1,24 +1,45 @@
-<div class="text-center mb-2" *ngIf="solution && adminAccess">
-  <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa name="edit"></fa></button>
-  <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa name="times"></fa></button>
-</div>
-<div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal" (click)="solThumbClick(content)"
-     [attr.data-target]="solution.pendingScanId ? '' : '#solution-modal-' + solution.id">
-  <img class="card-img" [src]="solution.photos[0]" alt="scan preview" *ngIf="solution.photos && solution.photos.length > 0"/>
-  <div class="card-img text-center" *ngIf="solution.pendingScanId">
-    <h6 class="mt-5">Available from pending scan</h6>
+<div *ngIf="solution && !solution.uploadInProgress; else uploadInProgress">
+  <div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal" (click)="solThumbClick(content)"
+       [attr.data-target]="solution.pendingScanId ? '' : '#solution-modal-' + solution.id">
+    <img class="card-img" [src]="solution.photos[0]" alt="scan preview" *ngIf="solution.photos && solution.photos.length > 0"/>
+    <div class="card-img text-center" *ngIf="solution.pendingScanId">
+      <h6 class="mt-5">Available from pending scan</h6>
+    </div>
+    <div class="card-img-overlay align-items-center d-flex justify-content-center">
+      <h2 class="card-title text-center" *ngIf="solution.grade >= 0; else noGrade">
+        {{solution.grade}} / {{question.total_grade}}
+      </h2>
+      <ng-template #noGrade>
+        <h4 class="card-title text-center">
+          Unknown Grade
+        </h4>
+      </ng-template>
+    </div>
   </div>
-  <div class="card-img-overlay align-items-center d-flex justify-content-center">
-    <h2 class="card-title text-center" *ngIf="solution.grade >= 0; else noGrade">
-      {{solution.grade}} / {{question.total_grade}}
-    </h2>
-    <ng-template #noGrade>
-      <h4 class="card-title text-center">
-        Unknown Grade
-      </h4>
-    </ng-template>
+  <div class="text-center mt-2" *ngIf="solution && adminAccess">
+    <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa name="edit"></fa></button>
+    <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa name="times"></fa></button>
   </div>
 </div>
+
+<ng-template #uploadInProgress>
+  <div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal">
+    <div class="card-img text-center">
+      <h6 class="mt-5"><fa name="spinner" animation="spin" size="lg"></fa></h6>
+      <div class="mt-2">Solution in upload</div>
+    </div>
+    <div class="card-img-overlay align-items-center d-flex justify-content-center">
+      <h2 class="card-title text-center" *ngIf="solution.grade >= 0; else noGrade">
+        {{solution.grade}} / {{question.total_grade}}
+      </h2>
+      <ng-template #noGrade>
+        <h4 class="card-title text-center">
+          Unknown Grade
+        </h4>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #content let-modal>
   <div class="modal-header">

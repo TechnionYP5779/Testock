@@ -1,0 +1,75 @@
+<div class="display-3 text-center mt-4 mb-4">
+  <strong>About </strong> <img src="assets/images/testock-logo.png" alt="logo"/>
+</div>
+<p class="lead mt-4">
+  <strong>Testock</strong> was developed during Winter 2018-2019 and Spring 2019 semesters, as part of the <strong>Yearly Project in Software Engineering</strong>, in the <strong>Computer Science Department, Technion</strong>.
+</p>
+<div class="text-center">
+  <button type="button" class="btn btn-lg btn-outline-primary" (click)="contactClick(contactUsModal)"><fa name="envelope" class="mr-2"></fa>Contact Us</button>
+</div>
+<h2>The Team</h2>
+<div class="row mt-4">
+  <div class="col-md mb-4" *ngFor="let teammate of team">
+    <div class="card border-0 shadow">
+      <img [src]="'assets/images/about/team/' + teammate.photo" class="card-img-top" alt="...">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-0">{{ teammate.name }}</h5>
+        <div class="card-text text-black-50">{{ teammate.position }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mt-4">Built with</h2>
+<div class="row mt-4">
+  <div class="col-md-3 text-center" *ngFor="let technology of technologies">
+    <div class="card border-0">
+      <a class="btn btn-light" [href]="technology.url" target="_blank">
+        <img [src]="'assets/images/about/tech/' + technology.photo" alt="..." style="height: 150px"/>
+        <div class="card-body">
+          <h4 class="card-title">{{ technology.name }}</h4>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<h4 class="mt-4">Tools and Libraries:</h4>
+<div>
+  <ul>
+    <li *ngFor="let lib of libs">
+      <a [href]="lib.url" target="_blank"><strong>{{lib.name}}</strong></a>
+      <span *ngIf="lib.author"> by {{lib.author}}</span>
+    </li>
+  </ul>
+</div>
+
+<h2 class="mt-4">Acknowledgements</h2>
+
+<div>
+  <ul>
+    <li><strong>Kobi Mike</strong>, our mentor during Spring 2019 semester</li>
+    <li><strong>Dor Maayan</strong>, our mentor during Winter 2018-2019 semester</li>
+    <li><strong>Saar Globin</strong>, academic coordinator of the CS students union</li>
+  </ul>
+</div>
+
+<div class="row mt-4 mb-4">
+  <div class="col-md-{{ack.width}} text-center justify-content-center align-self-center" *ngFor="let ack of acks">
+    <a class="btn" [href]="ack.url" target="_blank">
+      <img [src]="'assets/images/about/ack/' + ack.photo" alt="..." style="max-height: 130px; max-width: 100%;"/>
+    </a>
+  </div>
+</div>
+
+<ng-template #contactUsModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Contact Us</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ftestock.tk%2F&tabs=messages&width=465&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=2156803741300506" width="465" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+  </div>
+</ng-template>

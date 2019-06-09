@@ -1,128 +1,147 @@
-<div class="row">
-  <div class="accordion col-8" id="accordionExample">
-    <div class="card">
-      <div class="card-header" id="headingOne">
-        <h5 class="mb-0">
-          <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                  aria-expanded="true" aria-controls="collapseOne" #collapseOne>
-            Upload a new scan
-          </button>
-        </h5>
-      </div>
-      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-        <div class="card-body">
-          <div class="box has-advanced-upload" [ngClass]="{'is-dragover':isDragged == true}" (drop)="onDrop($event)"
-               (dragover)="onDragOver($event)"
-               (dragleave)="onDragLeave($event)" enctype="multipart/form-data">
-            <div class="box-input">
-              <fa name="upload" class="box-icon"></fa>
-              <input class="box-file" type="file" id="file" accept="application/pdf" #file (change)="onFileSelected($event)">
-              <div class="box-file-label-text" style="text-align: center;">
-                <label class="box-file-label" for="file">
-                  <strong> Browse your scan </strong> or drop it here
-                </label>
-              </div>
+<div class="alert alert-danger" *ngIf="error">
+  <fa name="exclamation-circle" class="mr-2"></fa> {{error}}
+</div>
+<div class="row" *ngIf="state === uploadState.Ready">
+  <div class="col-md-12">
+    <ngx-file-drop
+      (onFileDrop)="dropped($event)"
+      accept=".pdf"
+      [multiple]="false"
+      dropZoneClassName=""
+      contentClassName=""
+      (onFileOver)="isDragged = true"
+      (onFileLeave)="isDragged = false"
+    >
+      <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+        <div class="box has-advanced-upload" [ngClass]="{'is-dragover':isDragged == true}">
+          <div class="box-input">
+            <fa name="upload" class="box-icon"></fa>
+            <div class="box-file-label-text" style="text-align: center;">
+              <label class="box-file-label" (click)="openFileSelector()">
+                <strong> Browse your scan </strong> or drop it here
+              </label>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header" id="headingTwo">
-        <h5 class="mb-0">
-          <button class="btn btn-link collapsed" #imagesCollpaseTrigger type="button" data-toggle="collapse"
-                  data-target="#imagesCollapse" aria-expanded="false" aria-controls="imagesCollapse">
-            Choose pages for uploading
-          </button>
-        </h5>
-      </div>
-      <div id="imagesCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-        <div class="card-body">
-          <div class="text-center">
-            <div class="btn-group" role="group" aria-label="Clean Pages">
-              <button type="button" class="btn btn-danger" (click)="removeFirstPage()">Remove First Page</button>
-              <button type="button" class="btn btn-danger" (click)="clearEvenPages()">Remove Even Pages</button>
-              <button type="button" class="btn btn-danger" (click)="clearOddPages()">Remove Odd Pages</button>
-              <button type="button" class="btn btn-danger" (click)="clearBlankPages()">Remove Blank Pages</button>
-              <button type="button" class="btn btn-danger" (click)="returnPages()">Return All Pages</button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-3" *ngFor="let blob of blobs; let i = index">
-              <button type="button" class="close" aria-label="Close" style="color: red" (click)="removePageByIndex(i)">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <app-scan-page [blob]="blob" [index]="i" [croppable]="activeQuestion"
-                             (imageSelected)="addImage($event)"></app-scan-page>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-4">
-    <div *ngIf="course">
-      <div class="card">
-        <div class="upload-thumbnail-image-placeholder">
-          <img class="align-middle" src="/assets/images/testock-logo.png" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">
-            {{ course.name }}
-            <span style="display: block">
-              {{ moed | fullMoed }}
-            </span>
-          </h5>
-          <ul class="scan-properties row">
-            <li class="col-6">
-              <span class="scan-properties-icon">
-                <fa name="hashtag"></fa>
-              </span>
-              <span class="scan-properties-text">
-                {{ course.id }}
-              </span>
-            </li>
-            <li class="col-6">
-              <span class="scan-properties-icon">
-                <fa name="home"></fa>
-              </span>
-              <span class="scan-properties-text">
-                {{ course.faculty.name }}
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Upload Options</h5>
-          <mat-slide-toggle [(ngModel)]="isQuickMode">Quick Mode</mat-slide-toggle>
-        </div>
-      </div>
-
-      <div class="questions-wrapper">
-        <div class="accordion" id="questions">
-          <app-upload-question *ngFor="let q of questions" [index]="q.index" [images]="q.images" [(grade)]="q.grade"
-                               [(points)]="q.points"
-                               [quickMode]="isQuickMode"
-                               [pointsReadOnly]="q.pointsReadOnly"
-                               (imageAddRequested)="enableImageAdding($event)"
-                               (imageRemoveRequested)="removeImage($event)"></app-upload-question>
-        </div>
-
-        <button id="add-question-button" class="btn btn-primary btn-block" type="button" (click)="addQuestion()">
-          Add Question
-        </button>
-      </div>
-
-      <Button id="upload-scan-button" class="btn btn-success btn-block" [disabled]="state !== uploadState.Ready"
-              (click)="uploadImages()">
-        <span [hidden]="state !== uploadState.Uploading">
-          <fa name="spinner" animation="spin"></fa>
-        </span>
-        Upload Scan
-      </Button>
-    </div>
+      </ng-template>
+    </ngx-file-drop>
   </div>
 </div>
+<div class="row mt-5" *ngIf="state === uploadState.LoadingFile">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="text-center">
+      <h2 class="mt-4">Loading Scan...</h2>
+    </div>
+    <ul class="list-group mt-4">
+      <li class="list-group-item">
+        <fa name="check" *ngIf="loadProgress?.pages" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.pages" class="mr-2"></fa>
+        <span *ngIf="loadProgress?.pages"><strong>Scan Pages:</strong> Found {{loadProgress?.pages.length}} Pages</span>
+        <span *ngIf="!loadProgress?.pages"><strong>Scan Pages</strong></span>
+      </li>
+      <li class="list-group-item">
+        <fa name="check" *ngIf="loadProgress?.resultScanDetails" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.resultScanDetails" class="mr-2"></fa>
+        <span *ngIf="loadProgress?.resultScanDetails"><strong>Exam Details:</strong> {{ loadProgress.resultScanDetails.moed | fullMoed }}</span>
+        <span *ngIf="!loadProgress?.resultScanDetails"><strong>Exam Details</strong></span>
+      </li>
+      <li class="list-group-item">
+        <fa name="check" *ngIf="loadProgress?.resultCourse" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.resultCourse" class="mr-2"></fa>
+        <span *ngIf="loadProgress?.resultCourse"><strong>Course:</strong> {{ loadProgress.resultCourse.name }} ({{loadProgress.resultCourse.id}})</span>
+        <span *ngIf="!loadProgress?.resultCourse"><strong>Course</strong></span>
+      </li>
+      <li class="list-group-item">
+        <fa name="check" *ngIf="loadProgress?.existingQuestions" class="text-success mr-2"></fa>
+        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.existingQuestions" class="mr-2"></fa>
+        <span *ngIf="loadProgress?.existingQuestions"><strong>Existing Questions:</strong> {{loadProgress.existingQuestions.length}} found</span>
+        <span *ngIf="!loadProgress?.existingQuestions"><strong>Existing Questions</strong></span>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row" *ngIf="state === uploadState.Editing">
+  <div class="col-md-12">
+    <app-scan-editor
+      [pages]="pages"
+      [moed]="scanDetails.moed"
+      [course]="course"
+      [questions]="questions"
+      (upload)="uploadScan($event, confirmReadyForUpload, confirmQuickMode)"
+    ></app-scan-editor>
+  </div>
+</div>
+<div class="row mt-4" *ngIf="state === uploadState.Uploading">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 text-center">
+    <fa name="spinner" animation="spin" size="5x"></fa>
+    <h2 class="mt-4">Uploading Solutions</h2>
+    <div class="mt-4" *ngIf="uploadProgress?.currentQuestionProgress">
+      <div>Uploading question {{uploadProgress.currentQuestionProgress.question.number}}...</div>
+      <div class="mt-2">
+        <ngb-progressbar animated="true" striped="true" [max]="100" showValue="true" [value]="uploadProgress.bytes.getPercentage()"></ngb-progressbar>
+      </div>
+      <div class="mt-4">Image {{uploadProgress.currentQuestionProgress.question_images.current}} out of {{uploadProgress.currentQuestionProgress.question_images.total}}</div>
+      <div class="mt-2">
+        <ngb-progressbar animated="true" striped="true" [max]="100" showValue="true" [value]="uploadProgress?.currentQuestionProgress?.question_bytes.getPercentage()"></ngb-progressbar>
+      </div>
+    </div>
+    <div class="mt-4" *ngIf="uploadProgress?.pendingScanProgress">
+      <div>Uploading pending scan...</div>
+      <div class="mt-2">
+        <ngb-progressbar animated="true" striped="true" [max]="100" showValue="true" [value]="uploadProgress.pendingScanProgress.total_bytes.getPercentage()"></ngb-progressbar>
+      </div>
+      <div class="mt-4">Page {{uploadProgress.pendingScanProgress.pages.current}} out of {{uploadProgress.pendingScanProgress.pages.total}}</div>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row mt-4" *ngIf="state === uploadState.UploadSuccess">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 text-center">
+    <div class="text-success">
+      <fa name="check" size="5x"></fa>
+    </div>
+    <h2 class="mt-4">Solutions Uploaded Successfully</h2>
+    <h4 class="mt-2">Thanks for your contribution!</h4>
+    <div class="mt-4">
+      <button class="btn btn-primary mr-2" (click)="reset()">
+        Upload another scan
+      </button>
+      <button class="btn btn-success" [routerLink]="'/course/' + course.id + '/exam/' + scanDetails.moed.semester.year + '-' + scanDetails.moed.semester.num + '-' + scanDetails.moed.num">
+        Go to exam page
+      </button>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+
+<ng-template #confirmReadyForUpload let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Did you select all the questions in your scan?</h5>
+  </div>
+  <div class="modal-body">
+    <p>It is just fine if you skipped some, your contribution is already very helpful 😃</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.close(false)" ngbAutofocus>No</button>
+    <button type="button" class="btn btn-success" (click)="modal.close(true)">Yes</button>
+  </div>
+</ng-template>
+
+<ng-template #confirmQuickMode let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Upload as pending scan?</h5>
+  </div>
+  <div class="modal-body">
+    <p>We can upload your scan as a pending scan and let others crop the solutions you skipped.</p>
+    <div class="alert alert-warning"><fa name="exclamation-triangle" class="mr-2"></fa>All pages you did not hide will be uploaded, including the first page with your details. so if</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close(pendingScanConfirmResult.BACK_TO_EDIT)">Back to edit</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.close(pendingScanConfirmResult.DONT_UPLOAD_PENDING)">Do not upload as Pending Scan</button>
+    <button type="button" class="btn btn-success" (click)="modal.close(pendingScanConfirmResult.UPLOAD_PENDING)" ngbAutofocus>Upload as Pending Scan</button>
+  </div>
+</ng-template>

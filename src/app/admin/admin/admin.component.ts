@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserData} from '../../entities/user';
 import {DbService} from '../../core/db.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {Faculty, FacultyId} from '../../entities/faculty';
 import {Course} from '../../entities/course';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -31,8 +31,7 @@ export class AdminComponent implements OnInit {
 
   createNewCourse() {
     this.spinner.show();
-    this.newCourse.created = Timestamp.now();
-    this.newCourse.description = 'Welcome to the"' +  this.newCourse.name + '"('  + this.newCourse.id +
+    this.newCourse.description = 'Welcome to the "' +  this.newCourse.name + '"('  + this.newCourse.id +
       ') course page. Good luck in your exams!';
     this.db.createCourse(this.newCourse).then(() => this.spinner.hide())
       .then(() => {

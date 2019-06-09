@@ -3,12 +3,12 @@
     <b>Pending Scans</b>
     <span class="badge badge-info ml-1">{{pendingScans.length}}</span>
   </li>
-  <a *ngFor="let p of pendingScans" routerLink="/pendingScan/{{ p.id }}" class="list-group-item list-group-item-action">
-    Pending Scan Uploaded at {{ p.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}
+  <button *ngFor="let p of pendingScans" (click)="openPendingScanModal(p)" class="list-group-item list-group-item-action">
+    <fa name="file" class="mr-2"></fa> {{ p.moed | fullMoed }}
     <button class="btn btn-sm btn-danger float-right" (click)="removePendingScan($event, p)" *ngIf="adminAccess">
       <fa name="times"></fa>
     </button>
-  </a>
+  </button>
   <li class="list-group-item" *ngIf="pendingScans.length == 0">
     There are no pending scans at the moment 😊
   </li>

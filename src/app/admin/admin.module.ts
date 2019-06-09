@@ -8,14 +8,13 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import { UsersTableComponent } from './users-table/users-table.component';
-import {
-  MatFormFieldModule, MatIconModule,
-  MatInputModule,
-  MatPaginatorModule,
-  MatSlideToggleModule,
-  MatSortModule,
-  MatTableModule
-} from '@angular/material';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [

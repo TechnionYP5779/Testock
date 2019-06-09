@@ -1,4 +1,25 @@
-<file-drop dropZoneLabel="Drop scans here" (onFileDrop)="dropped($event)" *ngIf="!uploadActive"></file-drop>
+<ngx-file-drop
+  (onFileDrop)="dropped($event)"
+  accept=".pdf"
+  [multiple]="true"
+  dropZoneClassName=""
+  contentClassName=""
+  (onFileOver)="isDragged = true"
+  (onFileLeave)="isDragged = false"
+>
+  <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+    <div class="box has-advanced-upload" [ngClass]="{'is-dragover':isDragged == true}">
+      <div class="box-input">
+        <fa name="upload" class="box-icon"></fa>
+        <div class="box-file-label-text" style="text-align: center;">
+          <label class="box-file-label" (click)="openFileSelector()">
+            <strong> Browse your scans </strong> or drop them here
+          </label>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ngx-file-drop>
 <table class="table mt-4">
   <thead>
   </thead>

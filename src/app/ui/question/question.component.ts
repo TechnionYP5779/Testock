@@ -8,7 +8,7 @@ import {flatMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {SolvedQuestion} from '../../entities/solved-question';
 import {NgxSpinnerService} from 'ngx-spinner';
 
@@ -27,7 +27,6 @@ export class QuestionComponent implements OnInit {
   isAdmin$: Observable<boolean>;
   userId: string;
   solvedQuestion$: Observable<SolvedQuestion>;
-  tags$: Observable<string[]>;
   selected = 0;
   average$: number;
 
@@ -41,7 +40,6 @@ export class QuestionComponent implements OnInit {
     this.course$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course)));
     this.userId = this.auth.currentUserId;
     this.solvedQuestion$ = this.db.getSolvedQuestion(this.userId, this.qId);
-    this.tags$ = this.db.getTagsOfQuestion(this.qId);
   }
 
   ngOnInit() {
@@ -69,19 +67,30 @@ export class QuestionComponent implements OnInit {
     this.spinner.show();
     this.db.addTagToQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
       this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
-      this.tags$ = this.db.getTagsOfQuestion(this.qId);
     });
   }
 
   arr_diff(a1, a2) {
-    return a1.filter(e => !a2.includes(e));
+    if (a1 && a2) {
+      return a1.filter(e => !a2.includes(e));
+    } else {
+      return [];
+    }
   }
+
 
   sendRate() {
     this.spinner.show();
     this.db.addSolvedQuestion(this.userId, {linkedQuestionId: this.qId, difficulty: this.selected}).then(() =>
       this.spinner.hide()).then(() => {
       this.snackBar.open(`Difficulty rating sent Successfully!`, 'close', {duration: 3000});
+    });
+  }
+
+  removeTag(tag: string) {
+    this.spinner.show();
+    this.db.removeTagFromQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
+      this.snackBar.open(`Removed Tag Successfully!`, 'close', {duration: 3000});
     });
   }
 }

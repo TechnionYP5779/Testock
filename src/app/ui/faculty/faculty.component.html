@@ -1,19 +1,52 @@
-<div class="jumbotron jumbotron" *ngIf="faculty$ | async as faculty">
-  <h1 class="display-4">{{ faculty.name }} </h1>
-  <p class="lead">Welcome to the "{{ faculty.name }}" faculty page. Below is the list of available courses.</p>
-</div>
+<div *ngIf="faculty$ | async as faculty">
+<div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this faculty</div>
 
-<div *ngIf="courses$ | async as courses" >
-  <ul class="list-group-flush">
-    <li class="list-group-item" *ngFor="let course of courses">
-      <h6 class="course-title m-2">
-        <a routerLink="/course/{{ course.id }}">
-          {{ course.id }}: {{ course.name }}
-        </a>
-      </h6>
-      <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
-      <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
-    </li>
-  </ul>
-</div>
+  <div class="jumbotron jumbotron">
+    <h1 class="display-4">{{ faculty.name }} </h1>
+    <p class="lead">Welcome to the "{{ faculty.name }}" faculty page. Below is the list of available courses.</p>
+    <button class="btn btn-success" *ngIf="isAdmin$ | async" (click)="openCreateCourseModal(createCourseModal)"><fa name="plus" class="mr-2"></fa>Create Course</button>
+  </div>
 
+  <div *ngIf="courses$ | async as courses" >
+    <ul class="list-group-flush">
+      <li class="list-group-item" *ngFor="let course of courses">
+        <h6 class="course-title m-2">
+          <a routerLink="/course/{{ course.id }}">
+            {{ course.id }}: {{ course.name }}
+          </a>
+        </h6>
+        <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
+        <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #createCourseModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Create Course For {{faculty.name}} faculty</h5>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group form-inline">
+          <label for="courseNum">Course Number:</label>
+          <div class="input-group ml-2">
+            <input name="courseNum" min="1" id="courseNum" class="form-control" type="number" style="width: 100px" [(ngModel)]="newCourse.id">
+          </div>
+        </div>
+        <div class="form-group form-inline">
+          <label for="courseName">Course Name:</label>
+          <div class="input-group ml-2">
+            <input name="courseName" id="courseName" class="form-control" [(ngModel)]="newCourse.name">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancel</button>
+      <button type="button" class="btn btn-success" (click)="modal.close(true)">Create Course</button>
+    </div>
+  </ng-template>
+</div>

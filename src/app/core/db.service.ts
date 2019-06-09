@@ -13,7 +13,7 @@ import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
 import * as firebase from 'firebase';
 import {SolvedQuestion} from '../entities/solved-question';
-import {PendingScan, PendingScanId} from '../entities/pending-scan';
+import {LinkedQuestion, PendingScan, PendingScanId} from '../entities/pending-scan';
 import FieldValue = firebase.firestore.FieldValue;
 import {Moed} from '../entities/moed';
 
@@ -31,7 +31,13 @@ export class DbService {
   }
 
   getCourse(id: number): Observable<Course> {
-    return this.coursesCollection.doc<Course>(id.toString()).valueChanges();
+    return this.coursesCollection.doc<Course>(id.toString()).valueChanges().pipe(map(course => {
+      if (!course) {
+        throw new Error('Course doesn\'t exist');
+      } else {
+        return course;
+      }
+    }));
   }
 
   getCourseWithFaculty(id: number): Observable<CourseWithFaculty> {
@@ -152,10 +158,6 @@ export class DbService {
     return this.afs.doc(`questions/${id}`).update({'tags': FieldValue.arrayUnion(tag)});
   }
 
-  getTagsOfQuestion(id: string): Observable<string[]> {
-    return this.afs.doc<Question>(`questions/${id}`).valueChanges().pipe(map(q => q.tags));
-  }
-
   addSolvedQuestion(uId: string, q: SolvedQuestion): Promise<void> {
     return this.afs.doc<SolvedQuestion>('users/' + uId + `/solvedQuestions/${q.linkedQuestionId}`).set(q);
   }
@@ -191,26 +193,19 @@ export class DbService {
   }
 
   getQuestionByDetails(course: number, moed: Moed, number: number): Observable<QuestionId> {
-    const ref = r =>
-      r.where('course', '==', course)
-        .where('moed.semester.year', '==', moed.semester.year)
-        .where('moed.semester.num', '==', moed.semester.num)
-        .where('moed.num', '==', moed)
-        .where('number', '==', number);
-
-    return this.afs.collection<Question>('questions', ref).snapshotChanges().pipe(
-      map(actions => {
-        if (actions.length !== 1) {
+    const docId = `${course}-${moed.semester.year}-${moed.semester.num}-${moed.num}-${number}`;
+    return this.afs.collection<Question>('questions').doc<Question>(docId).valueChanges().pipe(
+      map(question => {
+        if (!question) {
           return null;
         }
-        const e = actions[0].payload.doc.data() as Question;
-        return {id: actions[0].payload.doc.id, ...e};
+        return {id: docId, ...question};
       })
     );
   }
 
-  createQuestionForExam(course: number, q: Question): Promise<QuestionId> {
-    const docId = `${course}-${q.moed.semester.year}-${q.moed.semester.num}-${q.moed.num}-${q.number}`;
+  createQuestion(q: Question): Promise<QuestionId> {
+    const docId = `${q.course}-${q.moed.semester.year}-${q.moed.semester.num}-${q.moed.num}-${q.number}`;
     return this.questionsCollection.doc<Question>(docId).set(q)
       .then(() => {
         return {id: docId, ...q};
@@ -245,6 +240,7 @@ export class DbService {
   }
 
   createCourse(course: Course): Promise<void> {
+    course.created = firebase.firestore.Timestamp.now();
     return this.afs.doc(`courses/${course.id}`).set(course);
   }
 
@@ -414,6 +410,20 @@ export class DbService {
 
   removeTagFromCourse(id: number, tag: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'tags': FieldValue.arrayRemove(tag)});
+  }
+
+  removeTagFromQuestion(qId: string, tag: string) {
+    return this.afs.doc(`questions/${qId}`).update({'tags': FieldValue.arrayRemove(tag)});
+  }
+
+  pendingScanAddExtracted(pendingScanId: string, extracted: LinkedQuestion): Promise<void> {
+    return this.afs.doc(`pendingScans/${pendingScanId}`).update({
+      extractedQuestions: FieldValue.arrayUnion(extracted)
+    });
+  }
+
+  getCourses(): Observable<Course[]> {
+    return this.afs.collection<Course>('courses').valueChanges();
   }
 }
 
