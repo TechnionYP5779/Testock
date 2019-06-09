@@ -20,10 +20,12 @@
   <div class="text-center mt-2" *ngFor="let img of pendingScan.pages; let i = index">
     <img class="pending-scan-page" [src]="img" alt="pending scan page" />
   </div>
-  <h1 class="text-center mt-2" *ngIf="pendingScan.uploadInProgress">
-    <fa name="spinner" animation="spin" size="lg">></fa>
-  </h1>
-  <div class="text-center mt-2">This scan is currently being uploaded</div>
+  <div class="mt-2" *ngIf="pendingScan.uploadInProgress">
+    <h1 class="text-center">
+      <fa name="spinner" animation="spin" size="lg">></fa>
+    </h1>
+    <div class="text-center mt-2">This scan is currently being uploaded</div>
+  </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
