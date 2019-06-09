@@ -27,8 +27,8 @@
       <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + course.id">{{ course.id }}</a>
       <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
       <a [routerLink]="'/course/' + course.id + '/exam/' + question.moed.semester.year + '-' + question.moed.semester.num + '-' + question.moed.num">{{ question.moed | fullMoed }}</a>
-      <fa-icon icon="chevron-right" size="sm" class="ml-3"></fa-icon>
-      Question {{ question.number }} <span class="total-grade">({{ question.total_grade }} points)</span>
+      <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
+      <span ngbTooltip="{{ question.total_grade }} points" placement="top">Question {{ question.number }}</span>
     </h3>
 
     <div class="tags">
