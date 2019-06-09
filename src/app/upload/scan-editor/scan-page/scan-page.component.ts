@@ -16,6 +16,7 @@ export class ScanPageComponent implements OnInit {
   @Input() addImageTo: QuestionSolution;
   @Output() hide = new EventEmitter<void>();
   private croppedImage: string;
+  private croppedImageSize: number;
   private modal: NgbModalRef;
 
   constructor(private ngbModal: NgbModal) { }
@@ -25,12 +26,13 @@ export class ScanPageComponent implements OnInit {
 
   updateCroppedImage(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
+    this.croppedImageSize = event.file.size;
   }
 
   selectImage() {
     if (this.croppedImage) {
       this.scanPage.highlightInc();
-      this.addImageTo.addImage(new SolutionImage(this.croppedImage, this.scanPage));
+      this.addImageTo.addImage(new SolutionImage(this.croppedImage, this.croppedImageSize, this.scanPage));
     }
 
     this.modal.close();
@@ -43,7 +45,7 @@ export class ScanPageComponent implements OnInit {
   addFullPage() {
     if (this.addImageTo) {
       this.scanPage.highlightInc();
-      this.addImageTo.addImage(new SolutionImage(this.scanPage.imageBase64, this.scanPage));
+      this.addImageTo.addImage(new SolutionImage(this.scanPage.imageBase64, this.scanPage.blob.size, this.scanPage));
     }
   }
 }

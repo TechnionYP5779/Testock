@@ -12,7 +12,7 @@
         <ng-template #fetchedQuestionHelp>
           This question already exists in the system for this exam.<br>If the current scan does not include a solution for it, just leave it empty.
         </ng-template>
-        <fa name="info" [ngbTooltip]="fetchedQuestionHelp"></fa>
+        <fa name="info" [ngbTooltip]="fetchedQuestionHelp" placement="bottom"></fa>
       </button>
       <div class="float-right">
         <button class="btn btn-transparent" (click)="activateRequested.emit()" *ngIf="!quickMode && !active">

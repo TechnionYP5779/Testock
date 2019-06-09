@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {ScanPage} from './scan-editor/scan-page';
 
 declare let pdfjsLib: any;
 const PDFJS = pdfjsLib;
@@ -10,7 +11,7 @@ export class PdfService {
 
   constructor() { }
 
-  public async getImagesOfPDF(file: string|Uint8Array): Promise<Blob[]> {
+  public async getBlobsOfPDF(file: string|Uint8Array): Promise<Blob[]> {
 
     const doc = await PDFJS.getDocument(file);
     const images = [];
@@ -36,16 +37,27 @@ export class PdfService {
 
   }
 
-  public async getImagesOfFile(file: File): Promise<Blob[]> {
+  public async getScanPagesOfPDF(file: File): Promise<ScanPage[]> {
 
     return new Promise((resolve, reject) => {
       const fr = new FileReader();
       fr.onload = () => resolve(fr.result);
       fr.onerror = () => reject();
       fr.readAsArrayBuffer(file);
-    }).then(res => {
+    }).then(async res => {
       const data = new Uint8Array(res as ArrayBuffer);
-      return this.getImagesOfPDF(data);
+      const blobs = await this.getBlobsOfPDF(data);
+      const base64 = await Promise.all(blobs.map(blob => getImageBase64FromBlob(blob)));
+      return blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
     });
   }
+}
+
+function getImageBase64FromBlob(blob: Blob): Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
 }
