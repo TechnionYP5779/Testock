@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Select Scan Details</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form *ngIf="(courses$ | async) as courses">
+    <div class="form-group">
+        We were not able to automatically detect the details of your scan. Please provide course, semester and moed to continue.
+    </div>
+
+    <div class="form-group">
+      <label for="course">Course:</label>
+      <select class="form-control" id="course" name="course" [(ngModel)]="details.course">
+        <option *ngFor="let course of courses" [ngValue]="course.id">{{course.id}} - {{course.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="semester">Semester:</label>
+      <select class="form-control" id="semester" name="semester" [(ngModel)]="details.moed.semester">
+        <option *ngFor="let semester of semesters" [ngValue]="semester">{{{semester: semester, num: 0} | fullSemester}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="moed">Moed:</label>
+      <select class="form-control" id="moed" name="moed" [(ngModel)]="details.moed.num">
+        <option [ngValue]="1" selected>Moed A</option>
+        <option [ngValue]="2">Moed B</option>
+        <option [ngValue]="3">Moed C</option>
+      </select>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="done()" [disabled]="!details.course || !details.moed.semester || !details.moed.num">Confirm Details</button>
+</div>

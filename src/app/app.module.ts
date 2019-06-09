@@ -49,6 +49,8 @@ import {PendingScanModalComponent} from './pending-scans/pending-scan-modal/pend
 import {ScanEditorPreviewComponent} from './upload/scan-editor/scan-editor-preview/scan-editor-preview.component';
 import {ExamsListComponent} from './ui/exams-list/exams-list.component';
 import { ChooseQuestionTagComponent } from './ui/to-bottom-sheet/choose-question-tag/choose-question-tag.component';
+import { AboutComponent } from './ui/about/about.component';
+import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-details-picker.component';
 
 
 @NgModule({
@@ -95,11 +97,12 @@ import { ChooseQuestionTagComponent } from './ui/to-bottom-sheet/choose-question
     FacultyComponent,
     TagComponent,
     ExamsListComponent,
-    ChooseQuestionTagComponent
+    ChooseQuestionTagComponent,
+    AboutComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
-  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent, ChooseQuestionTagComponent]
+  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent, ChooseQuestionTagComponent, ScanDetailsPickerComponent]
 })
 export class AppModule {
   constructor() {

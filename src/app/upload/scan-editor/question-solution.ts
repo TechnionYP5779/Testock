@@ -7,9 +7,9 @@ export class QuestionSolution {
   public points: number;
   public fetchedQuestion: boolean;
 
-  constructor(number: number, points: number, fetchedQuestion = false) {
+  constructor(number: number, grade: number, points: number, fetchedQuestion = false) {
     this.images = [];
-    this.grade = 0;
+    this.grade = grade;
     this.number = number;
     this.points = points;
     this.fetchedQuestion = fetchedQuestion;
@@ -30,5 +30,9 @@ export class QuestionSolution {
   unhighlightRelatedPages() {
     this.images.map(solImg => solImg.source).map(page => page.highlightDec());
 
+  }
+
+  getTotalBytes(): number {
+    return this.images.reduce((sum, i) => sum + i.size, 0);
   }
 }

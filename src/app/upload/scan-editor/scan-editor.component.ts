@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, TemplateRef} from '@angular/core';
-import {CourseWithFaculty} from '../../entities/course';
+import {Course} from '../../entities/course';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {OCRService} from '../../core/ocr.service';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -26,7 +26,7 @@ export class ScanEditResult {
 })
 export class ScanEditorComponent implements OnInit {
 
-  @Input() course: CourseWithFaculty;
+  @Input() course: Course;
   @Input() questions: QuestionSolution[] = [];
   @Input() pages: ScanPage[];
   @Input() moed: Moed;
@@ -66,7 +66,7 @@ export class ScanEditorComponent implements OnInit {
         return;
       }
 
-      const newQuestion = new QuestionSolution(this.newQuestionNum, this.newQuestionGrade);
+      const newQuestion = new QuestionSolution(this.newQuestionNum, 0, this.newQuestionGrade);
       this.questions.push(newQuestion);
       this.questions = this.questions.sort((a, b) => a.number - b.number);
       this.activateQuestion(newQuestion);
@@ -132,8 +132,10 @@ export class ScanEditorComponent implements OnInit {
   }
 
   deactivateQuestion() {
-    this.activeQuestion.unhighlightRelatedPages();
-    this.activeQuestion = null;
+    if (this.activeQuestion) {
+      this.activeQuestion.unhighlightRelatedPages();
+      this.activeQuestion = null;
+    }
   }
 
   deleteQuestion(q: QuestionSolution) {
@@ -153,7 +155,7 @@ export class ScanEditorComponent implements OnInit {
   preview() {
     const ref = this.modal.open(ScanEditorPreviewComponent, {size: 'lg'});
     ref.componentInstance.solutions = this.questions;
-    ref.componentInstance.collapsed = this.questions.map(q => false);
+    ref.componentInstance.collapsed = this.questions.map(() => true);
   }
 }
 
