@@ -19,7 +19,7 @@ import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatBottomSheetModule, MatPaginatorModule, MatTableModule} from '@angular/material';
+import {MatBottomSheetModule, MatListModule, MatPaginatorModule, MatTableModule} from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -80,7 +80,8 @@ import { ChooseQuestionTagComponent } from './ui/to-bottom-sheet/choose-question
     NgbRatingModule,
     MatTableModule,
     MatPaginatorModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    MatListModule
   ],
   declarations: [
     AppComponent,

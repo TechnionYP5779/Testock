@@ -1,12 +1,24 @@
 <div *ngIf="question$ | async as question">
   <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
   <div class="jumbotron jumbotron" *ngIf="course$ | async as course">
+    <div *ngIf="question.count_difficulty_ratings > 0">
+      <p class="difficulty-stars">
+        <ng-template #temp let-fill="fill">
+            <span class="star" [class.full]="fill === 100">
+              <span class="half" [style.width.%]="fill">&#9733;</span>
+              &#9733;
+            </span>
+        </ng-template>
+        <ngb-rating placement="top" ngbTooltip="Difficulty rating" [starTemplate]="temp" [(rate)]="question.sum_difficulty_ratings / question.count_difficulty_ratings"
+                    [readonly]="true" max="5"></ngb-rating>
+      </p>
+    </div>
     <h3 class="title display-4">
       <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + course.id">{{ course.id }}</a>
       <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
       <a [routerLink]="'/course/' + course.id + '/exam/' + question.moed.semester.year + '-' + question.moed.semester.num + '-' + question.moed.num">{{ question.moed | fullMoed }}</a>
       <fa-icon icon="chevron-right" size="sm" class="ml-3"></fa-icon>
-      Question {{ question.number }}
+      Question {{ question.number }} <span class="total-grade">({{ question.total_grade }} points)</span>
     </h3>
 
     <div class="tags">
@@ -27,19 +39,6 @@
   <h2>
     Question {{ question.number }} ({{ question.moed | fullMoed }})
   </h2>
-  <div *ngIf="question.count_difficulty_ratings > 0">
-    <h3>
-      Difficulty rating:
-      <ng-template #temp let-fill="fill">
-            <span class="star" [class.full]="fill === 100">
-              <span class="half" [style.width.%]="fill">&#9733;</span>
-              &#9733;
-            </span>
-      </ng-template>
-      <ngb-rating [starTemplate]="temp" [(rate)]="question.sum_difficulty_ratings / question.count_difficulty_ratings"
-                  [readonly]="true" max="5"></ngb-rating>
-    </h3>
-  </div>
   <div>
     <div *ngIf="course$ | async as course">
       <div *ngFor="let tag of question.tags">

@@ -4,8 +4,8 @@ import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
 import {AuthService} from '../../users/auth.service';
-import {flatMap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {flatMap, map} from 'rxjs/operators';
+import {combineLatest, Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -95,6 +95,12 @@ export class QuestionComponent implements OnInit {
   }
 
   openBottomSheet(): void {
-    this._bottomSheet.open(ChooseQuestionTagComponent);
+    const tagsBottomSheet = this._bottomSheet.open(ChooseQuestionTagComponent);
+    const optionalTags$: Observable<string[]> = combineLatest(this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course))),
+      this.db.getQuestion(this.qId)).pipe(
+      map(([course, question]) => this.arr_diff(course.tags, question.tags) as string[])
+    );
+    tagsBottomSheet.instance.tags$ = optionalTags$;
+    this.db.getQuestion(this.qId).subscribe(question => tagsBottomSheet.instance.questionId = question.id);
   }
 }

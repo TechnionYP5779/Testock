@@ -9,11 +9,23 @@
   a {
     color: inherit;
   }
+
+  .total-grade {
+    font-size: 60%;
+  }
 }
 
 .tag {
   float: left;
   margin-right: 8px;
+
+  .remove-tag {
+    margin: 0;
+    padding: 0;
+    background: 0;
+    outline: 0;
+    border: 0;
+  }
 }
 
 .modal {
@@ -39,22 +51,26 @@
   color: orange;
 }
 
-.star {
-  position: relative;
-  display: inline-block;
-  font-size: 3rem;
-  color: #d3d3d3;
-}
+.difficulty-stars {
+  margin-bottom: 0;
 
-.full {
-  color: red;
-}
+  .star {
+    position: relative;
+    display: inline-block;
+    font-size: 2rem;
+    color: #d3d3d3;
+  }
 
-.half {
-  position: absolute;
-  display: inline-block;
-  overflow: hidden;
-  color: red;
+  .full {
+    color: #007bff;
+  }
+
+  .half {
+    position: absolute;
+    display: inline-block;
+    overflow: hidden;
+    color: #007bff;
+  }
 }
 
 
