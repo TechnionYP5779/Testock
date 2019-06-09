@@ -2,12 +2,21 @@
   <div>
     <h4 class="modal-title">Pending Scan for {{ pendingScan.moed | fullMoed }}</h4>
     <div class="display-inline" *ngIf="pendingScan.linkedQuestions.length > 0">
-      <strong>Questions on this exam: </strong>
+      <strong>Questions on this scan: </strong>
       <a class="badge badge-primary ml-1"
          *ngFor="let linkedQuestion of pendingScan.linkedQuestions"
          (click)="activeModal.dismiss()"
          [routerLink]="'/question/' + linkedQuestion.qid">
         Question {{ linkedQuestion.num }}
+      </a>
+    </div>
+    <div class="display-inline" *ngIf="pendingScan.extractedQuestions.length > 0">
+      <strong>Solutions extracted from this scan: </strong>
+      <a class="badge badge-success ml-1"
+         *ngFor="let extractedQuestion of pendingScan.extractedQuestions"
+         (click)="activeModal.dismiss()"
+         [routerLink]="'/question/' + extractedQuestion.qid">
+        Question {{ extractedQuestion.num }}
       </a>
     </div>
   </div>
