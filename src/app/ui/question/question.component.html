@@ -38,7 +38,8 @@
           <fa-icon icon="times"></fa-icon>
         </button>
       </button>
-      <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Choose tag" (click)="openBottomSheet()">
+      <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Choose tag" (click)="openBottomSheet()"
+        *ngIf="course.tags.length > question.tags.length">
         <fa-icon icon="plus"></fa-icon>
       </button>
     </div>
