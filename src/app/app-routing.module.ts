@@ -17,6 +17,7 @@ import {PendingScanComponent} from './pending-scans/pending-scan/pending-scan.co
 import {TagComponent} from './ui/tag/tag.component';
 import {BatchUploadComponent} from './upload/batch-upload/batch-upload.component';
 import {CropPendingComponent} from './upload/crop-pending/crop-pending.component';
+import {AboutComponent} from './ui/about/about.component';
 
 const routes: Routes = [
   {path: '', component: FacultiesComponent},
@@ -37,7 +38,8 @@ const routes: Routes = [
   {path: 'world', component: GameWorldComponent, canActivate: [UsersOnlyGuard]},
   {path: 'pendingScan/:id', component: PendingScanComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:cid/tag/:tag', component: TagComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'batch-upload', component: BatchUploadComponent, canActivate: [AdminOnlyGuard]}
+  {path: 'batch-upload', component: BatchUploadComponent, canActivate: [AdminOnlyGuard]},
+  {path: 'about', component: AboutComponent}
 ];
 
 @NgModule({
