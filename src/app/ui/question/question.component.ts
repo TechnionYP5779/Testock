@@ -30,7 +30,6 @@ export class QuestionComponent implements OnInit {
   userId: string;
   solvedQuestion$: Observable<SolvedQuestion>;
   selected = 0;
-  average$: number;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar,
               private spinner: NgxSpinnerService, private _bottomSheet: MatBottomSheet) {
@@ -62,13 +61,6 @@ export class QuestionComponent implements OnInit {
       this.spinner.hide().then(() => {
         this.snackBar.open(`This question was removed from your solved question list!`, 'close', {duration: 3000});
       });
-    });
-  }
-
-  addTag(tag) {
-    this.spinner.show();
-    this.db.addTagToQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
-      this.snackBar.open(`Added Tag Successfully!`, 'close', {duration: 3000});
     });
   }
 
