@@ -71,7 +71,11 @@ export class QuestionComponent implements OnInit {
   }
 
   arr_diff(a1, a2) {
-    return a1.filter(e => !a2.includes(e));
+    if (a1 && a2) {
+      return a1.filter(e => !a2.includes(e));
+    } else {
+      return [];
+    }
   }
 
   sendRate() {
