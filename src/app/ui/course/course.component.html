@@ -4,7 +4,7 @@
   <div class="favorite-toggle" (click)="updateFavoriteCourse()">
     <button>
       <fa-icon icon="star" *ngIf="(favorite$ | async)"></fa-icon>
-      <fa-icon icon="star-o" *ngIf="(favorite$ | async) == false"></fa-icon>
+      <fa-icon [icon]="['far', 'star']" *ngIf="(favorite$ | async) == false"></fa-icon>
     </button>
   </div>
   <h1 class="display-4">
