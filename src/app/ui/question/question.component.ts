@@ -13,6 +13,7 @@ import {SolvedQuestion} from '../../entities/solved-question';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MatBottomSheet} from '@angular/material';
 import {ChooseQuestionTagComponent} from '../to-bottom-sheet/choose-question-tag/choose-question-tag.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-question',
@@ -30,9 +31,10 @@ export class QuestionComponent implements OnInit {
   userId: string;
   solvedQuestion$: Observable<SolvedQuestion>;
   selected = 0;
+  editTotalGrade: number;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar,
-              private spinner: NgxSpinnerService, private _bottomSheet: MatBottomSheet) {
+              private spinner: NgxSpinnerService, private _bottomSheet: MatBottomSheet, private modal: NgbModal) {
     this.qId = this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForQuestion(this.qId);
     this.question$ = this.db.getQuestion(this.qId);
@@ -99,5 +101,25 @@ export class QuestionComponent implements OnInit {
     );
     tagsBottomSheet.instance.tags$ = optionalTags$;
     this.db.getQuestion(this.qId).subscribe(question => tagsBottomSheet.instance.questionId = question.id);
+  }
+
+  async editQuestion(editQuestionModal: TemplateRef<any>, q: QuestionId) {
+    this.editTotalGrade = q.total_grade;
+    const result = await this.modal.open(editQuestionModal, {size: 'sm'}).result.catch(reason => {});
+
+    if (result) {
+
+      if (this.editTotalGrade < 1 || this.editTotalGrade > 100) {
+        this.snackBar.open('Error: Invalid question grade', 'close', {duration: 3000});
+        return;
+      }
+
+      q.total_grade = this.editTotalGrade;
+      await this.spinner.show();
+      await this.db.updateQuestionTotalGrade(q);
+      await this.spinner.hide();
+      this.snackBar.open('Question updated successfully', 'close', {duration: 3000});
+    }
+
   }
 }
