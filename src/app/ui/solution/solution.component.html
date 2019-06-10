@@ -82,7 +82,7 @@
               <div class="input-group-text">/</div>
             </div>
             <div class="input-group-prepend">
-              <div class="input-group-text">{{question.total_grade}}</div>
+              <input type="number" class="form-control col-3" id="totalGrade" name="totalGrade" [(ngModel)]="question.total_grade">
             </div>
           </div>
         </form>

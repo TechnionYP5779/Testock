@@ -271,6 +271,10 @@ export class DbService {
     return this.afs.doc<Solution>(`questions/${q.id}/solutions/${sol.id}`).update({grade: sol.grade});
   }
 
+  updateQuestionTotalGrade(q: QuestionId): Promise<void> {
+    return this.afs.doc<Question>(`questions/${q.id}`).update({total_grade: q.total_grade});
+  }
+
   createTopic(topic: Topic): Promise<TopicId> {
     topic.created = firebase.firestore.Timestamp.now();
     return this.afs.collection<Topic>(`topics`).add(topic).then(dr => {

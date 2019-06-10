@@ -33,7 +33,9 @@ export class SolutionComponent implements OnInit {
   }
 
   saveSolution() {
-    this.db.updateSolutionGrade(this.solution, this.question).then(() => {
+    const p1 = this.db.updateSolutionGrade(this.solution, this.question);
+    const p2 = this.db.updateQuestionTotalGrade(this.question);
+    Promise.all([p1, p2]).then(() => {
       this.snackBar.open(`Solution Updated Successfully`, 'close', {duration: 3000});
     });
   }
