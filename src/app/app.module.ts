@@ -102,7 +102,13 @@ import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-deta
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
-  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent, ChooseQuestionTagComponent, ScanDetailsPickerComponent]
+  entryComponents: [
+    PendingSolutionModalComponent,
+    PendingScanModalComponent,
+    ScanEditorPreviewComponent,
+    ChooseQuestionTagComponent,
+    ScanDetailsPickerComponent
+  ]
 })
 export class AppModule {
   constructor() {
