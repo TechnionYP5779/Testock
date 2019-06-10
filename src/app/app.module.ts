@@ -51,6 +51,7 @@ import {ExamsListComponent} from './ui/exams-list/exams-list.component';
 import { ChooseQuestionTagComponent } from './ui/to-bottom-sheet/choose-question-tag/choose-question-tag.component';
 import { AboutComponent } from './ui/about/about.component';
 import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-details-picker.component';
+import { HelpComponent } from './ui/help/help.component';
 
 
 @NgModule({
@@ -98,7 +99,8 @@ import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-deta
     TagComponent,
     ExamsListComponent,
     ChooseQuestionTagComponent,
-    AboutComponent
+    AboutComponent,
+    HelpComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
