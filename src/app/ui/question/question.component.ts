@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
@@ -8,7 +8,7 @@ import {flatMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {SolvedQuestion} from '../../entities/solved-question';
 import {NgxSpinnerService} from 'ngx-spinner';
 
@@ -31,7 +31,7 @@ export class QuestionComponent implements OnInit {
   average$: number;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar,
-              private spinner: NgxSpinnerService) {
+              private spinner: NgxSpinnerService, private router: Router) {
     this.qId = this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForQuestion(this.qId);
     this.question$ = this.db.getQuestion(this.qId);
@@ -91,6 +91,15 @@ export class QuestionComponent implements OnInit {
     this.spinner.show();
     this.db.removeTagFromQuestion(this.qId, tag).then(() => this.spinner.hide()).then(() => {
       this.snackBar.open(`Removed Tag Successfully!`, 'close', {duration: 3000});
+    });
+  }
+
+  deleteQuestion() {
+    this.spinner.show();
+    this.router.navigate(['../']).then(() => {
+      this.db.removeQuestion(this.qId).then(() => this.spinner.hide()).then(() => {
+        this.snackBar.open(`Removed Question Successfully!`, 'close', {duration: 3000});
+      });
     });
   }
 }

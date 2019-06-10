@@ -424,6 +424,10 @@ export class DbService {
   getCourses(): Observable<Course[]> {
     return this.afs.collection<Course>('courses').valueChanges();
   }
+
+  removeQuestion(qId: string) {
+    return this.afs.doc(`questions/${qId}`).delete();
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
