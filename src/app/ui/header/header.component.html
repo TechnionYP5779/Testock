@@ -25,19 +25,23 @@
           </form>
           <!-- User logged in -->
           <div *ngIf="auth.user$ | async as user">
+            <button type="button" class="btn btn-outline-primary align-middle mr-2" *ngIf="auth.currentUser" routerLink="/upload">
+              <fa-icon icon="upload" class="mr-2"></fa-icon>
+              <span>Upload Scan</span>
+            </button>
             <div class="profile-image mr-2" routerLink="/profile">
               <span class="notification-badge badge badge-warning" routerLink="/profile" *ngIf="(notificationsCount$ | async) && (notificationsCount$ | async) > 0">{{ (notificationsCount$ | async) }}</span>
               <img class="rounded" [src]="user.photoUrl" width="35px">
             </div>
             <button class="btn btn-warning mr-2" type="button" routerLink="/world">
-              <fa name="diamond"></fa>
+              <fa-icon [icon]="['far', 'gem']"></fa-icon>
               {{ user.points }}
             </button>
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">
             <button class="btn btn-outline-success mr-2" type="button" (click)="login()">
-            <fa name="sign-in"></fa>
+            <fa-icon icon="sign-in-alt"></fa-icon>
               Sign In
             </button>
           </div>
@@ -46,10 +50,6 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="before">
-            <button mat-menu-item *ngIf="auth.currentUser" routerLink="/upload">
-              <mat-icon>cloud_upload</mat-icon>
-              <span>Upload Scan</span>
-            </button>
             <button mat-menu-item *ngIf="isAdmin" routerLink="/batch-upload">
               <mat-icon>cloud_upload</mat-icon>
               <span>Batch Upload</span>

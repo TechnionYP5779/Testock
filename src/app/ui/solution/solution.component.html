@@ -17,15 +17,15 @@
     </div>
   </div>
   <div class="text-center mt-2" *ngIf="solution && adminAccess">
-    <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa name="edit"></fa></button>
-    <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa name="times"></fa></button>
+    <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa-icon icon="edit"></fa-icon></button>
+    <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa-icon icon="times"></fa-icon></button>
   </div>
 </div>
 
 <ng-template #uploadInProgress>
   <div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal">
     <div class="card-img text-center">
-      <h6 class="mt-5"><fa name="spinner" animation="spin" size="lg"></fa></h6>
+      <h6 class="mt-5"><fa-icon icon="spinner" [spin]="true" size="lg">></fa-icon></h6>
       <div class="mt-2">Solution in upload</div>
     </div>
     <div class="card-img-overlay align-items-center d-flex justify-content-center">

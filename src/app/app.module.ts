@@ -7,7 +7,11 @@ import {environment} from '../environments/environment';
 import {AppRoutingModule} from './app-routing.module';
 
 import {AuthService} from './users/auth.service';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 import {PdfService} from './upload/pdf.service';
 import {CoursesComponent} from './ui/courses/courses.component';
 import {CourseComponent} from './ui/course/course.component';
@@ -15,6 +19,7 @@ import {QuestionComponent} from './ui/question/question.component';
 import {ExamComponent} from './ui/exam/exam.component';
 import {HeaderComponent} from './ui/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatBottomSheetModule, MatListModule, MatPaginatorModule, MatTableModule} from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -42,9 +47,10 @@ import { TagComponent } from './ui/tag/tag.component';
 import {CKEditorModule} from 'ngx-ckeditor';
 import {PendingScanModalComponent} from './pending-scans/pending-scan-modal/pending-scan-modal.component';
 import {ScanEditorPreviewComponent} from './upload/scan-editor/scan-editor-preview/scan-editor-preview.component';
+import {ExamsListComponent} from './ui/exams-list/exams-list.component';
+import { ChooseQuestionTagComponent } from './ui/to-bottom-sheet/choose-question-tag/choose-question-tag.component';
 import { AboutComponent } from './ui/about/about.component';
 import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-details-picker.component';
-
 
 
 @NgModule({
@@ -52,7 +58,7 @@ import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-deta
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
-    AngularFontAwesomeModule,
+    FontAwesomeModule,
     CoreModule,
     AdminModule,
     DiscussionsModule,
@@ -73,7 +79,11 @@ import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-deta
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    NgbRatingModule
+    NgbRatingModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatBottomSheetModule,
+    MatListModule
   ],
   declarations: [
     AppComponent,
@@ -86,11 +96,16 @@ import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-deta
     FacultiesComponent,
     FacultyComponent,
     TagComponent,
+    ExamsListComponent,
+    ChooseQuestionTagComponent,
     AboutComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
-  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent, ScanDetailsPickerComponent]
+  entryComponents: [PendingSolutionModalComponent, PendingScanModalComponent, ScanEditorPreviewComponent, ChooseQuestionTagComponent, ScanDetailsPickerComponent]
 })
 export class AppModule {
+  constructor() {
+    library.add(fas, far, faFacebookSquare);
+  }
 }

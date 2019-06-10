@@ -1,20 +1,44 @@
 <div class="alert alert-info" *ngIf="adminAccess">You have admin access for this exam</div>
-<div class="card" *ngIf="exam && course">
-  <h5 class="card-header" *ngIf="this.exam">
-    <a [routerLink]="'/course/' + course.id">{{course.name}} ({{course.id}})</a> - {{ exam.moed | fullMoed }}
+<div class="jumbotron jumbotron" *ngIf="exam && course">
+  <div class="download-solution">
     <a target="_blank" [href]="getPdfUrl + '?course=' + courseId + '&year=' + exam.moed.semester.year + '&semester=' + exam.moed.semester.num + '&moed=' + exam.moed.num">
-      <button type="button" class="btn btn-danger float-right">Download full PDF solution!</button>
+      <button type="button" class="btn btn-success" placement="top" ngbTooltip="Download full PDF solution">
+        <fa-icon icon="file-download"></fa-icon>
+      </button>
     </a>
-  </h5>
-  <div class="card-body">
-    <div class="list-group my-3" >
-      <li class="list-group-item list-group-item-danger">Solved questions</li>
-      <a *ngFor="let q of questions" routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action">
-        Question {{ q.number }} ({{q.total_grade}} Points)
-      </a>
-    </div>
-
-    <app-pending-scans-list [course]="courseId" [moed]="exam.moed" [adminAccess]="adminAccess"></app-pending-scans-list>
-
   </div>
+  <div *ngIf="difficulty">
+    <p class="difficulty-stars">
+      <ng-template #temp let-fill="fill">
+          <span class="star" [class.full]="fill === 100">
+            <span class="half" [style.width.%]="fill">&#9733;</span>
+            &#9733;
+          </span>
+      </ng-template>
+      <ngb-rating placement="top" [ngbTooltip]="'Average questions difficulty: ' + (difficulty | number:'1.1-2')" [starTemplate]="temp" [(rate)]="difficulty"
+                  [readonly]="true" max="5"></ngb-rating>
+    </p>
+  </div>
+  <h3 class="title display-4">
+    <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + courseId">{{ course.id }}</a>
+    <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
+    {{ exam.moed | fullMoed }}
+  </h3>
+
+  <div class="tags">
+    <button class="tag btn btn-warning mr-2" *ngFor="let tag of tags" [routerLink]="'/course/' + course.id + '/tag/' + tag">
+      # {{ tag }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="exam && course">
+  <div class="list-group my-3" >
+    <li class="list-group-item list-group-item-danger">Solved questions</li>
+    <a *ngFor="let q of questions" routerLink="/question/{{ q.id }}" class="list-group-item list-group-item-action">
+      Question {{ q.number }} ({{q.total_grade}} Points)
+    </a>
+  </div>
+
+  <app-pending-scans-list [course]="courseId" [moed]="exam.moed" [adminAccess]="adminAccess"></app-pending-scans-list>
 </div>

@@ -9,7 +9,7 @@
   <div *ngIf="pendingScan && loaded else loading">
     <div class="enter-crop-mode-btn" *ngIf="!cropMode else toolbar">
       <button type="button" class="btn btn-primary" (click)="enableCropMode()">
-        <fa name="crop" class="mr-2"></fa>
+        <fa-icon icon="crop" class="mr-2"></fa-icon>
         Crop this solution, help others and earn some points!
       </button>
     </div>
@@ -36,7 +36,7 @@
   <div class="edit-toolbar">
     <div class="mb-4 text-center">
       <button type="button" class="btn btn-danger" (click)="disableCropMode()">
-        <fa name="times" class="mr-2"></fa> Exit crop mode
+        <fa-icon icon="times" class="mr-2"></fa-icon> Exit crop mode
       </button>
     </div>
     <div class="card">
@@ -61,7 +61,7 @@
               <img [src]="croppedPages[i]" alt="scan page crop" width="100%" *ngIf="croppedPages[i]">
               <div class="image-popup">
                 <button class="btn image-remove-button" (click)="cancelPage(i)">
-                  <fa name="trash"></fa>
+                  <fa-icon icon="trash"></fa-icon>
                 </button>
               </div>
             </div>
@@ -70,7 +70,7 @@
       </div>
 
       <div class="card-footer text-center">
-        <button class="btn btn-lg btn-success" (click)="uploadSolution()"><fa name="check" class="mr-2"></fa>Done</button>
+        <button class="btn btn-lg btn-success" (click)="uploadSolution()"><fa-icon icon="check" class="mr-2"></fa-icon>Done</button>
       </div>
     </div>
 
@@ -82,6 +82,6 @@
 
 <ng-template #loading>
   <h1 class="text-center">
-    <fa name="spinner" animation="spin" size="lg"></fa>
+    <fa-icon icon="spinner" [spin]="true" size="lg"></fa-icon>
   </h1>
 </ng-template>

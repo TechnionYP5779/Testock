@@ -1,5 +1,5 @@
 <div class="alert alert-danger" *ngIf="error">
-  <fa name="exclamation-circle" class="mr-2"></fa> {{error}}
+  <fa-icon icon="exclamation-circle" class="mr-2"></fa-icon> {{error}}
 </div>
 <div class="row" *ngIf="state === uploadState.Ready">
   <div class="col-md-12">
@@ -15,7 +15,7 @@
       <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
         <div class="box has-advanced-upload" [ngClass]="{'is-dragover':isDragged == true}">
           <div class="box-input">
-            <fa name="upload" class="box-icon"></fa>
+            <fa-icon icon="upload" class="box-icon"></fa-icon>
             <div class="box-file-label-text" style="text-align: center;">
               <label class="box-file-label" (click)="openFileSelector()">
                 <strong> Browse your scan </strong> or drop it here
@@ -35,26 +35,26 @@
     </div>
     <ul class="list-group mt-4">
       <li class="list-group-item">
-        <fa name="check" *ngIf="loadProgress?.pages" class="text-success mr-2"></fa>
-        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.pages" class="mr-2"></fa>
+        <fa-icon icon="check" *ngIf="loadProgress?.pages" class="text-success mr-2"></fa-icon>
+        <fa-icon icon="spinner" [spin]="true" *ngIf="!loadProgress?.pages" class="mr-2"></fa-icon>
         <span *ngIf="loadProgress?.pages"><strong>Scan Pages:</strong> Found {{loadProgress?.pages.length}} Pages</span>
         <span *ngIf="!loadProgress?.pages"><strong>Scan Pages</strong></span>
       </li>
       <li class="list-group-item">
-        <fa name="check" *ngIf="loadProgress?.resultScanDetails" class="text-success mr-2"></fa>
-        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.resultScanDetails" class="mr-2"></fa>
+        <fa-icon icon="check" *ngIf="loadProgress?.resultScanDetails" class="text-success mr-2"></fa-icon>
+        <fa-icon icon="spinner" [spin]="true" *ngIf="!loadProgress?.resultScanDetails" class="mr-2"></fa-icon>
         <span *ngIf="loadProgress?.resultScanDetails"><strong>Exam Details:</strong> {{ loadProgress.resultScanDetails.moed | fullMoed }}</span>
         <span *ngIf="!loadProgress?.resultScanDetails"><strong>Exam Details</strong></span>
       </li>
       <li class="list-group-item">
-        <fa name="check" *ngIf="loadProgress?.resultCourse" class="text-success mr-2"></fa>
-        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.resultCourse" class="mr-2"></fa>
+        <fa-icon icon="check" *ngIf="loadProgress?.resultCourse" class="text-success mr-2"></fa-icon>
+        <fa-icon icon="spinner" [spin]="true" *ngIf="!loadProgress?.resultCourse" class="mr-2"></fa-icon>
         <span *ngIf="loadProgress?.resultCourse"><strong>Course:</strong> {{ loadProgress.resultCourse.name }} ({{loadProgress.resultCourse.id}})</span>
         <span *ngIf="!loadProgress?.resultCourse"><strong>Course</strong></span>
       </li>
       <li class="list-group-item">
-        <fa name="check" *ngIf="loadProgress?.existingQuestions" class="text-success mr-2"></fa>
-        <fa name="spinner" animation="spin" *ngIf="!loadProgress?.existingQuestions" class="mr-2"></fa>
+        <fa-icon icon="check" *ngIf="loadProgress?.existingQuestions" class="text-success mr-2"></fa-icon>
+        <fa-icon icon="spinner" [spin]="true" *ngIf="!loadProgress?.existingQuestions" class="mr-2"></fa-icon>
         <span *ngIf="loadProgress?.existingQuestions"><strong>Existing Questions:</strong> {{loadProgress.existingQuestions.length}} found</span>
         <span *ngIf="!loadProgress?.existingQuestions"><strong>Existing Questions</strong></span>
       </li>
@@ -76,7 +76,7 @@
 <div class="row mt-4" *ngIf="state === uploadState.Uploading">
   <div class="col-md-3"></div>
   <div class="col-md-6 text-center">
-    <fa name="spinner" animation="spin" size="5x"></fa>
+    <fa-icon icon="spinner" [spin]="true" size="5x"></fa-icon>
     <h2 class="mt-4">Uploading Solutions</h2>
     <div class="mt-4" *ngIf="uploadProgress?.currentQuestionProgress">
       <div>Uploading question {{uploadProgress.currentQuestionProgress.question.number}}...</div>
@@ -102,7 +102,7 @@
   <div class="col-md-3"></div>
   <div class="col-md-6 text-center">
     <div class="text-success">
-      <fa name="check" size="5x"></fa>
+      <fa-icon icon="check" size="5x"></fa-icon>
     </div>
     <h2 class="mt-4">Solutions Uploaded Successfully</h2>
     <h4 class="mt-2">Thanks for your contribution!</h4>
@@ -137,7 +137,7 @@
   </div>
   <div class="modal-body">
     <p>We can upload your scan as a pending scan and let others crop the solutions you skipped.</p>
-    <div class="alert alert-warning"><fa name="exclamation-triangle" class="mr-2"></fa>All pages you did not hide will be uploaded, including the first page with your details. so if</div>
+    <div class="alert alert-warning"><fa-icon icon="exclamation-triangle" class="mr-2"></fa-icon>All pages you did not hide will be uploaded, including the first page with your details. so if</div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary" (click)="modal.close(pendingScanConfirmResult.BACK_TO_EDIT)">Back to edit</button>

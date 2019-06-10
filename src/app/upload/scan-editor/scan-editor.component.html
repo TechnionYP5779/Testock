@@ -12,12 +12,12 @@
       <div class="col-md-7">
         <div class="btn-toolbar float-right">
           <button type="button" class="btn btn-sm btn-success" (click)="restoreHiddenPages()" [ngbTooltip]="'Restore ' + hiddenPagesCount + ' Hidden Pages'" *ngIf="hiddenPagesCount">
-            <fa name="undo" class="mr-2"></fa>
+            <fa-icon icon="undo" class="mr-2"></fa-icon>
             <span class="badge badge-light">{{ hiddenPagesCount }}</span>
           </button>
 
           <div class="btn-group btn-group-sm ml-1" role="group" aria-label="Clean Pages">
-            <button type="button" class="btn btn-danger"><fa name="eye-slash"></fa></button>
+            <button type="button" class="btn btn-danger"><fa-icon icon="eye-slash"></fa-icon></button>
             <button type="button" class="btn btn-danger" (click)="hideFirstPage()" ngbTooltip="Hide First Page">First</button>
             <button type="button" class="btn btn-danger" (click)="hideEvenPages()" ngbTooltip="Hide Even Pages">Even</button>
             <button type="button" class="btn btn-danger" (click)="hideOddPages()" ngbTooltip="Hide Odd Pages">Odd</button>
@@ -38,12 +38,12 @@
 
           <button class="btn btn-secondary ml-1"
                   (click)="preview()">
-            <fa name="eye" class="mr-2"></fa>Preview
+            <fa-icon icon="eye" class="mr-2"></fa-icon>Preview
           </button>
 
           <button class="btn btn-success ml-1"
                   (click)="emitUpload()">
-            <fa name="upload" class="mr-2"></fa>Upload
+            <fa-icon icon="upload" class="mr-2"></fa-icon>Upload
           </button>
         </div>
       </div>
@@ -55,10 +55,10 @@
     <div class="row">
       <div class="col-12 sticky-top sticky-alert">
         <div class="alert alert-warning" *ngIf="activeQuestion">
-          <fa name="info" class="mr-2"></fa> Choose question {{ activeQuestion.number }} answers
+          <fa-icon icon="info" class="mr-2"></fa-icon> Choose question {{ activeQuestion.number }} answers
         </div>
         <div class="alert alert-primary" *ngIf="!activeQuestion">
-          <fa name="info" class="mr-2"></fa> Choose a question to edit from the right toolbar
+          <fa-icon icon="info" class="mr-2"></fa-icon> Choose a question to edit from the right toolbar
         </div>
       </div>
       <div class="col-12">
@@ -80,7 +80,7 @@
                   You have hidden all scan pages.
                 </div>
                 <button class="btn btn btn-success mt-2" (click)="restoreHiddenPages()">
-                  <fa name="undo" class="mr-2"></fa> Restore hidden pages
+                  <fa-icon icon="undo" class="mr-2"></fa-icon> Restore hidden pages
                 </button>
               </div>
             </div>
@@ -91,7 +91,7 @@
   </div>
   <div class="col-4 sticky-top right-toolbar">
     <button class="btn btn-outline-primary btn-block mt-2" type="button" (click)="addQuestion(newQuestionModal)">
-      <fa name="plus" class="mr-2"></fa>Add Question
+      <fa-icon icon="plus" class="mr-2"></fa-icon>Add Question
     </button>
     <div *ngIf="questions" class="questions-container mt-1">
       <div class="mt-2">
@@ -106,7 +106,7 @@
             [active]="activeQuestion === q"
           ></app-question-solution>
           <div class="alert alert-primary" *ngIf="questions.length == 0">
-            <fa name="info" class="mr-2"></fa>
+            <fa-icon icon="info" class="mr-2"></fa-icon>
             Click above to insert a question
           </div>
         </div>

@@ -10,7 +10,7 @@
         <div class="user-text">
           <span class="user-name">{{planetUser.name}}</span>
           <span class="user-score">
-            <fa name="diamond"></fa>
+            <fa-icon [icon]="['far', 'gem']"></fa-icon>
             {{planetUser.points}}
           </span>
         </div>
@@ -18,7 +18,7 @@
     </ul>
     <p class="empty-planet-notice" *ngIf="(planetUsers$ | async)?.length == 0">Still no users on this planet</p>
     <ng-template #loading>
-      <p class="empty-planet-notice"><fa name="spinner" animation="spin" class="empty-planet-notice"></fa></p>
+      <p class="empty-planet-notice"><fa-icon icon="spinner" [spin]="true" class="empty-planet-notice"></fa-icon></p>
     </ng-template>
   </div>
 </div>

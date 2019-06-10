@@ -1,0 +1,48 @@
+.title {
+  font-size: 2.5rem;
+
+  a {
+    color: inherit;
+  }
+
+  .total-grade {
+    font-size: 60%;
+  }
+}
+
+.tag {
+  margin-right: 8px;
+}
+
+.download-solution {
+  float: right;
+
+  button {
+    font-size: 45px;
+    margin-right: 20px;
+    cursor: pointer;
+    padding: 0 17px;
+  }
+}
+
+.difficulty-stars {
+  margin-bottom: 0;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 2rem;
+  color: #d3d3d3;
+}
+
+.full {
+  color: #007bff;
+}
+
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #007bff;
+}

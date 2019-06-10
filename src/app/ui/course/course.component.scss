@@ -6,6 +6,27 @@
   cursor: pointer;
 }
 
+.edit-button {
+  margin: 0;
+  font-size: 40%;
+  padding: 0;
+  background: 0;
+  outline: 0;
+  border: 0;
+}
+
+.tag {
+  font-style: italic;
+
+  .remove-tag {
+    margin: 0;
+    padding: 0;
+    background: 0;
+    outline: 0;
+    border: 0;
+  }
+}
+
 .favorite-toggle {
   float: right;
 

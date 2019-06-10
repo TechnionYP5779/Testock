@@ -1,0 +1,41 @@
+<h5 class="table-header-title">
+  {{ title }}
+  <span class="badge badge-primary">{{dataSource.data.length}}</span>
+</h5>
+<div class="mat-elevation-z8">
+  <table mat-table
+         matSort (matSortChange)="sortExams($event)"
+         [dataSource]="dataSource" multiTemplateDataRows>
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+      <th mat-header-cell [mat-sort-header]="column" *matHeaderCellDef> {{column | titlecase }} </th>
+      <td mat-cell *matCellDef="let exam"> {{exam[column]}} </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let exam" [attr.colspan]="columnsToDisplay.length">
+        <div class="exam-detail"
+             [@detailExpand]="exam == expandedExam ? 'expanded' : 'collapsed'">
+          <div class="exam-description">
+            <button type="button" class="btn btn-warning exam-button mr-2" [routerLink]="'/course/' + exam.course + '/exam/' + exam.id">Entire Exam</button>
+            <div class="questions-container" *ngFor="let question of (exam.questions | async)">
+              <button type="button" class="btn btn-primary question-button mr-2 mb-2" placement="top" [ngbTooltip]="question.tags.toString()" [routerLink]="'/question/' + question.id">
+                Question {{ question.number }} ({{ question.total_grade }} points)
+              </button>
+            </div>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let exam; columns: columnsToDisplay;"
+        class="exam-row"
+        [class.exam-expanded-row]="expandedExam === exam"
+        (click)="expandedExam = expandedExam === exam ? null : exam">
+    </tr>
+    <tr mat-row *matRowDef="let exam; columns: ['expandedDetail']" class="exam-detail-row"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
