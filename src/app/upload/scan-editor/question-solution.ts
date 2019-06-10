@@ -1,4 +1,5 @@
 import {SolutionImage} from './solution-image';
+import {ScanPage} from './scan-page';
 
 export class QuestionSolution {
   public number: number;
@@ -34,5 +35,13 @@ export class QuestionSolution {
 
   getTotalBytes(): number {
     return this.images.reduce((sum, i) => sum + i.size, 0);
+  }
+
+  hasFullPage(scanPage: ScanPage) {
+    return this.images.find(sol => sol.fullPage && sol.source === scanPage) != null;
+  }
+
+  removeFullPage(scanPage: ScanPage) {
+    this.images = this.images.filter(sol => !sol.fullPage || sol.source !== scanPage);
   }
 }
