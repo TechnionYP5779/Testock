@@ -161,7 +161,7 @@ async function addSolImage(pdf: PDFKit.PDFDocument, url: string){
 async function getBestSolutionFor(q: QuestionId): Promise<Solution|null> {
   const query = admin.firestore().collection(`questions/${q.id}/solutions`)
     .where('uploadInProgress', '==', false)
-    .where('pendingScanId', '==', null)
+    .where('linkedToPendingScanId', '==', null)
     .orderBy('grade', 'desc')
     .limit(1);
   return query.get().then(res => res.docs.length > 0 ? res.docs[0].data() as Solution : null);
@@ -380,7 +380,7 @@ export const onSolutionCreated = functions.firestore.document('questions/{questi
     notificationContent += ' (Unknown Grade)';
   }
 
-  if (solution.pendingScanId) {
+  if (solution.linkedToPendingScanId) {
     notificationContent = `New pending solution for ${course.name}, ${getSemesterStr(question.moed)} ${getMoedStr(question.moed)} - Question ${question.number}. `;
     notificationContent += 'Crop it now to earn some points!'
   }
@@ -464,7 +464,7 @@ export const onSolvedQuestionDelete = functions.firestore
   });
 
 
-export const onPendingSolutionChanged = functions.firestore.document('questions/{questionId}/solutions/{solID}').onWrite((snapshot, context) => {
+export const onSolutionChanged = functions.firestore.document('questions/{questionId}/solutions/{solID}').onWrite(async (snapshot, context) => {
 
   const qid = context.params.questionId;
   const qNum = parseInt(qid.toString().split('-')[4]);
@@ -473,12 +473,21 @@ export const onPendingSolutionChanged = functions.firestore.document('questions/
   // Handle solution creation
   if (!snapshot.before.exists && snapshot.after.exists) {
     const newSol = snapshot.after.data() as Solution;
-    if (newSol.pendingScanId) {
-      const ref = admin.firestore().collection('pendingScans').doc(newSol.pendingScanId);
-      console.log('Linking solution created for ' + qid + ' to ' + newSol.pendingScanId);
+    if (newSol.linkedToPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.linkedToPendingScanId);
+      console.log('Linking solution created for ' + qid + ' to ' + newSol.linkedToPendingScanId);
 
-      return ref.update({
+      await ref.update({
         linkedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    if (newSol.extractedFromPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.extractedFromPendingScanId);
+      console.log('Linking extracted solution created for ' + qid + ' to ' + newSol.extractedFromPendingScanId);
+
+      await ref.update({
+        extractedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
       });
     }
 
@@ -490,20 +499,37 @@ export const onPendingSolutionChanged = functions.firestore.document('questions/
     const solBefore = snapshot.before.data() as Solution;
     const newSol = snapshot.after.data() as Solution;
 
-    if (!solBefore.pendingScanId && newSol.pendingScanId) {
-      const ref = admin.firestore().collection('pendingScans').doc(newSol.pendingScanId);
-      console.log('Linking updated solution for ' + qid + ' to ' + newSol.pendingScanId);
+    if (!solBefore.linkedToPendingScanId && newSol.linkedToPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.linkedToPendingScanId);
+      console.log('Linking updated solution for ' + qid + ' to ' + newSol.linkedToPendingScanId);
 
-      return ref.update({
+      await ref.update({
         linkedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
       });
     }
 
-    if (solBefore.pendingScanId && !newSol.pendingScanId) {
-      const ref = admin.firestore().collection('pendingScans').doc(solBefore.pendingScanId);
-      console.log('Unlinking updated solution for ' + qid + ' from ' + solBefore.pendingScanId);
-      return ref.update({
+    if (solBefore.linkedToPendingScanId && !newSol.linkedToPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(solBefore.linkedToPendingScanId);
+      console.log('Unlinking updated solution for ' + qid + ' from ' + solBefore.linkedToPendingScanId);
+      await ref.update({
         linkedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    if (!solBefore.extractedFromPendingScanId && newSol.extractedFromPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.extractedFromPendingScanId);
+      console.log('Linking updated extracted solution for ' + qid + ' to ' + newSol.extractedFromPendingScanId);
+
+      await ref.update({
+        extractedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    if (solBefore.extractedFromPendingScanId && !newSol.extractedFromPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(solBefore.extractedFromPendingScanId);
+      console.log('Unlinking updated extracted solution for ' + qid + ' from ' + solBefore.extractedFromPendingScanId);
+      await ref.update({
+        extractedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
       });
     }
 
@@ -513,11 +539,19 @@ export const onPendingSolutionChanged = functions.firestore.document('questions/
   // Handle solution deletion
   if (snapshot.before.exists && !snapshot.after.exists) {
     const deletedSol = snapshot.before.data() as Solution;
-    if (deletedSol.pendingScanId) {
-      const ref = admin.firestore().collection('pendingScans').doc(deletedSol.pendingScanId);
-      console.log('Unlinking deleted solution for ' + qid + ' from ' + deletedSol.pendingScanId);
-      return ref.update({
+    if (deletedSol.linkedToPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(deletedSol.linkedToPendingScanId);
+      console.log('Unlinking deleted solution for ' + qid + ' from ' + deletedSol.linkedToPendingScanId);
+      await ref.update({
         linkedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    if (deletedSol.extractedFromPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(deletedSol.extractedFromPendingScanId);
+      console.log('Unlinking deleted extracted solution for ' + qid + ' from ' + deletedSol.extractedFromPendingScanId);
+      await ref.update({
+        extractedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
       });
     }
 
@@ -551,7 +585,7 @@ export const onQuestionCreated = functions.firestore.document('questions/{qid}')
 
   return Promise.all(pendingScansIds.map(psId => {
     const pendingSol = {} as Solution;
-    pendingSol.pendingScanId = psId;
+    pendingSol.linkedToPendingScanId = psId;
     pendingSol.grade = -1;
     pendingSol.created = admin.firestore.Timestamp.now();
     return admin.firestore().collection(`questions/${qid}/solutions`).add(pendingSol);
