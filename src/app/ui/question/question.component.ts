@@ -1,7 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, Input, OnInit, TemplateRef} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
@@ -103,7 +101,6 @@ export class QuestionComponent implements OnInit {
       });
     });
   }
-  
   openBottomSheet(): void {
     const tagsBottomSheet = this._bottomSheet.open(ChooseQuestionTagComponent);
     const optionalTags$: Observable<string[]> = combineLatest(this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course))),

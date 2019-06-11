@@ -1,58 +1,3 @@
-<div *ngIf="question$ | async as question">
-  <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
-  <a [routerLink]="'/course/' + course.id" *ngIf="course$ | async as course">
-    <h1 style="color:DodgerBlue"> {{ course.name}} ({{question.course}})</h1>
-  </a>
-  <h2>
-    Question {{ question.number }} ({{ question.moed | fullMoed }})
-    <button mat-button *ngIf="isAdmin$ | async" role="button" style="color: orangered" data-toggle="modal" data-target="#confirmDeleteModal">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </h2>
-
-  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Confirm Deletion</h2>
-        </div>
-        <div class="modal-body">
-          <div><p>Are you sure you want to delete this question?</p></div>
-          <div>
-            <button type="submit" data-dismiss="modal" class="btn btn-danger" style="margin-right: 5px" (click)="deleteQuestion()">Delete</button>
-            <button type="submit" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="question.count_difficulty_ratings > 0">
-    <h3>
-      Difficulty rating:
-      <ng-template #temp let-fill="fill">
-            <span class="star" [class.full]="fill === 100">
-              <span class="half" [style.width.%]="fill">&#9733;</span>
-              &#9733;
-            </span>
-      </ng-template>
-      <ngb-rating [starTemplate]="temp" [(rate)]="question.sum_difficulty_ratings / question.count_difficulty_ratings"
-                  [readonly]="true" max="5"></ngb-rating>
-    </h3>
-  </div>
-  <div>
-    <div *ngIf="course$ | async as course">
-      <div *ngFor="let tag of question.tags">
-        <div class="badge badge-primary" style="float: left;margin-right: 5px;">
-          <a style="color: white;" routerLink="/course/{{course.id}}/tag/{{tag}}">#{{tag}}</a>
-          <mat-icon role="button" *ngIf="isAdmin$ | async" (click)="removeTag(tag)"
-                    style="width:0px; height: 0px; font-size: 14px; margin-right: 12px; color: black; cursor:pointer;">
-            close
-          </mat-icon>
-        </div>
-      </div>
-    </div>
-  </div>
 <ng-container *ngIf="(isAdmin$ | async) !== null as isAdmin">
   <div *ngIf="question$ | async as question">
     <div class="alert alert-info" *ngIf="isAdmin">You have admin access for this question</div>
@@ -90,6 +35,26 @@
         </button>
       </h3>
 
+      <button mat-button *ngIf="isAdmin" role="button" style="color: orangered" data-toggle="modal" data-target="#confirmDeleteModal">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>Confirm Deletion</h2>
+            </div>
+            <div class="modal-body">
+              <div><p>Are you sure you want to delete this question?</p></div>
+              <div>
+                <button type="submit" data-dismiss="modal" class="btn btn-danger" style="margin-right: 5px" (click)="deleteQuestion()">Delete</button>
+                <button type="submit" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="tags">
         <button class="tag btn btn-warning mr-2" *ngFor="let tag of question.tags" [routerLink]="'/course/' + course.id + '/tag/' + tag">
           # {{ tag }}
@@ -98,7 +63,7 @@
           </button>
         </button>
         <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Choose tag" (click)="openBottomSheet()"
-          *ngIf="course.tags.length > question.tags.length">
+                *ngIf="course.tags.length > question.tags.length">
           <fa-icon icon="plus"></fa-icon>
         </button>
       </div>
