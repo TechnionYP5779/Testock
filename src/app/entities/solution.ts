@@ -3,9 +3,10 @@ import {Timestamp} from '@firebase/firestore-types';
 export interface Solution {
   grade: number;
   photos?: string[];
-  pendingScanId: string;
+  linkedToPendingScanId: string;
   created: Timestamp;
   uploadInProgress: boolean;
+  extractedFromPendingScanId: string;
 }
 
 export interface SolutionId extends Solution {

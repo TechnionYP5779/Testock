@@ -32,7 +32,7 @@ export class PendingSolutionModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.db.getPendingScan(this.solution.pendingScanId).pipe(take(1)).toPromise().then(ps => {
+    this.db.getPendingScan(this.solution.linkedToPendingScanId).pipe(take(1)).toPromise().then(ps => {
       this.pendingScan = ps;
       this.isPageCropped = Array(ps.pages.length).map(() => false);
       this.croppedPages = Array(ps.pages.length).map(() => null);

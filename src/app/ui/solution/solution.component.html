@@ -1,8 +1,8 @@
 <div *ngIf="solution && !solution.uploadInProgress; else uploadInProgress">
   <div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal" (click)="solThumbClick(content)"
-       [attr.data-target]="solution.pendingScanId ? '' : '#solution-modal-' + solution.id">
+       [attr.data-target]="solution.linkedToPendingScanId ? '' : '#solution-modal-' + solution.id">
     <img class="card-img" [src]="solution.photos[0]" alt="scan preview" *ngIf="solution.photos && solution.photos.length > 0"/>
-    <div class="card-img text-center" *ngIf="solution.pendingScanId">
+    <div class="card-img text-center" *ngIf="solution.linkedToPendingScanId">
       <h6 class="mt-5">Available from pending scan</h6>
     </div>
     <div class="card-img-overlay align-items-center d-flex justify-content-center">

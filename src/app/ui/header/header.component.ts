@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NotificationsService} from '../../notifications/notifications.service';
 import {flatMap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {of, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -25,7 +25,13 @@ export class HeaderComponent implements OnInit {
     this.router = rtr;
     this.auth.isAdmin.subscribe(res => this.isAdmin = res);
     this.notificationsCount$ = this.auth.user$.pipe(
-      flatMap(user => this.notifications.getUnseenNotificationsCountForUser(user.uid))
+      flatMap(user => {
+        if (user) {
+          return this.notifications.getUnseenNotificationsCountForUser(user.uid)
+        } else {
+          return of(0);
+        }
+      })
     );
   }
 
