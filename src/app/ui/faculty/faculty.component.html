@@ -4,7 +4,7 @@
   <div class="jumbotron jumbotron">
     <h1 class="display-4">{{ faculty.name }} </h1>
     <p class="lead">Welcome to the "{{ faculty.name }}" faculty page. Below is the list of available courses.</p>
-    <button class="btn btn-success" *ngIf="isAdmin$ | async" (click)="openCreateCourseModal(createCourseModal)"><fa name="plus" class="mr-2"></fa>Create Course</button>
+    <button class="btn btn-success" *ngIf="isAdmin$ | async" (click)="openCreateCourseModal(createCourseModal)"><fa-icon icon="plus" class="mr-2"></fa-icon>Create Course</button>
   </div>
 
   <div *ngIf="courses$ | async as courses" >
@@ -15,8 +15,8 @@
             {{ course.id }}: {{ course.name }}
           </a>
         </h6>
-        <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa name="facebook" class="mr-2"></fa>Facebook Group</a>
-        <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa name="globe" class="mr-2"></fa>Course Website</a>
+        <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa-icon [icon]="['fab', 'facebook-square']" class="mr-2"></fa-icon>Facebook Group</a>
+        <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa-icon icon="globe" class="mr-2"></fa-icon>Course Website</a>
       </li>
     </ul>
   </div>

@@ -425,6 +425,10 @@ export class DbService {
   getCourses(): Observable<Course[]> {
     return this.afs.collection<Course>('courses').valueChanges();
   }
+
+  updateQuestionTotalGrade(q: QuestionId): Promise<void> {
+    return this.afs.doc<Question>(`questions/${q.id}`).update({total_grade: q.total_grade});
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {

@@ -6,10 +6,10 @@
   <div class="image-popup p-2">
     <div class="image-remove-button">
       <button class="btn btn-danger" (click)="hide.emit(); $event.stopPropagation()" ngbTooltip="Hide Page">
-        <fa name="eye-slash"></fa>
+        <fa-icon icon="eye-slash"></fa-icon>
       </button>
       <button class="btn btn-primary ml-2" *ngIf="addImageTo" (click)="openModal(content); $event.stopPropagation()" ngbTooltip="Crop Page">
-        <fa name="crop"></fa>
+        <fa-icon icon="crop"></fa-icon>
       </button>
     </div>
   </div>
@@ -18,7 +18,7 @@
 <ng-template #content let-modal>
   <div class="modal-header" *ngIf="addImageTo; else viewModeHeader">
     <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancel</button>
-    <button type="button" class="btn btn-success" (click)="selectImage()"><fa name="check" class="mr-2"></fa>Add selection</button>
+    <button type="button" class="btn btn-success" (click)="selectImage()"><fa-icon icon="check" class="mr-2"></fa-icon>Add selection</button>
   </div>
 
   <ng-template #viewModeHeader>

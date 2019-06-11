@@ -7,7 +7,7 @@ import {TopicComponent} from './topic/topic.component';
 import {CoreModule} from '../core/core.module';
 import {UsersModule} from '../users/users.module';
 import {CKEditorModule} from 'ngx-ckeditor';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {AppRoutingModule} from '../app-routing.module';
 
 @NgModule({
@@ -21,7 +21,7 @@ import {AppRoutingModule} from '../app-routing.module';
     CoreModule,
     UsersModule,
     CKEditorModule,
-    AngularFontAwesomeModule,
+    FontAwesomeModule,
     AppRoutingModule
   ],
   exports: [
