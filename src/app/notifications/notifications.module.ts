@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationsListComponent } from './notifications-list/notifications-list.component';
 import {NotificationsService} from './notifications.service';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AppRoutingModule} from '../app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -19,7 +19,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   ],
   imports: [
     CommonModule,
-    AngularFontAwesomeModule,
+    FontAwesomeModule,
     AngularFirestoreModule,
     AppRoutingModule,
     NgbModule

@@ -318,7 +318,7 @@ export class UploadService {
     for (let i = 0; i < questions.length; ++i) {
       const q = questions[i];
       await this.uploadQuestion(console.log, details.course, details.moed,
-        new QuestionSolution(q.number, q.total_grade, true), pendingScan, null);
+        new QuestionSolution(q.number, -1, q.total_grade, true), pendingScan, null);
     }
 
     return pendingScan;

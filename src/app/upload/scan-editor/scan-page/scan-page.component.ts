@@ -44,8 +44,13 @@ export class ScanPageComponent implements OnInit {
 
   addFullPage() {
     if (this.addImageTo) {
-      this.scanPage.highlightInc();
-      this.addImageTo.addImage(new SolutionImage(this.scanPage.imageBase64, this.scanPage.blob.size, this.scanPage));
+      if (this.addImageTo.hasFullPage(this.scanPage)) {
+        this.scanPage.highlightDec();
+        this.addImageTo.removeFullPage(this.scanPage);
+      } else {
+        this.scanPage.highlightInc();
+        this.addImageTo.addImage(new SolutionImage(this.scanPage.imageBase64, this.scanPage.blob.size, this.scanPage, true));
+      }
     }
   }
 }
