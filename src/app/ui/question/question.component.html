@@ -30,14 +30,14 @@
         <a [routerLink]="'/course/' + course.id + '/exam/' + question.moed.semester.year + '-' + question.moed.semester.num + '-' + question.moed.num">{{ question.moed | fullMoed }}</a>
         <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
         <span ngbTooltip="{{ question.total_grade }} points" placement="top">Question {{ question.number }}</span>
-        <button class="edit-button mr-2 ml-2" (click)="editQuestion(editQuestionModal, question)">
+        <button class="edit-button ml-4" (click)="editQuestion(editQuestionModal, question)">
           <fa-icon icon="edit"></fa-icon>
+        </button>
+        <button class="delete-button mr-2 ml-2" data-toggle="modal" data-target="#confirmDeleteModal">
+          <fa-icon icon="trash-alt"></fa-icon>
         </button>
       </h3>
 
-      <button mat-button *ngIf="isAdmin" role="button" style="color: orangered" data-toggle="modal" data-target="#confirmDeleteModal">
-        <mat-icon>delete</mat-icon>
-      </button>
       <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
