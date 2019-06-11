@@ -29,7 +29,7 @@
               <fa-icon icon="upload" class="mr-2"></fa-icon>
               <span>Upload Scan</span>
             </button>
-            <button type="button" class="btn notification-button mr-2">
+            <button type="button" class="btn notification-button mr-2" [ngbPopover]="notificationsContent" [popoverTitle]="notificationsTitle" [autoClose]="'outside'">
               <span class="notification-badge badge badge-warning" routerLink="/profile" *ngIf="(notificationsCount$ | async) && (notificationsCount$ | async) > 0">{{ (notificationsCount$ | async) }}</span>
               <fa-icon icon="bell" size="2x"></fa-icon>
             </button>
@@ -40,6 +40,9 @@
               <fa-icon [icon]="['far', 'gem']"></fa-icon>
               {{ user.points }}
             </button>
+
+            <ng-template #notificationsContent><app-notifications-list [user]="auth.user$"></app-notifications-list></ng-template>
+            <ng-template #notificationsTitle>What's new? ({{notificationsCount$ | async}})</ng-template>
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">
