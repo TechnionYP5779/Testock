@@ -405,7 +405,7 @@ export const onSolutionCreated = functions.firestore.document('questions/{questi
 
 });
 
-export const onPendingScanDeleted = functions.firestore.document('pendingScans/{pid}').onDelete(async (snapshot, context) => {
+export const onPendingScanDeleted = functions.firestore.document('pendingScans/{pid}').onDelete((snapshot, context) => {
 
   const pid = context.params.pid;
   const ps = snapshot.data() as PendingScan;
@@ -417,14 +417,17 @@ export const onPendingScanDeleted = functions.firestore.document('pendingScans/{
     console.log(`Deleting ${path}`);
   }
 
-  const morePromises = [];
+  const deleteLinkedSolutionsPromises = [];
   for (let i = 0; i < ps.linkedQuestions.length; ++i) {
     const ref = admin.firestore().doc(`questions/${ps.linkedQuestions[i].qid}/solutions/${ps.linkedQuestions[i].sid}`);
     console.log('Deleting linked question: ' + ps.linkedQuestions[i].qid + ', solution: ' + ps.linkedQuestions[i].sid);
-    morePromises.push(ref.delete());
+    deleteLinkedSolutionsPromises.push(ref.delete());
   }
 
-  return Promise.all([Promise.all(promises), Promise.all(morePromises)]);
+  const unlinkExtractedPromises = ps.extractedQuestions
+    .map(elq => admin.firestore().doc(`questions/${elq.qid}/solutions/${elq.sid}`).update({extractedFromPendingScanId: null}));
+
+  return Promise.all([Promise.all(promises), Promise.all(deleteLinkedSolutionsPromises), Promise.all(unlinkExtractedPromises)]);
 });
 
 export const onSolvedQuestionUpdate = functions.firestore
@@ -507,6 +510,7 @@ export const onSolutionChanged = functions.firestore.document('questions/{questi
     if (!solBefore.linkedToPendingScanId && newSol.linkedToPendingScanId) {
       const ref = admin.firestore().collection('pendingScans').doc(newSol.linkedToPendingScanId);
       console.log('Linking updated solution for ' + qid + ' to ' + newSol.linkedToPendingScanId);
+      console.log('Is this ever called?');
 
       await ref.update({
         linkedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
@@ -531,11 +535,7 @@ export const onSolutionChanged = functions.firestore.document('questions/{questi
     }
 
     if (solBefore.extractedFromPendingScanId && !newSol.extractedFromPendingScanId) {
-      const ref = admin.firestore().collection('pendingScans').doc(solBefore.extractedFromPendingScanId);
-      console.log('Unlinking updated extracted solution for ' + qid + ' from ' + solBefore.extractedFromPendingScanId);
-      await ref.update({
-        extractedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
-      });
+      console.log("This should be called only when deleting a pending scan - no need to unlink");
     }
 
     return true;
@@ -547,9 +547,14 @@ export const onSolutionChanged = functions.firestore.document('questions/{questi
     if (deletedSol.linkedToPendingScanId) {
       const ref = admin.firestore().collection('pendingScans').doc(deletedSol.linkedToPendingScanId);
       console.log('Unlinking deleted solution for ' + qid + ' from ' + deletedSol.linkedToPendingScanId);
-      await ref.update({
-        linkedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
-      });
+      try {
+        await ref.update({
+          linkedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
+        });
+      } catch (error) {
+        console.log('Is pendingScan deleted?');
+        console.log(error);
+      }
     }
 
     if (deletedSol.extractedFromPendingScanId) {
