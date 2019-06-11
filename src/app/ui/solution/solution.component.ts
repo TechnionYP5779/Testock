@@ -39,7 +39,7 @@ export class SolutionComponent implements OnInit {
   }
 
   solThumbClick(content) {
-    if (this.solution.pendingScanId) {
+    if (this.solution.linkedToPendingScanId) {
       const modalRef = this.modalService.open(PendingSolutionModalComponent, {size: 'lg'});
       modalRef.componentInstance.question = this.question;
       modalRef.componentInstance.solution = this.solution;
