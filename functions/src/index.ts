@@ -276,14 +276,19 @@ export const getPDFofExam = functions.https.onRequest(async (request, response) 
 
 export const onSolutionDeleted = functions.firestore.document('questions/{questionId}/solutions/{solID}').onDelete(async (snapshot, context) => {
 
-  const qid = context.params.questionId;
-  const question: Question = await admin.firestore().doc(`questions/${qid}`).get().then(doc => doc.data() as Question);
+  const qidParams = context.params.questionId.split('-');
+  const course = qidParams[0];
+  const year = qidParams[1];
+  const semester = qidParams[2];
+  const moed = qidParams[3];
+  const qNum = qidParams[4];
+
   const sid = context.params.solID;
   const sol = snapshot.data();
   const numOfPics = sol && sol.photos ? sol.photos.length : 0;
   const promises = [];
   for (let i=0; i < numOfPics; ++i){
-    const path = `${question.course}/${question.moed.semester.year}/${question.moed.semester.num}/${question.moed.num}/${question.number}/${sid}/${i}.jpg`;
+    const path = `${course}/${year}/${semester}/${moed}/${qNum}/${sid}/${i}.jpg`;
     promises.push(bucket.file(path).delete());
     console.log(`Deleting ${path}`);
   }
