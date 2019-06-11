@@ -426,6 +426,11 @@ export class DbService {
     return this.afs.collection<Course>('courses').valueChanges();
   }
 
+
+  removeQuestion(qId: string) {
+    return this.afs.doc(`questions/${qId}`).delete();
+  }
+  
   updateQuestionTotalGrade(q: QuestionId): Promise<void> {
     return this.afs.doc<Question>(`questions/${q.id}`).update({total_grade: q.total_grade});
   }

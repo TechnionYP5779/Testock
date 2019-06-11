@@ -1,5 +1,5 @@
+import {ActivatedRoute, Router} from '@angular/router';
 import {Component, Input, OnInit, TemplateRef} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
@@ -8,7 +8,7 @@ import {flatMap, map} from 'rxjs/operators';
 import {combineLatest, Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {SolvedQuestion} from '../../entities/solved-question';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MatBottomSheet} from '@angular/material';
@@ -34,7 +34,7 @@ export class QuestionComponent implements OnInit {
   editTotalGrade: number;
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService, private snackBar: MatSnackBar,
-              private spinner: NgxSpinnerService, private _bottomSheet: MatBottomSheet, private modal: NgbModal) {
+              private spinner: NgxSpinnerService, private router: Router, private _bottomSheet: MatBottomSheet, private modal: NgbModal) {
     this.qId = this.route.snapshot.paramMap.get('id');
     this.topics$ = this.db.getTopicsForQuestion(this.qId);
     this.question$ = this.db.getQuestion(this.qId);
@@ -93,6 +93,14 @@ export class QuestionComponent implements OnInit {
     });
   }
 
+  deleteQuestion() {
+    this.spinner.show();
+    this.router.navigate(['../']).then(() => {
+      this.db.removeQuestion(this.qId).then(() => this.spinner.hide()).then(() => {
+        this.snackBar.open(`Removed Question Successfully!`, 'close', {duration: 3000});
+      });
+    });
+  }
   openBottomSheet(): void {
     const tagsBottomSheet = this._bottomSheet.open(ChooseQuestionTagComponent);
     const optionalTags$: Observable<string[]> = combineLatest(this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course))),
@@ -120,6 +128,5 @@ export class QuestionComponent implements OnInit {
       await this.spinner.hide();
       this.snackBar.open('Question updated successfully', 'close', {duration: 3000});
     }
-
   }
 }
