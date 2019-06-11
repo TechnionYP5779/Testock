@@ -23,11 +23,15 @@ export class NotificationsListComponent implements OnInit {
     );
   }
 
-  toggleSeen(event: MouseEvent, notification: NotificationId, redirect: boolean) {
+  changeSeen(event: MouseEvent, notification: NotificationId, seen: boolean, redirect: boolean = true) {
     if (redirect === false) {
       event.preventDefault();
       event.stopPropagation();
     }
     this.notifications.updateNotificationState(notification.id, !notification.seen);
+  }
+
+  toggleSeen(event: MouseEvent, notification: NotificationId, redirect: boolean) {
+    this.changeSeen(event, notification, !notification.seen, redirect);
   }
 }
