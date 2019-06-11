@@ -54,9 +54,10 @@ export const onTagDeleted = functions.firestore.document('courses/{courseID}').o
 });
 
 export const onQuestionDeleted = functions.firestore.document('questions/{questionID}').onDelete(async (snap, context) => {
-  const questionData = snap.data();
   const qId = context.params.questionID;
-  const p1 = deleteCollection(admin.firestore(), 'questions/{questionID}/solutions', 1);
+  const p1 = admin.firestore().collection('questions/'+qId+'/solutions').get().then(snapshot => {
+    snapshot.docs.forEach(doc => doc.ref.delete());
+  });
   const p2 = admin.firestore().collection('topics').where('linkedQuestionId', '==', qId).get().then(snapshot => {
     snapshot.docs.forEach(doc => doc.ref.delete());
   });
@@ -66,47 +67,6 @@ export const onQuestionDeleted = functions.firestore.document('questions/{questi
 
   return Promise.all([p1,p2,p3]);
 });
-
-function deleteCollection(db, collectionPath, batchSize) {
-  const collectionRef = db.collection(collectionPath);
-  const query = collectionRef.orderBy('__name__').limit(batchSize);
-
-  return new Promise((resolve, reject) => {
-    deleteQueryBatch(db, query, batchSize, resolve, reject);
-  });
-}
-
-function deleteQueryBatch(db, query, batchSize, resolve, reject) {
-  query.get()
-    .then((snapshot) => {
-      // When there are no documents left, we are done
-      if (snapshot.size === 0) {
-        return 0;
-      }
-
-      // Delete documents in a batch
-      const batch = db.batch();
-      snapshot.docs.forEach((doc) => {
-        batch.delete(doc.ref);
-      });
-
-      return batch.commit().then(() => {
-        return snapshot.size;
-      });
-    }).then((numDeleted) => {
-    if (numDeleted === 0) {
-      resolve();
-      return;
-    }
-
-    // Recurse on the next process tick, to avoid
-    // exploding the stack.
-    process.nextTick(() => {
-      deleteQueryBatch(db, query, batchSize, resolve, reject);
-    });
-  })
-    .catch(reject);
-}
 
 export const isImageBlank = functions.https.onRequest(async (request, response) => {
   return cors(request, response, async () => {
