@@ -21,6 +21,9 @@
     </ul>
   </div>
 
+  <h2 class="mb-4">Faculty Admins</h2>
+  <app-faculty-admins-list [faculty]="faculty"></app-faculty-admins-list>
+
   <ng-template #createCourseModal let-modal>
     <div class="modal-header">
       <h5 class="modal-title">Create Course For {{faculty.name}} faculty</h5>

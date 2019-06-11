@@ -1,0 +1,10 @@
+<div class="row mb-2" *ngIf="facultyAdmins$ | async as admins">
+  <div class="col-md" *ngFor="let admin of admins">
+    <button class="btn media" [routerLink]="'/profile/' + admin.uid">
+      <img [src]="admin.photoUrl" class="rounded-circle mr-3" width="30" [alt]="admin.name"/>
+      <div class="media-body">
+        {{ admin.name }}
+      </div>
+    </button>
+  </div>
+</div>
