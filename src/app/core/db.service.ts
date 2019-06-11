@@ -240,6 +240,7 @@ export class DbService {
   }
 
   createCourse(course: Course): Promise<void> {
+    course.created = firebase.firestore.Timestamp.now();
     return this.afs.doc(`courses/${course.id}`).set(course);
   }
 
@@ -425,8 +426,13 @@ export class DbService {
     return this.afs.collection<Course>('courses').valueChanges();
   }
 
+
   removeQuestion(qId: string) {
     return this.afs.doc(`questions/${qId}`).delete();
+  }
+  
+  updateQuestionTotalGrade(q: QuestionId): Promise<void> {
+    return this.afs.doc<Question>(`questions/${q.id}`).update({total_grade: q.total_grade});
   }
 }
 

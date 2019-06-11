@@ -6,7 +6,7 @@ import {UsersOnlyGuard} from './guards/users-only.guard';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {AppModule} from '../app.module';
 import {AppRoutingModule} from '../app-routing.module';
 import { MatSortModule } from '@angular/material/sort';
@@ -26,7 +26,7 @@ import {CoreModule} from '../core/core.module';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    AngularFontAwesomeModule,
+    FontAwesomeModule,
     AppRoutingModule,
     MatSortModule,
     NotificationsModule,

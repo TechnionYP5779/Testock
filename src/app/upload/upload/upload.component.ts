@@ -179,7 +179,7 @@ export class UploadComponent implements OnInit {
     return Promise.all([detailsPromise, courseDetailsPromise, pdfPagesExtraction, existingQuestionsPromise])
       .then(([details, course, pages, existingQuestions]) => {
         if (existingQuestions) {
-          existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, q.total_grade, true)));
+          existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, 0, q.total_grade, true)));
         }
         this.scanDetails = details;
         this.course = course;
@@ -219,6 +219,9 @@ export class UploadComponent implements OnInit {
         case PendingScanConfirmResult.UPLOAD_PENDING:
           // User accepted
           quickMode = true;
+          break;
+        case PendingScanConfirmResult.DONT_UPLOAD_PENDING:
+          quickMode = false;
       }
     }
 

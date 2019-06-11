@@ -1,0 +1,105 @@
+.topic-creator-profile-pic {
+  width: 30px;
+  height: 30px;
+}
+
+.title {
+  font-size: 2.5rem;
+
+  a {
+    color: inherit;
+  }
+
+  .total-grade {
+    font-size: 60%;
+  }
+}
+
+.tag {
+  margin-right: 8px;
+
+  .remove-tag {
+    margin: 0;
+    padding: 0;
+    background: 0;
+    outline: 0;
+    border: 0;
+  }
+}
+
+.modal {
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.checked {
+  color: orange;
+}
+
+.solved-toggle {
+  float: right;
+
+  button {
+    font-size: 45px;
+    margin-right: 20px;
+    cursor: pointer;
+  }
+}
+
+.no-solutions {
+  text-align: center;
+
+  .broken-heart {
+    color: darkred;
+  }
+
+  .no-solutions-title {
+    margin: 10px 0 20px;
+  }
+}
+
+.difficulty-stars {
+  margin-bottom: 0;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 2rem;
+  color: #d3d3d3;
+}
+
+.full {
+  color: #007bff;
+}
+
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #007bff;
+}
+
+.edit-button {
+  margin: 0;
+  font-size: 60%;
+  padding: 0;
+  background: 0;
+  outline: 0;
+  border: 0;
+}
+

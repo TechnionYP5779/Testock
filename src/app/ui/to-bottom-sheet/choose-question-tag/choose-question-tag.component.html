@@ -1,0 +1,3 @@
+<mat-action-list>
+  <button mat-list-item *ngFor="let tag of (tags$ | async)" (click)="chooseTag(tag)"># {{ tag }}</button>
+</mat-action-list>
