@@ -61,7 +61,7 @@ export const onQuestionDeleted = functions.firestore.document('questions/{questi
   const p2 = admin.firestore().collection('topics').where('linkedQuestionId', '==', qId).get().then(snapshot => {
     snapshot.docs.forEach(doc => doc.ref.delete());
   });
-  const p3 = admin.firestore().collection('users/{userID}/solvedQuestions').where('linkedQuestionId', '==', qId).get().then(snapshot => {
+  const p3 = admin.firestore().collection('solvedQuestions').where('linkedQuestionId', '==', qId).get().then(snapshot => {
     snapshot.docs.forEach(doc => doc.ref.delete());
   });
 
