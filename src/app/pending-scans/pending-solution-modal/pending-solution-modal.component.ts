@@ -9,6 +9,8 @@ import {ImageCroppedEvent} from 'ngx-image-cropper';
 import {UploadService} from '../../upload/upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {QuestionSolution} from '../../upload/scan-editor/question-solution';
+import {SolutionImage} from '../../upload/scan-editor/solution-image';
 
 @Component({
   selector: 'app-pending-solution-modal',
@@ -24,7 +26,7 @@ export class PendingSolutionModalComponent implements OnInit {
   public cropMode: boolean;
   public isPageCropped: boolean[];
   public pagesBase64: string[];
-  public croppedPages: string[];
+  public croppedPages: SolutionImage[];
   public loaded = false;
 
   constructor(public activeModal: NgbActiveModal, private db: DbService, private uploadService: UploadService,
@@ -65,7 +67,7 @@ export class PendingSolutionModalComponent implements OnInit {
   }
 
   updateCroppedPage(i: number, $event: ImageCroppedEvent) {
-    this.croppedPages[i] = $event.base64;
+    this.croppedPages[i] = new SolutionImage($event.base64, $event.file.size, null);
   }
 
   cancelPage(i: number) {

@@ -15,6 +15,7 @@ import {ScanDetails} from '../entities/scan-details';
 import {QuestionSolution, QuestionType} from './scan-editor/question-solution';
 import {ScanPage} from './scan-editor/scan-page';
 import Timestamp = firestore.Timestamp;
+import {SolutionImage} from './scan-editor/solution-image';
 
 export class Progress {
   current: number;
@@ -107,32 +108,32 @@ export class UploadService {
     const totalBytes = solutions.reduce((s, v) => s + v.getTotalBytes(), 0);
     let transferredBytes = 0;
     for (let i = 0; i < solutions.length; ++i) {
-      const q = solutions[i];
-      const linked = pendingScan.linkedQuestions.find(linkedQuestion => linkedQuestion.num === q.number);
+      const questionSolution = solutions[i];
+      const linked = pendingScan.linkedQuestions.find(linkedQuestion => linkedQuestion.num === questionSolution.number);
       if (linked) {
         const question = await this.db.getQuestion(linked.qid).pipe(first()).toPromise();
         const sol: SolutionId = {
           id: linked.sid,
-          grade: q.grade,
+          grade: questionSolution.grade,
           linkedToPendingScanId: pendingScan.id,
           extractedFromPendingScanId: null,
           created: Timestamp.now(),
           uploadInProgress: true
         };
         await this.updateSolutionFromPendingScan(questionProgress => updateProgress({
-          currentQuestionProgress: questionProgress,
+          currentQuestionProgress: {...questionProgress, question: questionSolution},
           bytes: new Progress(transferredBytes + questionProgress.question_bytes.current, totalBytes),
           questions: new Progress(i + 1, solutions.length)
-        }), question, sol, q);
+        }), question, sol, questionSolution.images);
       } else {
         const sol = await this.uploadQuestion(questionProgress => updateProgress({
           currentQuestionProgress: questionProgress,
           bytes: new Progress(transferredBytes + questionProgress.question_bytes.current, totalBytes),
           questions: new Progress(i + 1, solutions.length)
-        }), pendingScan.course, pendingScan.moed, q, pendingScan);
+        }), pendingScan.course, pendingScan.moed, questionSolution, pendingScan);
       }
 
-      transferredBytes += q.getTotalBytes();
+      transferredBytes += questionSolution.getTotalBytes();
     }
 
   }
@@ -241,7 +242,7 @@ export class UploadService {
   }
 
   public async updateSolutionFromPendingScan(updateProgress: (UploadQuestionProgress) => void,
-                                             q: QuestionId, sol: SolutionId, questionSolution: QuestionSolution): Promise<void> {
+                                             q: QuestionId, sol: SolutionId, solutionImages: SolutionImage[]): Promise<void> {
 
     const pendingScanId = sol.linkedToPendingScanId;
     sol.linkedToPendingScanId = null;
@@ -250,21 +251,20 @@ export class UploadService {
 
     sol.photos = [];
 
-    const totalBytes = questionSolution.getTotalBytes();
+    const totalBytes = solutionImages.reduce((s, v) => s + v.size, 0);
     let bytesTransferred = 0;
 
-    for (let i = 0; i < questionSolution.images.length; ++i) {
+    for (let i = 0; i < solutionImages.length; ++i) {
       const p = `${q.course}\/${q.moed.semester.year}\/${q.moed.semester.num}\/${q.moed.num}\/${q.number}\/${sol.id}\/${i}.jpg`;
-      const uploadTask = this.storage.ref(p).putString(questionSolution.images[i].base64, 'data_url');
+      const uploadTask = this.storage.ref(p).putString(solutionImages[i].base64, 'data_url');
       uploadTask.snapshotChanges().subscribe(snap => updateProgress({
         question_bytes: new Progress(bytesTransferred + snap.bytesTransferred, totalBytes),
         image_bytes: new Progress(snap.bytesTransferred, snap.totalBytes),
-        question_images: new Progress(i + 1, questionSolution.images.length),
-        question: questionSolution
+        question_images: new Progress(i + 1, solutionImages.length)
       }));
 
       await uploadTask;
-      bytesTransferred += questionSolution.images[i].size;
+      bytesTransferred += solutionImages[i].size;
       sol.photos.push(await this.storage.ref(p).getDownloadURL().pipe(first()).toPromise());
     }
 
