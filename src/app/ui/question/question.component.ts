@@ -93,13 +93,13 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  deleteQuestion() {
-    this.spinner.show();
-    this.router.navigate(['../']).then(() => {
-      this.db.removeQuestion(this.qId).then(() => this.spinner.hide()).then(() => {
-        this.snackBar.open(`Removed Question Successfully!`, 'close', {duration: 3000});
-      });
-    });
+  async deleteQuestion() {
+    const courseId = this.qId.split('-')[0];
+    await this.spinner.show();
+    await this.router.navigate(['/course/' + courseId]);
+    await this.db.removeQuestion(this.qId);
+    await this.spinner.hide();
+    this.snackBar.open(`Removed Question Successfully!`, 'close', {duration: 3000});
   }
   openBottomSheet(): void {
     const tagsBottomSheet = this._bottomSheet.open(ChooseQuestionTagComponent);
