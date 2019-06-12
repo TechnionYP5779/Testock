@@ -1,3 +1,9 @@
 h6 {
   display: inline-block;
 }
+
+.popover-no-padding {
+  .popover-body {
+    padding: 0;
+  }
+}

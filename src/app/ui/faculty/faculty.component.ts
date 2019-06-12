@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
 import {Course} from '../../entities/course';
 import {DbService} from '../../core/db.service';
 import {ActivatedRoute} from '@angular/router';
@@ -13,7 +13,8 @@ import {UserData} from '../../entities/user';
 @Component({
   selector: 'app-faculty',
   templateUrl: './faculty.component.html',
-  styleUrls: ['./faculty.component.scss']
+  styleUrls: ['./faculty.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FacultyComponent implements OnInit {
 
