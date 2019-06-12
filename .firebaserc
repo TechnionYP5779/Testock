@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "prod": "yp5779-testock",
+    "dev": "testock-development"
+  }
+}
