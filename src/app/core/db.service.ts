@@ -257,9 +257,9 @@ export class DbService {
     return this.afs.doc<UserData>(`users/${uid}`).valueChanges().pipe(map(u => u.roles));
   }
 
-  getAdminsOfFaculty(faculty: FacultyId): Observable<UserData[]> {
+  getAdminsOfFaculty(facultyId: string): Observable<UserData[]> {
     const ref = r =>
-      r.where('roles.faculty_admin', 'array-contains', faculty.id);
+      r.where('roles.faculty_admin', 'array-contains', facultyId);
     return this.afs.collection<UserData>('users', ref).valueChanges();
   }
 
@@ -426,8 +426,17 @@ export class DbService {
     return this.afs.collection<Course>('courses').valueChanges();
   }
 
+
+  removeQuestion(qId: string) {
+    return this.afs.doc(`questions/${qId}`).delete();
+  }
+  
   updateQuestionTotalGrade(q: QuestionId): Promise<void> {
     return this.afs.doc<Question>(`questions/${q.id}`).update({total_grade: q.total_grade});
+  }
+
+  deleteCommentOfTopic(topicId: string, commentId: string) {
+    return this.afs.doc<Topic>(`topics/${topicId}/comments/${commentId}`).delete();
   }
 }
 
