@@ -434,6 +434,10 @@ export class DbService {
   updateQuestionTotalGrade(q: QuestionId): Promise<void> {
     return this.afs.doc<Question>(`questions/${q.id}`).update({total_grade: q.total_grade});
   }
+
+  deleteCommentOfTopic(topicId: string, commentId: string) {
+    return this.afs.doc<Topic>(`topics/${topicId}/comments/${commentId}`).delete();
+  }
 }
 
 export const leftJoinDocument = (afs: AngularFirestore, field, collection) => {
