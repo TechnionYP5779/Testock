@@ -1,7 +1,62 @@
-<app-scan-editor
-  (upload)="doUpload($event)"
-  [questions]="questions"
-  [pages]="pages"
-  [course]="course"
-  [moed]="pendingScan?.moed">
-</app-scan-editor>
+<ngb-alert type="danger" (close)="hideErrorAlert = true" *ngIf="!hideErrorAlert && error">
+  <fa-icon icon="exclamation-circle" class="mr-2"></fa-icon> {{error}}
+</ngb-alert>
+
+<div class="row mt-5" *ngIf="state === cropState.LoadingFile">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="text-center">
+      <fa-icon icon="spinner" spin="true" size="5x"></fa-icon>
+      <h2 class="mt-4">Loading Pending Scan...</h2>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+
+<div class="row" *ngIf="state === cropState.Editing">
+  <div class="col-md-12">
+    <app-scan-editor
+      (upload)="doUpload($event)"
+      [questions]="questions"
+      [pages]="pages"
+      [course]="course"
+      [moed]="pendingScan?.moed">
+    </app-scan-editor>
+  </div>
+</div>
+
+<div class="row mt-4" *ngIf="state === cropState.Uploading">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 text-center">
+    <fa-icon icon="spinner" [spin]="true" size="5x"></fa-icon>
+    <h2 class="mt-4">Uploading Solutions</h2>
+    <div class="mt-4" *ngIf="uploadProgress?.currentQuestionProgress">
+      <div>Uploading question {{uploadProgress.currentQuestionProgress.question.number}}...</div>
+      <div class="mt-2">
+        <ngb-progressbar animated="true" striped="true" [max]="100" showValue="true" [value]="uploadProgress.bytes.getPercentage()"></ngb-progressbar>
+      </div>
+      <div class="mt-4">Image {{uploadProgress.currentQuestionProgress.question_images.current}} out of {{uploadProgress.currentQuestionProgress.question_images.total}}</div>
+      <div class="mt-2">
+        <ngb-progressbar animated="true" striped="true" [max]="100" showValue="true" [value]="uploadProgress?.currentQuestionProgress?.question_bytes.getPercentage()"></ngb-progressbar>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+
+<div class="row mt-4" *ngIf="state === cropState.UploadSuccess">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 text-center">
+    <div class="text-success">
+      <fa-icon icon="check" size="5x"></fa-icon>
+    </div>
+    <h2 class="mt-4">Solutions Uploaded Successfully</h2>
+    <h4 class="mt-2">Thanks for your contribution!</h4>
+    <div class="mt-4">
+      <button class="btn btn-success" [routerLink]="'/course/' + course.id + '/exam/' + pendingScan.moed.semester.year + '-' + pendingScan.moed.semester.num + '-' + pendingScan.moed.num">
+        Go to exam page
+      </button>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>

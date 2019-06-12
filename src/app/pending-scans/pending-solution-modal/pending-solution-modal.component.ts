@@ -76,7 +76,7 @@ export class PendingSolutionModalComponent implements OnInit {
   uploadSolution() {
     this.spinner.show();
     const photosToUpload = this.croppedPages.filter(s => s);
-    this.uploadService.updateSolutionFromPendingScan(this.question, this.solution, photosToUpload).then(() => {
+    this.uploadService.updateSolutionFromPendingScan(console.log, this.question, this.solution, photosToUpload).then(() => {
       this.activeModal.close();
     }).then(() => this.spinner.hide()).then(() => {
       this.snackbar.open('Thanks for your contribution!', 'close', {duration: 6000});
