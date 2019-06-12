@@ -108,7 +108,7 @@ export class QuestionComponent implements OnInit {
       map(([course, question]) => this.arr_diff(course.tags, question.tags) as string[])
     );
     tagsBottomSheet.instance.tags$ = optionalTags$;
-    this.db.getQuestion(this.qId).subscribe(question => tagsBottomSheet.instance.questionId = question.id);
+    tagsBottomSheet.instance.questionId = this.qId;
   }
 
   async editQuestion(editQuestionModal: TemplateRef<any>, q: QuestionId) {
