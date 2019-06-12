@@ -601,3 +601,26 @@ export const onQuestionCreated = functions.firestore.document('questions/{qid}')
     return admin.firestore().collection(`questions/${qid}/solutions`).add(pendingSol);
   }));
 });
+
+export const onCommentDeleted = functions.firestore.document('topics/{topicId}/comments/{commentId}').onDelete(async (snap, context) => {
+
+  const topicId = context.params.topicId;
+  const commentId = context.params.commentId;
+  const ref = admin.firestore().collection('topics').doc(topicId);
+
+  try {
+    const topic = await ref.get().then(docSnap => docSnap.data() as Topic);
+
+    if (topic.correctAnswerId === commentId) {
+      console.log('Removing correct answer link');
+      await ref.update({
+        correctAnswerId: FieldValue.delete()
+      });
+    } else {
+      console.log('No need to remove correct answer link');
+    }
+  } catch {
+    console.log('Topic doesn\'t exist!', topicId);
+  }
+
+});
