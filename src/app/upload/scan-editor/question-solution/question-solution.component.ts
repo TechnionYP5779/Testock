@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {QuestionSolution} from '../question-solution';
+import {QuestionSolution, QuestionType} from '../question-solution';
 
 @Component({
   selector: 'app-question-solution',
@@ -16,6 +16,8 @@ export class QuestionSolutionComponent implements OnInit {
   @Output() activateRequested = new EventEmitter<void>();
   @Output() deleteRequested = new EventEmitter<void>();
   @Output() deactivateRequested = new EventEmitter<void>();
+
+  QuestionType = QuestionType;
 
   constructor() {}
 

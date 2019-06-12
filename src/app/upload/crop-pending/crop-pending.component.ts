@@ -9,7 +9,7 @@ import {PendingScanId} from '../../entities/pending-scan';
 import {Course} from '../../entities/course';
 import {ScanPage} from '../scan-editor/scan-page';
 import {ScanEditResult} from '../scan-editor/scan-editor.component';
-import {QuestionSolution} from '../scan-editor/question-solution';
+import {QuestionSolution, QuestionType} from '../scan-editor/question-solution';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 enum CropPendingState {
@@ -49,12 +49,20 @@ export class CropPendingComponent implements OnInit {
   async loadPendingScan(pendingScanId: string) {
     this.state = this.cropState.LoadingFile;
     this.pendingScan = await this.db.getPendingScan(pendingScanId).pipe(take(1)).toPromise();
+
     const fetchedQuestions = await Promise.all(this.pendingScan.linkedQuestions
       .map(linkedQuestion => this.db.getQuestion(linkedQuestion.qid).pipe(take(1)).toPromise()));
-    this.questions = fetchedQuestions.map(q => new QuestionSolution(q.number, 0, q.total_grade, true));
+    const extractedQuestions = await Promise.all(this.pendingScan.extractedQuestions
+      .map(extractedQuestion => this.db.getQuestion(extractedQuestion.qid).pipe(take(1)).toPromise()));
+    this.questions = fetchedQuestions.map(q => new QuestionSolution(q.number, 0, q.total_grade, QuestionType.FETCHED));
+    this.questions = this.questions.concat(
+      extractedQuestions.map(q => new QuestionSolution(q.number, 0, q.total_grade, QuestionType.EXTRACTED)));
+    this.questions = this.questions.sort((q1, q2) => q1.number - q2.number);
+
     this.course = await this.db.getCourse(this.pendingScan.course).pipe(take(1)).toPromise();
     const blobs = await Promise.all(this.pendingScan.pages.map(page => getBlobFromUrl(page)));
     const base64 = await Promise.all(blobs.map(blob => getImageBase64FromBlob(blob)));
+
     this.pages = blobs.map((blob, i) => new ScanPage(i + 1, blob, base64[i]));
     this.state = this.cropState.Editing;
   }

@@ -7,14 +7,14 @@ import {Solution, SolutionId} from '../entities/solution';
 import {first} from 'rxjs/operators';
 import {GamificationService, Rewards} from '../gamification/gamification.service';
 import {PendingScanId} from '../entities/pending-scan';
-import { firestore } from 'firebase/app';
-import Timestamp = firestore.Timestamp;
+import {firestore} from 'firebase/app';
 import {OCRService} from '../core/ocr.service';
 import {PdfService} from './pdf.service';
 import {Moed} from '../entities/moed';
 import {ScanDetails} from '../entities/scan-details';
-import {QuestionSolution} from './scan-editor/question-solution';
+import {QuestionSolution, QuestionType} from './scan-editor/question-solution';
 import {ScanPage} from './scan-editor/scan-page';
+import Timestamp = firestore.Timestamp;
 
 export class Progress {
   current: number;
@@ -333,7 +333,7 @@ export class UploadService {
     for (let i = 0; i < questions.length; ++i) {
       const q = questions[i];
       await this.uploadQuestion(console.log, details.course, details.moed,
-        new QuestionSolution(q.number, -1, q.total_grade, true), pendingScan);
+        new QuestionSolution(q.number, -1, q.total_grade, QuestionType.FETCHED), pendingScan);
     }
 
     return pendingScan;

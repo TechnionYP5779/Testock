@@ -1,19 +1,25 @@
 import {SolutionImage} from './solution-image';
 import {ScanPage} from './scan-page';
 
+export enum QuestionType {
+  REGULAR,
+  FETCHED,
+  EXTRACTED
+}
+
 export class QuestionSolution {
   public number: number;
   public images: SolutionImage[];
   public grade: number;
   public points: number;
-  public fetchedQuestion: boolean;
+  public questionType: QuestionType;
 
-  constructor(number: number, grade: number, points: number, fetchedQuestion = false) {
+  constructor(number: number, grade: number, points: number, questionType = QuestionType.REGULAR) {
     this.images = [];
     this.grade = grade;
     this.number = number;
     this.points = points;
-    this.fetchedQuestion = fetchedQuestion;
+    this.questionType = questionType;
   }
 
   addImage(image: SolutionImage) {
