@@ -10,6 +10,11 @@
 
   .list-group {
     max-height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
+  }
+
+  small {
+    display: block;
+    text-align: right;
   }
 }
