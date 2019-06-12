@@ -28,7 +28,7 @@ export class NotificationsListComponent implements OnInit {
       event.preventDefault();
       event.stopPropagation();
     }
-    this.notifications.updateNotificationState(notification.id, !notification.seen);
+    this.notifications.updateNotificationState(notification.id, seen);
   }
 
   toggleSeen(event: MouseEvent, notification: NotificationId, redirect: boolean) {
