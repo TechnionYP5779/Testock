@@ -257,9 +257,9 @@ export class DbService {
     return this.afs.doc<UserData>(`users/${uid}`).valueChanges().pipe(map(u => u.roles));
   }
 
-  getAdminsOfFaculty(faculty: FacultyId): Observable<UserData[]> {
+  getAdminsOfFaculty(facultyId: string): Observable<UserData[]> {
     const ref = r =>
-      r.where('roles.faculty_admin', 'array-contains', faculty.id);
+      r.where('roles.faculty_admin', 'array-contains', facultyId);
     return this.afs.collection<UserData>('users', ref).valueChanges();
   }
 

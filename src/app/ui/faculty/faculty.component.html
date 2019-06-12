@@ -4,6 +4,7 @@
   <div class="jumbotron jumbotron">
     <h1 class="display-4">{{ faculty.name }} </h1>
     <p class="lead">Welcome to the "{{ faculty.name }}" faculty page. Below is the list of available courses.</p>
+    <button class="btn btn-primary mr-2" [ngbPopover]="adminsPopContent" placement="bottom"><fa-icon icon="chevron-down" class="mr-2"></fa-icon>Faculty Admins</button>
     <button class="btn btn-success" *ngIf="isAdmin$ | async" (click)="openCreateCourseModal(createCourseModal)"><fa-icon icon="plus" class="mr-2"></fa-icon>Create Course</button>
   </div>
 
@@ -21,8 +22,21 @@
     </ul>
   </div>
 
-  <h2 class="mb-4">Faculty Admins</h2>
-  <app-faculty-admins-list [faculty]="faculty"></app-faculty-admins-list>
+  <ng-template #adminsPopContent>
+    <ul class="list-group" *ngIf="facultyAdmins$ | async as admins; else loadingAdmins">
+      <li *ngFor="let admin of admins" class="list-group-item">
+        <button class="btn media p-0" [routerLink]="'/profile/' + admin.uid">
+          <img [src]="admin.photoUrl" class="rounded-circle mr-3" width="30" [alt]="admin.name"/>
+          <div class="media-body">
+            {{ admin.name }}
+          </div>
+        </button>
+      </li>
+    </ul>
+    <ng-template #loadingAdmins>
+      <fa-icon icon="spinner"></fa-icon>
+    </ng-template>
+  </ng-template>
 
   <ng-template #createCourseModal let-modal>
     <div class="modal-header">

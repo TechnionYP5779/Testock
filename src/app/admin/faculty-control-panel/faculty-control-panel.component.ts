@@ -26,6 +26,6 @@ export class FacultyControlPanelComponent implements OnInit {
       this.subscription.unsubscribe();
     }
     this._faculty = value;
-    this.subscription = this.db.getAdminsOfFaculty(value).subscribe(admins => this.admins = admins);
+    this.subscription = this.db.getAdminsOfFaculty(value.id).subscribe(admins => this.admins = admins);
   }
 }
