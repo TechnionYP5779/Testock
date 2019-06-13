@@ -31,7 +31,7 @@
             </button>
             <button type="button" class="btn notification-button mr-2"  #notificationPopover="ngbPopover" [ngbPopover]="notificationsContent" [popoverTitle]="notificationsTitle" [autoClose]="'outside'" popoverClass="notification-popover">
               <span class="notification-badge badge badge-warning" routerLink="/profile" *ngIf="(notificationsCount$ | async) && (notificationsCount$ | async) > 0">{{ (notificationsCount$ | async) }}</span>
-              <fa-icon icon="bell" size="2x"></fa-icon>
+              <fa-icon icon="bell" size="lg"></fa-icon>
             </button>
             <div class="profile-image mr-2" routerLink="/profile">
               <img class="rounded" [src]="user.photoUrl" width="35px">
