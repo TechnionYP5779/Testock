@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NotificationId} from '../../entities/notification';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
@@ -14,6 +14,7 @@ import {UserData} from '../../entities/user';
 export class NotificationsListComponent implements OnInit {
   @Input() user: Observable<UserData>;
   public notifications$: Observable<NotificationId[]>;
+  @Output() notificationClicked = new EventEmitter<NotificationId>();
 
   constructor(private notifications: NotificationsService) { }
 
@@ -28,7 +29,11 @@ export class NotificationsListComponent implements OnInit {
       event.preventDefault();
       event.stopPropagation();
     }
-    this.notifications.updateNotificationState(notification.id, !notification.seen);
+    this.notifications.updateNotificationState(notification.id, seen);
+
+    if (redirect === true) {
+      this.notificationClicked.emit(notification);
+    }
   }
 
   toggleSeen(event: MouseEvent, notification: NotificationId, redirect: boolean) {
