@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-body d-flex flex-column">
+    <h5 class="card-title">
+      {{course.name}} ({{course.id}})
+    </h5>
+    <ul class="list-group list-group-flush mt-1" *ngIf="solvedQuestions$ | async as solvedQuestions">
+      <ng-container *ngFor="let question of solvedQuestions">
+        <a class="list-group-item list-group-item-action" [routerLink]="'/question/' + question.id">
+          {{ question.moed | fullMoed }} - Question {{question.number}}
+        </a>
+      </ng-container>
+    </ul>
+    <button [routerLink]="'/course/' + course.id" class="btn btn-primary mt-auto">
+      See more <fa-icon icon="angle-double-right"></fa-icon>
+    </button>
+  </div>
+</div>

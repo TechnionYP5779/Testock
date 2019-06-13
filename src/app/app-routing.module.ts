@@ -18,9 +18,10 @@ import {TagComponent} from './ui/tag/tag.component';
 import {BatchUploadComponent} from './upload/batch-upload/batch-upload.component';
 import {CropPendingComponent} from './upload/crop-pending/crop-pending.component';
 import {AboutComponent} from './ui/about/about.component';
+import {HomepageComponent} from './ui/homepage/homepage.component';
 
 const routes: Routes = [
-  {path: '', component: FacultiesComponent},
+  {path: '', component: HomepageComponent},
   {path: 'profile', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'profile/:uid', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses', component: CoursesComponent, canActivate: [UsersOnlyGuard]},

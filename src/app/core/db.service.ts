@@ -170,12 +170,14 @@ export class DbService {
     return this.afs.doc<SolvedQuestion>('users/' + uId + '/solvedQuestions/' + qId).valueChanges();
   }
 
-  getSolvedQuestionsAsQuestions(uId: string): Observable<Question[]> {
+  getSolvedQuestionsAsQuestions(uId: string): Observable<QuestionId[]> {
     return (this.afs
       .collection('users/' + uId + '/solvedQuestions')
       .valueChanges()
       .pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<any[]>)
-      .pipe(map(result => result.map(item => item.linkedQuestionId)));
+      .pipe(map(result => result.map(item => item.linkedQuestionId as Question).map(item => {
+        return {...item, id: `${item.course}-${item.moed.semester.year}-${item.moed.semester.num}-${item.moed.num}-${item.number}`};
+      })));
   }
 
   getSolutions(questionId: string): Observable<SolutionId[]> {
