@@ -58,7 +58,7 @@
         <div class="question-images">
           <div class="question-image" *ngFor="let page of isPageCropped; let i = index">
             <div *ngIf="croppedPages[i] && page">
-              <img [src]="croppedPages[i]" alt="scan page crop" width="100%" *ngIf="croppedPages[i]">
+              <img [src]="croppedPages[i].base64" alt="scan page crop" width="100%">
               <div class="image-popup">
                 <button class="btn image-remove-button" (click)="cancelPage(i)">
                   <fa-icon icon="trash"></fa-icon>
