@@ -10,7 +10,8 @@ export const environment = {
     databaseURL: 'https://testock-development.firebaseio.com',
     projectId: 'testock-development',
     storageBucket: 'testock-development.appspot.com',
-    messagingSenderId: '398800867598'
+    messagingSenderId: '398800867598',
+    functionsLocation: 'us-central1'
   }
 };
 
