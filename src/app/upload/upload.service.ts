@@ -326,13 +326,13 @@ export class UploadService {
       exam = await this.db.createExamForCourse(details.course, e);
     }
 
-    const pendingScan = await this.uploadPendingScan(console.log, details.course, details.moed, scanPages);
+    const pendingScan = await this.uploadPendingScan(() => {}, details.course, details.moed, scanPages);
 
     const questions = await this.db.getQuestionsOfExam(details.course, exam.id).pipe(first()).toPromise();
 
     for (let i = 0; i < questions.length; ++i) {
       const q = questions[i];
-      await this.uploadQuestion(console.log, details.course, details.moed,
+      await this.uploadQuestion(() => {}, details.course, details.moed,
         new QuestionSolution(q.number, -1, q.total_grade, QuestionType.FETCHED), pendingScan);
     }
 
