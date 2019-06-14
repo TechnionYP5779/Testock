@@ -6,14 +6,18 @@
   <mat-card-content>
     <ng-container *ngIf="solvedQuestions$ | async as solvedQuestions; else loading">
       <div class="solved-questions" *ngIf="solvedQuestions.length > 0">
-        <h6>Solved Questions</h6>
-        <ul class="list-group list-group-flush mt-1" >
-          <ng-container *ngFor="let question of solvedQuestions">
+        <h6>Solved Questions ({{solvedQuestionsLimit}}/{{solvedQuestions.length}})</h6>
+        <div class="list-group list-group-flush mt-1" >
+          <ng-container *ngFor="let question of solvedQuestions | slice:0:solvedQuestionsLimit">
             <a class="list-group-item list-group-item-action" [routerLink]="'/question/' + question.id">
               {{ question.moed | fullMoed }} - Question {{question.number}}
             </a>
           </ng-container>
-        </ul>
+          <button type="button" class="btn btn-primary" (click)="increaseSolvedQuestionsLimit(1)" *ngIf="solvedQuestionsLimit < solvedQuestions.length">
+            More
+            <fa-icon icon="caret-down"></fa-icon>
+          </button>
+        </div>
       </div>
     </ng-container>
     <ng-template #loading>

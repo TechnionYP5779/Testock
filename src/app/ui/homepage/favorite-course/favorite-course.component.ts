@@ -14,7 +14,8 @@ import {DbService} from '../../../core/db.service';
 export class FavoriteCourseComponent implements OnInit {
 
   @Input() course: Course;
-  private solvedQuestions$: Observable<QuestionId[]>;
+  public solvedQuestions$: Observable<QuestionId[]>;
+  public solvedQuestionsLimit = 1;
 
   constructor(private auth: AuthService, private db: DbService) {
     this.solvedQuestions$ = this.auth.user$.pipe(flatMap(userData => this.db.getSolvedQuestionsAsQuestions(userData.uid)))
@@ -24,4 +25,7 @@ export class FavoriteCourseComponent implements OnInit {
   ngOnInit() {
   }
 
+  increaseSolvedQuestionsLimit(delta: number = 3) {
+    this.solvedQuestionsLimit += delta;
+  }
 }
