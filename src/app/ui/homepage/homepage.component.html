@@ -1,6 +1,6 @@
 <div class="row" *ngIf="favoriteCourses$ | async as favoriteCourses">
   <ng-container *ngFor="let course of favoriteCourses">
-    <div class="col-6">
+    <div class="col-6 mb-3">
       <app-favorite-course [course]="course"></app-favorite-course>
     </div>
   </ng-container>
