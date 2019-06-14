@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Course} from '../../../entities/course';
-import {Question, QuestionId} from '../../../entities/question';
+import {QuestionId} from '../../../entities/question';
 import {flatMap, map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {AuthService} from '../../../users/auth.service';
