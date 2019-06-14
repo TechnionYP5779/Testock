@@ -1,3 +1,13 @@
+<div class="jumbotron">
+  <h3 class="title display-6" *ngIf="(auth.user$ | async) as user">
+    Hello {{ user.name }}, how are you?
+  </h3>
+  <p class="lead">
+    Below you can see all the courses you marked as favorites. <br />
+    We recommend you select the courses you are currently taking, so you can have a quick access to them.
+  </p>
+</div>
+
 <div class="row" *ngIf="favoriteCourses$ | async as favoriteCourses">
   <ng-container *ngFor="let course of favoriteCourses">
     <div class="col-6 mb-3">
