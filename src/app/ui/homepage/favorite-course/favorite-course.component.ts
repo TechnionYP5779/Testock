@@ -25,7 +25,7 @@ export class FavoriteCourseComponent implements OnInit {
   ngOnInit() {
   }
 
-  increaseSolvedQuestionsLimit(delta: number = 3) {
+  changeSolvedQuestionsLimitBy(delta: number = 3) {
     this.solvedQuestionsLimit += delta;
   }
 }
