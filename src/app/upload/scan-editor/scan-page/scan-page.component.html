@@ -1,0 +1,47 @@
+<h6 class="mt-1 mb-1 text-center w-100">
+  {{ scanPage.pageNum }}
+</h6>
+<div class="scan-page-image" [ngClass]="{'scan-page-highlight': scanPage.highlight > 0}" (click)="addImageTo ? addFullPage() : openModal(content)" ngbTooltip="Select full page" [disableTooltip]="!addImageTo">
+  <img [src]="scanPage.imageBase64" alt="scan page crop">
+  <div class="image-popup p-2">
+    <div class="image-remove-button">
+      <button class="btn btn-danger" (click)="hide.emit(); $event.stopPropagation()" ngbTooltip="Hide Page">
+        <fa-icon icon="eye-slash"></fa-icon>
+      </button>
+      <button class="btn btn-primary ml-2" *ngIf="addImageTo" (click)="openModal(content); $event.stopPropagation()" ngbTooltip="Crop Page">
+        <fa-icon icon="crop"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header" *ngIf="addImageTo; else viewModeHeader">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="selectImage()"><fa-icon icon="check" class="mr-2"></fa-icon>Add selection</button>
+  </div>
+
+  <ng-template #viewModeHeader>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Page #{{ scanPage.pageNum }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="modal-body">
+    <img class="scan-page-image-modal" [src]="scanPage.imageBase64" alt="exam scan image" *ngIf="!addImageTo; else imageCropper">
+
+    <ng-template #imageCropper>
+      <image-cropper
+        [imageBase64]="scanPage.imageBase64"
+        format="jpeg"
+        [maintainAspectRatio]="false"
+        [resizeToWidth]="1024"
+        (imageCropped)="updateCroppedImage($event)"
+      ></image-cropper>
+    </ng-template>
+  </div>
+
+</ng-template>

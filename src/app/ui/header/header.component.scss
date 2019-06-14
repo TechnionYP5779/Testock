@@ -6,6 +6,31 @@
   .container {
     padding: 5px 0;
   }
-}
 
+  .profile-image {
+    display: inline-block;
+    cursor: pointer;
+  }
+  .notification-button {
+    position: relative;
+
+    .notification-badge {
+      position: absolute;
+      display: block;
+      top: 0;
+      right: 2px;
+      font-size: 50%;
+      border: 1px solid #8d6805;
+    }
+  }
+
+  .notification-popover {
+    width: 380px;
+    max-width: 380px;
+
+    .popover-body {
+      padding: 0;
+    }
+  }
+}
 

@@ -16,36 +16,63 @@
             <li class="nav-item">
               <a class="nav-link" routerLink="/courses">Courses</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/about">About</a>
+            </li>
           </ul>
           <form class="form-inline my-2 my-lrg-0">
             <input class="form-control mr-sm-2" type="text" (keyup)="onSearchChange($event.target.value)" placeholder="Search course..." aria-label="Search">
           </form>
-          <button class="btn btn-outline-primary mr-2" type="button" routerLink="/upload">
-            <fa name="upload"></fa>
-            Upload scan
-          </button>
           <!-- User logged in -->
-          <div *ngIf="auth.currentUser">
-            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">
-              <fa name="sign-out"></fa>
-              Logout
+          <div *ngIf="auth.user$ | async as user">
+            <button type="button" class="btn btn-outline-primary align-middle mr-2" *ngIf="auth.currentUser" routerLink="/upload">
+              <fa-icon icon="upload" class="mr-2"></fa-icon>
+              <span>Upload Scan</span>
             </button>
-            <img class="mr-2" [src]="auth.currentUser.photoURL" width=35px routerLink="/profile">
+            <button type="button" class="btn notification-button mr-2"  #notificationPopover="ngbPopover" [ngbPopover]="notificationsContent" [popoverTitle]="notificationsTitle" [autoClose]="'outside'" popoverClass="notification-popover">
+              <span class="notification-badge badge badge-warning" routerLink="/profile" *ngIf="(notificationsCount$ | async) && (notificationsCount$ | async) > 0">{{ (notificationsCount$ | async) }}</span>
+              <fa-icon icon="bell" size="lg"></fa-icon>
+            </button>
+            <div class="profile-image mr-2" routerLink="/profile">
+              <img class="rounded" [src]="user.photoUrl" width="35px">
+            </div>
+            <button class="btn btn-warning mr-2" type="button" routerLink="/world">
+              <fa-icon [icon]="['far', 'gem']"></fa-icon>
+              {{ user.points }}
+            </button>
+
+            <ng-template #notificationsContent><app-notifications-list [user]="auth.user$" (notificationClicked)="notificationPopover.close()"></app-notifications-list></ng-template>
+            <ng-template #notificationsTitle>What's new? ({{notificationsCount$ | async}})</ng-template>
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">
-            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">
-            <fa name="sign-in"></fa>
-              Login
+            <button class="btn btn-outline-success mr-2" type="button" (click)="login()">
+            <fa-icon icon="sign-in-alt"></fa-icon>
+              Sign In
             </button>
           </div>
 
-          <div *ngIf="isAdmin">
-            <button class="btn btn-outline-danger mr-2" type="button" routerLink="/admin">
-              <fa name="cog"></fa>
-              Admin CP
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item *ngIf="isAdmin" routerLink="/batch-upload">
+              <mat-icon>cloud_upload</mat-icon>
+              <span>Batch Upload</span>
             </button>
-          </div>
+            <button mat-menu-item *ngIf="isAdmin" routerLink="/admin">
+              <mat-icon>settings</mat-icon>
+              <span>Admin CP</span>
+            </button>
+            <button mat-menu-item *ngIf="auth.currentUser" (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Sign Out</span>
+            </button>
+            <button mat-menu-item *ngIf="!auth.currentUser" (click)="login()">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Sign In</span>
+            </button>
+          </mat-menu>
         </div>
       </nav>
     </div>

@@ -1,0 +1,35 @@
+<div class="jumbotron jumbotron">
+  <h3 class="title display-4" *ngIf="(course$ | async) as course">
+    <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + courseID">{{ courseID }}</a>
+    <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
+    # {{ tag }}
+  </h3>
+</div>
+
+<br>
+<table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions$ | async as questions" >
+  <thead>
+  <tr class="table-danger">
+    <th colspan="5">
+      Questions
+      <span class="badge badge-danger">{{questions.length}}</span>
+    </th>
+  </tr>
+  <tr class="table-light">
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="year" >Year</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="semester">Semester</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="moed">Moed</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="number">Question No.</th>
+    <th class="text-center" scope="col" style="width: 10%" mat-sort-header="difficulty">Difficulty</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="clickable" routerLink="/question/{{ q.id }}" *ngFor="let q of questions">
+    <td>{{ q.moed | year }}</td>
+    <td>{{ q.moed | semester }}</td>
+    <td>{{ q.moed | moed }}</td>
+    <td>{{ q.number }}</td>
+    <td>{{ q.sum_difficulty_ratings / q.count_difficulty_ratings | number:'1.1-2'}}</td>
+  </tr>
+  </tbody>
+</table>

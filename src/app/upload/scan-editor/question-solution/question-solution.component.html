@@ -1,0 +1,67 @@
+<div class="card" *ngIf="sol.questionType != QuestionType.EXTRACTED">
+  <div class="card-header" [ngClass]="{'active-question': active == true}">
+    <h5 class="mb-0">
+      <button class="btn btn-link" (click)="collapsed = !collapsed" (mouseenter)="this.sol.highlightRelatedPages()" (mouseleave)="this.sol.unhighlightRelatedPages()">
+        <fa-icon [icon]="collapsed ? 'plus' : 'minus'" class="mr-1"></fa-icon>
+        Question {{ sol.number }} <span class="badge badge-secondary ml-1">{{ sol.images.length }}</span>
+      </button>
+      <button class="btn btn-transparent" *ngIf="active && sol.questionType === QuestionType.REGULAR" (click)="deleteRequested.emit()">
+        <fa-icon icon="trash"></fa-icon>
+      </button>
+      <button class="btn btn-transparent"  *ngIf="sol.questionType !+ QuestionType.REGULAR">
+        <ng-template #fetchedQuestionHelp>
+          This question already exists in the system for this exam.<br>If the current scan does not include a solution for it, just leave it empty.
+        </ng-template>
+        <fa-icon icon="info" [ngbTooltip]="fetchedQuestionHelp" placement="bottom"></fa-icon>
+      </button>
+      <div class="float-right">
+        <button class="btn btn-transparent" (click)="activateRequested.emit()" *ngIf="!quickMode && !active">
+          <fa-icon icon="edit"></fa-icon>
+        </button>
+
+        <button class="btn btn-transparent" *ngIf="active" (click)="deactivateRequested.emit()">
+          <fa-icon icon="check"></fa-icon>
+        </button>
+      </div>
+      <div class="grades-container float-right">
+        <input class="lhs" type="number" [(ngModel)]="sol.grade" min="0" [max]="sol.points" (change)="verifyGrade()">
+         /
+        <input class="rhs" type="number" [(ngModel)]="sol.points" [readOnly]="sol.questionType != QuestionType.REGULAR">
+      </div>
+    </h5>
+  </div>
+  <div [ngbCollapse]="collapsed">
+    <div class="card-body">
+      <div *ngIf="!sol.images || sol.images.length == 0" class="text-center">
+        <small>No Images Selected</small>
+      </div>
+      <div class="question-images">
+        <div class="question-image" *ngFor="let image of sol.images;" (mouseenter)="image.source.highlightInc()" (mouseleave)="image.source.highlightDec()">
+          <img [src]="image.base64" alt="scan page crop">
+          <div class="image-popup" *ngIf="active">
+            <button class="btn image-remove-button" (click)="image.source.highlightDec(); image.source.highlightDec(); sol.removeImage(image);">
+              <fa-icon icon="trash"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="sol.questionType === QuestionType.EXTRACTED" class="card">
+  <div class="card-header extracted-question">
+    <h5 class="mb-0">
+      <button class="btn btn-link" disabled>
+        <fa-icon icon="check" class="mr-1"></fa-icon>
+        Question {{ sol.number }}
+      </button>
+      <button class="btn btn-transparent float-right">
+        <ng-template #extractedQuestionInfo>
+          This question already has a solution from this pending scan
+        </ng-template>
+        <fa-icon icon="info" [ngbTooltip]="extractedQuestionInfo" placement="left"></fa-icon>
+      </button>
+    </h5>
+  </div>
+</div>

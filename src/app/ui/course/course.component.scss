@@ -1,0 +1,44 @@
+.topic-creator-profile-pic {
+  width: 30px;
+  height: 30px;
+}
+.clickable {
+  cursor: pointer;
+}
+
+.edit-button {
+  margin: 0;
+  font-size: 40%;
+  padding: 0;
+  background: 0;
+  outline: 0;
+  border: 0;
+}
+
+.tag {
+  font-style: italic;
+
+  .remove-tag {
+    margin: 0;
+    padding: 0;
+    background: 0;
+    outline: 0;
+    border: 0;
+  }
+}
+
+.favorite-toggle {
+  float: right;
+
+  button {
+    color: #FFC107;
+    font-size: 45px;
+    margin-right: 20px;
+    cursor: pointer;
+
+    background: 0;
+    outline: 0;
+    border: 0;
+    padding: 0;
+  }
+}

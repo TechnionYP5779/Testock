@@ -1,0 +1,41 @@
+<div class="modal-header">
+  <div>
+    <h4 class="modal-title">Pending Scan for {{ pendingScan.moed | fullMoed }}</h4>
+    <div class="display-inline" *ngIf="pendingScan.linkedQuestions.length > 0">
+      <strong>Questions on this scan: </strong>
+      <a class="badge badge-primary ml-1"
+         *ngFor="let linkedQuestion of pendingScan.linkedQuestions"
+         (click)="activeModal.dismiss()"
+         [routerLink]="'/question/' + linkedQuestion.qid">
+        Question {{ linkedQuestion.num }}
+      </a>
+    </div>
+    <div class="display-inline" *ngIf="pendingScan.extractedQuestions.length > 0">
+      <strong>Solutions extracted from this scan: </strong>
+      <a class="badge badge-success ml-1"
+         *ngFor="let extractedQuestion of pendingScan.extractedQuestions"
+         (click)="activeModal.dismiss()"
+         [routerLink]="'/question/' + extractedQuestion.qid">
+        Question {{ extractedQuestion.num }}
+      </a>
+    </div>
+  </div>
+  <button class="btn btn-success ml-2" [routerLink]="'/crop-pending/' + pendingScan.id" (click)="activeModal.dismiss()" *ngIf="!pendingScan.uploadInProgress">Crop This Scan</button>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="text-center mt-2" *ngFor="let img of pendingScan.pages; let i = index">
+    <img class="pending-scan-page" [src]="img" alt="pending scan page" />
+  </div>
+  <div class="mt-2" *ngIf="pendingScan.uploadInProgress">
+    <h1 class="text-center">
+      <fa-icon icon="spinner" [spin]="true" size="lg">></fa-icon>
+    </h1>
+    <div class="text-center mt-4">This scan is currently being uploaded</div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

@@ -1,6 +1,24 @@
-@import "~bootstrap/dist/css/bootstrap.css";
-@import "~font-awesome/css/font-awesome.min.css";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "assets/fonts/feast-of-flesh/style.css";
+
+body.world  {
+  background-color: #532a5c;
+
+  app-root {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #topbar {
+    margin-bottom: 0;
+  }
+}
 
 .modal-backdrop.show {
   opacity: 0.75;

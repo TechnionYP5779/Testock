@@ -1,0 +1,26 @@
+:host {
+  .seen-toggle-btn {
+    outline: 0;
+    border: 0;
+    background: 0;
+    padding: 0;
+    margin-right: 20px;
+    color: inherit;
+  }
+
+  .list-group {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  small {
+    display: block;
+    text-align: right;
+  }
+
+  .loading {
+    padding: 20px;
+    font-size: 36px;
+    text-align: center;
+  }
+}

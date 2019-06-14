@@ -1,4 +1,4 @@
-import { SemesterPipe } from './semester.pipe';
+import {SemesterPipe} from './semester.pipe';
 
 describe('SemesterPipe', () => {
   it('create an instance', () => {

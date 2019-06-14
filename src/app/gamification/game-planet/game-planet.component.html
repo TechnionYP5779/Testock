@@ -1,0 +1,46 @@
+<button class="exit" (click)="closePlanet()">x</button>
+<div class="sidebar">
+  <img class="planet-image" [src]="'../../../assets/images/gamification/planets/' + planet.image" alt="Planets">
+  <div class="scoreboard">
+    <h4 class="title">Planet Leaders</h4>
+    <ul class="users" *ngIf="(planetUsers$ | async) as planetUsers; else loading">
+      <li class="user" *ngFor="let planetUser of planetUsers; index as i">
+        <span class="user-rating"># {{i + 1}}</span>
+        <img class="user-image" src="{{planetUser.photoUrl}}" alt="Profile image" [routerLink]="'/profile/' + planetUser.uid"/>
+        <div class="user-text">
+          <span class="user-name">{{planetUser.name}}</span>
+          <span class="user-score">
+            <fa-icon [icon]="['far', 'gem']"></fa-icon>
+            {{planetUser.points}}
+          </span>
+        </div>
+      </li>
+    </ul>
+    <p class="empty-planet-notice" *ngIf="(planetUsers$ | async)?.length == 0">Still no users on this planet</p>
+    <ng-template #loading>
+      <p class="empty-planet-notice"><fa-icon icon="spinner" [spin]="true" class="empty-planet-notice"></fa-icon></p>
+    </ng-template>
+  </div>
+</div>
+<div class="content">
+  <div class="text">
+    <h2 class="title">{{ planet.title }}</h2>
+    <h3 class="description">
+      {{ planet.description }}
+      <span class="limits label">{{planet.min_points}} - {{planet.max_points}} Points</span>
+    </h3>
+  </div>
+  <div class="monsters-container">
+    <h4>
+      Planet's Monsters
+      <span class="next-monster label" *ngIf="pointsForNextMonster > 0">next monster at {{pointsForNextMonster}} points</span>
+    </h4>
+    <ul class="monsters">
+      <li class="monster" [class.owned]="monster.owned" *ngFor="let monster of planet.monsters">
+        <button class="monster-thumb-button">
+          <img [src]="'../../../assets/images/gamification/monsters/' + monster.image" alt="" class="monster-thumb">
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

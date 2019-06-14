@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
-import {Question, QuestionId} from '../../core/entities/question';
-import {Exam} from '../../core/entities/exam';
-import {AuthService} from '../../core/auth.service';
-import {Course} from '../../core/entities/course';
+import {QuestionId} from '../../entities/question';
+import {Exam} from '../../entities/exam';
+import {AuthService} from '../../users/auth.service';
+import {Course} from '../../entities/course';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-exam',
   templateUrl: './exam.component.html',
-  styleUrls: ['./exam.component.css']
+  styleUrls: ['./exam.component.scss']
 })
 export class ExamComponent implements OnInit {
 
@@ -18,8 +19,11 @@ export class ExamComponent implements OnInit {
   public questions: QuestionId[];
   public exam: Exam;
   course: Course;
+  public difficulty: number;
+  public tags: string[];
 
   adminAccess: boolean;
+  getPdfUrl = 'https://' + environment.firebase.functionsLocation + '-' + environment.firebase.projectId + '.cloudfunctions.net/getPDFofExam';
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.courseId = +route.snapshot.paramMap.get('cid');
@@ -34,7 +38,22 @@ export class ExamComponent implements OnInit {
   }
 
   private getQuestions() {
-    this.db.getQuestionsOfExam(this.courseId, this.examId).subscribe(ques => this.questions = ques);
+    this.db.getQuestionsOfExam(this.courseId, this.examId).subscribe(ques => {
+      this.questions = ques;
+
+      if (this.questions.length > 0 ) {
+        let sumAverages = 0;
+        let tags: string[] = [];
+        for (const question of this.questions) {
+          sumAverages += question.sum_difficulty_ratings / question.count_difficulty_ratings;
+          tags = tags.concat(question.tags);
+        }
+        if (sumAverages > 0) {
+          this.difficulty = sumAverages / this.questions.length;
+        }
+        this.tags = Array.from(new Set(tags));
+      }
+    });
   }
 
   private getExam() {

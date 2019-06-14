@@ -1,9 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {SolutionId} from '../../core/entities/solution';
-import {QuestionId} from '../../core/entities/question';
+import {SolutionId} from '../../entities/solution';
+import {QuestionId} from '../../entities/question';
 import {DbService} from '../../core/db.service';
-import {AuthService} from '../../core/auth.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PendingSolutionModalComponent} from '../../pending-scans/pending-solution-modal/pending-solution-modal.component';
 
 @Component({
   selector: 'app-solution',
@@ -18,7 +20,7 @@ export class SolutionComponent implements OnInit {
   @Input()
   adminAccess: boolean;
 
-  constructor(private db: DbService, private snackBar: MatSnackBar) {
+  constructor(private db: DbService, private snackBar: MatSnackBar, private router: Router, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -34,5 +36,15 @@ export class SolutionComponent implements OnInit {
     this.db.updateSolutionGrade(this.solution, this.question).then(() => {
       this.snackBar.open(`Solution Updated Successfully`, 'close', {duration: 3000});
     });
+  }
+
+  solThumbClick(content) {
+    if (this.solution.linkedToPendingScanId) {
+      const modalRef = this.modalService.open(PendingSolutionModalComponent, {size: 'lg'});
+      modalRef.componentInstance.question = this.question;
+      modalRef.componentInstance.solution = this.solution;
+    } else {
+      this.modalService.open(content, {size: 'lg'});
+    }
   }
 }

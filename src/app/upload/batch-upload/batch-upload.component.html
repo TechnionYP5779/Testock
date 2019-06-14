@@ -1,0 +1,42 @@
+<ngx-file-drop
+  (onFileDrop)="dropped($event)"
+  accept=".pdf"
+  [multiple]="true"
+  dropZoneClassName=""
+  contentClassName=""
+  (onFileOver)="isDragged = true"
+  (onFileLeave)="isDragged = false"
+>
+  <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+    <div class="box has-advanced-upload" [ngClass]="{'is-dragover':isDragged == true}">
+      <div class="box-input">
+        <fa-icon icon="upload" class="box-icon"></fa-icon>
+        <div class="box-file-label-text" style="text-align: center;">
+          <label class="box-file-label" (click)="openFileSelector()">
+            <strong> Browse your scans </strong> or drop them here
+          </label>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ngx-file-drop>
+<table class="table mt-4">
+  <thead>
+  </thead>
+  <tbody>
+  <tr *ngFor="let file of files; let i = index">
+    <th scope="row">{{file.name}}</th>
+    <td style="width: 30%" *ngIf="uploadTasks[i] | async as result; else loading">
+      <fa-icon icon="check" class="text-success mr-2" *ngIf="result.id"></fa-icon>
+      <fa-icon icon="times" class="text-danger mr-2" *ngIf="!result.id"></fa-icon>
+      <a [routerLink]="'/pendingScan/' + result.id" *ngIf="result.id" target="_blank">Uploaded Successfully</a>
+      <strong *ngIf="!result.id">{{result.message}}</strong>
+    </td>
+    <ng-template #loading>
+      <td style="width: 20%">
+        <fa-icon icon="spinner" [spin]="true"></fa-icon>
+      </td>
+    </ng-template>
+  </tr>
+  </tbody>
+</table>

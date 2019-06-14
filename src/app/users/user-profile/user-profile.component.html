@@ -1,33 +1,64 @@
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-4">
-      <div class="card text-center" id="login">
-        <div class="card-header">
-          Profile page
+  <div class="row">
+    <div class="col-9">
+      <div class="jumbotron" *ngIf="(user$ | async) as user">
+        <div class="media">
+          <img class="mr-4 rounded-circle" [src]="user.photoUrl" height=100 alt="">
+          <div class="media-body">
+            <h2>
+              {{user.name}}
+              <span class="badge badge-info" *ngIf="user.roles.admin">Admin</span>
+            </h2>
+            <p class="lead">{{user.faculty}}</p>
+          </div>
+          <button class="btn btn-lg btn-warning ml-2" type="button" routerLink="/world">
+            <fa-icon [icon]="['far', 'gem']"></fa-icon>
+            {{ user.points }}
+          </button>
         </div>
-        <div class="card-body">
-          <!-- User logged in -->
-          <div *ngIf="auth.currentUser">
-            <h3>Hi {{ auth.currentUser.displayName }}</h3>
-            <app-facebook-profile-picture [fbUid]="currentUserFbId" [width]="100" [height]="100"></app-facebook-profile-picture>
-          </div>
-          <!-- User NOT logged in -->
-          <div *ngIf="!auth.currentUser">
-            <h3>Hi guest</h3>
-          </div>
-        </div>
-
-        <div class="card-footer text-muted">
-          <!-- User logged in -->
-          <div *ngIf="auth.currentUser">
-            <button class="btn btn-outline-danger mr-2" type="button" (click)="logout()">Logout</button>
-          </div>
-          <!-- User NOT logged in -->
-          <div *ngIf="!auth.currentUser">
-            <button class="btn btn-outline-success mr-2" type="button" routerLink="/login">Login</button>
-          </div>
-        </div>
+        <ul class="favoriteCourses">
+          <li *ngFor="let course of (favoriteCourses$ | async)">
+            <button type="button" class="btn btn-outline-primary" [routerLink]="'/course/' + course.id">{{ course.name }}</button>
+          </li>
+        </ul>
       </div>
+    </div>
+    <div class="col-3" *ngIf="facultyAdmin$ | async as facultiesAdmin">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-primary">Admin for Faculties:</li>
+        <a class="list-group-item list-group-item-action" *ngFor="let faculty of facultiesAdmin" [routerLink]="'/faculty/' + faculty.id">{{faculty.name}}</a>
+      </ul>
+    </div>
+  </div>
+  <div class="my-profile-details row" *ngIf="isMyProfile">
+    <div class="col-12">
+      <h3>Personal progress:</h3>
+      <table matSort (matSortChange)="sortQuestions($event)" class="table table-hover" *ngIf="questions" >
+        <thead>
+        <tr class="table-success">
+          <th colspan="9">
+            Questions you solved:
+            <span class="badge badge-success">{{questions.length}}</span>
+          </th>
+        </tr>
+        <tr class="table-light text-center" >
+          <th scope="col" mat-sort-header="course">Course</th>
+          <th scope="col" mat-sort-header="year">Year</th>
+          <th scope="col" mat-sort-header="semester">Semester</th>
+          <th scope="col" mat-sort-header="moed">Moed</th>
+          <th scope="col" mat-sort-header="number">Question No.</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let q of questions">
+          <td>{{ q.course }}</td>
+          <td>{{ q.moed | year }}</td>
+          <td>{{ q.moed | semester}}</td>
+          <td>{{ q.moed | moed}}</td>
+          <td>{{ q.number }}</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

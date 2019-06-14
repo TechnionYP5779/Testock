@@ -1,28 +1,68 @@
-<div class="text-center mb-2" *ngIf="solution && adminAccess">
-  <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa name="edit"></fa></button>
-  <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa name="times"></fa></button>
-</div>
-<div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal"
-     [attr.data-target]="'#solution-modal-' + solution.id">
-  <img class="card-img" [src]="solution.photos[0]" alt="scan preview" />
-  <div class="card-img-overlay align-items-center d-flex justify-content-center">
-    <h2 class="card-title text-center">
-      {{solution.grade}} / {{question.total_grade}}
-    </h2>
+<div *ngIf="solution && !solution.uploadInProgress; else uploadInProgress">
+  <div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal" (click)="solThumbClick(content)"
+       [attr.data-target]="solution.linkedToPendingScanId ? '' : '#solution-modal-' + solution.id">
+    <img class="card-img" [src]="solution.photos[0]" alt="scan preview" *ngIf="solution.photos && solution.photos.length > 0"/>
+    <div class="card-img text-center" *ngIf="solution.linkedToPendingScanId">
+      <h6 class="mt-5">Available from pending scan</h6>
+    </div>
+    <div class="card-img-overlay align-items-center d-flex justify-content-center">
+      <h2 class="card-title text-center" *ngIf="solution.grade >= 0; else noGrade">
+        {{solution.grade}} / {{question.total_grade}}
+      </h2>
+      <ng-template #noGrade>
+        <h4 class="card-title text-center">
+          Unknown Grade
+        </h4>
+      </ng-template>
+    </div>
+  </div>
+  <div class="text-center mt-2" *ngIf="solution && adminAccess">
+    <button class="btn btn-info btn-sm mr-2" type="button" data-toggle="modal" [attr.data-target]="'#editSolution-' + solution.id" role="button"><fa-icon icon="edit"></fa-icon></button>
+    <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" [attr.data-target]="'#deleteSolution-' + solution.id" role="button"><fa-icon icon="times"></fa-icon></button>
   </div>
 </div>
 
-<div class="modal fade scan-modal" [attr.id]="'solution-modal-' + solution.id" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div *ngFor="let photo of solution.photos">
-          <img [src]="photo" alt="solution photo" class="sol-image-modal"/>
-        </div>
-      </div>
+<ng-template #uploadInProgress>
+  <div class="card bg-dark text-white" *ngIf="solution" data-toggle="modal">
+    <div class="card-img text-center">
+      <h6 class="mt-5"><fa-icon icon="spinner" [spin]="true" size="lg">></fa-icon></h6>
+      <div class="mt-2">Solution in upload</div>
+    </div>
+    <div class="card-img-overlay align-items-center d-flex justify-content-center">
+      <h2 class="card-title text-center" *ngIf="solution.grade >= 0; else noGrade">
+        {{solution.grade}} / {{question.total_grade}}
+      </h2>
+      <ng-template #noGrade>
+        <h4 class="card-title text-center">
+          Unknown Grade
+        </h4>
+      </ng-template>
     </div>
   </div>
-</div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" *ngIf="solution.grade >= 0; else noGrade">Solution Grade: {{solution.grade}} / {{question.total_grade}}</h4>
+    <ng-template #noGrade>
+      <h4 class="modal-title">
+        Unknown Grade
+      </h4>
+    </ng-template>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngFor="let photo of solution.photos">
+      <img [src]="photo" alt="solution photo" class="sol-image-modal"/>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+
+</ng-template>
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" [id]="'editSolution-' + solution.id">
   <div class="modal-dialog" role="document">
