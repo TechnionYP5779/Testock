@@ -15,7 +15,7 @@ export class FavoriteCourseComponent implements OnInit {
 
   @Input() course: Course;
   public solvedQuestions$: Observable<QuestionId[]>;
-  public solvedQuestionsLimit = 1;
+  public solvedQuestionsLimit = 3;
 
   constructor(private auth: AuthService, private db: DbService) {
     this.solvedQuestions$ = this.auth.user$.pipe(flatMap(userData => this.db.getSolvedQuestionsAsQuestions(userData.uid)))
