@@ -40,7 +40,9 @@ function matchInArray(regex: RegExp, arrayOfString: string[]): string {
   return '';
 }
 
-export const onTagDeleted = functions.firestore.document('courses/{courseID}').onUpdate(async (change, context) => {
+const funcs = functions.region('europe-west1');
+
+export const onTagDeleted = funcs.firestore.document('courses/{courseID}').onUpdate(async (change, context) => {
   const prev_data = change.before.data();
   const new_data = change.after.data();
   const prev_tags: string[] = prev_data ? prev_data.tags : [];
@@ -53,7 +55,7 @@ export const onTagDeleted = functions.firestore.document('courses/{courseID}').o
     }));
 });
 
-export const onQuestionDeleted = functions.firestore.document('questions/{questionID}').onDelete(async (snap, context) => {
+export const onQuestionDeleted = funcs.firestore.document('questions/{questionID}').onDelete(async (snap, context) => {
   const qId = context.params.questionID;
   const p1 = admin.firestore().collection('questions/'+qId+'/solutions').get().then(snapshot => {
     snapshot.docs.forEach(doc => doc.ref.delete());
@@ -69,7 +71,7 @@ export const onQuestionDeleted = functions.firestore.document('questions/{questi
   return Promise.all([p1,p2,p3]);
 });
 
-export const isImageBlank = functions.https.onRequest(async (request, response) => {
+export const isImageBlank = funcs.https.onRequest(async (request, response) => {
   return cors(request, response, async () => {
     const [imagePropertiesResult] = await visionClient.imageProperties(request.body);
     const [labelDetectionResult] = await visionClient.labelDetection(request.body);
@@ -85,7 +87,7 @@ export const isImageBlank = functions.https.onRequest(async (request, response) 
   });
 });
 
-export const getStickerInfoFromTitlePage = functions.https.onRequest((request, response) => {
+export const getStickerInfoFromTitlePage = funcs.https.onRequest((request, response) => {
   return cors(request, response, async () => {
     const [result]= await visionClient.textDetection(request.body);
     // @ts-ignore
@@ -233,7 +235,7 @@ function getSemesterStr(moed: Moed): string {
   }
 }
 
-export const getPDFofExam = functions.https.onRequest(async (request, response) => {
+export const getPDFofExam = funcs.https.onRequest(async (request, response) => {
 
   const course = +request.query.course;
   const moed: Moed = {
@@ -274,7 +276,7 @@ export const getPDFofExam = functions.https.onRequest(async (request, response) 
 
 });
 
-export const onSolutionDeleted = functions.firestore.document('questions/{questionId}/solutions/{solID}').onDelete(async (snapshot, context) => {
+export const onSolutionDeleted = funcs.firestore.document('questions/{questionId}/solutions/{solID}').onDelete(async (snapshot, context) => {
 
   const qidParams = context.params.questionId.split('-');
   const course = qidParams[0];
@@ -307,14 +309,14 @@ async function localAddPoints(userId: string, pointsDelta: number) {
   });
 }
 
-export const addPointsToUser = functions.https.onCall(async (data, context) => {
+export const addPointsToUser = funcs.https.onCall(async (data, context) => {
   if (!context.auth)
     return;
 
   return localAddPoints(context.auth.uid, data.pointsDelta);
 });
 
-export const onTopicChanged = functions.firestore.document('topics/{topicId}').onUpdate(async (change, context) => {
+export const onTopicChanged = funcs.firestore.document('topics/{topicId}').onUpdate(async (change, context) => {
   const pointsDelta = 5;
 
   const topicBefore = change.before.data();
@@ -338,7 +340,7 @@ export const onTopicChanged = functions.firestore.document('topics/{topicId}').o
   return;
 });
 
-export const onTopicCreated = functions.firestore.document('topics/{topicId}').onCreate((snap, context) => {
+export const onTopicCreated = funcs.firestore.document('topics/{topicId}').onCreate((snap, context) => {
   const pointsDelta = 8;
 
   const topic = snap.data();
@@ -348,7 +350,7 @@ export const onTopicCreated = functions.firestore.document('topics/{topicId}').o
   return localAddPoints(topic.creator, pointsDelta);
 });
 
-export const onCommentCreated = functions.firestore.document('topics/{topicId}/comments/{commentId}').onCreate(async (snap, context) => {
+export const onCommentCreated = funcs.firestore.document('topics/{topicId}/comments/{commentId}').onCreate(async (snap, context) => {
   const comment = snap.data();
   if (!comment) {
     return
@@ -367,7 +369,7 @@ export const onCommentCreated = functions.firestore.document('topics/{topicId}/c
   });
 });
 
-export const onSolutionCreated = functions.firestore.document('questions/{questionId}/solutions/{solID}').onCreate(async (snap, context) => {
+export const onSolutionCreated = funcs.firestore.document('questions/{questionId}/solutions/{solID}').onCreate(async (snap, context) => {
   const qid = context.params.questionId;
   const solution = snap.data() as Solution;
   if (!solution) {
@@ -405,7 +407,7 @@ export const onSolutionCreated = functions.firestore.document('questions/{questi
 
 });
 
-export const onPendingScanDeleted = functions.firestore.document('pendingScans/{pid}').onDelete((snapshot, context) => {
+export const onPendingScanDeleted = funcs.firestore.document('pendingScans/{pid}').onDelete((snapshot, context) => {
 
   const pid = context.params.pid;
   const ps = snapshot.data() as PendingScan;
@@ -430,7 +432,7 @@ export const onPendingScanDeleted = functions.firestore.document('pendingScans/{
   return Promise.all([Promise.all(promises), Promise.all(deleteLinkedSolutionsPromises), Promise.all(unlinkExtractedPromises)]);
 });
 
-export const onSolvedQuestionUpdate = functions.firestore
+export const onSolvedQuestionUpdate = funcs.firestore
   .document('users/{uid}/solvedQuestions/{qid}')
   .onUpdate(async (change, context) => {
     const oldValue = change.before.data() as SolvedQuestion;
@@ -454,7 +456,7 @@ export const onSolvedQuestionUpdate = functions.firestore
     }
   });
 
-export const onSolvedQuestionDelete = functions.firestore
+export const onSolvedQuestionDelete = funcs.firestore
   .document('users/{uid}/solvedQuestions/{qid}')
   .onDelete(async (snap, context) => {
     const data = snap.data();
@@ -472,7 +474,7 @@ export const onSolvedQuestionDelete = functions.firestore
   });
 
 
-export const onSolutionChanged = functions.firestore.document('questions/{questionId}/solutions/{solID}').onWrite(async (snapshot, context) => {
+export const onSolutionChanged = funcs.firestore.document('questions/{questionId}/solutions/{solID}').onWrite(async (snapshot, context) => {
 
   const qid = context.params.questionId;
   const qNum = parseInt(qid.toString().split('-')[4]);
@@ -572,7 +574,7 @@ export const onSolutionChanged = functions.firestore.document('questions/{questi
 
 });
 
-export const onQuestionCreated = functions.firestore.document('questions/{qid}').onCreate(async (snap, context) => {
+export const onQuestionCreated = funcs.firestore.document('questions/{qid}').onCreate(async (snap, context) => {
   const qid = context.params.qid;
   const question = snap.data() as Question;
 
@@ -600,4 +602,27 @@ export const onQuestionCreated = functions.firestore.document('questions/{qid}')
     pendingSol.created = admin.firestore.Timestamp.now();
     return admin.firestore().collection(`questions/${qid}/solutions`).add(pendingSol);
   }));
+});
+
+export const onCommentDeleted = funcs.firestore.document('topics/{topicId}/comments/{commentId}').onDelete(async (snap, context) => {
+
+  const topicId = context.params.topicId;
+  const commentId = context.params.commentId;
+  const ref = admin.firestore().collection('topics').doc(topicId);
+
+  try {
+    const topic = await ref.get().then(docSnap => docSnap.data() as Topic);
+
+    if (topic.correctAnswerId === commentId) {
+      console.log('Removing correct answer link');
+      await ref.update({
+        correctAnswerId: FieldValue.delete()
+      });
+    } else {
+      console.log('No need to remove correct answer link');
+    }
+  } catch {
+    console.log('Topic doesn\'t exist!', topicId);
+  }
+
 });

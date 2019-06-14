@@ -76,8 +76,8 @@ export class DbService {
 
     const order = r =>
       r.orderBy('moed.semester.year', 'desc')
-        .orderBy('moed.semester.num')
-        .orderBy('moed.num');
+        .orderBy('moed.semester.num', 'desc')
+        .orderBy('moed.num', 'desc');
 
     return this.coursesCollection.doc<Course>(id.toString()).collection<Exam>('exams', order).snapshotChanges().pipe(
       map(actions => actions.map(a => {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {QuestionSolution} from '../question-solution';
+import {QuestionSolution, QuestionType} from '../question-solution';
 
 @Component({
   selector: 'app-scan-editor-preview',
@@ -11,6 +11,7 @@ export class ScanEditorPreviewComponent implements OnInit {
 
   solutions: QuestionSolution[];
   collapsed: boolean[];
+  QuestionType = QuestionType;
 
   constructor(public activeModal: NgbActiveModal) { }
 

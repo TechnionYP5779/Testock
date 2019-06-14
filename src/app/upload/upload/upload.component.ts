@@ -3,12 +3,12 @@ import {DbService} from '../../core/db.service';
 import {PdfService} from '../pdf.service';
 import {Course} from '../../entities/course';
 import {UploadScanProgress, UploadService} from '../upload.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute} from '@angular/router';
 import {take} from 'rxjs/operators';
 import {QuestionId} from '../../entities/question';
 import {ScanDetails} from '../../entities/scan-details';
-import {QuestionSolution} from '../scan-editor/question-solution';
+import {QuestionSolution, QuestionType} from '../scan-editor/question-solution';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
 import {ScanPage} from '../scan-editor/scan-page';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -87,7 +87,6 @@ export class UploadComponent implements OnInit {
       } else {
         // It was a directory (empty directories are added, otherwise only files)
         const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        console.log(droppedFile.relativePath, fileEntry);
       }
     }
 
@@ -179,7 +178,7 @@ export class UploadComponent implements OnInit {
     return Promise.all([detailsPromise, courseDetailsPromise, pdfPagesExtraction, existingQuestionsPromise])
       .then(([details, course, pages, existingQuestions]) => {
         if (existingQuestions) {
-          existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, 0, q.total_grade, true)));
+          existingQuestions.forEach(q => this.questions.push(new QuestionSolution(q.number, 0, q.total_grade, QuestionType.FETCHED)));
         }
         this.scanDetails = details;
         this.course = course;
