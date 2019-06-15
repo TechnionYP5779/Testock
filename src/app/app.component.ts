@@ -25,4 +25,8 @@ export class AppComponent {
       }
     });
   }
+
+  hidePlugin() {
+    document.getElementById('plugin-button').hidden = true;
+  }
 }

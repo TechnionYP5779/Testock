@@ -6,5 +6,15 @@
 <ngx-spinner type="ball-spin-clockwise"></ngx-spinner>
 
 <div class="alert alert-danger fixed-bottom ml-5 mb-4" style="width: 250px" *ngIf="!production">
-  <fa-icon icon="info" class="mr-2"></fa-icon> <strong>Development Build</strong>
+  <fa-icon icon="info" class="mr-2"></fa-icon>
+  <strong>Development Build</strong>
+</div>
+<div id="plugin-button" class="alert alert-secondary fixed-bottom mr-5 mb-4" style="width: 250px; left: unset;">
+  <a href="https://chrome.google.com/webstore/detail/testock-plugin/mfoagkijioojiljhoobpnldbjjpncmmn" target="_blank" style="color: black;">
+    <fa-icon icon="arrow-alt-circle-right" class="mr-2"></fa-icon>
+    <strong>
+      Add Chrome Plugin
+    </strong>
+  </a>
+  <fa-icon role="button" icon="times-circle" class="mr-2" style="float: right" (click)="hidePlugin()"></fa-icon>
 </div>
