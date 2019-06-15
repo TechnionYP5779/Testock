@@ -51,6 +51,9 @@ export class DbService {
   }
 
   getFavoriteCourses(user: UserData): Observable<Course[]> {
+    if (!user || user.favoriteCourses.length === 0) {
+      return of([]);
+    }
     return combineLatest(user.favoriteCourses.map(courseId => this.getCourse(courseId)));
   }
 
@@ -170,12 +173,14 @@ export class DbService {
     return this.afs.doc<SolvedQuestion>('users/' + uId + '/solvedQuestions/' + qId).valueChanges();
   }
 
-  getSolvedQuestionsAsQuestions(uId: string): Observable<Question[]> {
+  getSolvedQuestionsAsQuestions(uId: string): Observable<QuestionId[]> {
     return (this.afs
       .collection('users/' + uId + '/solvedQuestions')
       .valueChanges()
       .pipe(leftJoinDocument(this.afs, 'linkedQuestionId', 'questions')) as Observable<any[]>)
-      .pipe(map(result => result.map(item => item.linkedQuestionId)));
+      .pipe(map(result => result.map(item => item.linkedQuestionId as Question).map(item => {
+        return {...item, id: `${item.course}-${item.moed.semester.year}-${item.moed.semester.num}-${item.moed.num}-${item.number}`};
+      })));
   }
 
   getSolutions(questionId: string): Observable<SolutionId[]> {
@@ -403,7 +408,6 @@ export class DbService {
     return this.afs.doc(`courses/${id}`).update({'name': newCourseName});
   }
 
-
   updateCourseDescription(id: number, newCourseDescription: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'description': newCourseDescription});
   }
@@ -426,11 +430,10 @@ export class DbService {
     return this.afs.collection<Course>('courses').valueChanges();
   }
 
-
   removeQuestion(qId: string) {
     return this.afs.doc(`questions/${qId}`).delete();
   }
-  
+
   updateQuestionTotalGrade(q: QuestionId): Promise<void> {
     return this.afs.doc<Question>(`questions/${q.id}`).update({total_grade: q.total_grade});
   }

@@ -1,0 +1,25 @@
+.loading {
+  padding: 10px 0;
+  text-align: center;
+}
+.favorite-card {
+  border: 1.5px solid #FFC107;
+  background: #fffaea;
+}
+
+.solved-questions-title {
+  font-weight: bold;
+  position: relative;
+
+  .buttons {
+    position: absolute;
+    right: 0;
+    top: -7px;
+
+    button {
+      -webkit-box-shadow: 0 0 0 0 #ffffff;
+      -moz-box-shadow: 0 0 0 0 #ffffff;
+      box-shadow: 0 0 0 0 #ffffff;
+    }
+  }
+}
