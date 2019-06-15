@@ -4,6 +4,7 @@ import {flatMap, map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {AuthService} from '../../users/auth.service';
 import {Course} from '../../entities/course';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-homepage',
@@ -13,11 +14,14 @@ import {Course} from '../../entities/course';
 export class HomepageComponent implements OnInit {
   favoriteCourses$: Observable<Course[]>;
 
-  constructor(private db: DbService, private auth: AuthService) {
+  constructor(private db: DbService, private auth: AuthService, private spinner: NgxSpinnerService) {
     this.favoriteCourses$ = this.auth.user$.pipe(flatMap(userData => this.db.getFavoriteCourses(userData)));
   }
 
   ngOnInit() {
   }
 
+  login() {
+    this.spinner.show().then(() => this.auth.loginWithCampus()).finally(() => this.spinner.hide());
+  }
 }
