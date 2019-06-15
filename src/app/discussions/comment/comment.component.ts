@@ -1,8 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {CommentWithCreatorId} from '../../entities/comment';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {DbService} from '../../core/db.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-comment',
@@ -23,7 +25,10 @@ export class CommentComponent implements OnInit {
   @Input()
   topic: TopicWithCreatorId;
 
-  constructor(private db: DbService, private snackBar: MatSnackBar) { }
+  @Input()
+  isAdmin: boolean;
+
+  constructor(private db: DbService, private snackBar: MatSnackBar, private modal: NgbModal, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
   }
@@ -38,5 +43,16 @@ export class CommentComponent implements OnInit {
     this.db.clearMarkAsAnswer(this.topic.id).then(() => {
       this.snackBar.open(`Unmarked as answer successfully!`, 'close', {duration: 3000});
     });
+  }
+
+  async deleteComment(confirmDeleteComment: TemplateRef<any>) {
+    const result = await this.modal.open(confirmDeleteComment).result.catch(reason => {});
+
+    if (result) {
+      await this.spinner.show();
+      await this.db.deleteCommentOfTopic(this.topic.id, this.comment.id);
+      await this.spinner.hide();
+      this.snackBar.open('Comment deleted successfully', 'close', {duration: 3000});
+    }
   }
 }

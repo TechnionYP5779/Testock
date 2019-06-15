@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
@@ -9,6 +9,8 @@ import {ImageCroppedEvent} from 'ngx-image-cropper';
 import {UploadService} from '../../upload/upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {QuestionSolution} from '../../upload/scan-editor/question-solution';
+import {SolutionImage} from '../../upload/scan-editor/solution-image';
 
 @Component({
   selector: 'app-pending-solution-modal',
@@ -24,7 +26,7 @@ export class PendingSolutionModalComponent implements OnInit {
   public cropMode: boolean;
   public isPageCropped: boolean[];
   public pagesBase64: string[];
-  public croppedPages: string[];
+  public croppedPages: SolutionImage[];
   public loaded = false;
 
   constructor(public activeModal: NgbActiveModal, private db: DbService, private uploadService: UploadService,
@@ -32,7 +34,7 @@ export class PendingSolutionModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.db.getPendingScan(this.solution.pendingScanId).pipe(take(1)).toPromise().then(ps => {
+    this.db.getPendingScan(this.solution.linkedToPendingScanId).pipe(take(1)).toPromise().then(ps => {
       this.pendingScan = ps;
       this.isPageCropped = Array(ps.pages.length).map(() => false);
       this.croppedPages = Array(ps.pages.length).map(() => null);
@@ -65,7 +67,7 @@ export class PendingSolutionModalComponent implements OnInit {
   }
 
   updateCroppedPage(i: number, $event: ImageCroppedEvent) {
-    this.croppedPages[i] = $event.base64;
+    this.croppedPages[i] = new SolutionImage($event.base64, $event.file.size, null);
   }
 
   cancelPage(i: number) {
@@ -76,10 +78,17 @@ export class PendingSolutionModalComponent implements OnInit {
   uploadSolution() {
     this.spinner.show();
     const photosToUpload = this.croppedPages.filter(s => s);
-    this.uploadService.updateSolutionFromPendingScan(this.question, this.solution, photosToUpload).then(() => {
+    this.uploadService.updateSolutionFromPendingScan(() => {}, this.question, this.solution, photosToUpload).then(() => {
       this.activeModal.close();
     }).then(() => this.spinner.hide()).then(() => {
       this.snackbar.open('Thanks for your contribution!', 'close', {duration: 6000});
     });
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.cropMode) {
+      $event.returnValue = true;
+    }
   }
 }

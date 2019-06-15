@@ -23,7 +23,7 @@ export class ExamComponent implements OnInit {
   public tags: string[];
 
   adminAccess: boolean;
-  getPdfUrl = 'https://us-central1-' + environment.firebase.projectId + '.cloudfunctions.net/getPDFofExam';
+  getPdfUrl = 'https://' + environment.firebase.functionsLocation + '-' + environment.firebase.projectId + '.cloudfunctions.net/getPDFofExam';
 
   constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
     this.courseId = +route.snapshot.paramMap.get('cid');

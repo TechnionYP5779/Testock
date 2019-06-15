@@ -9,7 +9,7 @@ import {environment} from '../../environments/environment';
 export class OCRService {
 
   public http: HttpClient;
-  private baseUrl = 'https://us-central1-' + environment.firebase.projectId + '.cloudfunctions.net/';
+  private baseUrl = 'https://' + environment.firebase.functionsLocation + '-' + environment.firebase.projectId + '.cloudfunctions.net/';
 
   constructor(http: HttpClient) {
     this.http = http;

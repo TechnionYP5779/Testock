@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
 import {Course} from '../../entities/course';
 import {DbService} from '../../core/db.service';
 import {ActivatedRoute} from '@angular/router';
@@ -8,16 +8,19 @@ import {AuthService} from '../../users/auth.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MatSnackBar} from '@angular/material';
+import {UserData} from '../../entities/user';
 
 @Component({
   selector: 'app-faculty',
   templateUrl: './faculty.component.html',
-  styleUrls: ['./faculty.component.scss']
+  styleUrls: ['./faculty.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FacultyComponent implements OnInit {
 
   public faculty$: Observable<FacultyId>;
   public courses$: Observable<Course[]>;
+  facultyAdmins$: Observable<UserData[]>;
   isAdmin$: Observable<boolean>;
   public id: string;
 
@@ -26,12 +29,13 @@ export class FacultyComponent implements OnInit {
   constructor(private route: ActivatedRoute, private db: DbService, private snackBar: MatSnackBar,
               private auth: AuthService, private modal: NgbModal, private spinner: NgxSpinnerService) {
     this.id = this.route.snapshot.paramMap.get('id');
+    this.faculty$ = this.db.getFaculty(this.id);
+    this.courses$ = this.db.getCoursesOfFaculty(this.id);
     this.isAdmin$ = this.auth.isAdminOfFaculty(this.id);
+    this.facultyAdmins$ = this.db.getAdminsOfFaculty(this.id);
   }
 
   ngOnInit() {
-    this.faculty$ = this.db.getFaculty(this.id);
-    this.courses$ = this.db.getCoursesOfFaculty(this.id);
   }
 
   async openCreateCourseModal(createCourseModal: TemplateRef<any>) {

@@ -1,0 +1,628 @@
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import * as https from 'https';
+import * as PDFDocument from 'pdfkit';
+import * as corsMod from 'cors';
+// @ts-ignore
+import * as vision from '@google-cloud/vision';
+import {Topic} from '../../src/app/entities/topic';
+import {UserData} from '../../src/app/entities/user';
+import {PendingScan} from '../../src/app/entities/pending-scan';
+import {Question, QuestionId} from '../../src/app/entities/question';
+import {Solution} from '../../src/app/entities/solution';
+import {Course} from '../../src/app/entities/course';
+import {SolvedQuestion} from '../../src/app/entities/solved-question';
+import {Moed} from '../../src/app/entities/moed';
+import {ScanDetails} from '../../src/app/entities/scan-details';
+import FieldValue = admin.firestore.FieldValue;
+
+// Start writing Firebase Functions
+// https://firebase.google.com/docs/functions/typescript
+
+
+admin.initializeApp(functions.config().firebase);
+const visionClient = new vision.ImageAnnotatorClient();
+const cors = corsMod({origin: true});
+
+const DOMINANT_FRACTION_THRESHOLD = 0.88;
+const TEXT_SCORE_THRESHOLD = 0.95;
+
+function matchInArray(regex: RegExp, arrayOfString: string[]): string {
+
+  const len = arrayOfString.length;
+  let i = 0;
+
+  for (; i < len; i++) {
+    if (arrayOfString[i].match(regex)) {
+      return arrayOfString[i];
+    }
+  }
+  return '';
+}
+
+const funcs = functions.region('europe-west1');
+
+export const onTagDeleted = funcs.firestore.document('courses/{courseID}').onUpdate(async (change, context) => {
+  const prev_data = change.before.data();
+  const new_data = change.after.data();
+  const prev_tags: string[] = prev_data ? prev_data.tags : [];
+  const new_tags: string[] = new_data ? new_data.tags : [];
+  return Promise.all(prev_tags.filter(tag => !new_tags.includes(tag)).map( async tag => {
+    const snapshot = await admin.firestore().collection('questions').where('course', '==', parseInt(context.params.courseID)).get();
+    return Promise.all(snapshot.docs.map(doc => {
+      return doc.ref.update({'tags': FieldValue.arrayRemove(tag)});
+      }));
+    }));
+});
+
+export const onQuestionDeleted = funcs.firestore.document('questions/{questionID}').onDelete(async (snap, context) => {
+  const qId = context.params.questionID;
+  const p1 = admin.firestore().collection('questions/'+qId+'/solutions').get().then(snapshot => {
+    snapshot.docs.forEach(doc => doc.ref.delete());
+  });
+  const p2 = admin.firestore().collection('topics').where('linkedQuestionId', '==', qId).get().then(snapshot => {
+    snapshot.docs.forEach(doc => doc.ref.delete());
+  });
+  const p3 = admin.firestore().collection('users').get().then(snapshotUser => {snapshotUser.docs.forEach(user => {
+    return user.ref.collection('solvedQuestions').where('linkedQuestionId', '==', qId).get().then(snapshot => {
+    snapshot.docs.forEach(doc => doc.ref.delete());});});
+  });
+
+  return Promise.all([p1,p2,p3]);
+});
+
+export const isImageBlank = funcs.https.onRequest(async (request, response) => {
+  return cors(request, response, async () => {
+    const [imagePropertiesResult] = await visionClient.imageProperties(request.body);
+    const [labelDetectionResult] = await visionClient.labelDetection(request.body);
+    const dominantColorFraction = imagePropertiesResult.imagePropertiesAnnotation.dominantColors.colors[0]['score'];
+    // @ts-ignore
+    const textlLabel = labelDetectionResult.labelAnnotations.filter(label => label['description'] === 'Text');
+    if (dominantColorFraction > DOMINANT_FRACTION_THRESHOLD && (textlLabel.length < 1
+      || textlLabel[0]['score'] < TEXT_SCORE_THRESHOLD)) {
+      response.status(200).send( {isBlank: true});
+    } else {
+      response.status(200).send( {isBlank: false});
+    }
+  });
+});
+
+export const getStickerInfoFromTitlePage = funcs.https.onRequest((request, response) => {
+  return cors(request, response, async () => {
+    const [result]= await visionClient.textDetection(request.body);
+    // @ts-ignore
+    const detections = result.textAnnotations.map(val => val['description']);
+
+    let possibleRegex: RegExp[];
+    possibleRegex = [/^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
+      /^[/\d]{7}[.][/\d]{2}[-][/\d]{6}[-][/\d]$/,
+      /^[/\d]{4}[.][/\d]{2}[-][/\d]{6}[-][/\d]{3}[.][/\d]{2}[.][/\d]{2}$/];
+
+    const matchReg1 = matchInArray(possibleRegex[0], detections);
+    const matchReg2 = matchInArray(possibleRegex[1], detections);
+    const matchReg3 = matchInArray(possibleRegex[2], detections);
+
+    let infoStr = '';
+    if (matchReg1 !== '') {
+      infoStr = matchReg1.toString();
+    } else if (matchReg2 !== '') {
+      infoStr = matchReg2.toString().substring(3);
+    } else if (matchReg3 !== ''){
+      infoStr = matchReg3.toString().substring(0, 16);
+    }
+
+    const year = parseInt(infoStr.substr(0, 4));
+    const semester = parseInt(infoStr.substr(5, 2));
+    const number = parseInt(infoStr.substr(8, 6));
+    const moed = parseInt(infoStr.substr(15, 1));
+
+    if (!number || !year || !semester || !moed) {
+      return response.status(200).send();
+    }
+
+    const details: ScanDetails = {
+      course: number,
+      moed: {
+        semester: {
+          year: year,
+          num: semester
+        },
+        num: moed
+      }
+    };
+
+    return response.status(200).send(details);
+  });
+});
+
+
+const bucket = admin.storage().bucket();
+
+async function addSolImage(pdf: PDFKit.PDFDocument, url: string){
+  return new Promise(async(resolve, reject) => {
+    const req = await https.get(url, (res) => {
+      res.setEncoding('base64');
+      let body = "data:" + res.headers["content-type"] + ";base64,";
+      res.on('data', (d) => {
+        body += d;
+      });
+      res.on('end', () => {
+        pdf.image(body, { width: 500, align: 'center' } as PDFKit.Mixins.ImageOption);
+        resolve(res);
+      });
+    });
+    req.on('error', err => {
+      console.error('error!');
+      reject(err);
+    });
+
+  });
+
+}
+
+async function getBestSolutionFor(q: QuestionId): Promise<Solution|null> {
+  const query = admin.firestore().collection(`questions/${q.id}/solutions`)
+    .where('uploadInProgress', '==', false)
+    .where('linkedToPendingScanId', '==', null)
+    .orderBy('grade', 'desc')
+    .limit(1);
+  return query.get().then(res => res.docs.length > 0 ? res.docs[0].data() as Solution : null);
+}
+
+async function addQuestion(pdf: PDFKit.PDFDocument, q: QuestionId): Promise<void> {
+  pdf.addPage();
+  const sol = await getBestSolutionFor(q);
+  if (sol === null) {
+    pdf.fontSize(25).text(`Question ${q.number} (${q.total_grade})`, 50, 50, { link: `https://testock.tk/questions/${q.id}` });
+    pdf.moveDown();
+    pdf.text(`We don't have any solutions for this question :(`);
+    return;
+  }
+  pdf.fontSize(25).text(`Question ${q.number} (${sol.grade}/${q.total_grade})`, 50, 50, { link: `https://testock.tk/questions/${q.id}` });
+  pdf.moveDown();
+  let first = true;
+  if (!sol || !sol.photos) return;
+  for (const photo of sol.photos) {
+    if (first) {
+      first = false;
+    } else {
+      pdf.addPage();
+      pdf.fontSize(25).text(`Question ${q.number} (Cont.)`, 50, 50, { link: `https://testock.tk/questions/${q.id}` });
+    }
+    await addSolImage(pdf, photo);
+  }
+}
+
+async function getQuestionsOfExam(course: number, moed: Moed): Promise<QuestionId[]> {
+  return admin.firestore().collection('questions')
+    .where('course', '==', course)
+    .where('moed.semester.year', '==', moed.semester.year)
+    .where('moed.semester.num', '==', moed.semester.num)
+    .where('moed.num', '==', moed.num)
+    .orderBy('number')
+    .get().then(docs => {
+      return docs.docs.map(snap => {
+        return {id: snap.id, ...snap.data() as Question};
+      });
+    });
+}
+
+async function getCourse(course: number): Promise<Course> {
+  return admin.firestore().collection('courses').doc(course.toString()).get().then(doc => doc.data() as Course);
+}
+
+function getMoedStr(moed: Moed): string {
+  if (moed.num === 1) {
+    return 'Moed A';
+  } else if (moed.num === 2) {
+    return 'Moed B';
+  } else if (moed.num === 3) {
+    return 'Moed C';
+  } else {
+    return moed.num.toString();
+  }
+}
+
+function getSemesterStr(moed: Moed): string {
+  if (moed.semester.num === 1) {
+    return `Winter ${moed.semester.year}-${moed.semester.year + 1}`;
+  } else if (moed.semester.num === 2) {
+    return `Spring ${moed.semester.year + 1}`;
+  } else if (moed.semester.num === 3) {
+    return `Summer ${moed.semester.year + 1}`;
+  } else {
+    return moed.semester.year.toString();
+  }
+}
+
+export const getPDFofExam = funcs.https.onRequest(async (request, response) => {
+
+  const course = +request.query.course;
+  const moed: Moed = {
+    num: +request.query.moed,
+    semester: {
+      num: +request.query.semester,
+      year: +request.query.year
+    }
+  };
+
+  if (!course || !moed.semester.year || !moed.semester.num || !moed.num) return;
+
+  const courseData = await getCourse(course);
+
+  console.log(`Getting best scan for course ${courseData.name}`);
+
+  const questions = await getQuestionsOfExam(course, moed);
+
+  console.log(`Found ${questions.length} questions for ${course}, ${moed.semester.year}, ${moed.semester.num}, ${moed.num}`);
+
+  const pdf = new PDFDocument;
+
+  pdf.pipe(response);
+
+  pdf.fontSize(30).text(`${courseData.id} ${courseData.name}`, { align: 'center', link: `https://testock.tk/course/${courseData.id}` });
+  pdf.moveDown(2);
+  pdf.fontSize(26).text(getSemesterStr(moed), { align: 'center' });
+  pdf.moveDown();
+  pdf.fontSize(26).text(getMoedStr(moed), { align: 'center' });
+  pdf.moveDown(5);
+  pdf.fontSize(20).text('Automatically Generated by Testock', { align: 'center', link: 'https://testock.tk', underline: true });
+
+  for (const q of questions) {
+    await addQuestion(pdf, q);
+  }
+
+  pdf.end();
+
+});
+
+export const onSolutionDeleted = funcs.firestore.document('questions/{questionId}/solutions/{solID}').onDelete(async (snapshot, context) => {
+
+  const qidParams = context.params.questionId.split('-');
+  const course = qidParams[0];
+  const year = qidParams[1];
+  const semester = qidParams[2];
+  const moed = qidParams[3];
+  const qNum = qidParams[4];
+
+  const sid = context.params.solID;
+  const sol = snapshot.data();
+  const numOfPics = sol && sol.photos ? sol.photos.length : 0;
+  const promises = [];
+  for (let i=0; i < numOfPics; ++i){
+    const path = `${course}/${year}/${semester}/${moed}/${qNum}/${sid}/${i}.jpg`;
+    promises.push(bucket.file(path).delete());
+    console.log(`Deleting ${path}`);
+  }
+
+  return Promise.all(promises);
+});
+
+async function localAddPoints(userId: string, pointsDelta: number) {
+  const document = admin.firestore().collection('users').doc(userId);
+  const currentUser = (await document.get()).data();
+  if(!currentUser)
+    return;
+
+  return document.update({
+    points: (currentUser.points ? currentUser.points : 0) + pointsDelta
+  });
+}
+
+export const addPointsToUser = funcs.https.onCall(async (data, context) => {
+  if (!context.auth)
+    return;
+
+  return localAddPoints(context.auth.uid, data.pointsDelta);
+});
+
+export const onTopicChanged = funcs.firestore.document('topics/{topicId}').onUpdate(async (change, context) => {
+  const pointsDelta = 5;
+
+  const topicBefore = change.before.data();
+  const topicAfter = change.after.data();
+  if(!topicAfter || !topicBefore)
+    return;
+
+  if(topicAfter.correctAnswerId !== '' && topicAfter.correctAnswerId !== topicBefore.correctAnswerId){
+    const commentDoc = admin.firestore().collection(`topics/${context.params.topicId}/comments`).doc(topicAfter.correctAnswerId);
+    const correctAnswer = (await commentDoc.get()).data();
+    if(!correctAnswer)
+      return;
+
+    if(topicAfter.creator === correctAnswer.creator)
+      return;
+
+    return localAddPoints(correctAnswer.creator, pointsDelta);
+  }
+
+  // No points reduction when user's answer is deselected as the correct one, because it was correct at some points :-)
+  return;
+});
+
+export const onTopicCreated = funcs.firestore.document('topics/{topicId}').onCreate((snap, context) => {
+  const pointsDelta = 8;
+
+  const topic = snap.data();
+  if(!topic)
+    return;
+
+  return localAddPoints(topic.creator, pointsDelta);
+});
+
+export const onCommentCreated = funcs.firestore.document('topics/{topicId}/comments/{commentId}').onCreate(async (snap, context) => {
+  const comment = snap.data();
+  if (!comment) {
+    return
+  }
+
+  const commentUser: UserData = await admin.firestore().doc(`users/${comment.creator}`).get().then(doc => doc.data() as UserData);
+  const tid = context.params.topicId;
+  const topic: Topic = await admin.firestore().doc(`topics/${tid}`).get().then(doc => doc.data() as Topic);
+
+  return admin.firestore().collection('notifications').add({
+    content: commentUser.name + ' has commented on your topic: ' + topic.subject,
+    datetime: admin.firestore.Timestamp.now(),
+    recipientId: topic.creator,
+    seen: false,
+    url: 'topic/' + tid
+  });
+});
+
+export const onSolutionCreated = funcs.firestore.document('questions/{questionId}/solutions/{solID}').onCreate(async (snap, context) => {
+  const qid = context.params.questionId;
+  const solution = snap.data() as Solution;
+  if (!solution) {
+    return
+  }
+
+  const question = await admin.firestore().doc(`questions/${qid}`).get().then(doc => doc.data() as Question);
+  const courseId = question.course;
+  const course = await getCourse(courseId);
+  let notificationContent = `New solution for ${course.name}, ${getSemesterStr(question.moed)} ${getMoedStr(question.moed)} - Question ${question.number}`;
+
+  if (solution.grade >= 0) {
+    notificationContent += ` (${solution.grade}/${question.total_grade})`;
+  } else {
+    notificationContent += ' (Unknown Grade)';
+  }
+
+  if (solution.linkedToPendingScanId) {
+    notificationContent = `New pending solution for ${course.name}, ${getSemesterStr(question.moed)} ${getMoedStr(question.moed)} - Question ${question.number}. `;
+    notificationContent += 'Crop it now to earn some points!'
+  }
+
+  const uidToSend = await admin.firestore().collection('users').where('favoriteCourses', 'array-contains', courseId)
+    .get().then(snaps => snaps.docs.map(doc => doc.id));
+
+  return Promise.all(uidToSend.map(uid => {
+    return admin.firestore().collection('notifications').add({
+      content: notificationContent,
+      datetime: admin.firestore.Timestamp.now(),
+      recipientId: uid,
+      seen: false,
+      url: `question/${qid}`
+    });
+  }));
+
+});
+
+export const onPendingScanDeleted = funcs.firestore.document('pendingScans/{pid}').onDelete((snapshot, context) => {
+
+  const pid = context.params.pid;
+  const ps = snapshot.data() as PendingScan;
+  const numOfPics = ps ? ps.pages.length : 0;
+  const promises = [];
+  for (let i=0; i < numOfPics; ++i){
+    const path = `${ps.course}/${ps.moed.semester.year}/${ps.moed.semester.num}/${ps.moed.num}/pending/${pid}/${i}.jpg`;
+    promises.push(bucket.file(path).delete());
+    console.log(`Deleting ${path}`);
+  }
+
+  const deleteLinkedSolutionsPromises = [];
+  for (let i = 0; i < ps.linkedQuestions.length; ++i) {
+    const ref = admin.firestore().doc(`questions/${ps.linkedQuestions[i].qid}/solutions/${ps.linkedQuestions[i].sid}`);
+    console.log('Deleting linked question: ' + ps.linkedQuestions[i].qid + ', solution: ' + ps.linkedQuestions[i].sid);
+    deleteLinkedSolutionsPromises.push(ref.delete());
+  }
+
+  const unlinkExtractedPromises = ps.extractedQuestions
+    .map(elq => admin.firestore().doc(`questions/${elq.qid}/solutions/${elq.sid}`).update({extractedFromPendingScanId: null}));
+
+  return Promise.all([Promise.all(promises), Promise.all(deleteLinkedSolutionsPromises), Promise.all(unlinkExtractedPromises)]);
+});
+
+export const onSolvedQuestionUpdate = funcs.firestore
+  .document('users/{uid}/solvedQuestions/{qid}')
+  .onUpdate(async (change, context) => {
+    const oldValue = change.before.data() as SolvedQuestion;
+    const newValue = change.after.data() as SolvedQuestion;
+    if (!oldValue || !newValue) return;
+    const oldDifficulty = oldValue.difficulty;
+    const newDifficulty = newValue.difficulty;
+    if (newDifficulty < 0) {
+      return null;
+    }
+    else if (oldDifficulty < 0) {
+      return admin.firestore().collection('questions').doc(context.params.qid).update({
+        sum_difficulty_ratings: FieldValue.increment(newDifficulty),
+        count_difficulty_ratings: FieldValue.increment(1)
+      });
+    }
+    else {
+      return admin.firestore().collection('questions').doc(context.params.qid).update({
+        sum_difficulty_ratings: FieldValue.increment(newDifficulty - oldDifficulty)
+      });
+    }
+  });
+
+export const onSolvedQuestionDelete = funcs.firestore
+  .document('users/{uid}/solvedQuestions/{qid}')
+  .onDelete(async (snap, context) => {
+    const data = snap.data();
+    if (!data) return;
+    const difficulty = data.difficulty;
+    if (difficulty < 0) {
+      return;
+    }
+    else {
+      return admin.firestore().collection('questions').doc(context.params.qid).update({
+        sum_difficulty_ratings: FieldValue.increment(-difficulty),
+        count_difficulty_ratings: FieldValue.increment(-1)
+      });
+    }
+  });
+
+
+export const onSolutionChanged = funcs.firestore.document('questions/{questionId}/solutions/{solID}').onWrite(async (snapshot, context) => {
+
+  const qid = context.params.questionId;
+  const qNum = parseInt(qid.toString().split('-')[4]);
+  const sid = context.params.solID;
+
+  // Handle solution creation
+  if (!snapshot.before.exists && snapshot.after.exists) {
+    const newSol = snapshot.after.data() as Solution;
+    if (newSol.linkedToPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.linkedToPendingScanId);
+      console.log('Linking solution created for ' + qid + ' to ' + newSol.linkedToPendingScanId);
+
+      await ref.update({
+        linkedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    if (newSol.extractedFromPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.extractedFromPendingScanId);
+      console.log('Linking extracted solution created for ' + qid + ' to ' + newSol.extractedFromPendingScanId);
+
+      await ref.update({
+        extractedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    return true;
+  }
+
+  // Handle solution change
+  if (snapshot.before.exists && snapshot.after.exists) {
+    const solBefore = snapshot.before.data() as Solution;
+    const newSol = snapshot.after.data() as Solution;
+
+    if (!solBefore.linkedToPendingScanId && newSol.linkedToPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.linkedToPendingScanId);
+      console.log('Linking updated solution for ' + qid + ' to ' + newSol.linkedToPendingScanId);
+      console.log('Is this ever called?');
+
+      await ref.update({
+        linkedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    if (solBefore.linkedToPendingScanId && !newSol.linkedToPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(solBefore.linkedToPendingScanId);
+      console.log('Unlinking updated solution for ' + qid + ' from ' + solBefore.linkedToPendingScanId);
+      await ref.update({
+        linkedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    if (!solBefore.extractedFromPendingScanId && newSol.extractedFromPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(newSol.extractedFromPendingScanId);
+      console.log('Linking updated extracted solution for ' + qid + ' to ' + newSol.extractedFromPendingScanId);
+
+      await ref.update({
+        extractedQuestions: FieldValue.arrayUnion({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    if (solBefore.extractedFromPendingScanId && !newSol.extractedFromPendingScanId) {
+      console.log("This should be called only when deleting a pending scan - no need to unlink");
+    }
+
+    return true;
+  }
+
+  // Handle solution deletion
+  if (snapshot.before.exists && !snapshot.after.exists) {
+    const deletedSol = snapshot.before.data() as Solution;
+    if (deletedSol.linkedToPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(deletedSol.linkedToPendingScanId);
+      console.log('Unlinking deleted solution for ' + qid + ' from ' + deletedSol.linkedToPendingScanId);
+      try {
+        await ref.update({
+          linkedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
+        });
+      } catch (error) {
+        console.log('Is pendingScan deleted?');
+        console.log(error);
+      }
+    }
+
+    if (deletedSol.extractedFromPendingScanId) {
+      const ref = admin.firestore().collection('pendingScans').doc(deletedSol.extractedFromPendingScanId);
+      console.log('Unlinking deleted extracted solution for ' + qid + ' from ' + deletedSol.extractedFromPendingScanId);
+      await ref.update({
+        extractedQuestions: FieldValue.arrayRemove({qid: qid, num: qNum, sid: sid})
+      });
+    }
+
+    return true;
+  }
+
+  return true;
+
+});
+
+export const onQuestionCreated = funcs.firestore.document('questions/{qid}').onCreate(async (snap, context) => {
+  const qid = context.params.qid;
+  const question = snap.data() as Question;
+
+  let pendingScansIds: string[] = await admin.firestore().collection('pendingScans')
+    .where('course', '==', question.course)
+    .where('moed.semester.year', '==', question.moed.semester.year)
+    .where('moed.semester.num', '==', question.moed.semester.num)
+    .where('moed.num', '==', question.moed.num).get().then(snaps => snaps.docs.map(doc => doc.id));
+
+  console.log('Found the following pending scans: ' + pendingScansIds);
+
+  if (question.preventPendingCreationFor) {
+    console.log('Preventing pending creation to: ' + question.preventPendingCreationFor);
+    pendingScansIds = pendingScansIds.filter(psId => psId !== question.preventPendingCreationFor);
+
+    await snap.ref.update({
+      preventPendingCreationFor: FieldValue.delete()
+    });
+  }
+
+  return Promise.all(pendingScansIds.map(psId => {
+    const pendingSol = {} as Solution;
+    pendingSol.linkedToPendingScanId = psId;
+    pendingSol.grade = -1;
+    pendingSol.created = admin.firestore.Timestamp.now();
+    return admin.firestore().collection(`questions/${qid}/solutions`).add(pendingSol);
+  }));
+});
+
+export const onCommentDeleted = funcs.firestore.document('topics/{topicId}/comments/{commentId}').onDelete(async (snap, context) => {
+
+  const topicId = context.params.topicId;
+  const commentId = context.params.commentId;
+  const ref = admin.firestore().collection('topics').doc(topicId);
+
+  try {
+    const topic = await ref.get().then(docSnap => docSnap.data() as Topic);
+
+    if (topic.correctAnswerId === commentId) {
+      console.log('Removing correct answer link');
+      await ref.update({
+        correctAnswerId: FieldValue.delete()
+      });
+    } else {
+      console.log('No need to remove correct answer link');
+    }
+  } catch {
+    console.log('Topic doesn\'t exist!', topicId);
+  }
+
+});

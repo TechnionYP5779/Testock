@@ -1,15 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {AuthService} from '../../users/auth.service';
 import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NotificationsService} from '../../notifications/notifications.service';
 import {flatMap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {of, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit {
   main_menu_opened: boolean;
@@ -25,7 +26,13 @@ export class HeaderComponent implements OnInit {
     this.router = rtr;
     this.auth.isAdmin.subscribe(res => this.isAdmin = res);
     this.notificationsCount$ = this.auth.user$.pipe(
-      flatMap(user => this.notifications.getUnseenNotificationsCountForUser(user.uid))
+      flatMap(user => {
+        if (user) {
+          return this.notifications.getUnseenNotificationsCountForUser(user.uid)
+        } else {
+          return of(0);
+        }
+      })
     );
   }
 

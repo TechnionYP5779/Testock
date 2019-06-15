@@ -1,4 +1,4 @@
-<h6 class="mt-1 mb-1 text-center">
+<h6 class="mt-1 mb-1 text-center w-100">
   {{ scanPage.pageNum }}
 </h6>
 <div class="scan-page-image" [ngClass]="{'scan-page-highlight': scanPage.highlight > 0}" (click)="addImageTo ? addFullPage() : openModal(content)" ngbTooltip="Select full page" [disableTooltip]="!addImageTo">

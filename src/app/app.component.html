@@ -4,3 +4,7 @@
   <router-outlet></router-outlet>
 </div>
 <ngx-spinner type="ball-spin-clockwise"></ngx-spinner>
+
+<div class="alert alert-danger fixed-bottom ml-5 mb-4" style="width: 250px" *ngIf="!production">
+  <fa-icon icon="info" class="mr-2"></fa-icon> <strong>Development Build</strong>
+</div>

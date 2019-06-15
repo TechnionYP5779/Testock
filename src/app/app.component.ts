@@ -1,5 +1,6 @@
 import {Component, Renderer2} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,7 @@ import {NavigationStart, Router} from '@angular/router';
 export class AppComponent {
   title = 'Testock';
   previousUrl: string;
+  production = environment.production;
   constructor(private renderer: Renderer2, private router: Router) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {

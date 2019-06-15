@@ -1,7 +1,7 @@
 <header>
   <div id="topbar">
     <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light">
+      <nav class="navbar navbar-expand-xl navbar-light">
         <a class="navbar-brand" routerLink="/">
           <img src="/assets/images/testock-logo.png" alt="" height="25">
         </a>
@@ -32,14 +32,20 @@
               <fa-icon icon="upload" class="mr-2"></fa-icon>
               <span>Upload Scan</span>
             </button>
-            <div class="profile-image mr-2" routerLink="/profile">
+            <button type="button" class="btn notification-button mr-2"  #notificationPopover="ngbPopover" [ngbPopover]="notificationsContent" [popoverTitle]="notificationsTitle" [autoClose]="'outside'" popoverClass="notification-popover">
               <span class="notification-badge badge badge-warning" routerLink="/profile" *ngIf="(notificationsCount$ | async) && (notificationsCount$ | async) > 0">{{ (notificationsCount$ | async) }}</span>
+              <fa-icon icon="bell" size="lg"></fa-icon>
+            </button>
+            <div class="profile-image mr-2" routerLink="/profile">
               <img class="rounded" [src]="user.photoUrl" width="35px">
             </div>
             <button class="btn btn-warning mr-2" type="button" routerLink="/world">
               <fa-icon [icon]="['far', 'gem']"></fa-icon>
               {{ user.points }}
             </button>
+
+            <ng-template #notificationsContent><app-notifications-list [user]="auth.user$" (notificationClicked)="notificationPopover.close()"></app-notifications-list></ng-template>
+            <ng-template #notificationsTitle>What's new? ({{notificationsCount$ | async}})</ng-template>
           </div>
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">

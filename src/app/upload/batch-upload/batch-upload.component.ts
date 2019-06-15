@@ -28,10 +28,6 @@ export class BatchUploadComponent implements OnInit {
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntries.push(fileEntry);
-      } else {
-        // It was a directory (empty directories are added, otherwise only files)
-        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        console.log(droppedFile.relativePath, fileEntry);
       }
     }
 

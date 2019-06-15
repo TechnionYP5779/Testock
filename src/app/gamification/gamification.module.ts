@@ -6,8 +6,9 @@ import {Planet} from './entities/planet';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {UsersModule} from '../users/users.module';
 import {GamificationService} from './gamification.service';
-import {AngularFireFunctions, AngularFireFunctionsModule} from '@angular/fire/functions';
+import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functions';
 import {AppRoutingModule} from '../app-routing.module';
+import {environment} from '../../environments/environment';
 
 const planets: Planet[] = [
   {
@@ -75,6 +76,7 @@ const planets: Planet[] = [
   declarations: [GameWorldComponent, GamePlanetComponent],
   providers: [
     {provide: 'Planets', useValue: planets},
+    {provide: FUNCTIONS_REGION, useValue: environment.firebase.functionsLocation},
     GamificationService
   ],
   imports: [

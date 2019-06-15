@@ -51,6 +51,7 @@ import {ExamsListComponent} from './ui/exams-list/exams-list.component';
 import { ChooseQuestionTagComponent } from './ui/to-bottom-sheet/choose-question-tag/choose-question-tag.component';
 import { AboutComponent } from './ui/about/about.component';
 import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-details-picker.component';
+import {NotificationsModule} from './notifications/notifications.module';
 import { HelpComponent } from './ui/help/help.component';
 
 
@@ -84,7 +85,8 @@ import { HelpComponent } from './ui/help/help.component';
     MatTableModule,
     MatPaginatorModule,
     MatBottomSheetModule,
-    MatListModule
+    MatListModule,
+    NotificationsModule
   ],
   declarations: [
     AppComponent,

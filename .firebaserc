@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "prod": "testock-europe",
+    "dev": "testock-development"
+  }
+}
