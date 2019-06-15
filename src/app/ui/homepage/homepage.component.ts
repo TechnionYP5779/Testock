@@ -15,7 +15,10 @@ export class HomepageComponent implements OnInit {
   favoriteCourses$: Observable<Course[]>;
 
   constructor(private db: DbService, private auth: AuthService, private spinner: NgxSpinnerService) {
-    this.favoriteCourses$ = this.auth.user$.pipe(flatMap(userData => this.db.getFavoriteCourses(userData)));
+    this.favoriteCourses$ = this.auth.user$.pipe(
+      flatMap(userData => this.db.getFavoriteCourses(userData)),
+      map(courses => courses.sort((c1, c2) => (c1.name < c2.name) ? -1 : 1))
+    );
   }
 
   ngOnInit() {
