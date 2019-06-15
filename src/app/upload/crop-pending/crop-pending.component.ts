@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {DbService} from '../../core/db.service';
 import {OCRService} from '../../core/ocr.service';
 import {UploadScanProgress, UploadService} from '../upload.service';
@@ -85,6 +85,13 @@ export class CropPendingComponent implements OnInit {
       this.state = CropPendingState.Editing;
       this.error = error;
       this.hideErrorAlert = false;
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.state === CropPendingState.Editing || this.state === CropPendingState.Uploading) {
+      $event.returnValue = true;
     }
   }
 }
