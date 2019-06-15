@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Course} from '../../entities/course';
 import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
@@ -30,15 +30,25 @@ export class CourseComponent implements OnInit {
   tags: string[];
   newCourseName: string;
   newCourseDescription: string;
+  navigationSubscription;
 
   constructor(private afs: AngularFirestore, private route: ActivatedRoute, private db: DbService, private auth: AuthService,
-              private snackBar: MatSnackBar, private spinner: NgxSpinnerService) {
+              private snackBar: MatSnackBar, private spinner: NgxSpinnerService, private router: Router) {
+    this.navigationSubscription = this.router.events.subscribe((e: any) => {
+      if (e instanceof NavigationEnd) {
+        this.init(auth);
+      }
+    });
+  }
+
+  init(auth: AuthService) {
     this.id = +this.route.snapshot.paramMap.get('id');
     this.exams$ = this.db.getExamsOfCourse(this.id);
     this.topics$ = this.db.getTopicsForCourseWithCreators(this.id);
     this.favorite$ = auth.user$.pipe(
       map(user => user.favoriteCourses.includes(this.course.id))
     );
+    this.ngOnInit();
   }
 
   ngOnInit() {
