@@ -16,16 +16,30 @@ export class FavoriteCourseComponent implements OnInit {
   @Input() course: Course;
   public solvedQuestions$: Observable<QuestionId[]>;
   public solvedQuestionsLimit = 3;
+  private _totalSolvedQuestions;
 
   constructor(private auth: AuthService, private db: DbService) {
     this.solvedQuestions$ = this.auth.user$.pipe(flatMap(userData => this.db.getSolvedQuestionsAsQuestions(userData.uid)))
-      .pipe(map(questions => questions.filter(q => q.course === this.course.id)));
+      .pipe(map(questions => {
+        const solved = questions.filter(q => q.course === this.course.id);
+        this._totalSolvedQuestions = solved.length;
+        this.solvedQuestionsLimit = Math.min(3, this._totalSolvedQuestions);
+        return solved;
+      }));
   }
 
   ngOnInit() {
   }
 
   changeSolvedQuestionsLimitBy(delta: number = 3) {
+    if (this.solvedQuestionsLimit + delta < 1) {
+      this.solvedQuestionsLimit = 1;
+      return;
+    }
+    if (this.solvedQuestionsLimit + delta > this._totalSolvedQuestions) {
+      this.solvedQuestionsLimit = this._totalSolvedQuestions;
+      return;
+    }
     this.solvedQuestionsLimit += delta;
   }
 }
