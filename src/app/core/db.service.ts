@@ -4,7 +4,7 @@ import {Course, CourseWithFaculty} from '../entities/course';
 import {combineLatest, defer, Observable, of} from 'rxjs';
 import {Question, QuestionId} from '../entities/question';
 import {Solution, SolutionId} from '../entities/solution';
-import {flatMap, map, switchMap} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {Exam, ExamId} from '../entities/exam';
 import {Roles, UserData} from '../entities/user';
 import {Faculty, FacultyId} from '../entities/faculty';
@@ -113,7 +113,7 @@ export class DbService {
   getQuestionsOfExam(course: number, examId: string): Observable<QuestionId[]> {
 
     return this.getExam(course, examId).pipe(
-      flatMap(e => {
+      switchMap(e => {
         const year = e.moed.semester.year;
         const semester = e.moed.semester.num;
         const moed = e.moed.num;

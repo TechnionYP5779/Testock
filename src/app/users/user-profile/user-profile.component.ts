@@ -7,7 +7,7 @@ import {DbService} from '../../core/db.service';
 import {Question} from '../../entities/question';
 import { Sort } from '@angular/material/sort';
 import {Course} from '../../entities/course';
-import {flatMap, map} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {FacultyId} from '../../entities/faculty';
 
 @Component({
@@ -29,10 +29,10 @@ export class UserProfileComponent implements OnInit {
     this.user$ = this.userId ? this.db.getUser(this.userId) : this.auth.user$;
     this.isMyProfile = (this.userId === null);
     this.favoriteCourses$ = this.user$.pipe(
-      flatMap(user => this.db.getFavoriteCourses(user)),
+      switchMap(user => this.db.getFavoriteCourses(user)),
       map(courses => courses.sort((c1, c2) => (c1.name < c2.name) ? -1 : 1))
     );
-    this.facultyAdmin$ = this.user$.pipe(flatMap(userdata => {
+    this.facultyAdmin$ = this.user$.pipe(switchMap(userdata => {
       if (!userdata.roles.faculty_admin) { return null; }
       return combineLatest(userdata.roles.faculty_admin.map(facId => this.db.getFaculty(facId)));
     }));

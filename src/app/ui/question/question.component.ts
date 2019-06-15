@@ -4,7 +4,7 @@ import {DbService} from '../../core/db.service';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
 import {AuthService} from '../../users/auth.service';
-import {flatMap, map} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {combineLatest, Observable} from 'rxjs';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Course} from '../../entities/course';
@@ -39,8 +39,8 @@ export class QuestionComponent implements OnInit {
     this.topics$ = this.db.getTopicsForQuestion(this.qId);
     this.question$ = this.db.getQuestion(this.qId);
     this.solutions$ = this.db.getSolutions(this.qId);
-    this.isAdmin$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.auth.isAdminForCourse(q.course)));
-    this.course$ = this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course)));
+    this.isAdmin$ = this.db.getQuestion(this.qId).pipe(switchMap(q => this.auth.isAdminForCourse(q.course)));
+    this.course$ = this.db.getQuestion(this.qId).pipe(switchMap(q => this.db.getCourse(q.course)));
     this.userId = this.auth.currentUserId;
     this.solvedQuestion$ = this.db.getSolvedQuestion(this.userId, this.qId);
   }
@@ -103,7 +103,7 @@ export class QuestionComponent implements OnInit {
   }
   openBottomSheet(): void {
     const tagsBottomSheet = this._bottomSheet.open(ChooseQuestionTagComponent);
-    const optionalTags$: Observable<string[]> = combineLatest(this.db.getQuestion(this.qId).pipe(flatMap(q => this.db.getCourse(q.course))),
+    const optionalTags$: Observable<string[]> = combineLatest(this.db.getQuestion(this.qId).pipe(switchMap(q => this.db.getCourse(q.course))),
       this.db.getQuestion(this.qId)).pipe(
       map(([course, question]) => this.arr_diff(course.tags, question.tags) as string[])
     );

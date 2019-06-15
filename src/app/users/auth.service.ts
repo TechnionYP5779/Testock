@@ -5,7 +5,7 @@ import {User} from 'firebase';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
-import {flatMap, map, switchMap, take} from 'rxjs/operators';
+import {map, switchMap, take} from 'rxjs/operators';
 import {UserData} from '../entities/user';
 import {Course} from '../entities/course';
 import {Question} from '../entities/question';
@@ -123,12 +123,12 @@ export class AuthService {
 
   isAdminForCourse(id: number): Observable<boolean> {
     return this.db.doc<Course>(`courses/${id}`).valueChanges()
-      .pipe(flatMap(course => this.isAdminOfFaculty(course.faculty)));
+      .pipe(switchMap(course => this.isAdminOfFaculty(course.faculty)));
   }
 
   isAdminForQuestion(id: string): Observable<boolean> {
     return this.db.doc<Question>(`questions/${id}`).valueChanges()
-      .pipe(flatMap(q => this.isAdminForCourse(q.course)));
+      .pipe(switchMap(q => this.isAdminForCourse(q.course)));
   }
 
   updateFavoriteCourse(course: number, favorite: boolean): Promise<void> {

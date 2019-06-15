@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Course} from '../../../entities/course';
 import {QuestionId} from '../../../entities/question';
-import {flatMap, map} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
 import {AuthService} from '../../../users/auth.service';
 import {DbService} from '../../../core/db.service';
@@ -19,7 +19,7 @@ export class FavoriteCourseComponent implements OnInit {
   private _totalSolvedQuestions;
 
   constructor(private auth: AuthService, private db: DbService) {
-    this.solvedQuestions$ = this.auth.user$.pipe(flatMap(userData => {
+    this.solvedQuestions$ = this.auth.user$.pipe(switchMap(userData => {
       if (!userData) {
         return of([]);
       }

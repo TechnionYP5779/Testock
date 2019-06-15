@@ -3,7 +3,7 @@ import {AuthService} from '../../users/auth.service';
 import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NotificationsService} from '../../notifications/notifications.service';
-import {flatMap, map} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {of, Observable} from 'rxjs';
 import {Course} from '../../entities/course';
 import {DbService} from '../../core/db.service';
@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
     this.router = rtr;
     this.auth.isAdmin.subscribe(res => this.isAdmin = res);
     this.notificationsCount$ = this.auth.user$.pipe(
-      flatMap(user => {
+      switchMap(user => {
         if (user) {
           return this.notifications.getUnseenNotificationsCountForUser(user.uid);
         } else {
@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
       })
     );
     this.favoriteCourses$ = this.auth.user$.pipe(
-      flatMap(userData => this.db.getFavoriteCourses(userData)),
+      switchMap(userData => this.db.getFavoriteCourses(userData)),
       map(courses => courses.sort((c1, c2) => (c1.name < c2.name) ? -1 : 1))
     );
   }

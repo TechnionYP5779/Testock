@@ -4,7 +4,7 @@ import {DbService} from '../../core/db.service';
 import {Observable} from 'rxjs';
 import {PendingScanId} from '../../entities/pending-scan';
 import {Course} from '../../entities/course';
-import {flatMap} from 'rxjs/operators';
+import {switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-pending-scan-view',
@@ -20,7 +20,7 @@ export class PendingScanComponent implements OnInit {
   constructor(private route: ActivatedRoute, private db: DbService) {
     this.pendingScanId = this.route.snapshot.paramMap.get('id');
     this.pendingScan$ = this.db.getPendingScan(this.pendingScanId);
-    this.course$ = this.db.getPendingScan(this.pendingScanId).pipe(flatMap(ps => this.db.getCourse(ps.course)));
+    this.course$ = this.db.getPendingScan(this.pendingScanId).pipe(switchMap(ps => this.db.getCourse(ps.course)));
   }
 
   ngOnInit() {
