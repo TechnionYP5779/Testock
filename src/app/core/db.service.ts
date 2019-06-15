@@ -51,7 +51,7 @@ export class DbService {
   }
 
   getFavoriteCourses(user: UserData): Observable<Course[]> {
-    if (user.favoriteCourses.length === 0) {
+    if (!user || user.favoriteCourses.length === 0) {
       return of([]);
     }
     return combineLatest(user.favoriteCourses.map(courseId => this.getCourse(courseId)));
