@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {QuestionId} from '../../entities/question';
 import {SolutionId} from '../../entities/solution';
@@ -83,5 +83,12 @@ export class PendingSolutionModalComponent implements OnInit {
     }).then(() => this.spinner.hide()).then(() => {
       this.snackbar.open('Thanks for your contribution!', 'close', {duration: 6000});
     });
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.cropMode) {
+      $event.returnValue = true;
+    }
   }
 }
