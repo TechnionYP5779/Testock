@@ -25,7 +25,7 @@ const routes: Routes = [
   {path: 'profile', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'profile/:uid', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'courses', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'course/:id', component: CourseComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'course/:id', component: CourseComponent, canActivate: [UsersOnlyGuard], runGuardsAndResolvers: 'always'},
   {path: 'question/:id', component: QuestionComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:cid/exam/:eid', component: ExamComponent, canActivate: [UsersOnlyGuard]},
   {path: 'upload', component: UploadComponent, canActivate: [UsersOnlyGuard]},
@@ -45,7 +45,7 @@ const routes: Routes = [
 
 @NgModule({
   exports: [RouterModule],
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
 })
 export class AppRoutingModule {
 }
