@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Course} from '../../../entities/course';
 import {QuestionId} from '../../../entities/question';
 import {flatMap, map} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {AuthService} from '../../../users/auth.service';
 import {DbService} from '../../../core/db.service';
 
@@ -19,8 +19,12 @@ export class FavoriteCourseComponent implements OnInit {
   private _totalSolvedQuestions;
 
   constructor(private auth: AuthService, private db: DbService) {
-    this.solvedQuestions$ = this.auth.user$.pipe(flatMap(userData => this.db.getSolvedQuestionsAsQuestions(userData.uid)))
-      .pipe(map(questions => {
+    this.solvedQuestions$ = this.auth.user$.pipe(flatMap(userData => {
+      if (!userData) {
+        return of([]);
+      }
+      return this.db.getSolvedQuestionsAsQuestions(userData.uid);
+    })).pipe(map(questions => {
         const solved = questions.filter(q => q.course === this.course.id);
         this._totalSolvedQuestions = solved.length;
         this.solvedQuestionsLimit = Math.min(3, this._totalSolvedQuestions);
