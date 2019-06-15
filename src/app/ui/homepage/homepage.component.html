@@ -4,14 +4,28 @@
   </h3>
   <p class="lead">
     Below you can see all the courses you marked as favorites. <br />
-    We recommend you select the courses you are currently taking, so you can have a quick access to them.
   </p>
 </div>
-
-<div class="row" *ngIf="favoriteCourses$ | async as favoriteCourses">
-  <ng-container *ngFor="let course of favoriteCourses">
-    <div class="col-6 mb-3">
-      <app-favorite-course [course]="course"></app-favorite-course>
-    </div>
+<div class="row">
+  <ng-container *ngIf="favoriteCourses$ | async as favoriteCourses; else loading">
+    <ng-container *ngIf="favoriteCourses.length > 0; else noFavorites">
+      <ng-container *ngFor="let course of favoriteCourses">
+        <div class="col-6 mb-3">
+          <app-favorite-course [course]="course"></app-favorite-course>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #noFavorites>
+      <div class="col-12">
+        <div class="alert alert-info" role="alert">
+          No courses were marked as favorites yet. We recommend you select the courses you are currently taking, so you can have a quick access to them.
+        </div>
+      </div>
+    </ng-template>
   </ng-container>
+  <ng-template #loading>
+    <div class="col-12 loading">
+      <fa-icon icon="spinner" [spin]="true" size="2x"></fa-icon>
+    </div>
+  </ng-template>
 </div>

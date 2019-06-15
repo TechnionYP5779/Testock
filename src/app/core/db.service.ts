@@ -51,6 +51,9 @@ export class DbService {
   }
 
   getFavoriteCourses(user: UserData): Observable<Course[]> {
+    if (user.favoriteCourses.length === 0) {
+      return of([]);
+    }
     return combineLatest(user.favoriteCourses.map(courseId => this.getCourse(courseId)));
   }
 
@@ -405,7 +408,6 @@ export class DbService {
     return this.afs.doc(`courses/${id}`).update({'name': newCourseName});
   }
 
-
   updateCourseDescription(id: number, newCourseDescription: string): Promise<void> {
     return this.afs.doc(`courses/${id}`).update({'description': newCourseDescription});
   }
@@ -428,11 +430,10 @@ export class DbService {
     return this.afs.collection<Course>('courses').valueChanges();
   }
 
-
   removeQuestion(qId: string) {
     return this.afs.doc(`questions/${qId}`).delete();
   }
-  
+
   updateQuestionTotalGrade(q: QuestionId): Promise<void> {
     return this.afs.doc<Question>(`questions/${q.id}`).update({total_grade: q.total_grade});
   }
