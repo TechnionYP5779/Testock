@@ -26,7 +26,8 @@ export class AppComponent {
     });
   }
 
-  hidePlugin() {
+  hidePlugin($event: MouseEvent) {
+    $event.preventDefault();
     document.getElementById('plugin-button').hidden = true;
   }
 }
