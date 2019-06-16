@@ -1,178 +1,176 @@
-<ng-container *ngIf="(isAdmin$ | async) !== null as isAdmin">
-  <div *ngIf="question$ | async as question">
-    <div class="alert alert-info" *ngIf="isAdmin">You have admin access for this question</div>
-    <div class="jumbotron jumbotron" *ngIf="course$ | async as course">
-      <div class="solved-toggle">
-        <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()"
-                type="button">
-          <fa-icon icon="check"></fa-icon>
-        </button>
-        <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();"
-                type="button">
-          <fa-icon icon="check"></fa-icon>
-        </button>
-      </div>
-      <div *ngIf="question.count_difficulty_ratings > 0">
-        <p class="difficulty-stars">
-          <ng-template #temp let-fill="fill">
-              <span class="star" [class.full]="fill === 100">
-                <span class="half" [style.width.%]="fill">&#9733;</span>
-                &#9733;
-              </span>
-          </ng-template>
-          <ngb-rating placement="top" [ngbTooltip]="'Difficulty: ' + (question.sum_difficulty_ratings / question.count_difficulty_ratings | number:'1.1-2')" [starTemplate]="temp" [(rate)]="question.sum_difficulty_ratings / question.count_difficulty_ratings"
-                      [readonly]="true" max="5"></ngb-rating>
-        </p>
-      </div>
-      <h3 class="title display-4">
-        <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + course.id">{{ course.id }}</a>
-        <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
-        <a [routerLink]="'/course/' + course.id + '/exam/' + question.moed.semester.year + '-' + question.moed.semester.num + '-' + question.moed.num">{{ question.moed | fullMoed }}</a>
-        <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
-        <span ngbTooltip="{{ question.total_grade }} points" placement="top">Question {{ question.number }}</span>
-        <button class="edit-button ml-4" (click)="editQuestion(editQuestionModal, question)">
-          <fa-icon icon="edit"></fa-icon>
-        </button>
-        <button class="delete-button mr-2 ml-2" data-toggle="modal" data-target="#confirmDeleteModal">
-          <fa-icon icon="trash-alt"></fa-icon>
-        </button>
-      </h3>
-
-      <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h2>Confirm Deletion</h2>
-            </div>
-            <div class="modal-body">
-              <div><p>Are you sure you want to delete this question?</p></div>
-              <div>
-                <button type="submit" data-dismiss="modal" class="btn btn-danger" style="margin-right: 5px" (click)="deleteQuestion()">Delete</button>
-                <button type="submit" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tags">
-        <button class="tag btn btn-warning mr-2" *ngFor="let tag of question.tags" [routerLink]="'/course/' + course.id + '/tag/' + tag">
-          # {{ tag }}
-          <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="isAdmin">
-            <fa-icon icon="times"></fa-icon>
-          </button>
-        </button>
-        <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Choose tag" (click)="openBottomSheet()"
-                *ngIf="course.tags.length > question.tags.length">
-          <fa-icon icon="plus"></fa-icon>
-        </button>
-      </div>
+<div *ngIf="question$ | async as question">
+  <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
+  <div class="jumbotron jumbotron" *ngIf="course$ | async as course">
+    <div class="solved-toggle">
+      <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()"
+              type="button">
+        <fa-icon icon="check"></fa-icon>
+      </button>
+      <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved();"
+              type="button">
+        <fa-icon icon="check"></fa-icon>
+      </button>
     </div>
-
-    <div *ngIf="(solutions$ | async) as solutions">
-      <div class="row p-3" *ngIf="solutions.length > 0; else noSolutions">
-        <div class="col-md-3 p-3" *ngFor="let sol of solutions">
-          <app-solution [solution]="sol" [question]="question" [adminAccess]="isAdmin"></app-solution>
-        </div>
-      </div>
+    <div *ngIf="question.count_difficulty_ratings > 0">
+      <p class="difficulty-stars">
+        <ng-template #temp let-fill="fill">
+            <span class="star" [class.full]="fill === 100">
+              <span class="half" [style.width.%]="fill">&#9733;</span>
+              &#9733;
+            </span>
+        </ng-template>
+        <ngb-rating placement="top" [ngbTooltip]="'Difficulty: ' + (question.sum_difficulty_ratings / question.count_difficulty_ratings | number:'1.1-2')" [starTemplate]="temp" [(rate)]="question.sum_difficulty_ratings / question.count_difficulty_ratings"
+                    [readonly]="true" max="5"></ngb-rating>
+      </p>
     </div>
-    <ng-template #noSolutions>
-      <div class="no-solutions">
-        <fa-icon class="broken-heart" icon="heart-broken" size="6x"></fa-icon>
-        <h3 class="no-solutions-title">Sorry, There are currently no solutions for this question.</h3>
-        <button type="button" class="btn btn-success" routerLink="/upload">
-          <fa-icon icon="upload"></fa-icon>
-          Upload one yourself
-        </button>
-      </div>
-    </ng-template>
+    <h3 class="title display-4">
+      <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + course.id">{{ course.id }}</a>
+      <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
+      <a [routerLink]="'/course/' + course.id + '/exam/' + question.moed.semester.year + '-' + question.moed.semester.num + '-' + question.moed.num">{{ question.moed | fullMoed }}</a>
+      <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
+      <span ngbTooltip="{{ question.total_grade }} points" placement="top">Question {{ question.number }}</span>
+      <button class="edit-button ml-4" (click)="editQuestion(editQuestionModal, question)" *ngIf="isAdmin$ | async">
+        <fa-icon icon="edit"></fa-icon>
+      </button>
+      <button class="delete-button mr-2 ml-2" data-toggle="modal" data-target="#confirmDeleteModal" *ngIf="isAdmin$ | async">
+        <fa-icon icon="trash-alt"></fa-icon>
+      </button>
+    </h3>
 
-    <div class="list-group my-3" *ngIf="topics$ | async as topics">
-      <div class="list-group-item list-group-item-info">
-        <fa-icon icon="comment" class="mr-2"></fa-icon>
-        Forum
-        <span class="badge badge-info">{{topics.length}}</span>
-        <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
-          <fa-icon icon="plus"></fa-icon>
-        </button>
-      </div>
-      <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action"
-         *ngFor="let topic of topics;">
-        {{ topic.subject }}
-        <span class="float-right col-4">
-        <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic"/>
-        <small class="mr-2">{{ topic.creator.name }}</small>
-        <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
-      </span>
-      </a>
-    </div>
-
-    <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h2>Create new topic</h2>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <h2>Confirm Deletion</h2>
           </div>
           <div class="modal-body">
-            <app-create-topic [linkedQuestionId]="question.id"></app-create-topic>
+            <div><p>Are you sure you want to delete this question?</p></div>
+            <div>
+              <button type="submit" data-dismiss="modal" class="btn btn-danger" style="margin-right: 5px" (click)="deleteQuestion()">Delete</button>
+              <button type="submit" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="tags">
+      <button class="tag btn btn-warning mr-2" *ngFor="let tag of question.tags" [routerLink]="'/course/' + course.id + '/tag/' + tag">
+        # {{ tag }}
+        <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="isAdmin$ | async">
+          <fa-icon icon="times"></fa-icon>
+        </button>
+      </button>
+      <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Choose tag" (click)="openBottomSheet()"
+              *ngIf="course.tags.length > question.tags.length">
+        <fa-icon icon="plus"></fa-icon>
+      </button>
     </div>
   </div>
 
-  <!-- Difficulty Ranking Modal -->
-  <button id="openModal" [hidden]="true" data-toggle="modal" data-target="#difficultyRankingModal"></button>
-  <div class="modal fade" id="difficultyRankingModal" tabindex="-1" role="dialog"
-       aria-labelledby="difficultyRankingModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+  <div *ngIf="(solutions$ | async) as solutions">
+    <div class="row p-3" *ngIf="solutions.length > 0; else noSolutions">
+      <div class="col-md-3 p-3" *ngFor="let sol of solutions">
+        <app-solution [solution]="sol" [question]="question" [adminAccess]="isAdmin$ | async"></app-solution>
+      </div>
+    </div>
+  </div>
+  <ng-template #noSolutions>
+    <div class="no-solutions">
+      <fa-icon class="broken-heart" icon="heart-broken" size="6x"></fa-icon>
+      <h3 class="no-solutions-title">Sorry, There are currently no solutions for this question.</h3>
+      <button type="button" class="btn btn-success" routerLink="/upload">
+        <fa-icon icon="upload"></fa-icon>
+        Upload one yourself
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="list-group my-3" *ngIf="topics$ | async as topics">
+    <div class="list-group-item list-group-item-info">
+      <fa-icon icon="comment" class="mr-2"></fa-icon>
+      Forum
+      <span class="badge badge-info">{{topics.length}}</span>
+      <button role="button" class="btn btn-info float-right" data-toggle="modal" data-target="#createTopicModal">
+        <fa-icon icon="plus"></fa-icon>
+      </button>
+    </div>
+    <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action"
+       *ngFor="let topic of topics;">
+      {{ topic.subject }}
+      <span class="float-right col-4">
+      <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic"/>
+      <small class="mr-2">{{ topic.creator.name }}</small>
+      <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
+    </span>
+    </a>
+  </div>
+
+  <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="difficultyRankingModalLabel">Rate difficulty</h5>
+          <h2>Create new topic</h2>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <ng-template #t let-fill="fill">
-              <span class="star" [class.full]="fill === 100">
-                <span class="half" [style.width.%]="fill">&#9733;</span>
-                &#9733;
-              </span>
-          </ng-template>
-          <ngb-rating [(rate)]="selected" [starTemplate]="t" max="5"></ngb-rating>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="sendRate()">Submit</button>
+          <app-create-topic [linkedQuestionId]="question.id"></app-create-topic>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <ng-template #editQuestionModal let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title">Edit question</h5>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-        <span aria-hidden="true">&times;</span>
-      </button>
+<!-- Difficulty Ranking Modal -->
+<button id="openModal" [hidden]="true" data-toggle="modal" data-target="#difficultyRankingModal"></button>
+<div class="modal fade" id="difficultyRankingModal" tabindex="-1" role="dialog"
+     aria-labelledby="difficultyRankingModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="difficultyRankingModalLabel">Rate difficulty</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ng-template #t let-fill="fill">
+            <span class="star" [class.full]="fill === 100">
+              <span class="half" [style.width.%]="fill">&#9733;</span>
+              &#9733;
+            </span>
+        </ng-template>
+        <ngb-rating [(rate)]="selected" [starTemplate]="t" max="5"></ngb-rating>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="sendRate()">Submit</button>
+      </div>
     </div>
-    <div class="modal-body">
-      <form>
-        <div class="form-group form-inline">
-          <label for="totalGrade">Total Grade:</label>
-          <div class="input-group ml-2">
-            <input name="totalGrade" min="1" id="totalGrade" class="form-control" type="number" style="width: 100px" [(ngModel)]="editTotalGrade">
-          </div>
+  </div>
+</div>
+
+<ng-template #editQuestionModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Edit question</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group form-inline">
+        <label for="totalGrade">Total Grade:</label>
+        <div class="input-group ml-2">
+          <input name="totalGrade" min="1" id="totalGrade" class="form-control" type="number" style="width: 100px" [(ngModel)]="editTotalGrade">
         </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancel</button>
-      <button type="button" class="btn btn-success" (click)="modal.close(true)">Update Question</button>
-    </div>
-  </ng-template>
-</ng-container>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="modal.close(true)">Update Question</button>
+  </div>
+</ng-template>
