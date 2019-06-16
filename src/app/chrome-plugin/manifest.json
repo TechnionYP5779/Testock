@@ -13,6 +13,11 @@
       "matches": ["https://grades.technion.ac.il/scanexam.ashx*"],
       "run_at": "document_idle",
       "js": ["scan.js"]
+    },
+    {
+      "matches": ["https://testock.tk/*", "http://localhost:4200/*"],
+      "run_at": "document_idle",
+      "js": ["hide.js"]
     }
   ],
   "page_action": {
