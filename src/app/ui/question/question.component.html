@@ -1,5 +1,5 @@
 <div *ngIf="question$ | async as question">
-  <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this question</div>
+  <div class="alert alert-info" *ngIf="isAdmin">You have admin access for this question</div>
   <div class="jumbotron jumbotron" *ngIf="course$ | async as course">
     <div class="solved-toggle">
       <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved()"
@@ -29,10 +29,10 @@
       <a [routerLink]="'/course/' + course.id + '/exam/' + question.moed.semester.year + '-' + question.moed.semester.num + '-' + question.moed.num">{{ question.moed | fullMoed }}</a>
       <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
       <span ngbTooltip="{{ question.total_grade }} points" placement="top">Question {{ question.number }}</span>
-      <button class="edit-button ml-4" (click)="editQuestion(editQuestionModal, question)" *ngIf="isAdmin$ | async">
+      <button class="edit-button ml-4" (click)="editQuestion(editQuestionModal, question)" *ngIf="isAdmin">
         <fa-icon icon="edit"></fa-icon>
       </button>
-      <button class="delete-button mr-2 ml-2" data-toggle="modal" data-target="#confirmDeleteModal" *ngIf="isAdmin$ | async">
+      <button class="delete-button mr-2 ml-2" data-toggle="modal" data-target="#confirmDeleteModal" *ngIf="isAdmin">
         <fa-icon icon="trash-alt"></fa-icon>
       </button>
     </h3>
@@ -57,7 +57,7 @@
     <div class="tags">
       <button class="tag btn btn-warning mr-2" *ngFor="let tag of question.tags" [routerLink]="'/course/' + course.id + '/tag/' + tag">
         # {{ tag }}
-        <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="isAdmin$ | async">
+        <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="isAdmin">
           <fa-icon icon="times"></fa-icon>
         </button>
       </button>
@@ -71,7 +71,7 @@
   <div *ngIf="(solutions$ | async) as solutions">
     <div class="row p-3" *ngIf="solutions.length > 0; else noSolutions">
       <div class="col-md-3 p-3" *ngFor="let sol of solutions">
-        <app-solution [solution]="sol" [question]="question" [adminAccess]="isAdmin$ | async"></app-solution>
+        <app-solution [solution]="sol" [question]="question" [adminAccess]="isAdmin"></app-solution>
       </div>
     </div>
   </div>

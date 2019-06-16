@@ -27,7 +27,7 @@ export class QuestionComponent implements OnInit {
   solutions$: Observable<SolutionId[]>;
   topics$: Observable<TopicWithCreatorId[]>;
   course$: Observable<Course>;
-  isAdmin$: Observable<boolean>;
+  isAdmin: boolean;
   userId: string;
   solvedQuestion$: Observable<SolvedQuestion>;
   selected = 0;
@@ -39,13 +39,14 @@ export class QuestionComponent implements OnInit {
     this.topics$ = this.db.getTopicsForQuestion(this.qId);
     this.question$ = this.db.getQuestion(this.qId);
     this.solutions$ = this.db.getSolutions(this.qId);
-    this.isAdmin$ = this.db.getQuestion(this.qId).pipe(switchMap(q => this.auth.isAdminForCourse(q.course)));
     this.course$ = this.db.getQuestion(this.qId).pipe(switchMap(q => this.db.getCourse(q.course)));
     this.userId = this.auth.currentUserId;
     this.solvedQuestion$ = this.db.getSolvedQuestion(this.userId, this.qId);
   }
 
   ngOnInit() {
+    this.db.getQuestion(this.qId).pipe(switchMap(q => this.auth.isAdminForCourse(q.course)))
+      .subscribe(isAdmin => this.isAdmin = isAdmin);
   }
 
   markAsSolved() {
