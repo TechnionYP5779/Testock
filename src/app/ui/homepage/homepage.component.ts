@@ -14,7 +14,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 export class HomepageComponent implements OnInit {
   favoriteCourses$: Observable<Course[]>;
 
-  constructor(private db: DbService, private auth: AuthService, private spinner: NgxSpinnerService) {
+  constructor(private db: DbService, public auth: AuthService, private spinner: NgxSpinnerService) {
     this.favoriteCourses$ = this.auth.user$.pipe(
       switchMap(userData => this.db.getFavoriteCourses(userData)),
       map(courses => courses.sort((c1, c2) => (c1.name < c2.name) ? -1 : 1))
