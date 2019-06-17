@@ -19,6 +19,7 @@ import {BatchUploadComponent} from './upload/batch-upload/batch-upload.component
 import {CropPendingComponent} from './upload/crop-pending/crop-pending.component';
 import {AboutComponent} from './ui/about/about.component';
 import {HomepageComponent} from './ui/homepage/homepage.component';
+import {HelpComponent} from './ui/help/help.component';
 
 const routes: Routes = [
   {path: '', component: HomepageComponent},
@@ -40,7 +41,8 @@ const routes: Routes = [
   {path: 'pendingScan/:id', component: PendingScanComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:cid/tag/:tag', component: TagComponent, canActivate: [UsersOnlyGuard]},
   {path: 'batch-upload', component: BatchUploadComponent, canActivate: [AdminOnlyGuard]},
-  {path: 'about', component: AboutComponent}
+  {path: 'about', component: AboutComponent},
+  {path: 'help', component: HelpComponent}
 ];
 
 @NgModule({

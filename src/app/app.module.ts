@@ -54,6 +54,7 @@ import {ScanDetailsPickerComponent} from './upload/scan-details-picker/scan-deta
 import {NotificationsModule} from './notifications/notifications.module';
 import { HomepageComponent } from './ui/homepage/homepage.component';
 import { FavoriteCourseComponent } from './ui/homepage/favorite-course/favorite-course.component';
+import { HelpComponent } from './ui/help/help.component';
 
 
 @NgModule({
@@ -103,9 +104,10 @@ import { FavoriteCourseComponent } from './ui/homepage/favorite-course/favorite-
     TagComponent,
     ExamsListComponent,
     ChooseQuestionTagComponent,
-    AboutComponent,
     HomepageComponent,
-    FavoriteCourseComponent
+    FavoriteCourseComponent,
+    AboutComponent,
+    HelpComponent
   ],
   providers: [AuthService, PdfService, MsGraphService],
   bootstrap: [AppComponent],
