@@ -15,7 +15,7 @@
       "js": ["scan.js"]
     },
     {
-      "matches": ["https://testock.tk/*", "http://localhost:4200/*"],
+      "matches": ["https://testock.tk/*"],
       "run_at": "document_idle",
       "js": ["hide.js"]
     }
