@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuestionSolution, QuestionType} from '../question-solution';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {SolutionImage} from '../solution-image';
 
 @Component({
   selector: 'app-question-solution',
@@ -32,5 +34,9 @@ export class QuestionSolutionComponent implements OnInit {
     if (this.sol.grade > this.sol.points) {
       this.sol.grade = this.sol.points;
     }
+  }
+
+  solutionImageDropped(event: CdkDragDrop<SolutionImage[]>) {
+    moveItemInArray(this.sol.images, event.previousIndex, event.currentIndex);
   }
 }
