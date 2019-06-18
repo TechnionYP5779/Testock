@@ -1,11 +1,9 @@
 <div class="alert alert-info" *ngIf="adminAccess">You have admin access for this exam</div>
 <div class="jumbotron jumbotron" *ngIf="exam && course">
   <div class="download-solution">
-    <a target="_blank" [href]="getPdfUrl + '?course=' + courseId + '&year=' + exam.moed.semester.year + '&semester=' + exam.moed.semester.num + '&moed=' + exam.moed.num">
-      <button type="button" class="btn btn-success" placement="top" ngbTooltip="Download full PDF solution">
-        <fa-icon icon="file-download"></fa-icon>
-      </button>
-    </a>
+    <button type="button" class="btn btn-success" placement="top" ngbTooltip="Download full PDF solution" (click)="downloadSuperScan(courseId, exam)">
+      <fa-icon icon="file-download"></fa-icon>
+    </button>
   </div>
   <div *ngIf="difficulty">
     <p class="difficulty-stars">
