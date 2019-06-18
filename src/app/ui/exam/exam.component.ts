@@ -6,6 +6,13 @@ import {Exam} from '../../entities/exam';
 import {AuthService} from '../../users/auth.service';
 import {Course} from '../../entities/course';
 import {environment} from '../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {saveAs} from 'file-saver';
+import {FullMoedPipe} from '../../core/full-moed.pipe';
+import {MoedPipe} from '../../core/moed.pipe';
+import {SemesterPipe} from '../../core/semester.pipe';
+import {YearPipe} from '../../core/year.pipe';
 
 @Component({
   selector: 'app-exam',
@@ -26,7 +33,9 @@ export class ExamComponent implements OnInit {
   getPdfUrl = 'https://' + environment.firebase.functionsLocation +
     '-' + environment.firebase.projectId + '.cloudfunctions.net/getPDFofExam';
 
-  constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService) {
+  constructor(private route: ActivatedRoute, private db: DbService, private auth: AuthService,
+              private http: HttpClient, private spinner: NgxSpinnerService,
+              private moedPipe: MoedPipe, private semesterPipe: SemesterPipe, private yearPipe: YearPipe) {
     this.courseId = +route.snapshot.paramMap.get('cid');
     this.examId = route.snapshot.paramMap.get('eid');
     this.auth.isAdminForCourse(this.courseId).subscribe(is => this.adminAccess = is);
@@ -59,5 +68,19 @@ export class ExamComponent implements OnInit {
 
   private getExam() {
     this.db.getExam(this.courseId, this.examId).subscribe(exam => this.exam = exam );
+  }
+
+  async downloadSuperScan(courseId: number, exam: Exam) {
+    await this.spinner.show();
+
+    const url = this.getPdfUrl + '?course=' + courseId + '&year=' +
+      exam.moed.semester.year + '&semester=' + exam.moed.semester.num + '&moed=' + exam.moed.num;
+
+    const blob = await this.http.get(url, {responseType: 'blob'}).toPromise();
+    const filename = `Testock-Super-Scan-${courseId}-${this.semesterPipe.transform(exam.moed)}` +
+      `-${this.yearPipe.transform(exam.moed)}-${this.moedPipe.transform(exam.moed)}`;
+    saveAs(blob, filename);
+
+    await this.spinner.hide();
   }
 }

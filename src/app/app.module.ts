@@ -55,6 +55,10 @@ import {NotificationsModule} from './notifications/notifications.module';
 import { HomepageComponent } from './ui/homepage/homepage.component';
 import { FavoriteCourseComponent } from './ui/homepage/favorite-course/favorite-course.component';
 import { HelpComponent } from './ui/help/help.component';
+import {FullMoedPipe} from './core/full-moed.pipe';
+import {SemesterPipe} from './core/semester.pipe';
+import {YearPipe} from './core/year.pipe';
+import {MoedPipe} from './core/moed.pipe';
 
 
 @NgModule({
@@ -109,7 +113,7 @@ import { HelpComponent } from './ui/help/help.component';
     AboutComponent,
     HelpComponent
   ],
-  providers: [AuthService, PdfService, MsGraphService],
+  providers: [AuthService, PdfService, MsGraphService, SemesterPipe, YearPipe, MoedPipe],
   bootstrap: [AppComponent],
   entryComponents: [
     PendingSolutionModalComponent,
