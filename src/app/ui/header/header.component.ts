@@ -3,8 +3,10 @@ import {AuthService} from '../../users/auth.service';
 import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NotificationsService} from '../../notifications/notifications.service';
-import {flatMap} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {of, Observable} from 'rxjs';
+import {Course} from '../../entities/course';
+import {DbService} from '../../core/db.service';
 
 @Component({
   selector: 'app-header',
@@ -19,20 +21,26 @@ export class HeaderComponent implements OnInit {
   router: any;
   isAdmin: boolean;
   notificationsCount$: Observable<number>;
+  favoriteCourses$: Observable<Course[]>;
 
-  constructor(private rtr: Router, public auth: AuthService, private spinner: NgxSpinnerService, private notifications: NotificationsService) {
+  constructor(private rtr: Router, public auth: AuthService, private spinner: NgxSpinnerService,
+              private notifications: NotificationsService, private db: DbService) {
     this.main_menu_opened = false;
     this.main_menu_triggered = new EventEmitter();
     this.router = rtr;
     this.auth.isAdmin.subscribe(res => this.isAdmin = res);
     this.notificationsCount$ = this.auth.user$.pipe(
-      flatMap(user => {
+      switchMap(user => {
         if (user) {
-          return this.notifications.getUnseenNotificationsCountForUser(user.uid)
+          return this.notifications.getUnseenNotificationsCountForUser(user.uid);
         } else {
           return of(0);
         }
       })
+    );
+    this.favoriteCourses$ = this.auth.user$.pipe(
+      switchMap(userData => this.db.getFavoriteCourses(userData)),
+      map(courses => courses.sort((c1, c2) => (c1.name < c2.name) ? -1 : 1))
     );
   }
 

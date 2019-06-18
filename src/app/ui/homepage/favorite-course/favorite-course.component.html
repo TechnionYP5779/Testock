@@ -1,0 +1,46 @@
+<mat-card class="favorite-card">
+  <div class="favorite-course-header">
+    <mat-card-title>{{course.name}}</mat-card-title>
+    <mat-card-subtitle>{{course.id}}</mat-card-subtitle>
+  </div>
+  <mat-card-content>
+    <ng-container *ngIf="solvedQuestions$ | async as solvedQuestions; else loading">
+      <div class="solved-questions" *ngIf="solvedQuestions.length > 0">
+        <h6 class="solved-questions-title">
+          <fa-icon icon="check" class="mr-2"></fa-icon>
+          Solved Questions ({{solvedQuestionsLimit}}/{{solvedQuestions.length}})
+          <div class="buttons">
+            <button type="button" class="btn ml-1" (click)="changeSolvedQuestionsLimitBy(1)" [disabled]="solvedQuestionsLimit >= solvedQuestions.length">
+              <fa-icon icon="plus"></fa-icon>
+            </button>
+            <button type="button" class="btn ml-1" (click)="changeSolvedQuestionsLimitBy(-1)" [disabled]="solvedQuestionsLimit <= 1">
+              <fa-icon icon="minus"></fa-icon>
+            </button>
+          </div>
+        </h6>
+        <mat-divider></mat-divider>
+        <mat-action-list class="solved-questions-list">
+          <button mat-list-item [routerLink]="'/question/' + question.id" *ngFor="let question of solvedQuestions | slice:0:solvedQuestionsLimit">
+            {{ question.moed | fullMoed }} - Question {{question.number}}
+          </button>
+        </mat-action-list>
+      </div>
+      <mat-divider></mat-divider>
+    </ng-container>
+    <ng-template #loading>
+      <div class="loading">
+        <fa-icon icon="spinner" [spin]="true" size="lg"></fa-icon>
+      </div>
+    </ng-template>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button [routerLink]="'/course/' + course.id">
+      COURSE
+      <fa-icon class="ml-2" icon="chevron-right" size="sm"></fa-icon>
+    </button>
+    <button mat-button [routerLink]="'/faculty/' + course.faculty">
+      FACULTY
+      <fa-icon class="ml-2" icon="chevron-right" size="sm"></fa-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>
