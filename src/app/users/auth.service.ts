@@ -15,6 +15,7 @@ import UserCredential = firebase.auth.UserCredential;
 import OAuthCredential = firebase.auth.OAuthCredential;
 import { firestore } from 'firebase/app';
 import Timestamp = firestore.Timestamp;
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class AuthService {
   user$: Observable<UserData>;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private storage: AngularFireStorage,
-              private msgraph: MsGraphService, private router: Router) {
+              private msgraph: MsGraphService, private router: Router, private spinner: NgxSpinnerService) {
     afAuth.user.subscribe((user) => {
       this.authState = user;
     });
@@ -60,7 +61,16 @@ export class AuthService {
     return this.authenticated ? this.authState.displayName : '';
   }
 
-  loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
+  async login() {
+    await this.spinner.show();
+    try {
+      await this.loginWithCampus();
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  private loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
     const provider = new firebase.auth.OAuthProvider('microsoft.com');
     provider.setCustomParameters({
       tenant: 'f1502c4c-ee2e-411c-9715-c855f6753b84'

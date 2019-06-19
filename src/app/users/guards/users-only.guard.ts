@@ -23,7 +23,7 @@ export class UsersOnlyGuard implements CanActivate {
           const ref = this.snackBar.open('Please Sign in to view this page', 'Sign In', {duration: 5000});
 
           ref.onAction().subscribe(async () => {
-            await this.auth.loginWithCampus();
+            await this.auth.login();
           });
           console.error('Access denied.');
         }

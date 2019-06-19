@@ -25,6 +25,6 @@ export class HomepageComponent implements OnInit {
   }
 
   login() {
-    this.spinner.show().then(() => this.auth.loginWithCampus()).finally(() => this.spinner.hide());
+    this.auth.login();
   }
 }
