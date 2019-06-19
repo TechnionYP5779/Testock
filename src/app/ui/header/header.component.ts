@@ -7,6 +7,7 @@ import {map, switchMap} from 'rxjs/operators';
 import {of, Observable} from 'rxjs';
 import {Course} from '../../entities/course';
 import {DbService} from '../../core/db.service';
+import {FacultyId} from '../../entities/faculty';
 
 @Component({
   selector: 'app-header',
@@ -19,16 +20,17 @@ export class HeaderComponent implements OnInit {
   @Output() main_menu_triggered: EventEmitter<boolean>;
   @Input() term: any;
   router: any;
-  isAdmin: boolean;
+  isAdmin$: Observable<boolean>;
   notificationsCount$: Observable<number>;
   favoriteCourses$: Observable<Course[]>;
+  faculties$: Observable<FacultyId[]>;
 
   constructor(private rtr: Router, public auth: AuthService, private spinner: NgxSpinnerService,
               private notifications: NotificationsService, private db: DbService) {
     this.main_menu_opened = false;
     this.main_menu_triggered = new EventEmitter();
     this.router = rtr;
-    this.auth.isAdmin.subscribe(res => this.isAdmin = res);
+    this.isAdmin$ = this.auth.isAdmin;
     this.notificationsCount$ = this.auth.user$.pipe(
       switchMap(user => {
         if (user) {
@@ -42,6 +44,7 @@ export class HeaderComponent implements OnInit {
       switchMap(userData => this.db.getFavoriteCourses(userData)),
       map(courses => courses.sort((c1, c2) => (c1.name < c2.name) ? -1 : 1))
     );
+    this.faculties$ = this.db.getFaculties();
   }
 
   trigger_menu() {
@@ -51,17 +54,18 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() { }
 
-  logout() {
+  async logout() {
+    await this.router.navigate(['/']);
     this.auth.signOut();
   }
 
-  onSearchChange(value: any) {
-    this.term = value;
+  onSearchChange($event: any) {
+    this.term = $event.target.value;
     this.router.navigate(['../courses/' + this.term.toString()]);
   }
 
-  login() {
-    this.auth.login();
+  async login() {
+    await this.auth.login();
   }
 
 }
