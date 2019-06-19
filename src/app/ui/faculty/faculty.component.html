@@ -5,7 +5,7 @@
     <h1 class="display-4">{{ faculty.name }} </h1>
     <p class="lead">Welcome to the "{{ faculty.name }}" faculty page. Below is the list of available courses.</p>
     <button class="btn btn-primary mr-2" [ngbPopover]="adminsPopContent" placement="bottom" popoverClass="popover-no-padding"><fa-icon icon="chevron-down" class="mr-2"></fa-icon>Faculty Admins</button>
-    <button class="btn btn-success" *ngIf="isAdmin$ | async" (click)="openCreateCourseModal(createCourseModal)"><fa-icon icon="plus" class="mr-2"></fa-icon>Create Course</button>
+    <button class="btn btn-success" *ngIf="isAdmin$ | async" (click)="openCreateCourseModal(createCourseModal, faculty.id)"><fa-icon icon="plus" class="mr-2"></fa-icon>Create Course</button>
   </div>
 
   <div *ngIf="courses$ | async as courses" >
