@@ -8,8 +8,8 @@
     <button class="btn btn-success" *ngIf="isAdmin$ | async" (click)="openCreateCourseModal(createCourseModal, faculty.id)"><fa-icon icon="plus" class="mr-2"></fa-icon>Create Course</button>
   </div>
 
-  <div *ngIf="courses$ | async as courses" >
-    <ul class="list-group-flush">
+  <div *ngIf="courses$ | async as courses; else loadingCourses">
+    <ul class="list-group-flush" *ngIf="courses.length > 0; else noCourses">
       <li class="list-group-item" *ngFor="let course of courses">
         <h6 class="course-title m-2">
           <a routerLink="/course/{{ course.id }}">
@@ -20,7 +20,21 @@
         <a *ngIf="course.id.toString().startsWith('23')" class="btn btn-secondary mr-2 float-right" [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank"><fa-icon icon="globe" class="mr-2"></fa-icon>Course Website</a>
       </li>
     </ul>
+
+    <ng-template #noCourses>
+      <div class="alert alert-info">
+        <fa-icon icon="info" class="mr-2"></fa-icon>
+        There are no courses in the system for this faculty. Please contact a faculty admin and ask to add a course.
+      </div>
+    </ng-template>
+
   </div>
+
+  <ng-template #loadingCourses>
+    <div class="text-center">
+      <fa-icon icon="spinner" spin="spin" size="5x"></fa-icon>
+    </div>
+  </ng-template>
 
   <ng-template #adminsPopContent>
     <ul class="list-group" *ngIf="facultyAdmins$ | async as admins; else loadingAdmins">
