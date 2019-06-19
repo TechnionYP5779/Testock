@@ -1,116 +1,118 @@
-<div class="alert alert-info" *ngIf="adminAccess">You have admin access for this course</div>
+<ng-container *ngIf="course$ | async as course">
+  <div class="alert alert-info" *ngIf="isAdmin$ | async">You have admin access for this course</div>
 
-<div class="jumbotron jumbotron" *ngIf="course">
-  <div class="favorite-toggle" (click)="updateFavoriteCourse()">
-    <button>
-      <fa-icon icon="star" *ngIf="(favorite$ | async)"></fa-icon>
-      <fa-icon [icon]="['far', 'star']" *ngIf="(favorite$ | async) == false"></fa-icon>
-    </button>
-  </div>
-  <h1 class="display-4">
-    {{ course.name }} ({{ course.id }})
-    <button data-toggle="modal" class="edit-button mr-2" data-target="#editCourseModal" *ngIf="adminAccess">
-      <fa-icon icon="edit"></fa-icon>
-    </button>
-    <a class="btn btn-primary mr-2" placement="top" ngbTooltip="Facebook Group" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
-       target="_blank">
-      <fa-icon [icon]="['fab', 'facebook-square']"></fa-icon>
-    </a>
-    <a *ngIf="course.id.toString().startsWith('23')" placement="top" ngbTooltip="Course Website" class="btn btn-info mr-2"
-       [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">
-      <fa-icon icon="globe"></fa-icon>
-    </a>
-  </h1>
-  <div class="lead" [innerHTML]="course.description"></div>
-  <div class="course-tags">
-    <button class="tag btn btn-warning mr-2" *ngFor="let tag of tags" routerLink="tag/{{ tag }}">
-      # {{ tag }}
-      <button class="remove-tag ml-2" (click)="removeTag($event, tag)" *ngIf="adminAccess">
-        <fa-icon icon="times"></fa-icon>
+  <div class="jumbotron jumbotron">
+    <div class="favorite-toggle" (click)="toggleFavoriteCourse(course.id);">
+      <button>
+        <fa-icon icon="star" *ngIf="(isFavorite$ | async)"></fa-icon>
+        <fa-icon [icon]="['far', 'star']" *ngIf="(isFavorite$ | async) == false"></fa-icon>
       </button>
-    </button>
-    <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Add new tag" data-toggle="modal" data-target="#addTagModal" *ngIf="adminAccess">
-      <fa-icon icon="plus"></fa-icon>
-    </button>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-6 mt-3">
-    <app-exams-list [exams]="(exams$ | async)"></app-exams-list>
-  </div>
-  <div class="col-6">
-    <div class="list-group my-3" *ngIf="topics$ | async as topics">
-      <div class="list-group-item list-group-item-info">
-        <b>Forum </b>
-        <span class="badge badge-info">{{topics.length}}</span>
-        <button role="button" class="btn btn-info float-right" placement="top" ngbTooltip="Add Topic" data-toggle="modal" data-target="#createTopicModal">
-          <fa-icon icon="plus"></fa-icon>
-        </button>
-      </div>
-      <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
-        {{ topic.subject }}
-        <span class="float-right col-4">
-      <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic" alt=""/>
-      <small class="mr-2">{{ topic.creator.name }}</small>
-      <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
-    </span>
+    </div>
+    <h1 class="display-4">
+      {{ course.name }} ({{ course.id }})
+      <button data-toggle="modal" class="edit-button mr-2" data-target="#editCourseModal" *ngIf="isAdmin$ | async">
+        <fa-icon icon="edit"></fa-icon>
+      </button>
+      <a class="btn btn-primary mr-2" placement="top" ngbTooltip="Facebook Group" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id"
+         target="_blank">
+        <fa-icon [icon]="['fab', 'facebook-square']"></fa-icon>
       </a>
-    </div>
-  </div>
-</div>
-
-<!-- Modals -->
-<div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Create new topic</h2>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+      <a *ngIf="course.id.toString().startsWith('23')" placement="top" ngbTooltip="Course Website" class="btn btn-info mr-2"
+         [attr.href]="'https://webcourse.cs.technion.ac.il/'+ course.id" target="_blank">
+        <fa-icon icon="globe"></fa-icon>
+      </a>
+    </h1>
+    <div class="lead" [innerHTML]="course.description"></div>
+    <div class="course-tags">
+      <button class="tag btn btn-warning mr-2" *ngFor="let tag of course.tags" routerLink="tag/{{ tag }}">
+        # {{ tag }}
+        <button class="remove-tag ml-2" (click)="removeTag(course.id, $event, tag)" *ngIf="isAdmin$ | async">
+          <fa-icon icon="times"></fa-icon>
         </button>
-      </div>
-      <div class="modal-body">
-        <app-create-topic [linkedCourseId]="id"></app-create-topic>
-      </div>
+      </button>
+      <button role="button" class="btn btn-warning mr-2" placement="bottom" ngbTooltip="Add new tag" data-toggle="modal" data-target="#addTagModal" *ngIf="isAdmin$ | async">
+        <fa-icon icon="plus"></fa-icon>
+      </button>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-hidden="true" *ngIf="course">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Edit Course Details</h2>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="courseName">Name:</label>
-            <input type="text" class="form-control" id="courseName" placeholder="Enter name" name="subject"
-                   [(ngModel)]="newCourseName">
-          </div>
-          <div class="form-group">
-            <label for="desc-editor">Description:</label>
-            <ck-editor name="editor1" id="desc-editor" [(ngModel)]="newCourseDescription" skin="moono-lisa"></ck-editor>
-          </div>
-          <button type="submit" class="btn btn-primary mb-2" (click)="editCourseDetails()" data-dismiss="modal">Update</button>
-        </form>
+  <div class="row">
+    <div class="col-6 mt-3">
+      <app-exams-list [exams]="(exams$ | async)"></app-exams-list>
+    </div>
+    <div class="col-6">
+      <div class="list-group my-3" *ngIf="topics$ | async as topics">
+        <div class="list-group-item list-group-item-info">
+          <b>Forum </b>
+          <span class="badge badge-info">{{topics.length}}</span>
+          <button role="button" class="btn btn-info float-right" placement="top" ngbTooltip="Add Topic" data-toggle="modal" data-target="#createTopicModal">
+            <fa-icon icon="plus"></fa-icon>
+          </button>
+        </div>
+        <a routerLink="/topic/{{ topic.id }}" class="list-group-item list-group-item-action" *ngFor="let topic of topics;">
+          {{ topic.subject }}
+          <span class="float-right col-4">
+        <img [src]="topic.creator.photoUrl" class="mr-2 topic-creator-profile-pic" alt=""/>
+        <small class="mr-2">{{ topic.creator.name }}</small>
+        <small class="float-right">{{ topic.created.toDate() | date: 'dd/MM/yyyy HH:mm' }}</small>
+      </span>
+        </a>
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="addTagModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <input type="text" class="form-control" placeholder="New Tag" [(ngModel)]="newTag" name="courseName"/>
-        <button type="submit" data-dismiss="modal" class="btn btn-success" (click)="addNewTag();">Add</button>
+  <!-- Modals -->
+  <div class="modal fade" id="createTopicModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Create new topic</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-create-topic [linkedCourseId]="course.id"></app-create-topic>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-hidden="true" *ngIf="course">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Edit Course Details</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="courseName">Name:</label>
+              <input type="text" class="form-control" id="courseName" placeholder="Enter name" name="subject"
+                     [(ngModel)]="newCourseName">
+            </div>
+            <div class="form-group">
+              <label for="desc-editor">Description:</label>
+              <ck-editor name="editor1" id="desc-editor" [(ngModel)]="newCourseDescription" skin="moono-lisa"></ck-editor>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2" (click)="editCourseDetails()" data-dismiss="modal">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addTagModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <input type="text" class="form-control" placeholder="New Tag" [(ngModel)]="newTag" name="courseName"/>
+          <button type="submit" data-dismiss="modal" class="btn btn-success" (click)="addNewTag(course.id);">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
