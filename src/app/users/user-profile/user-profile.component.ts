@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
-import {combineLatest, Observable} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
 import {UserData} from '../../entities/user';
 import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
@@ -33,7 +33,7 @@ export class UserProfileComponent implements OnInit {
       map(courses => courses.sort((c1, c2) => (c1.name < c2.name) ? -1 : 1))
     );
     this.facultyAdmin$ = this.user$.pipe(switchMap(userdata => {
-      if (!userdata.roles.faculty_admin) { return null; }
+      if (!userdata.roles.faculty_admin) { return of(null); }
       return combineLatest(userdata.roles.faculty_admin.map(facId => this.db.getFaculty(facId)));
     }));
   }
