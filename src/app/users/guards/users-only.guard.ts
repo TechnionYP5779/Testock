@@ -25,7 +25,6 @@ export class UsersOnlyGuard implements CanActivate {
           ref.onAction().subscribe(async () => {
             await this.auth.login();
           });
-          console.error('Access denied.');
         }
       })
     );
