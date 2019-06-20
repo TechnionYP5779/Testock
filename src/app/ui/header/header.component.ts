@@ -55,8 +55,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() { }
 
   async logout() {
-    await this.router.navigate(['/']);
-    this.auth.signOut();
+    await this.auth.signOut();
   }
 
   onSearchChange($event: any) {

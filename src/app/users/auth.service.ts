@@ -23,14 +23,14 @@ import {NgxSpinnerService} from 'ngx-spinner';
 export class AuthService {
 
   authState: User = null;
-  user$: Observable<UserData>;
+  readonly user$: Observable<UserData>;
 
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore, private storage: AngularFireStorage,
               private msgraph: MsGraphService, private router: Router, private spinner: NgxSpinnerService) {
     afAuth.user.subscribe((user) => {
       this.authState = user;
     });
-    this.user$ = this.afAuth.authState.pipe(switchMap(user => {
+    this.user$ = this.afAuth.user.pipe(switchMap(user => {
       if (user) {
         return this.db.doc<UserData>(`users/${user.uid}`).valueChanges();
       } else {
@@ -78,7 +78,7 @@ export class AuthService {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((cred) => {
         if (!cred.user.email.endsWith('technion.ac.il')) {
-          this.signOut();
+          return this.signOut();
         }
         if (cred.additionalUserInfo.isNewUser) {
           return this.createNewUser(cred);
@@ -86,9 +86,9 @@ export class AuthService {
       });
   }
 
-  signOut(): void {
-    this.afAuth.auth.signOut();
-    this.router.navigate(['/']);
+  async signOut() {
+    await this.router.navigate(['/']);
+    await this.afAuth.auth.signOut();
   }
 
   private createNewUser(cred: UserCredential): Promise<any> {

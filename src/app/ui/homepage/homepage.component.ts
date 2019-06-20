@@ -24,7 +24,7 @@ export class HomepageComponent implements OnInit {
   ngOnInit() {
   }
 
-  login() {
-    this.auth.login();
+  async login() {
+    await this.auth.login();
   }
 }
