@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NotificationId} from '../../entities/notification';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 import {NotificationsService} from '../notifications.service';
 import {switchMap} from 'rxjs/operators';
