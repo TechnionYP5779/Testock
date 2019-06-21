@@ -3,11 +3,11 @@
   <div class="jumbotron jumbotron" *ngIf="course$ | async as course">
     <div class="solved-toggle">
       <button *ngIf="solvedQuestion$ | async" class="mt-2 btn btn-success btn-lg" (click)="unmarkAsSolved(question.id)"
-              type="button">
+              type="button" ngbTooltip="Remove this question from your solved questions list">
         <fa-icon icon="check"></fa-icon>
       </button>
       <button *ngIf="!(solvedQuestion$ | async)" class="mt-2 btn btn-outline-success btn-lg" (click)="markAsSolved(question.id);"
-              type="button">
+              type="button" ngbTooltip="Add this question to your solved questions list">
         <fa-icon icon="check"></fa-icon>
       </button>
     </div>
