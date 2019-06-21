@@ -3,13 +3,14 @@ import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular
 import {Observable} from 'rxjs';
 import {AuthService} from '../auth.service';
 import {map, take, tap} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersOnlyGuard implements CanActivate {
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private snackBar: MatSnackBar) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -19,7 +20,11 @@ export class UsersOnlyGuard implements CanActivate {
       map(user => user && user.roles.user),
       tap(canView => {
         if (!canView) {
-          console.error('Access denied.');
+          const ref = this.snackBar.open('Please Sign in to view this page', 'Sign In', {duration: 5000});
+
+          ref.onAction().subscribe(async () => {
+            await this.auth.login();
+          });
         }
       })
     );

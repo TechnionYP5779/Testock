@@ -9,6 +9,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MatSnackBar} from '@angular/material';
 import {UserData} from '../../entities/user';
+import {map, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-faculty',
@@ -22,25 +23,25 @@ export class FacultyComponent implements OnInit {
   public courses$: Observable<Course[]>;
   facultyAdmins$: Observable<UserData[]>;
   isAdmin$: Observable<boolean>;
-  public id: string;
+  public id: Observable<string>;
 
   newCourse: Course;
 
   constructor(private route: ActivatedRoute, private db: DbService, private snackBar: MatSnackBar,
               private auth: AuthService, private modal: NgbModal, private spinner: NgxSpinnerService) {
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.faculty$ = this.db.getFaculty(this.id);
-    this.courses$ = this.db.getCoursesOfFaculty(this.id);
-    this.isAdmin$ = this.auth.isAdminOfFaculty(this.id);
-    this.facultyAdmins$ = this.db.getAdminsOfFaculty(this.id);
+    this.id = this.route.params.pipe(map(params => params.id));
+    this.faculty$ = this.id.pipe(switchMap(id => this.db.getFaculty(id)));
+    this.courses$ = this.id.pipe(switchMap(id => this.db.getCoursesOfFaculty(id)));
+    this.isAdmin$ = this.id.pipe(switchMap(id => this.auth.isAdminOfFaculty(id)));
+    this.facultyAdmins$ = this.id.pipe(switchMap(id => this.db.getAdminsOfFaculty(id)));
   }
 
   ngOnInit() {
   }
 
-  async openCreateCourseModal(createCourseModal: TemplateRef<any>) {
+  async openCreateCourseModal(createCourseModal: TemplateRef<any>, facultyId: string) {
     this.newCourse = {
-      faculty: this.id,
+      faculty: facultyId,
       id: null,
       name: null,
       tags: [],

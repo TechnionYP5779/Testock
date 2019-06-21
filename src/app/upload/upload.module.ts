@@ -22,6 +22,7 @@ import {NgbAlertModule, NgbButtonsModule, NgbCollapseModule, NgbProgressbarModul
 import { CropPendingComponent } from './crop-pending/crop-pending.component';
 import { ScanEditorPreviewComponent } from './scan-editor/scan-editor-preview/scan-editor-preview.component';
 import { ScanDetailsPickerComponent } from './scan-details-picker/scan-details-picker.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ScanDetailsPickerComponent } from './scan-details-picker/scan-details-p
     NgbButtonsModule,
     NgxFileDropModule,
     NgbProgressbarModule,
-    NgbAlertModule
+    NgbAlertModule,
+    DragDropModule
   ],
   providers: [
     UploadService,

@@ -25,7 +25,7 @@ const routes: Routes = [
   {path: '', component: HomepageComponent},
   {path: 'profile', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
   {path: 'profile/:uid', component: UserProfileComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'courses', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'courses', component: CoursesComponent},
   {path: 'course/:id', component: CourseComponent, canActivate: [UsersOnlyGuard], runGuardsAndResolvers: 'always'},
   {path: 'question/:id', component: QuestionComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:cid/exam/:eid', component: ExamComponent, canActivate: [UsersOnlyGuard]},
@@ -35,8 +35,8 @@ const routes: Routes = [
   {path: 'courses/:term', component: CoursesComponent, canActivate: [UsersOnlyGuard]},
   {path: 'admin', component: AdminComponent, canActivate: [AdminOnlyGuard]},
   {path: 'topic/:id', component: TopicComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'faculties', component: FacultiesComponent, canActivate: [UsersOnlyGuard]},
-  {path: 'faculty/:id', component: FacultyComponent, canActivate: [UsersOnlyGuard]},
+  {path: 'faculties', component: FacultiesComponent},
+  {path: 'faculty/:id', component: FacultyComponent},
   {path: 'world', component: GameWorldComponent, canActivate: [UsersOnlyGuard]},
   {path: 'pendingScan/:id', component: PendingScanComponent, canActivate: [UsersOnlyGuard]},
   {path: 'course/:cid/tag/:tag', component: TagComponent, canActivate: [UsersOnlyGuard]},
@@ -47,7 +47,7 @@ const routes: Routes = [
 
 @NgModule({
   exports: [RouterModule],
-  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
+  imports: [RouterModule.forRoot(routes)],
 })
 export class AppRoutingModule {
 }
