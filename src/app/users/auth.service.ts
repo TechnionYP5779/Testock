@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
-import * as firebase from 'firebase';
 import {User} from 'firebase';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
@@ -11,9 +10,9 @@ import {Course} from '../entities/course';
 import {Question} from '../entities/question';
 import {MsGraphService} from './msgraph.service';
 import {AngularFireStorage} from '@angular/fire/storage';
-import UserCredential = firebase.auth.UserCredential;
-import OAuthCredential = firebase.auth.OAuthCredential;
-import { firestore } from 'firebase/app';
+import UserCredential = auth.UserCredential;
+import OAuthCredential = auth.OAuthCredential;
+import { firestore, auth } from 'firebase/app';
 import Timestamp = firestore.Timestamp;
 import {NgxSpinnerService} from 'ngx-spinner';
 
@@ -71,7 +70,7 @@ export class AuthService {
   }
 
   private loginWithCampus(): Promise<firebase.auth.UserCredential|void> {
-    const provider = new firebase.auth.OAuthProvider('microsoft.com');
+    const provider = new auth.OAuthProvider('microsoft.com');
     provider.setCustomParameters({
       tenant: 'f1502c4c-ee2e-411c-9715-c855f6753b84'
     });

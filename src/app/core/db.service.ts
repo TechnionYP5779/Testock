@@ -11,10 +11,10 @@ import {Faculty, FacultyId} from '../entities/faculty';
 import {Topic, TopicId, TopicWithCreatorId} from '../entities/topic';
 import {Comment, CommentId, CommentWithCreatorId} from '../entities/comment';
 import {AngularFireStorage} from '@angular/fire/storage';
-import * as firebase from 'firebase';
+import {firestore} from 'firebase/app';
 import {SolvedQuestion} from '../entities/solved-question';
 import {LinkedQuestion, PendingScan, PendingScanId} from '../entities/pending-scan';
-import FieldValue = firebase.firestore.FieldValue;
+import FieldValue = firestore.FieldValue;
 import {Moed} from '../entities/moed';
 
 @Injectable({
@@ -245,7 +245,7 @@ export class DbService {
   }
 
   createCourse(course: Course): Promise<void> {
-    course.created = firebase.firestore.Timestamp.now();
+    course.created = firestore.Timestamp.now();
     return this.afs.doc(`courses/${course.id}`).set(course);
   }
 
@@ -277,14 +277,14 @@ export class DbService {
   }
 
   createTopic(topic: Topic): Promise<TopicId> {
-    topic.created = firebase.firestore.Timestamp.now();
+    topic.created = firestore.Timestamp.now();
     return this.afs.collection<Topic>(`topics`).add(topic).then(dr => {
       return {id: dr.id, ...topic};
     });
   }
 
   addComment(topicId: string, comment: Comment): Promise<CommentId> {
-    comment.created = firebase.firestore.Timestamp.now();
+    comment.created = firestore.Timestamp.now();
     return this.afs.collection<Comment>(`topics/${topicId}/comments`).add(comment).then(dr => {
       return {id: dr.id, ...comment};
     });
