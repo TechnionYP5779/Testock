@@ -16,6 +16,7 @@ import {QuestionSolution, QuestionType} from './scan-editor/question-solution';
 import {ScanPage} from './scan-editor/scan-page';
 import Timestamp = firestore.Timestamp;
 import {SolutionImage} from './scan-editor/solution-image';
+import {AuthService} from '../users/auth.service';
 
 export class Progress {
   current: number;
@@ -57,7 +58,7 @@ export interface UploadScanProgress {
 })
 export class UploadService {
 
-  constructor(private db: DbService, private storage: AngularFireStorage,
+  constructor(private db: DbService, private storage: AngularFireStorage, private auth: AuthService,
               private gamification: GamificationService, private ocr: OCRService, private pdf: PdfService) {
   }
 
@@ -192,6 +193,7 @@ export class UploadService {
 
       createdSol.uploadInProgress = false;
       await this.db.setSolutionForQuestion(question, createdSol);
+      await this.auth.addSolutionContribution(question, createdSol);
     }
 
     return createdSol;

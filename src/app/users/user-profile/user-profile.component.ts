@@ -9,6 +9,7 @@ import { Sort } from '@angular/material/sort';
 import {Course} from '../../entities/course';
 import {map, switchMap} from 'rxjs/operators';
 import {FacultyId} from '../../entities/faculty';
+import {Contribution, ContributionType} from '../../entities/contribution';
 
 @Component({
   selector: 'app-user-profile',
@@ -23,6 +24,7 @@ export class UserProfileComponent implements OnInit {
   questions: Question[];
   isMyProfile: boolean;
   favoriteCourses$: Observable<Course[]>;
+  contributions$: Observable<Contribution[]>;
 
   constructor(public auth: AuthService, private db: DbService, private route: ActivatedRoute) {
     this.userId = this.route.snapshot.paramMap.get('uid');
@@ -36,6 +38,7 @@ export class UserProfileComponent implements OnInit {
       if (!userdata.roles.faculty_admin) { return of(null); }
       return combineLatest(userdata.roles.faculty_admin.map(facId => this.db.getFaculty(facId)));
     }));
+    this.contributions$ = this.auth.getContributionsByType(ContributionType.SOLUTION);
   }
 
   ngOnInit() {

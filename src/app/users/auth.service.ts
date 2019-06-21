@@ -8,14 +8,16 @@ import {Observable, of} from 'rxjs';
 import {map, switchMap, take} from 'rxjs/operators';
 import {UserData} from '../entities/user';
 import {Course} from '../entities/course';
-import {Question} from '../entities/question';
+import {Question, QuestionId} from '../entities/question';
 import {MsGraphService} from './msgraph.service';
 import {AngularFireStorage} from '@angular/fire/storage';
+import {firestore} from 'firebase/app';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Contribution, ContributionType} from '../entities/contribution';
+import {SolutionId} from '../entities/solution';
 import UserCredential = firebase.auth.UserCredential;
 import OAuthCredential = firebase.auth.OAuthCredential;
-import { firestore } from 'firebase/app';
 import Timestamp = firestore.Timestamp;
-import {NgxSpinnerService} from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
@@ -156,4 +158,34 @@ export class AuthService {
       });
     });
   }
+
+  private addContribution(contribution: Contribution) {
+    return this.user$.pipe(take(1)).toPromise().then(user => {
+      return this.db.collection('users/' + user.uid + '/contributions').add(contribution);
+    });
+  }
+
+  addSolutionContribution(q: QuestionId, sol: SolutionId) {
+    return this.addContribution({
+      type: ContributionType.SOLUTION,
+      questionId: q.id,
+      course: q.course,
+      qNumber: q.number,
+      moed: q.moed,
+      solutionId: sol.id,
+      created: Timestamp.now()
+    });
+  }
+
+  getContributionsByType(type: ContributionType): Observable<Contribution[]> {
+    const ref = r => r.where('type', '==', type).orderBy('created', 'desc');
+    return this.user$.pipe(switchMap(user => {
+      if (!user) {
+        return of([]);
+      } else {
+        return this.db.collection<Contribution>(`users/${user.uid}/contributions`, ref).valueChanges();
+      }
+    }));
+  }
+
 }
