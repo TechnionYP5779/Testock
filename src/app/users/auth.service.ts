@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
-import * as firebase from 'firebase';
 import {User} from 'firebase';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
@@ -13,8 +12,10 @@ import {MsGraphService} from './msgraph.service';
 import {AngularFireStorage} from '@angular/fire/storage';
 import UserCredential = firebase.auth.UserCredential;
 import OAuthCredential = firebase.auth.OAuthCredential;
-import { firestore } from 'firebase/app';
-import Timestamp = firestore.Timestamp;
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import Timestamp = firebase.firestore.Timestamp;
 import {NgxSpinnerService} from 'ngx-spinner';
 
 @Injectable({
