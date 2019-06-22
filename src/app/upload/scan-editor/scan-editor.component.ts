@@ -39,8 +39,7 @@ export class ScanEditorComponent implements OnInit {
   constructor(private ocr: OCRService, public snackBar: MatSnackBar, private spinner: NgxSpinnerService, private modal: NgbModal) {
   }
 
-  newQuestionGrade: number;
-  newQuestionNum: number;
+  newQuestion: QuestionSolution;
   hiddenPagesCount = 0;
   pagesPerRow = 2;
 
@@ -48,28 +47,37 @@ export class ScanEditorComponent implements OnInit {
   }
 
   addQuestion(newQuestionModal: TemplateRef<any>) {
-    this.newQuestionNum = minNotInArray(this.questions.map(q => q.number));
-    this.newQuestionGrade = 5;
+    const newQuestionNum = minNotInArray(this.questions.map(q => q.number));
+    this.newQuestion = new QuestionSolution(newQuestionNum, 0, 0);
     this.modal.open(newQuestionModal, {size: 'sm', centered: true}).result.then(result => {
-      if (this.questions.map(q => q.number).includes(this.newQuestionNum)) {
+      if (this.questions.map(q => q.number).includes(this.newQuestion.number)) {
         this.snackBar.open('Question Already Exists', 'close', {duration: 3000});
         return;
       }
 
-      if (this.newQuestionNum <= 0) {
+      if (this.newQuestion.number <= 0) {
         this.snackBar.open('Invalid question number', 'close', {duration: 3000});
         return;
       }
 
-      if (this.newQuestionGrade <= 0 || this.newQuestionGrade > 100) {
+      if (this.newQuestion.points <= 0 || this.newQuestion.points > 100) {
         this.snackBar.open('Invalid question grade', 'close', {duration: 3000});
         return;
       }
 
-      const newQuestion = new QuestionSolution(this.newQuestionNum, 0, this.newQuestionGrade);
-      this.questions.push(newQuestion);
+      if (this.newQuestion.grade < 0) {
+        this.snackBar.open('Grade must be a non-negative number', 'close', {duration: 3000});
+        return;
+      }
+
+      if (this.newQuestion.grade > this.newQuestion.points) {
+        this.snackBar.open('Grade can not be greater than question\'s total grade', 'close', {duration: 3000});
+        return;
+      }
+
+      this.questions.push(this.newQuestion);
       this.questions = this.questions.sort((a, b) => a.number - b.number);
-      this.activateQuestion(newQuestion);
+      this.activateQuestion(this.newQuestion);
     }, reason => {});
   }
 

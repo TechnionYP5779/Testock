@@ -103,7 +103,7 @@ const fragment = create('\
         <span class="close-s hide" id="close" onclick="document.getElementById(`scan-pop`).style.display=`none`; document.getElementById(`close`).style.display=`none`">x</span>\
         <div class="scan-popup hide" id="scan-pop">\
           <img src="https://testock.tk/assets/images/testock-logo.png" width="190" style="display:block; margin-bottom: 10px;">\
-          <a id="main_button" target="_blank" href="http://localhost:4200/upload/chrome">העלה את הסריקה</a>\
+          <a id="main_button" target="_blank" href="http://testock.tk/upload/chrome">העלה את הסריקה</a>\
         </div>\
           ');
   document.body.insertBefore(fragment, document.body.childNodes[0]);

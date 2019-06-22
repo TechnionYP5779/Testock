@@ -25,4 +25,9 @@ export class AppComponent {
       }
     });
   }
+
+  hidePlugin($event: MouseEvent) {
+    $event.preventDefault();
+    document.getElementById('plugin-button').hidden = true;
+  }
 }

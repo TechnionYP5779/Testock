@@ -1,0 +1,63 @@
+<div *ngIf="(auth.user$ | async) as user; else noUser">
+  <div class="jumbotron">
+    <h3 class="title display-6">
+      Hello {{ user.name }}, how are you?
+    </h3>
+    <p class="lead">
+      Below you can see all the courses you marked as favorites.
+    </p>
+  </div>
+  <div class="row">
+    <ng-container *ngIf="favoriteCourses$ | async as favoriteCourses; else loading">
+      <ng-container *ngIf="favoriteCourses.length > 0; else noFavorites">
+        <ng-container *ngFor="let course of favoriteCourses">
+          <div class="col-6 mb-3">
+            <app-favorite-course [course]="course"></app-favorite-course>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-template #noFavorites>
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">
+            <p>
+              No courses were marked as favorites yet. We recommend you select the courses you are currently taking, so you can have a quick access to them.
+            </p>
+            <button class="btn btn-outline-info" routerLink="/courses">
+              <fa-icon icon="book" class="mr-1"></fa-icon>
+              Courses
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+    <ng-template #loading>
+      <div class="col-12 loading">
+        <fa-icon icon="spinner" [spin]="true" size="2x"></fa-icon>
+      </div>
+    </ng-template>
+  </div>
+</div>
+<ng-template #noUser>
+  <div class="jumbotron">
+    <h3 class="title display-6">
+      Hello new comer, how are you?
+    </h3>
+    <p class="lead">
+      Testock scans and solutions are only available to Technion students. Sign in using your technion credentials!
+    </p>
+    <div class="new-user-buttons">
+      <button type="button" class="btn btn-outline-success" (click)="login()">
+        <fa-icon icon="sign-in-alt" class="mr-1"></fa-icon>
+        Sign In
+      </button>
+      <button type="button" class="btn btn-outline-primary ml-2" routerLink="/help">
+        <fa-icon icon="rocket" class="mr-1"></fa-icon>
+        Getting Started
+      </button>
+      <button type="button" class="btn btn-outline-info ml-2" routerLink="/about">
+        <fa-icon icon="users" class="mr-1"></fa-icon>
+        About
+      </button>
+    </div>
+  </div>
+</ng-template>

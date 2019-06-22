@@ -1,7 +1,7 @@
 <header>
   <div id="topbar">
     <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light">
+      <nav class="navbar navbar-expand-xl navbar-light">
         <a class="navbar-brand" routerLink="/">
           <img src="/assets/images/testock-logo.png" alt="" height="25">
         </a>
@@ -10,19 +10,52 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/faculties">Faculties</a>
+            <li class="nav-item" [class.dropdown]="faculties.length > 0" *ngIf="(faculties$ | async) as faculties; else noFacultiesItem">
+              <ng-container *ngIf="faculties.length > 0; else noFacultiesLink">
+                <a class="nav-link dropdown-toggle" href="#" id="facultiesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Faculties</a>
+                <div class="dropdown-menu" aria-labelledby="facultiesDropdown">
+                  <a class="dropdown-item" *ngFor="let faculty of faculties" [routerLink]="'/faculty/' + faculty.id">{{ faculty.name }}</a>
+                </div>
+              </ng-container>
+              <ng-template #noFacultiesLink>
+                <a class="nav-link" routerLink="/faculties">Faculties</a>
+              </ng-template>
             </li>
+            <ng-template #noFacultiesItem>
+              <li>
+                <a class="nav-link" routerLink="/faculties">Faculties</a>
+              </li>
+            </ng-template>
+
+            <li class="nav-item" [class.dropdown]="favoriteCourses.length > 0" *ngIf="(favoriteCourses$ | async) as favoriteCourses; else noFavoritesItem">
+              <ng-container *ngIf="favoriteCourses.length > 0; else noFavoritesLink">
+                <a class="nav-link dropdown-toggle" href="#" id="coursesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses</a>
+                <div class="dropdown-menu" aria-labelledby="coursesDropdown">
+                  <a class="dropdown-item" routerLink="/courses">All Courses</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" *ngFor="let course of favoriteCourses" [routerLink]="'/course/' + course.id">{{ course.name }}</a>
+                </div>
+              </ng-container>
+              <ng-template #noFavoritesLink>
+                <a class="nav-link" routerLink="/courses">Courses</a>
+              </ng-template>
+            </li>
+            <ng-template #noFavoritesItem>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/courses">Courses</a>
+              </li>
+            </ng-template>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/courses">Courses</a>
+              <a class="nav-link" routerLink="/help">Help</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" routerLink="/about">About</a>
             </li>
           </ul>
           <form class="form-inline my-2 my-lrg-0">
-            <input class="form-control mr-sm-2" type="text" (keyup)="onSearchChange($event.target.value)" placeholder="Search course..." aria-label="Search">
+            <input class="form-control mr-sm-2" type="text" (keyup)="onSearchChange($event)" placeholder="Search course..." aria-label="Search">
           </form>
+
           <!-- User logged in -->
           <div *ngIf="auth.user$ | async as user">
             <button type="button" class="btn btn-outline-primary align-middle mr-2" *ngIf="auth.currentUser" routerLink="/upload">
@@ -44,6 +77,7 @@
             <ng-template #notificationsContent><app-notifications-list [user]="auth.user$" (notificationClicked)="notificationPopover.close()"></app-notifications-list></ng-template>
             <ng-template #notificationsTitle>What's new? ({{notificationsCount$ | async}})</ng-template>
           </div>
+
           <!-- User NOT logged in -->
           <div *ngIf="!auth.currentUser">
             <button class="btn btn-outline-success mr-2" type="button" (click)="login()">
@@ -52,25 +86,21 @@
             </button>
           </div>
 
-          <button mat-icon-button [matMenuTriggerFor]="menu">
+          <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="auth.currentUser">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="before">
-            <button mat-menu-item *ngIf="isAdmin" routerLink="/batch-upload">
+            <button mat-menu-item *ngIf="isAdmin$ | async" routerLink="/batch-upload">
               <mat-icon>cloud_upload</mat-icon>
               <span>Batch Upload</span>
             </button>
-            <button mat-menu-item *ngIf="isAdmin" routerLink="/admin">
+            <button mat-menu-item *ngIf="isAdmin$ | async" routerLink="/admin">
               <mat-icon>settings</mat-icon>
               <span>Admin CP</span>
             </button>
-            <button mat-menu-item *ngIf="auth.currentUser" (click)="logout()">
+            <button mat-menu-item (click)="logout()">
               <mat-icon>logout</mat-icon>
               <span>Sign Out</span>
-            </button>
-            <button mat-menu-item *ngIf="!auth.currentUser" (click)="login()">
-              <mat-icon>exit_to_app</mat-icon>
-              <span>Sign In</span>
             </button>
           </mat-menu>
         </div>

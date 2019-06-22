@@ -127,13 +127,17 @@
       <div class="form-group form-inline">
         <label for="questionNum">Question #:</label>
         <div class="input-group ml-2">
-          <input name="questionNum" min="1" id="questionNum" class="form-control" type="number" style="width: 100px" [(ngModel)]="newQuestionNum">
+          <input name="questionNum" min="1" id="questionNum" class="form-control" type="number" style="width: 100px" [(ngModel)]="newQuestion.number">
         </div>
       </div>
-      <div class="form-group form-inline">
-        <label for="totalGrade">Total Grade:</label>
+      <div class="form-group">
+        <label for="userGrade">Your grade:</label>
         <div class="input-group ml-2">
-          <input name="totalGrade" min="1" max="100" id="totalGrade" class="form-control" type="number" style="width: 100px" [(ngModel)]="newQuestionGrade">
+          <input name="userGrade" min="0" [max]="newQuestion.points" id="userGrade" class="form-control" type="number" style="width: 70px" [(ngModel)]="newQuestion.grade">
+          <div class="input-prepend input-append">
+            <div class="input-group-text bg-transparent border-0">out of</div>
+          </div>
+          <input name="totalGrade" min="1" max="100" id="totalGrade" class="form-control" type="number" style="width: 70px" [(ngModel)]="newQuestion.points">
         </div>
       </div>
     </form>

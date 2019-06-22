@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {MatBottomSheetRef} from '@angular/material';
 import {DbService} from '../../../core/db.service';
 import {QuestionId} from '../../../entities/question';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-choose-question-tag',
@@ -11,15 +12,18 @@ import {QuestionId} from '../../../entities/question';
   styleUrls: ['./choose-question-tag.component.scss']
 })
 export class ChooseQuestionTagComponent implements OnInit {
-  @Input() tags$: Observable<string[]> = null;
+  @Input() tags: string[];
   @Input() questionId: string;
 
-  constructor(private _bottomSheetRef: MatBottomSheetRef<ChooseQuestionTagComponent>, private db: DbService) { }
+  constructor(private _bottomSheetRef: MatBottomSheetRef<ChooseQuestionTagComponent>, private db: DbService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
   }
 
-  chooseTag(tag: string) {
-    this.db.addTagToQuestion(this.questionId, tag).then(() => this._bottomSheetRef.dismiss());
+  async chooseTag(tag: string) {
+    await this.spinner.show();
+    await this.db.addTagToQuestion(this.questionId, tag);
+    await this._bottomSheetRef.dismiss();
+    await this.spinner.hide();
   }
 }

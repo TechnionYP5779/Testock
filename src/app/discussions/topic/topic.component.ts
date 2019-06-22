@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {DbService} from '../../core/db.service';
 import {TopicWithCreatorId} from '../../entities/topic';
 import {Observable, of} from 'rxjs';
-import {flatMap} from 'rxjs/operators';
+import {switchMap} from 'rxjs/operators';
 import {CommentWithCreatorId} from '../../entities/comment';
 import {Course} from '../../entities/course';
 import {QuestionId} from '../../entities/question';
@@ -29,7 +29,7 @@ export class TopicComponent implements OnInit {
     this.topic$ = this.db.getTopic(this.id);
     this.comments$ = this.db.getCommentsForTopic(this.id);
 
-    this.adminAccess$ = this.db.getTopic(this.id).pipe(flatMap(topic => {
+    this.adminAccess$ = this.db.getTopic(this.id).pipe(switchMap(topic => {
       if (topic.linkedCourseId) {
         return this.auth.isAdminForCourse(topic.linkedCourseId);
       } else if (topic.linkedQuestionId) {
@@ -39,27 +39,27 @@ export class TopicComponent implements OnInit {
       }
     }));
 
-    this.linkedCourse$ = this.db.getTopic(this.id).pipe(flatMap(topic => {
+    this.linkedCourse$ = this.db.getTopic(this.id).pipe(switchMap(topic => {
       if (topic.linkedCourseId) {
         return this.db.getCourse(topic.linkedCourseId);
       } else {
         return of(null);
       }
     }));
-    this.linkedQuestion$ = this.db.getTopic(this.id).pipe(flatMap(topic => {
+    this.linkedQuestion$ = this.db.getTopic(this.id).pipe(switchMap(topic => {
       if (topic.linkedQuestionId) {
         return this.db.getQuestion(topic.linkedQuestionId);
       } else {
         return of(null);
       }
     }));
-    this.linkedQuestionCourse$ = this.db.getTopic(this.id).pipe(flatMap(topic => {
+    this.linkedQuestionCourse$ = this.db.getTopic(this.id).pipe(switchMap(topic => {
       if (topic.linkedQuestionId) {
         return this.db.getQuestion(topic.linkedQuestionId);
       } else {
         return of(null);
       }
-    })).pipe(flatMap(question => {
+    })).pipe(switchMap(question => {
       if (question) {
         return this.db.getCourse(question.course);
       } else {

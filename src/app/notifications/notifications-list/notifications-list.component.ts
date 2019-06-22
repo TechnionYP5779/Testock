@@ -1,9 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NotificationId} from '../../entities/notification';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 import {NotificationsService} from '../notifications.service';
-import {flatMap} from 'rxjs/operators';
+import {switchMap} from 'rxjs/operators';
 import {UserData} from '../../entities/user';
 
 @Component({
@@ -20,7 +19,7 @@ export class NotificationsListComponent implements OnInit {
 
   ngOnInit() {
     this.notifications$ = this.user.pipe(
-      flatMap(user => this.notifications.getNotificationsForUser(user.uid, 30))
+      switchMap(user => this.notifications.getNotificationsForUser(user.uid, 30))
     );
   }
 

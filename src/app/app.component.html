@@ -6,5 +6,20 @@
 <ngx-spinner type="ball-spin-clockwise"></ngx-spinner>
 
 <div class="alert alert-danger fixed-bottom ml-5 mb-4" style="width: 250px" *ngIf="!production">
-  <fa-icon icon="info" class="mr-2"></fa-icon> <strong>Development Build</strong>
+  <fa-icon icon="info" class="mr-2"></fa-icon>
+  <strong>Development Build</strong>
+</div>
+<div id="plugin-button" class="fixed-bottom mr-5 mb-4" style="left: unset;" *ngIf="production">
+  <a class="btn btn-light" href="https://chrome.google.com/webstore/detail/testock-plugin/mfoagkijioojiljhoobpnldbjjpncmmn" target="_blank">
+    <div>
+      <img src="/assets/images/chrome-web-store.png" alt="available at chrome web store"/>
+      <fa-icon role="button" icon="times-circle" class="float-right" size="lg" (click)="hidePlugin($event)"></fa-icon>
+    </div>
+    <div>
+      Our chrome plugin
+    </div>
+    <h5>
+      The fastest way to upload scans
+    </h5>
+  </a>
 </div>

@@ -35,8 +35,8 @@
       <div *ngIf="!sol.images || sol.images.length == 0" class="text-center">
         <small>No Images Selected</small>
       </div>
-      <div class="question-images">
-        <div class="question-image" *ngFor="let image of sol.images;" (mouseenter)="image.source.highlightInc()" (mouseleave)="image.source.highlightDec()">
+      <div class="question-images" cdkDropList (cdkDropListDropped)="solutionImageDropped($event)" [cdkDropListDisabled]="!active">
+        <div class="question-image" *ngFor="let image of sol.images;" (mouseenter)="image.source.highlightInc()" (mouseleave)="image.source.highlightDec()" cdkDrag>
           <img [src]="image.base64" alt="scan page crop">
           <div class="image-popup" *ngIf="active">
             <button class="btn image-remove-button" (click)="image.source.highlightDec(); image.source.highlightDec(); sol.removeImage(image);">
