@@ -12,8 +12,8 @@
     <ul class="list-group-flush" *ngIf="courses.length > 0; else noCourses">
       <li class="list-group-item" *ngFor="let course of courses">
         <h6 class="course-title m-2">
-          <a routerLink="/course/{{ course.id }}">
-            {{ course.id }}: {{ course.name }}
+          <a [routerLink]="'/course/' + course.id">
+            {{ course.id | courseId }}: {{ course.name }}
           </a>
         </h6>
         <a class="btn btn-primary mr-2 float-right" [attr.href]="'https://www.facebook.com/search/groups/?q=' + course.id" target="_blank"><fa-icon [icon]="['fab', 'facebook-square']" class="mr-2"></fa-icon>Facebook Group</a>
@@ -67,7 +67,7 @@
         <div class="form-group form-inline">
           <label for="courseNum">Course Number:</label>
           <div class="input-group ml-2">
-            <input name="courseNum" id="courseNum" class="form-control" style="width: 100px" [(ngModel)]="newCourse.id">
+            <input name="courseNum" min="1" id="courseNum" class="form-control" type="number" style="width: 100px" [(ngModel)]="newCourse.id">
           </div>
         </div>
         <div class="form-group form-inline">

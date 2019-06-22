@@ -61,7 +61,7 @@ export class FacultyComponent implements OnInit {
         return;
       }
 
-      if (!/^[0-9]{6}$/.test(this.newCourse.id)) {
+      if (this.newCourse.id < 1 || this.newCourse.id > 999999) {
         this.snackBar.open('Error: Invalid course number', 'close', {duration: 3000});
         return;
       }

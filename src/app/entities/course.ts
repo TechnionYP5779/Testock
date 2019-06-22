@@ -2,7 +2,7 @@ import {Faculty} from './faculty';
 import {Timestamp} from '@firebase/firestore-types';
 
 export interface Course {
-  id: string;
+  id: number;
   name: string;
   faculty: string;
   description: string;

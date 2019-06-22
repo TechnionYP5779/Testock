@@ -1,7 +1,7 @@
 <mat-card class="favorite-card">
   <div class="favorite-course-header">
     <mat-card-title>{{course.name}}</mat-card-title>
-    <mat-card-subtitle>{{course.id}}</mat-card-subtitle>
+    <mat-card-subtitle>{{course.id | courseId}}</mat-card-subtitle>
   </div>
   <mat-card-content>
     <ng-container *ngIf="solvedQuestions$ | async as solvedQuestions; else loading">

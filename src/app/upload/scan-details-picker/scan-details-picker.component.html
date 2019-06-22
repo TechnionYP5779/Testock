@@ -13,7 +13,7 @@
     <div class="form-group">
       <label for="course">Course:</label>
       <select class="form-control" id="course" name="course" [(ngModel)]="details.course">
-        <option *ngFor="let course of courses" [ngValue]="course.id">{{course.id}} - {{course.name}}</option>
+        <option *ngFor="let course of courses" [ngValue]="course.id">{{course.id | courseId}} - {{course.name}}</option>
       </select>
     </div>
 
