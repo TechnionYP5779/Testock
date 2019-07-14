@@ -11,6 +11,7 @@ import { MoedPipe } from './moed.pipe';
 import { FullMoedPipe } from './full-moed.pipe';
 import { FullSemesterPipe } from './full-semester.pipe';
 import { YearPipe } from './year.pipe';
+import { CourseIdPipe } from './course-id.pipe';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { YearPipe } from './year.pipe';
     MoedPipe,
     FullMoedPipe,
     FullSemesterPipe,
-    YearPipe
+    YearPipe,
+    CourseIdPipe
   ],
   imports: [
     CommonModule,
@@ -43,7 +45,8 @@ import { YearPipe } from './year.pipe';
     FullSemesterPipe,
     SemesterPipe,
     MoedPipe,
-    YearPipe
+    YearPipe,
+    CourseIdPipe
   ]
 })
 export class CoreModule { }

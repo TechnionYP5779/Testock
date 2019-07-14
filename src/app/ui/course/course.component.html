@@ -9,7 +9,7 @@
       </button>
     </div>
     <h1 class="display-4">
-      {{ course.name }} ({{ course.id }})
+      {{ course.name }} ({{ course.id | courseId }})
       <button data-toggle="modal" class="edit-button mr-2" data-target="#editCourseModal" *ngIf="isAdmin$ | async">
         <fa-icon icon="edit"></fa-icon>
       </button>

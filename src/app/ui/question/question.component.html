@@ -24,7 +24,7 @@
       </p>
     </div>
     <h3 class="title display-4">
-      <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + course.id">{{ course.id }}</a>
+      <a placement="top" [ngbTooltip]="course.name" [routerLink]="'/course/' + course.id">{{ course.id | courseId }}</a>
       <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>
       <a [routerLink]="'/course/' + course.id + '/exam/' + question.moed.semester.year + '-' + question.moed.semester.num + '-' + question.moed.num">{{ question.moed | fullMoed }}</a>
       <fa-icon icon="chevron-right" size="sm" class="ml-3 mr-3"></fa-icon>

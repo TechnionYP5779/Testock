@@ -1,6 +1,6 @@
 <div *ngIf="pendingScan$ | async as pendingScan">
   <h3>Pending scan for</h3>
-  <a [routerLink]="'/course/' + pendingScan.course"><h1 style="color:DodgerBlue">{{ (course$ | async)?.name}} ({{pendingScan.course}})</h1></a>
+  <a [routerLink]="'/course/' + pendingScan.course"><h1 style="color:DodgerBlue">{{ (course$ | async)?.name}} ({{pendingScan.course | courseId}})</h1></a>
   <h2>
     ({{ pendingScan.moed | fullMoed }})
   </h2>

@@ -49,7 +49,7 @@
       <li class="list-group-item">
         <fa-icon icon="check" *ngIf="loadProgress?.resultCourse" class="text-success mr-2"></fa-icon>
         <fa-icon icon="spinner" [spin]="true" *ngIf="!loadProgress?.resultCourse" class="mr-2"></fa-icon>
-        <span *ngIf="loadProgress?.resultCourse"><strong>Course:</strong> {{ loadProgress.resultCourse.name }} ({{loadProgress.resultCourse.id}})</span>
+        <span *ngIf="loadProgress?.resultCourse"><strong>Course:</strong> {{ loadProgress.resultCourse.name }} ({{loadProgress.resultCourse.id | courseId}})</span>
         <span *ngIf="!loadProgress?.resultCourse"><strong>Course</strong></span>
       </li>
       <li class="list-group-item">
