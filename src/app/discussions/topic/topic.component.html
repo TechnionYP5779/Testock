@@ -1,8 +1,8 @@
 <div *ngIf="topic$ | async as topic">
   <div class="mb-4">
     <h4 *ngIf="linkedQuestion$ | async as linkedQuestion">
-      <a routerLink="/course/{{course.id}}" class="badge badge-primary mr-2" *ngIf="linkedQuestionCourse$ | async as course">
-        {{ course.name }} ({{ course.id }})
+      <a [routerLink]="'/course/' + course.id" class="badge badge-primary mr-2" *ngIf="linkedQuestionCourse$ | async as course">
+        {{ course.name }} ({{ course.id | courseId }})
       </a>
       <a routerLink="/question/{{linkedQuestion.id}}" class="badge badge-secondary mr-2">
         {{ linkedQuestion.moed | fullMoed }}
@@ -12,8 +12,8 @@
       </a>
     </h4>
     <h4 *ngIf="linkedCourse$ | async as course">
-      <a routerLink="/course/{{course.id}}" class="badge badge-primary mr-2">
-        {{ course.name }} ({{ course.id }})
+      <a [routerLink]="'/course/' + course.id" class="badge badge-primary mr-2">
+        {{ course.name }} ({{ course.id | courseId }})
       </a>
     </h4>
     <h2>
