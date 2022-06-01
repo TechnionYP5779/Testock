@@ -24,7 +24,7 @@
     "firebase-functions": "^2.3.0",
     "fs-extra": "^8.1.0",
     "pdfkit": "^0.9.1",
-    "sharp": "^0.22.1"
+    "sharp": "^0.30.5"
   },
   "devDependencies": {
     "tslint": "^5.18.0",
